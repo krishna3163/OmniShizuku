@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="manager/src/main/res/mipmap-xxxhdpi/ic_launcher.png" width="130" height="130" alt="OmniShizuku Logo" />
+<img src="screenshots/logo.png" width="130" height="130" alt="OmniShizuku Logo" />
 
 # 👑 The God Mode for Android
 ### Stop Installing 4 Different Apps. Experience True Privileged Freedom — No Root Required.
