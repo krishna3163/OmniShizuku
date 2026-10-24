@@ -1803,7 +1803,7 @@ private fun LazyListScope.automationSectionContent(
     onCopy: (String) -> Unit
 ) {
     val targetComponent = "${context.packageName}/com.hamondev.shevery.tasker.PluginReceiver"
-    val shellCommand = "am broadcast -a com.hamondev.shevery.action.START_SERVER -p ${context.packageName} -e auth $authToken"
+    val shellCommand = "am broadcast -a com.krishna.omnishizuku.action.START_SERVER -p ${context.packageName} -e auth $authToken"
 
     item {
         SettingsGroup(title = stringResource(R.string.shizuku_connectors_title)) {
@@ -1857,10 +1857,10 @@ private fun LazyListScope.automationSectionContent(
             GroupDivider()
             SectionHeader(stringResource(R.string.automation_dialog_actions_header))
             listOf(
-                "com.hamondev.shevery.action.START_SERVER" to stringResource(R.string.automation_action_start),
-                "com.hamondev.shevery.action.STOP_SERVER" to stringResource(R.string.automation_action_stop),
-                "com.hamondev.shevery.action.RESTART_SERVER" to stringResource(R.string.automation_action_restart),
-                "com.hamondev.shevery.action.TOGGLE_SERVER" to stringResource(R.string.automation_action_toggle),
+                "com.krishna.omnishizuku.action.START_SERVER" to stringResource(R.string.automation_action_start),
+                "com.krishna.omnishizuku.action.STOP_SERVER" to stringResource(R.string.automation_action_stop),
+                "com.krishna.omnishizuku.action.RESTART_SERVER" to stringResource(R.string.automation_action_restart),
+                "com.krishna.omnishizuku.action.TOGGLE_SERVER" to stringResource(R.string.automation_action_toggle),
             ).forEach { (action, label) ->
                 SettingsRow(
                     icon = R.drawable.ic_outline_play_arrow_24,

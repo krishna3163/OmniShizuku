@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">Shevery</string>
+    <string name="app_name" translatable="false">OmniShizuku</string>
 
     <!-- To translators: you can leave your here -->
     <string name="translation_contributors">sermart1234, ruvlad</string>
@@ -59,17 +59,17 @@
     <string name="adb_pair_required">Please go through the pairing step first.</string>
     <string name="development_settings">Developer options</string>
     <string name="notification_settings">Notification options</string>
-    <string name="adb_pairing_tutorial_title">Pair Shevery with your device</string>
-    <string name="adb_pairing_tutorial_content_notification">A notification from Shevery will help you complete the pairing.</string>
+    <string name="adb_pairing_tutorial_title">Pair OmniShizuku with your device</string>
+    <string name="adb_pairing_tutorial_content_notification">A notification from OmniShizuku will help you complete the pairing.</string>
     <string name="adb_pairing_tutorial_content_steps"><![CDATA[Enter "Developer options" - "Wireless debugging". Tap "Pair device with pairing code", you will see a six-digit code.]]></string>
     <string name="adb_pairing_tutorial_content_enter_pairing_code">Enter the code in the notification to complete pairing.</string>
-    <string name="adb_pairing_tutorial_content_notification_blocked">The pairing process needs you to interact with a notification from Shevery. Please allow Shevery to post notifications.</string>
+    <string name="adb_pairing_tutorial_content_notification_blocked">The pairing process needs you to interact with a notification from OmniShizuku. Please allow OmniShizuku to post notifications.</string>
     <string name="adb_pairing_tutorial_content_miui"><![CDATA[MIUI users may need to switch notification style to "Android" from "Notification" - "Notification shade" in system settings.]]></string>
     <string name="adb_pairing_tutorial_content_miui_2">Otherwise, you may not able to enter paring code from the notification.</string>
     <string name="adb_pairing_tutorial_content_left_is_clickable"><![CDATA[Please note, left part of the "Wireless debugging" option is clickable, tapping it will open a new page. Only turing on the switch on the right is incorrect.]]></string>
-    <string name="adb_pairing_tutorial_content_finish">Back to Shevery and start Shevery.</string>
-    <string name="adb_pairing_tutorial_content_network">Shevery needs to access local network. It is controlled by the network permission.</string>
-    <string name="adb_pairing_tutorial_content_network_limation_not_foreground">Some systems (such as MIUI) disallow apps to access the network when they are not visible, even if the app uses foreground service as standard. Please disable battery optimization features for Shevery on such systems.</string>
+    <string name="adb_pairing_tutorial_content_finish">Back to OmniShizuku and start OmniShizuku.</string>
+    <string name="adb_pairing_tutorial_content_network">OmniShizuku needs to access local network. It is controlled by the network permission.</string>
+    <string name="adb_pairing_tutorial_content_network_limation_not_foreground">Some systems (such as MIUI) disallow apps to access the network when they are not visible, even if the app uses foreground service as standard. Please disable battery optimization features for OmniShizuku on such systems.</string>
 
     <!-- Home - Root -->
     <string name="home_root_title"><![CDATA[Start (for rooted devices)]]></string>
@@ -85,11 +85,11 @@
         <item quantity="other"><![CDATA[Authorized %d applications]]></item>
     </plurals>
     <string name="home_app_management_view_authorized_apps"><![CDATA[Tap to manage authorized apps]]></string>
-    <string name="home_app_management_empty">Apps that has requested or declared Shevery will show here.</string>
+    <string name="home_app_management_empty">Apps that has requested or declared OmniShizuku will show here.</string>
 
     <!-- Home - Learn more -->
-    <string name="home_learn_more_title">Learn Shevery</string>
-    <string name="home_learn_more_description">Learn how to develop with Shevery</string>
+    <string name="home_learn_more_title">Learn OmniShizuku</string>
+    <string name="home_learn_more_description">Learn how to develop with OmniShizuku</string>
 
     <!-- Home - Quick actions -->
     <string name="home_quick_terminal">Terminal</string>
@@ -113,7 +113,7 @@
     <string name="app_management_deselect_all">Deselect all</string>
     <string name="app_management_dialog_adb_is_limited_title">The permission of adb is limited</string>
     <string name="app_management_dialog_adb_is_limited_message"><![CDATA[It\'s highly possible that your device manufacturer limits the permission of adb.<p>There may be a solution for your system in <b><a href="%1$s">this document</a></b>.]]></string>
-    <string name="app_management_item_summary_requires_root">* requires Shevery runs with root</string>
+    <string name="app_management_item_summary_requires_root">* requires OmniShizuku runs with root</string>
     <string name="app_management_loading">Loading apps…</string>
     <string name="app_management_search_hint">Search applications…</string>
     <string name="app_management_clear_search">Clear search</string>
@@ -140,14 +140,14 @@
     <string name="app_detail_uid">UID</string>
 
     <!-- Terminal -->
-    <string name="home_terminal_title">Use Shevery in terminal apps</string>
-    <string name="home_terminal_description">Run commands through Shevery in terminal apps you like</string>
+    <string name="home_terminal_title">Use OmniShizuku in terminal apps</string>
+    <string name="home_terminal_description">Run commands through OmniShizuku in terminal apps you like</string>
     <string name="terminal_tutorial_1">First, Export files to any where you want. You will find two files, %1$s and %2$s.</string>
-    <string name="terminal_tutorial_1_description">If there are files with the same name in the selected folder, they will be deleted.\n\nThe export function uses SAF (Storage Access Framework). It\'s reported that MIUI breaks the functions of SAF. If you are using MIUI, you may have to extract the file from Shevery\'s apk or download from GitHub.</string>
+    <string name="terminal_tutorial_1_description">If there are files with the same name in the selected folder, they will be deleted.\n\nThe export function uses SAF (Storage Access Framework). It\'s reported that MIUI breaks the functions of SAF. If you are using MIUI, you may have to extract the file from OmniShizuku\'s apk or download from GitHub.</string>
     <string name="terminal_export_files">Export files</string>
     <string name="terminal_tutorial_2">Then, use any text editor to open and edit %1$s.</string>
-    <string name="terminal_tutorial_2_description">For example, if you want to use Shevery in %1$s, you should replace %2$s with %3$s (%4$s is the package name of %1$s).</string>
-    <string name="terminal_tutorial_3">Finally, move the files to somewhere where your terminal app can access, you will be able to use %1$s to run commands through Shevery.</string>
+    <string name="terminal_tutorial_2_description">For example, if you want to use OmniShizuku in %1$s, you should replace %2$s with %3$s (%4$s is the package name of %1$s).</string>
+    <string name="terminal_tutorial_3">Finally, move the files to somewhere where your terminal app can access, you will be able to use %1$s to run commands through OmniShizuku.</string>
     <string name="terminal_tutorial_3_description">Some tips: grant execute permission to %1$s and add it to %2$s, you will able to use %1$s directly.</string>
     <string name="rish_description"><![CDATA[
 With %1$s, in any terminal app, you can connect to and interact with the shell runs by Shevery.
@@ -165,14 +165,14 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="settings_translation">Participate in translation</string>
     <string name="settings_translation_summary">Help us translate %s into your language</string>
     <string name="settings_start_on_boot">Start on boot via Root</string>
-    <string name="settings_start_on_boot_summary">Start Shevery automatically on boot using root privileges.</string>
+    <string name="settings_start_on_boot_summary">Start OmniShizuku automatically on boot using root privileges.</string>
     <string name="settings_start_on_boot_adb">Start on boot via Wireless debugging</string>
-    <string name="settings_start_on_boot_adb_summary">On boot, briefly enable Wireless debugging and start Shevery over ADB (TCP port 5555). No root required, Wi-Fi is needed only for a moment.</string>
-    <string name="settings_start_on_boot_adb_summary_no_tcp">On boot, briefly enable Wireless debugging and start Shevery over ADB. No root required, Wi-Fi is needed only for a moment.</string>
+    <string name="settings_start_on_boot_adb_summary">On boot, briefly enable Wireless debugging and start OmniShizuku over ADB (TCP port 5555). No root required, Wi-Fi is needed only for a moment.</string>
+    <string name="settings_start_on_boot_adb_summary_no_tcp">On boot, briefly enable Wireless debugging and start OmniShizuku over ADB. No root required, Wi-Fi is needed only for a moment.</string>
     <string name="settings_start_on_boot_adb_granted">WRITE_SECURE_SETTINGS granted.</string>
     <string name="settings_start_on_boot_adb_warning_no_tcp">TCP binding (port 5555) is off: wireless debugging will stay enabled.</string>
     <string name="settings_start_on_boot_adb_missing_permission_title">Missing permission</string>
-    <string name="settings_start_on_boot_adb_not_running">Shevery is not running. Start the service first, then come back and enable this setting.</string>
+    <string name="settings_start_on_boot_adb_not_running">OmniShizuku is not running. Start the service first, then come back and enable this setting.</string>
     <string name="settings_start_on_boot_adb_grant_failed">The automatic permission grant failed. Run this command from a computer to grant it manually:</string>
     <string name="settings_start_on_boot_adb_missing_permission_copy">Copy command</string>
     <string name="settings_start_on_boot_adb_missing_permission_instruction">How to use:\n1. Connect the device to a computer (USB or wireless debugging).\n2. In the terminal, run the command from the field above.</string>
@@ -181,7 +181,7 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <!-- ADB modules -->
     <string name="modules_title">ADB Modules</string>
     <string name="modules_settings_title">Modules</string>
-    <string name="modules_settings_summary">Install ZIP modules and run their actions through the active Shevery ADB/root server</string>
+    <string name="modules_settings_summary">Install ZIP modules and run their actions through the active OmniShizuku ADB/root server</string>
     <string name="modules_header_summary">%1$d installed, %2$d enabled</string>
     <string name="modules_version_label">Version: %s</string>
     <string name="modules_author_label">Author: %s</string>
@@ -199,7 +199,7 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="modules_permission_service">Run Service</string>
     <string name="modules_permission_service_summary">Allow service.sh when background actions are also enabled.</string>
     <string name="modules_permission_web_bridge">WebUI shell bridge</string>
-    <string name="modules_permission_web_bridge_summary">Expose window.Shevery only for local WebUI and only when WebView internet is off.</string>
+    <string name="modules_permission_web_bridge_summary">Expose window.OmniShizuku only for local WebUI and only when WebView internet is off.</string>
     <string name="modules_permission_web_network">WebView internet</string>
     <string name="modules_permission_web_network_summary">Allow HTTPS navigation/assets. This disables shell bridge exposure for that WebView.</string>
     <string name="modules_permission_web_download">WebUI download()</string>
@@ -236,7 +236,7 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="modules_webui_not_found">Module or WebUI not found</string>
     <string name="modules_delete">Delete</string>
     <string name="modules_delete_title">Delete module?</string>
-    <string name="modules_delete_message">%s will be removed from Shevery module storage.</string>
+    <string name="modules_delete_message">%s will be removed from OmniShizuku module storage.</string>
     <string name="modules_action_result">Action finished: exit %d</string>
     <string name="modules_action_failed">Action failed</string>
     <string name="modules_service_result">Service finished: exit %d</string>
@@ -280,17 +280,17 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="about_view_source_code"><![CDATA[View source code at %s]]></string>
 
     <!-- Stop -->
-    <string name="action_stop">Stop Shevery</string>
-    <string name="dialog_stop_message">Shevery service will be stopped.</string>
-    <string name="service_already_stopped">Shevery service is already stopped.</string>
-    <string name="service_stop_success">Shevery service stopped.</string>
+    <string name="action_stop">Stop OmniShizuku</string>
+    <string name="dialog_stop_message">OmniShizuku service will be stopped.</string>
+    <string name="service_already_stopped">OmniShizuku service is already stopped.</string>
+    <string name="service_stop_success">OmniShizuku service stopped.</string>
     <string name="service_stop_still_running">service is still running</string>
-    <string name="service_stop_failed">Failed to stop Shevery: %1$s</string>
+    <string name="service_stop_failed">Failed to stop OmniShizuku: %1$s</string>
 
     <!-- Notification -->
     <string name="notification_channel_service_status">Service start status</string>
-    <string name="notification_service_starting">Shevery service is starting…</string>
-    <string name="notification_service_start_failed">Start Shevery service failed.</string>
+    <string name="notification_service_starting">OmniShizuku service is starting…</string>
+    <string name="notification_service_start_failed">Start OmniShizuku service failed.</string>
     <string name="notification_service_start_no_root">Failed to request root permission.</string>
     <string name="notification_working">Working…</string>
     <string name="notification_channel_adb_pairing">Wireless debugging pairing</string>
@@ -300,18 +300,18 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="notification_adb_pairing_stop_searching">Stop searching</string>
     <string name="notification_adb_pairing_working_title">Pairing in progress</string>
     <string name="notification_adb_pairing_succeed_title">Pairing successful</string>
-    <string name="notification_adb_pairing_succeed_text">You can start Shevery service now.</string>
+    <string name="notification_adb_pairing_succeed_text">You can start OmniShizuku service now.</string>
     <string name="notification_adb_pairing_failed_title">Pairing failed</string>
     <string name="notification_adb_pairing_retry">Retry</string>
 
     <!-- Permission related, appears in system permission UI -->
-    <string name="permission_group_label" translatable="false">Shevery</string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description" translatable="false">@string/permission_label</string>
-    <string name="permission_label">access Shevery</string>
+    <string name="permission_label">access OmniShizuku</string>
     <string name="dhizuku_permission_label">access Device Owner privileges</string>
     <string name="dhizuku_permission_group_description" translatable="false">@string/dhizuku_permission_label</string>
-    <string name="device_admin_description">Device administrator for Shevery. Required to manage device policies and ownership features.</string>
-    <string name="permission_description">Allow the app to use Shevery.</string>
+    <string name="device_admin_description">Device administrator for OmniShizuku. Required to manage device policies and ownership features.</string>
+    <string name="permission_description">Allow the app to use OmniShizuku.</string>
     <string name="permission_warning_template"><![CDATA[Allow <b>%1$s</b> to %2$s?]]></string>
     <string name="grant_dialog_button_allow_always">Allow all the time</string>
     <string name="grant_dialog_button_allow_once">Allow this time</string>
@@ -328,52 +328,52 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="toast_copied_to_clipboard_with_text"><![CDATA[<b>%s</b> has been copied to clipboard.]]></string>
 
     <!-- Messages for legacy -->
-    <string name="dialog_legacy_not_support_title">%1$s does not support modern Shevery</string>
+    <string name="dialog_legacy_not_support_title">%1$s does not support modern OmniShizuku</string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Legacy Shevery has been deprecated since March 2019. Also, legacy Shevery does not work on newer Android systems.<p>Please ask the developer of <b>%1$s</b> to update.]]></string>
-    <string name="dialog_requesting_legacy_title">%1$s is requesting legacy Shevery</string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> has modern Shevery support, but it\'s requesting legacy Shevery. This could because Shevery is not running, please check in Shevery app.<p>Legacy Shevery has been deprecated since March 2019.]]></string>
-    <string name="dialog_requesting_legacy_button_open_shizuku">Open Shevery</string>
+    <string name="dialog_requesting_legacy_title">%1$s is requesting legacy OmniShizuku</string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> has modern OmniShizuku support, but it\'s requesting legacy OmniShizuku. This could because OmniShizuku is not running, please check in OmniShizuku app.<p>Legacy OmniShizuku has been deprecated since March 2019.]]></string>
+    <string name="dialog_requesting_legacy_button_open_shizuku">Open OmniShizuku</string>
 
     <!-- Lab Features -->
     <string name="lab_features_title">Lab Features</string>
     <string name="lab_features_summary">Experimental features</string>
-    <string name="shizuku_connectors_title">Shevery Connectors</string>
-    <string name="shizuku_connectors_summary">Allow plugins to activate Shevery</string>
+    <string name="shizuku_connectors_title">OmniShizuku Connectors</string>
+    <string name="shizuku_connectors_summary">Allow plugins to activate OmniShizuku</string>
     <string name="unsafe_warning_title">Warning</string>
     <string name="unsafe_warning_message">Enabling this feature is UNSAFE. Are you sure?</string>
     <string name="dhizuku_mode_title">Dhizuku Mode</string>
-    <string name="dhizuku_mode_summary">Allow Shevery to operate via binding to Dhizuku</string>
+    <string name="dhizuku_mode_summary">Allow OmniShizuku to operate via binding to Dhizuku</string>
     <string name="home_dhizuku_title"><![CDATA[Start (via Dhizuku)]]></string>
     <string name="home_dhizuku_description"><![CDATA[For devices managed by Dhizuku, you can start Shevery directly using Device Owner privileges.]]></string>
     <string name="dhizuku_warning_title">Warning: Dhizuku Mode</string>
-    <string name="dhizuku_warning_message">Dhizuku is designed for Device Owner/admin privileges. Some shell and ADB-specific commands may not work properly or may be entirely unsupported when running Shevery via Dhizuku. Are you sure you want to proceed?</string>
+    <string name="dhizuku_warning_message">Dhizuku is designed for Device Owner/admin privileges. Some shell and ADB-specific commands may not work properly or may be entirely unsupported when running OmniShizuku via Dhizuku. Are you sure you want to proceed?</string>
     <string name="settings_tcp_mode">TCP Mode</string>
-    <string name="settings_tcp_mode_summary">Restart ADB startup onto TCP port 5555 so Shevery can reconnect without relying on the changing Wireless Debugging port.</string>
+    <string name="settings_tcp_mode_summary">Restart ADB startup onto TCP port 5555 so OmniShizuku can reconnect without relying on the changing Wireless Debugging port.</string>
     <string name="settings_restart_dialog_title">Restart required</string>
-    <string name="settings_restart_dialog_message">Shevery needs to restart to apply this TCP mode change.</string>
+    <string name="settings_restart_dialog_message">OmniShizuku needs to restart to apply this TCP mode change.</string>
     <string name="settings_restart_dialog_message_wifi_required">
 
-Wi-Fi is required for the first restart because Shevery must connect to the current Wireless Debugging port before switching ADB to 5555.</string>
+Wi-Fi is required for the first restart because OmniShizuku must connect to the current Wireless Debugging port before switching ADB to 5555.</string>
     <string name="settings_auto_disable_usb_debugging">Auto-disable USB debugging</string>
-    <string name="settings_auto_disable_usb_debugging_summary">Turn off USB debugging after reboot when Shevery is not configured to start on boot</string>
+    <string name="settings_auto_disable_usb_debugging_summary">Turn off USB debugging after reboot when OmniShizuku is not configured to start on boot</string>
     <string name="usb_debugging_hide_title">Hide USB debugging</string>
     <string name="usb_debugging_hide_open_summary">Temporarily turn off USB debugging while selected apps are in front</string>
-    <string name="usb_debugging_hide_warning">This changes the device-wide USB debugging setting; it is not hidden from only the selected app. ADB-based connections may stop while it is off. Usage access and permission to change secure settings are required. If you force-stop Shevery, Android prevents cleanup until Shevery is opened again.</string>
+    <string name="usb_debugging_hide_warning">This changes the device-wide USB debugging setting; it is not hidden from only the selected app. ADB-based connections may stop while it is off. Usage access and permission to change secure settings are required. If you force-stop OmniShizuku, Android prevents cleanup until OmniShizuku is opened again.</string>
     <string name="usb_debugging_hide_usage_access">Usage access</string>
     <string name="usb_debugging_hide_usage_access_granted">Granted</string>
     <string name="usb_debugging_hide_usage_access_required">Tap to grant access to detect the foreground app</string>
-    <string name="usb_debugging_hide_permission_required">Start Shevery with Shizuku or configure it as Device Owner so it can change USB debugging.</string>
+    <string name="usb_debugging_hide_permission_required">Start OmniShizuku with Shizuku or configure it as Device Owner so it can change USB debugging.</string>
     <string name="usb_debugging_hide_apps">Selected apps</string>
     <string name="usb_debugging_hide_notification_channel">USB debugging hide</string>
     <string name="usb_debugging_hide_notification_title">USB debugging is being managed</string>
     <string name="usb_debugging_hide_notification_summary">USB debugging is turned off only while a selected app is in the foreground</string>
     <string name="network_firewall_title">Firewall</string>
     <string name="network_firewall_open_summary">Block selected apps from network access without a VPN</string>
-    <string name="network_firewall_summary">Uses Android’s platform firewall (Android 11 or newer), not a VPN. Shevery shows rules it created; the firewall chain is shared, so enabling it may also activate rules set by other apps.</string>
+    <string name="network_firewall_summary">Uses Android’s platform firewall (Android 11 or newer), not a VPN. OmniShizuku shows rules it created; the firewall chain is shared, so enabling it may also activate rules set by other apps.</string>
     <string name="network_firewall_unsupported">The platform firewall commands require Android 11 or newer.</string>
-    <string name="network_firewall_server_required">Start Shevery with Shizuku before changing firewall rules.</string>
+    <string name="network_firewall_server_required">Start OmniShizuku with Shizuku before changing firewall rules.</string>
     <string name="network_firewall_apps">Apps</string>
-    <string name="network_firewall_change_failed">Could not apply the firewall rule. Check that Shevery is running with Shizuku permission.</string>
+    <string name="network_firewall_change_failed">Could not apply the firewall rule. Check that OmniShizuku is running with Shizuku permission.</string>
     <string name="settings_service_group">Service Maintenance</string>
     <string name="settings_application">Application</string>
     <string name="settings_appearance">Appearance</string>
@@ -381,11 +381,11 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <!-- Lab Features - Service Behavior -->
     <string name="lab_service_behavior_title">Service Behavior</string>
     <string name="lab_keep_alive_title">Keep Service Alive</string>
-    <string name="lab_keep_alive_summary">Periodically check that the Shevery service is running and restart it if needed</string>
+    <string name="lab_keep_alive_summary">Periodically check that the OmniShizuku service is running and restart it if needed</string>
     <string name="lab_auto_restart_title">Auto-Restart on Crash</string>
-    <string name="lab_auto_restart_summary">Automatically attempt to restart the Shevery service if it crashes unexpectedly</string>
+    <string name="lab_auto_restart_summary">Automatically attempt to restart the OmniShizuku service if it crashes unexpectedly</string>
     <string name="lab_notify_death_title">Notify on Service Stop</string>
-    <string name="lab_notify_death_summary">Show a notification when the Shevery service stops unexpectedly (always shown while ErrorProtect(Watchdog) is on).</string>
+    <string name="lab_notify_death_summary">Show a notification when the OmniShizuku service stops unexpectedly (always shown while ErrorProtect(Watchdog) is on).</string>
 
     <!-- Lab Features - Debugging -->
     <string name="lab_debugging_title">Debugging</string>
@@ -404,7 +404,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <!-- Lab Features - Maintenance -->
     <string name="lab_maintenance_title">Maintenance</string>
     <string name="lab_restart_service_title">Restart Service Now</string>
-    <string name="lab_restart_service_summary">Restart the Shevery service using the last launch method</string>
+    <string name="lab_restart_service_summary">Restart the OmniShizuku service using the last launch method</string>
     <string name="lab_clear_update_title">Dismiss Update Banner</string>
     <string name="lab_clear_update_summary">Clear a stuck update banner from the home screen</string>
     <string name="lab_revoke_trusted_title">Revoke Trusted Modules</string>
@@ -415,7 +415,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <!-- Lab Features - Experimental -->
     <string name="lab_experimental_title">Experimental</string>
     <string name="lab_exp_haptics_title">Haptic Feedback on Service Change</string>
-    <string name="lab_exp_haptics_summary">Vibrate briefly whenever the Shevery service starts or stops</string>
+    <string name="lab_exp_haptics_summary">Vibrate briefly whenever the OmniShizuku service starts or stops</string>
     <string name="lab_exp_uptime_title">Show Service Uptime</string>
     <string name="lab_exp_uptime_summary">Show how long the service has been running under the home status card</string>
     <string name="lab_exp_keep_screen_title">Keep Screen On While Starting</string>
@@ -429,46 +429,46 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="settings_section_updates_summary">Module catalog and app update channel</string>
     <string name="settings_section_ai_summary">AI provider and recommendations</string>
     <string name="settings_section_about_summary">Version, licenses and links</string>
-    <string name="notification_recovery_title">Shevery Service Recovered</string>
-    <string name="notification_recovery_text">ErrorProtect restarted the Shevery service successfully.</string>
+    <string name="notification_recovery_title">OmniShizuku Service Recovered</string>
+    <string name="notification_recovery_text">ErrorProtect restarted the OmniShizuku service successfully.</string>
     <string name="notification_channel_watchdog">Service Watchdog</string>
     <string name="notification_channel_watchdog_death">Watchdog alert</string>
-    <string name="notification_watchdog_title">Shevery Service Stopped</string>
-    <string name="notification_watchdog_text">The Shevery service has stopped unexpectedly.</string>
-    <string name="watchdog_service_title">Shevery watchdog is active</string>
-    <string name="watchdog_service_text">Monitoring the Shevery service for keep-alive recovery</string>
+    <string name="notification_watchdog_title">OmniShizuku Service Stopped</string>
+    <string name="notification_watchdog_text">The OmniShizuku service has stopped unexpectedly.</string>
+    <string name="watchdog_service_title">OmniShizuku watchdog is active</string>
+    <string name="watchdog_service_text">Monitoring the OmniShizuku service for keep-alive recovery</string>
     <string name="watchdog_action_turn_off">Turn off</string>
     <string name="watchdog_action_channel_settings">Configure alerts</string>
 
     <!-- Shevery Control Notification -->
-    <string name="notification_control_channel_name">Shevery Control</string>
-    <string name="notification_startup_channel_name">Shevery startup</string>
-    <string name="notification_startup_title">Starting Shevery</string>
+    <string name="notification_control_channel_name">OmniShizuku Control</string>
+    <string name="notification_startup_channel_name">OmniShizuku startup</string>
+    <string name="notification_startup_title">Starting OmniShizuku</string>
     <string name="notification_startup_enabling_wifi">Enabling Wi-Fi debugging…</string>
     <string name="notification_startup_connecting">Connecting to ADB…</string>
-    <string name="notification_startup_started">Shevery started.</string>
-    <string name="notification_startup_failed">Failed to start Shevery.</string>
+    <string name="notification_startup_started">OmniShizuku started.</string>
+    <string name="notification_startup_failed">Failed to start OmniShizuku.</string>
     <string name="notification_startup_no_port">Wireless debugging port not found within 15 seconds.</string>
-    <string name="notification_startup_no_permission">Cannot start on boot: a required permission is not granted. Open Shevery and grant the permission first.</string>
+    <string name="notification_startup_no_permission">Cannot start on boot: a required permission is not granted. Open OmniShizuku and grant the permission first.</string>
     <string name="notification_startup_waiting_unlock">Waiting for device unlock to start…</string>
     <string name="notification_startup_cancel">Cancel</string>
     <string name="notification_startup_attempt_now">Attempt now</string>
 
     <!-- WADB Starter (WorkManager-based boot start) -->
-    <string name="wadb_notification_title">Starting Shevery…</string>
+    <string name="wadb_notification_title">Starting OmniShizuku…</string>
     <string name="wadb_notification_wifi_required">Awaiting Wi-Fi connection before proceeding</string>
     <string name="wadb_notification_retry">Waiting to retry</string>
     <string name="wadb_error_title">Error while starting on boot</string>
-    <string name="wadb_error_notify_dev">Tap to restart Shevery.</string>
+    <string name="wadb_error_notify_dev">Tap to restart OmniShizuku.</string>
     <string name="wadb_permission_error_notification_title">Permission Error</string>
-    <string name="wadb_permission_error_notification_content">Shevery could not start on boot. Open Shevery to check the issue.</string>
+    <string name="wadb_permission_error_notification_content">OmniShizuku could not start on boot. Open OmniShizuku to check the issue.</string>
     <string name="wadb_notification_channel">ADB auto-start service</string>
     <string name="wadb_notification_attempt_now">Attempt now</string>
 
-    <string name="notification_control_title_running">Shevery is running</string>
-    <string name="notification_control_title_stopped">Shevery is stopped</string>
-    <string name="notification_control_text_running">Tap to open Shevery, or expand this notification to stop it.</string>
-    <string name="notification_control_text_stopped">Tap to open Shevery, or expand this notification to start it.</string>
+    <string name="notification_control_title_running">OmniShizuku is running</string>
+    <string name="notification_control_title_stopped">OmniShizuku is stopped</string>
+    <string name="notification_control_text_running">Tap to open OmniShizuku, or expand this notification to stop it.</string>
+    <string name="notification_control_text_stopped">Tap to open OmniShizuku, or expand this notification to start it.</string>
     <string name="notification_control_action_start">Start</string>
     <string name="notification_control_action_stop">Stop</string>
     <string name="settings_update_group_title">Update</string>
@@ -500,11 +500,11 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="update_settings_github_pat_delete_summary">Remove stored GitHub token</string>
 
     <!-- Shevery App Updates -->
-    <string name="shevery_update_check_title">Check for Shevery updates</string>
-    <string name="shevery_update_check_summary">Check for newer versions of Shevery manager</string>
-    <string name="shevery_update_checking">Checking for Shevery updates…</string>
-    <string name="shevery_update_up_to_date">Shevery is up to date (%s)</string>
-    <string name="shevery_update_available_title">New Shevery update available!</string>
+    <string name="shevery_update_check_title">Check for OmniShizuku updates</string>
+    <string name="shevery_update_check_summary">Check for newer versions of OmniShizuku manager</string>
+    <string name="shevery_update_checking">Checking for OmniShizuku updates…</string>
+    <string name="shevery_update_up_to_date">OmniShizuku is up to date (%s)</string>
+    <string name="shevery_update_available_title">New OmniShizuku update available!</string>
     <string name="shevery_update_available_msg">Version %1$s is available (current: %2$s)</string>
     <string name="shevery_update_download_apk">Download APK</string>
     <string name="shevery_update_view_release">View on GitHub</string>
@@ -523,10 +523,10 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="app_update_channel_beta">Pre-release &amp; Beta</string>
     <string name="shevery_update_auto_check">Check for updates in background</string>
     <string name="shevery_update_auto_check_summary">Look for new versions even when the app is closed</string>
-    <string name="shevery_update_group_title">Shevery App Updates</string>
+    <string name="shevery_update_group_title">OmniShizuku App Updates</string>
     <string name="shevery_update_modules_group_title">Module Updates &amp; Catalog</string>
     <string name="shevery_update_check_failed">Update check failed: %s</string>
-    <string name="home_update_available_title">Shevery update available: %s</string>
+    <string name="home_update_available_title">OmniShizuku update available: %s</string>
     <string name="home_update_available_body">A newer version is ready. Tap to update.</string>
 
     <!-- Module Catalog -->
@@ -598,7 +598,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="comput_recommand_title">ReCommand for Comput</string>
     <string name="comput_recommand_summary">Show a confirmation dialog before running commands in Comput console</string>
     <string name="comput_recommand_confirmation">Are you sure you want to execute this ADB command in Comput?</string>
-    <string name="comput_ai_api_key_empty">Google AI Studio API Key is empty! Please configure it in Shevery Settings (Comput Console Settings).</string>
+    <string name="comput_ai_api_key_empty">Google AI Studio API Key is empty! Please configure it in OmniShizuku Settings (Comput Console Settings).</string>
     <string name="comput_ai_api_key_title">Google AI Studio API Key</string>
     <string name="comput_ai_api_key_not_configured">Not configured (AI will not work)</string>
     <string name="comput_gemini_model_title">AI Model</string>
@@ -663,9 +663,9 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="comput_exit_code">[E] Command exited with code %1$d.</string>
     <string name="comput_running_macro">Running macro: %1$s</string>
     <string name="comput_executing_cmd">> Executing command: %1$s</string>
-    <string name="comput_error_not_running">Error: Privileged Shevery Service is not running. Please start the service first.</string>
-    <string name="comput_error_no_binder">Error: Unable to retrieve Shevery binder.</string>
-    <string name="comput_console_initialized">Console initialized. Privileged Shevery service connected.\nReady for commands.</string>
+    <string name="comput_error_not_running">Error: Privileged OmniShizuku Service is not running. Please start the service first.</string>
+    <string name="comput_error_no_binder">Error: Unable to retrieve OmniShizuku binder.</string>
+    <string name="comput_console_initialized">Console initialized. Privileged OmniShizuku service connected.\nReady for commands.</string>
     <string name="comput_ai_explanation">AI Explanation</string>
     <string name="comput_ai_stage_1">Preset</string>
     <string name="comput_ai_stage_2">Credentials</string>
@@ -745,7 +745,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="comput_use_command">Use command</string>
     <string name="comput_copied_to_clipboard">Copied to clipboard</string>
     <string name="comput_copy_command">Copy command</string>
-    <string name="comput_hero_title">Shevery Console</string>
+    <string name="comput_hero_title">OmniShizuku Console</string>
     <string name="comput_hero_subtitle">Powerful shell terminal on your device, powered by Shizuku.</string>
     <string name="comput_status_ready">Ready</string>
     <string name="comput_status_running">Running</string>
@@ -816,7 +816,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
 
     <!-- ErrorProtect &amp; TCP 5555 -->
     <string name="error_protect_title">ErrorProtect(Watchdog)</string>
-    <string name="error_protect_summary">Reactively monitor service health. Automatically restarts Shevery if issues or crashes are detected.</string>
+    <string name="error_protect_summary">Reactively monitor service health. Automatically restarts OmniShizuku if issues or crashes are detected.</string>
     <string name="settings_wifi_reassert_title">Re-assert wireless debugging</string>
     <string name="settings_wifi_reassert_summary">Off by default. Restores the wireless debugging flag if the ROM cleared it (at ADB start and Wi-Fi reconnect). Never turns it off.</string>
     <string name="settings_tcp_5555_title">TCP Binding 5555</string>
@@ -824,7 +824,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="settings_tcp_5555_button">Bind to 5555</string>
     <string name="settings_tcp_5555_bind_success">Successfully bound ADB to TCP port 5555</string>
     <string name="settings_tcp_5555_bind_failed">Failed to bind ADB to port 5555: %1$s</string>
-    <string name="settings_tcp_5555_bind_failed_generic">Root, Dhizuku, or active Shevery is required.</string>
+    <string name="settings_tcp_5555_bind_failed_generic">Root, Dhizuku, or active OmniShizuku is required.</string>
 
     <!-- Accessibility Manager -->
     <string name="accessibility_manager_title">Accessibility Manager</string>
@@ -836,11 +836,11 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="accessibility_manager_keep_alive_summary">Re-enable pinned accessibility services when the system or user disables them</string>
     <string name="accessibility_manager_auto_boot_title">Start on boot</string>
     <string name="accessibility_manager_auto_boot_summary">Automatically start the keep-alive daemon after device reboot</string>
-    <string name="accessibility_manager_shizuku_required">Shevery is not running. Start it to enable or disable accessibility services.</string>
+    <string name="accessibility_manager_shizuku_required">OmniShizuku is not running. Start it to enable or disable accessibility services.</string>
     <string name="accessibility_manager_services_group">Accessibility services (%1$d)</string>
     <string name="accessibility_manager_services_empty">No installed accessibility services found.</string>
     <string name="accessibility_manager_service_no_description">No description provided by the service.</string>
-    <string name="accessibility_manager_write_failed">Failed to update accessibility services. Check that Shevery is running and has permission.</string>
+    <string name="accessibility_manager_write_failed">Failed to update accessibility services. Check that OmniShizuku is running and has permission.</string>
     <string name="accessibility_manager_pin">Pin service to keep alive</string>
     <string name="accessibility_manager_unpin">Unpin service</string>
     <string name="accessibility_daemon_channel_name">Accessibility keep-alive</string>
@@ -849,15 +849,15 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
 
     <!-- Shizuku compatibility stub -->
     <string name="settings_compat_stub">Legacy Shizuku stub</string>
-    <string name="settings_compat_stub_summary">Installs a stub package (moe.shizuku.privileged.api) so apps that hard-check for the legacy Shizuku manager keep working. Permission and binder requests are forwarded to Shevery.</string>
+    <string name="settings_compat_stub_summary">Installs a stub package (moe.shizuku.privileged.api) so apps that hard-check for the legacy Shizuku manager keep working. Permission and binder requests are forwarded to OmniShizuku.</string>
     <string name="settings_compat_stub_installed">Legacy stub installed via %1$s</string>
     <string name="settings_compat_stub_uninstalled">Legacy stub removed</string>
     <string name="settings_compat_stub_failed">Failed to %1$s the legacy stub via %2$s: %3$s</string>
-    <string name="settings_compat_stub_none">No channel available (start Shevery first)</string>
+    <string name="settings_compat_stub_none">No channel available (start OmniShizuku first)</string>
 
     <!-- TCP Mode Enable Prompt Dialog -->
     <string name="tcp_prompt_dialog_title">Enable Persistent TCP Mode?</string>
-    <string name="tcp_prompt_dialog_message">Shevery is running, but Persistent TCP Mode is currently disabled.\n\nEnabling TCP Mode allows Shevery to stay running and auto-reconnect in the background—even without Wi-Fi—until your device is restarted.</string>
+    <string name="tcp_prompt_dialog_message">OmniShizuku is running, but Persistent TCP Mode is currently disabled.\n\nEnabling TCP Mode allows OmniShizuku to stay running and auto-reconnect in the background—even without Wi-Fi—until your device is restarted.</string>
     <string name="tcp_prompt_dialog_enable">Enable</string>
     <string name="tcp_prompt_dialog_later">Not Now</string>
     <string name="tcp_prompt_dialog_do_not_remind">Don\'t remind me again</string>
@@ -866,7 +866,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="automation_settings_title">Automation</string>
     <string name="automation_section_summary">Tasker, MacroDroid, and broadcast intents</string>
     <string name="automation_tasker_macrodroid_title">Tasker &amp; MacroDroid</string>
-    <string name="automation_dialog_description">Control Shevery with Tasker or MacroDroid via the built-in plugin or by sending explicit broadcast intents. Tap an item to copy.</string>
+    <string name="automation_dialog_description">Control OmniShizuku with Tasker or MacroDroid via the built-in plugin or by sending explicit broadcast intents. Tap an item to copy.</string>
     <string name="automation_dialog_actions_header">Broadcast Actions</string>
     <string name="automation_dialog_target_header">Target Package</string>
     <string name="automation_copied_to_clipboard">Copied to clipboard</string>
@@ -879,8 +879,8 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="automation_plugin_method_summary">Integrated action &amp; state condition plugin in Tasker and MacroDroid</string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -894,7 +894,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -907,11 +907,11 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="app_management_make_permanent_desc">Currently granted for this session only. Tap to make it permanent.</string>
     <string name="app_management_make_permanent_prompt">Make permission permanent?</string>
     <string name="app_management_onetime_badge">This session only</string>
-    <string name="compat_stubs_header_info">Compatibility stubs are lightweight bridge packages that emulate official services. They forward permissions, requests, and APIs to Shevery so third-party apps work without modification.</string>
+    <string name="compat_stubs_header_info">Compatibility stubs are lightweight bridge packages that emulate official services. They forward permissions, requests, and APIs to OmniShizuku so third-party apps work without modification.</string>
     <string name="device_owner_active">Device Owner is active</string>
-    <string name="device_owner_active_desc">Shevery has device owner privileges. It can manage ADB, delegate scopes to apps, and auto-start without a PC.</string>
+    <string name="device_owner_active_desc">OmniShizuku has device owner privileges. It can manage ADB, delegate scopes to apps, and auto-start without a PC.</string>
     <string name="profile_owner_active">Profile Owner is active</string>
-    <string name="profile_owner_active_desc">Shevery has profile owner privileges. It can manage app permissions, freeze apps, and delegate scopes within this profile.</string>
+    <string name="profile_owner_active_desc">OmniShizuku has profile owner privileges. It can manage app permissions, freeze apps, and delegate scopes within this profile.</string>
     <string name="profile_owner_inactive_desc">To enable Profile Owner on your current user/profile, run this command via ADB:</string>
     <string name="profile_owner_tab">Profile Owner</string>
     <string name="device_owner_tab">Device Owner</string>
@@ -922,10 +922,10 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="profile_owner_deactivate_dialog_title">Deactivate Profile Owner?</string>
     <string name="profile_owner_deactivate_dialog_message">Are you sure you want to deactivate Profile Owner? All delegated permissions and policies will be revoked. To restore Profile Owner, you will need to re-run the ADB command.</string>
     <string name="profile_owner_deactivate_title">Deactivate Profile Owner</string>
-    <string name="profile_owner_deactivate_summary">Remove Profile Owner privileges from Shevery</string>
+    <string name="profile_owner_deactivate_summary">Remove Profile Owner privileges from OmniShizuku</string>
     <string name="profile_owner_deactivate_success">Profile Owner deactivated</string>
     <string name="profile_owner_deactivate_failed">Failed to deactivate Profile Owner</string>
-    <string name="device_owner_admin_enabled_toast">Shevery %1$s privileges granted</string>
+    <string name="device_owner_admin_enabled_toast">OmniShizuku %1$s privileges granted</string>
     <string name="device_owner_danger_zone_title">Danger Zone</string>
     <string name="device_owner_deactivate_button">Deactivate</string>
     <string name="device_owner_deactivate_countdown">Deactivate (%1$ds)</string>
@@ -933,7 +933,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="device_owner_deactivate_dialog_title">Deactivate Device Owner?</string>
     <string name="device_owner_deactivate_failed">Failed to deactivate Device Owner</string>
     <string name="device_owner_deactivate_success">Device Owner deactivated</string>
-    <string name="device_owner_deactivate_summary">Remove Device Owner privileges from Shevery</string>
+    <string name="device_owner_deactivate_summary">Remove Device Owner privileges from OmniShizuku</string>
     <string name="device_owner_deactivate_title">Deactivate Device Owner</string>
     <string name="device_owner_delegation_all_apps">All installed apps</string>
     <string name="device_owner_delegation_configure">Configure</string>
@@ -956,7 +956,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="device_owner_inactive_desc">To enable Device Owner, remove all accounts from your device, then run this command via ADB:</string>
     <string name="device_owner_transfer_button">Transfer</string>
     <string name="device_owner_transfer_dialog_hint">Target application must first be enabled under Android Settings тЖТ Security тЖТ Device admin apps.</string>
-    <string name="device_owner_transfer_dialog_message">This will permanently transfer Device Owner rights from Shevery to the selected application. Shevery will no longer be Device Owner.</string>
+    <string name="device_owner_transfer_dialog_message">This will permanently transfer Device Owner rights from OmniShizuku to the selected application. OmniShizuku will no longer be Device Owner.</string>
     <string name="device_owner_transfer_dialog_title">Transfer Device Ownership?</string>
     <string name="device_owner_transfer_failed">Failed to transfer ownership</string>
     <string name="device_owner_transfer_no_admin_apps">No eligible device admin apps found</string>
@@ -975,16 +975,16 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="security_action_permissions">Managing app permissions</string>
     <string name="security_action_server">Starting and stopping server</string>
     <string name="security_action_stubs">Installing or removing stubs</string>
-    <string name="security_auth_prompt_app_open">Unlock Shevery</string>
+    <string name="security_auth_prompt_app_open">Unlock OmniShizuku</string>
     <string name="security_auth_prompt_device_owner">Access Device Owner settings</string>
     <string name="security_auth_prompt_permissions">Manage application permissions</string>
-    <string name="security_auth_prompt_server">Control Shevery server</string>
+    <string name="security_auth_prompt_server">Control OmniShizuku server</string>
     <string name="security_auth_prompt_stubs">Manage compatibility stubs</string>
-    <string name="security_auth_prompt_title">Authenticate to manage Shevery</string>
-    <string name="security_locked_desc">Authentication is required to use Shevery</string>
-    <string name="security_locked_title">Shevery is locked</string>
+    <string name="security_auth_prompt_title">Authenticate to manage OmniShizuku</string>
+    <string name="security_locked_desc">Authentication is required to use OmniShizuku</string>
+    <string name="security_locked_title">OmniShizuku is locked</string>
     <string name="security_protected_actions_title">Protected Actions</string>
-    <string name="security_require_auth_summary">Protect Shevery actions with fingerprint, face unlock or device lock</string>
+    <string name="security_require_auth_summary">Protect OmniShizuku actions with fingerprint, face unlock or device lock</string>
     <string name="security_require_auth_title">Require authentication</string>
     <string name="security_timeout_15min">15 minutes</string>
     <string name="security_timeout_1hour">1 hour</string>
@@ -1003,7 +1003,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="settings_stealth_version">Stealth version</string>
     <string name="settings_stealth_version_summary">Disguised copy with a random package name. Saves the APK file to Downloads</string>
     <string name="settings_stealth_dialog_title">Save stealth APK</string>
-    <string name="settings_stealth_dialog_message">Package name: %1$s\nApp version: %2$s\n\nThe stealth copy declares the same Shizuku authorities, so uninstall the normal Shevery before installing it.</string>
+    <string name="settings_stealth_dialog_message">Package name: %1$s\nApp version: %2$s\n\nThe stealth copy declares the same Shizuku authorities, so uninstall the normal OmniShizuku before installing it.</string>
     <string name="settings_stealth_appname_label">App name</string>
     <string name="settings_stealth_filename_label">File name</string>
     <string name="settings_stealth_action_save">Save</string>
@@ -1015,7 +1015,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="stub_dhizuku_summary">Declares com.rosan.dhizuku package and Dhizuku API permission, providing compatibility for applications hardcoded to Dhizuku.</string>
     <string name="stub_dhizuku_title">Dhizuku Compatibility Stub</string>
     <string name="stub_installed_success">%1$s installed successfully via %2$s</string>
-    <string name="stub_shizuku_summary">Declares moe.shizuku.privileged.api package and Shizuku permissions, forwarding authorization and binder requests to Shevery.</string>
+    <string name="stub_shizuku_summary">Declares moe.shizuku.privileged.api package and Shizuku permissions, forwarding authorization and binder requests to OmniShizuku.</string>
     <string name="stub_shizuku_title">Shizuku Compatibility Stub</string>
     <string name="stub_status_installed">Installed</string>
     <string name="stub_status_not_installed">Not Installed</string>
@@ -1027,7 +1027,7 @@ Wi-Fi is required for the first restart because Shevery must connect to the curr
     <string name="notification_auth_missing_title">Auth token required</string>
     <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under Automation in Settings.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
-    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery Settings.</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku Settings.</string>
     <string name="notification_connectors_disabled_title">Automation connectors disabled</string>
-    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in Settings. Tap to enable.</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because OmniShizuku connectors are disabled in Settings. Tap to enable.</string>
 </resources>

@@ -24,15 +24,21 @@ object PluginContract {
     const val EXTRA_AUTH = "auth"
     const val VALUE_CONDITION_RUNNING = "running"
 
-    const val MANAGER_PACKAGE = "com.hamondev.shevery"
+    const val MANAGER_PACKAGE = "com.krishna.omnishizuku"
+    const val LEGACY_MANAGER_PACKAGE = "com.hamondev.shevery"
     const val MANAGER_CONTROL_RECEIVER = "moe.shizuku.manager.receiver.SheveryControlReceiver"
     const val ACTION_START_SERVER = "moe.shizuku.manager.action.START_SERVER"
     const val ACTION_STOP_SERVER = "moe.shizuku.manager.action.STOP_SERVER"
 
-    const val ACTION_DIRECT_START = "com.hamondev.shevery.action.START_SERVER"
-    const val ACTION_DIRECT_STOP = "com.hamondev.shevery.action.STOP_SERVER"
-    const val ACTION_DIRECT_RESTART = "com.hamondev.shevery.action.RESTART_SERVER"
-    const val ACTION_DIRECT_TOGGLE = "com.hamondev.shevery.action.TOGGLE_SERVER"
+    const val ACTION_DIRECT_START = "com.krishna.omnishizuku.action.START_SERVER"
+    const val ACTION_DIRECT_STOP = "com.krishna.omnishizuku.action.STOP_SERVER"
+    const val ACTION_DIRECT_RESTART = "com.krishna.omnishizuku.action.RESTART_SERVER"
+    const val ACTION_DIRECT_TOGGLE = "com.krishna.omnishizuku.action.TOGGLE_SERVER"
+
+    const val ACTION_LEGACY_DIRECT_START = "com.hamondev.shevery.action.START_SERVER"
+    const val ACTION_LEGACY_DIRECT_STOP = "com.hamondev.shevery.action.STOP_SERVER"
+    const val ACTION_LEGACY_DIRECT_RESTART = "com.hamondev.shevery.action.RESTART_SERVER"
+    const val ACTION_LEGACY_DIRECT_TOGGLE = "com.hamondev.shevery.action.TOGGLE_SERVER"
 
     const val CHANNEL_ID_ALERTS = "automation_alerts"
     const val NOTIFICATION_ID_AUTH = 1450

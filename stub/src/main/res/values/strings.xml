@@ -6,6 +6,6 @@
     <string name="permission_label">access Shizuku</string>
     <string name="permission_description">Allow the app to use Shizuku.</string>
     <string name="dhizuku_app_name">Dhizuku</string>
-    <string name="dhizuku_permission_label">access Dhizuku (Shevery)</string>
-    <string name="dhizuku_permission_description">Allow the app to use Dhizuku via Shevery.</string>
+    <string name="dhizuku_permission_label">access Dhizuku (OmniShizuku)</string>
+    <string name="dhizuku_permission_description">Allow the app to use Dhizuku via OmniShizuku.</string>
 </resources>

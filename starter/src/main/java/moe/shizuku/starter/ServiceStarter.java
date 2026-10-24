@@ -94,7 +94,7 @@ public class ServiceStarter {
     }
 
     private static boolean sendBinder(IBinder binder, String token, boolean retry) {
-        String packageName = "com.hamondev.shevery";
+        String packageName = "com.krishna.omnishizuku";
         String name = packageName + ".shizuku";
         int userId = 0;
         IContentProvider provider = null;
@@ -102,6 +102,9 @@ public class ServiceStarter {
         try {
             for (int attempt = 0; ; attempt++) {
                 provider = ActivityManagerApis.getContentProviderExternal(name, userId, null, name);
+                if (provider == null) {
+                    provider = ActivityManagerApis.getContentProviderExternal("com.hamondev.shevery.shizuku", userId, null, "com.hamondev.shevery.shizuku");
+                }
                 if (provider != null) {
                     break;
                 }

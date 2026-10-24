@@ -61,10 +61,10 @@ import java.util.zip.ZipFile
  */
 object StealthApkGenerator {
 
-    const val DEFAULT_PACKAGE = "com.hamondev.shevery"
+    const val DEFAULT_PACKAGE = "com.krishna.omnishizuku"
     const val TEMPLATE_PACKAGE = DEFAULT_PACKAGE
     const val TEMPLATE_APP_NAME = "System Toolkit"
-    const val STEALTH_LABEL_PLACEHOLDER = "SheveryStealthLabelPlaceholder32"
+    const val STEALTH_LABEL_PLACEHOLDER = "OmniShizukuStealthPlaceholder32"
 
     private const val TASKER_SUFFIX = ".tasker"
     private const val APK_SIG_BLOCK_V2_ID = 0x7109871a

@@ -8,24 +8,35 @@ import android.os.Bundle;
 
 public class ForwardActivity extends Activity {
 
+    public static final String OMNISHIZUKU_PACKAGE = "com.krishna.omnishizuku";
     public static final String SHEVERY_PACKAGE = "com.hamondev.shevery";
     public static final String PERMISSION_ACTIVITY = "moe.shizuku.manager.authorization.RequestPermissionActivity";
     public static final String LEGACY_ACTIVITY = "moe.shizuku.manager.legacy.LegacyIsNotSupportedActivity";
+
+    private String getTargetPackage() {
+        try {
+            getPackageManager().getPackageInfo(OMNISHIZUKU_PACKAGE, 0);
+            return OMNISHIZUKU_PACKAGE;
+        } catch (Throwable ignored) {
+            return SHEVERY_PACKAGE;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try {
+            String targetPkg = getTargetPackage();
             Intent original = getIntent();
             Intent forward = new Intent(original);
-            forward.setPackage(SHEVERY_PACKAGE);
+            forward.setPackage(targetPkg);
 
             String action = original.getAction();
             if (action != null && action.contains("REQUEST_AUTHORIZATION")) {
-                forward.setClassName(SHEVERY_PACKAGE, LEGACY_ACTIVITY);
+                forward.setClassName(targetPkg, LEGACY_ACTIVITY);
             } else {
-                forward.setClassName(SHEVERY_PACKAGE, PERMISSION_ACTIVITY);
+                forward.setClassName(targetPkg, PERMISSION_ACTIVITY);
             }
 
             if (original.getExtras() != null) {

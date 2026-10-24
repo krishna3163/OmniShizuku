@@ -9,16 +9,27 @@ import android.os.Bundle;
 
 public class ForwardDhizukuActivity extends Activity {
 
+    public static final String OMNISHIZUKU_PACKAGE = "com.krishna.omnishizuku";
     public static final String SHEVERY_PACKAGE = "com.hamondev.shevery";
     public static final String SHEVERY_REQUEST_ACTIVITY = "moe.shizuku.manager.authorization.RequestPermissionActivity";
+
+    private String getTargetPackage() {
+        try {
+            getPackageManager().getPackageInfo(OMNISHIZUKU_PACKAGE, 0);
+            return OMNISHIZUKU_PACKAGE;
+        } catch (Throwable ignored) {
+            return SHEVERY_PACKAGE;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         try {
+            String targetPkg = getTargetPackage();
             Intent forward = new Intent();
-            forward.setComponent(new ComponentName(SHEVERY_PACKAGE, SHEVERY_REQUEST_ACTIVITY));
+            forward.setComponent(new ComponentName(targetPkg, SHEVERY_REQUEST_ACTIVITY));
             String action = getIntent().getAction();
             if (action != null) {
                 forward.setAction(action);

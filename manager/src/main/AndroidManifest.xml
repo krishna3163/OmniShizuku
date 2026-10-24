@@ -55,7 +55,7 @@
         android:required="false" />
 
     <permission-group
-        android:name="com.hamondev.shevery.permission-group.API"
+        android:name="com.krishna.omnishizuku.permission-group.API"
         android:description="@string/permission_group_description"
         android:icon="@drawable/ic_system_icon"
         android:label="@string/permission_group_label" />
@@ -70,7 +70,7 @@
         android:description="@string/permission_description"
         android:icon="@drawable/ic_system_icon"
         android:label="@string/permission_label"
-        android:permissionGroup="com.hamondev.shevery.permission-group.API"
+        android:permissionGroup="com.krishna.omnishizuku.permission-group.API"
         android:protectionLevel="dangerous" />
     <uses-permission
         android:name="moe.shizuku.manager.permission.API_V23" />
@@ -143,6 +143,7 @@
             android:exported="true"
             android:label="@string/accessibility_manager_title">
             <intent-filter>
+                <action android:name="com.krishna.omnishizuku.action.ACCESSIBILITY_MANAGER" />
                 <action android:name="com.hamondev.shevery.action.ACCESSIBILITY_MANAGER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>

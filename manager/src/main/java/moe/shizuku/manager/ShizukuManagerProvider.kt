@@ -17,6 +17,7 @@ class ShizukuManagerProvider : ShizukuProvider() {
 
     companion object {
         private const val EXTRA_BINDER = "moe.shizuku.privileged.api.intent.extra.BINDER"
+        private const val EXTRA_BINDER_OMNISHIZUKU = "com.krishna.omnishizuku.intent.extra.BINDER"
         private const val EXTRA_BINDER_SHEVERY = "com.hamondev.shevery.intent.extra.BINDER"
         private const val METHOD_SEND_USER_SERVICE = "sendUserService"
     }
@@ -33,7 +34,8 @@ class ShizukuManagerProvider : ShizukuProvider() {
             METHOD_SEND_BINDER -> {
                 try {
                     extras.classLoader = BinderContainer::class.java.classLoader
-                    val container = extras.getParcelable<BinderContainer>(EXTRA_BINDER)
+                    val container = extras.getParcelable<BinderContainer>(EXTRA_BINDER_OMNISHIZUKU)
+                        ?: extras.getParcelable<BinderContainer>(EXTRA_BINDER)
                         ?: extras.getParcelable<BinderContainer>(EXTRA_BINDER_SHEVERY)
                     val newBinder = container?.binder
                     if (newBinder != null) {

@@ -25,6 +25,10 @@
                 <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
             </intent-filter>
             <intent-filter>
+                <action android:name="com.krishna.omnishizuku.action.START_SERVER" />
+                <action android:name="com.krishna.omnishizuku.action.STOP_SERVER" />
+                <action android:name="com.krishna.omnishizuku.action.RESTART_SERVER" />
+                <action android:name="com.krishna.omnishizuku.action.TOGGLE_SERVER" />
                 <action android:name="com.hamondev.shevery.action.START_SERVER" />
                 <action android:name="com.hamondev.shevery.action.STOP_SERVER" />
                 <action android:name="com.hamondev.shevery.action.RESTART_SERVER" />

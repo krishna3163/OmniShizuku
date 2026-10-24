@@ -11,7 +11,7 @@ plugins {
 android {
     namespace 'moe.shizuku.manager'
     defaultConfig {
-        applicationId "com.hamondev.shevery"
+        applicationId "com.krishna.omnishizuku"
         versionCode rootProject.ext.versionCode
         versionName rootProject.ext.versionName
         externalNativeBuild {

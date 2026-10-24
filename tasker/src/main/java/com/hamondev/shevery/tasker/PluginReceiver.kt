@@ -74,10 +74,14 @@ class PluginReceiver : BroadcastReceiver() {
         when (intent.action) {
             PluginContract.ACTION_FIRE_SETTING -> handleFire(context, intent)
             PluginContract.ACTION_QUERY_CONDITION -> handleQuery(intent)
-            PluginContract.ACTION_DIRECT_START -> handleDirect(context, Command.START)
-            PluginContract.ACTION_DIRECT_STOP -> handleDirect(context, Command.STOP)
-            PluginContract.ACTION_DIRECT_RESTART -> handleDirect(context, Command.RESTART)
-            PluginContract.ACTION_DIRECT_TOGGLE -> handleDirect(context, Command.TOGGLE)
+            PluginContract.ACTION_DIRECT_START,
+            PluginContract.ACTION_LEGACY_DIRECT_START -> handleDirect(context, Command.START)
+            PluginContract.ACTION_DIRECT_STOP,
+            PluginContract.ACTION_LEGACY_DIRECT_STOP -> handleDirect(context, Command.STOP)
+            PluginContract.ACTION_DIRECT_RESTART,
+            PluginContract.ACTION_LEGACY_DIRECT_RESTART -> handleDirect(context, Command.RESTART)
+            PluginContract.ACTION_DIRECT_TOGGLE,
+            PluginContract.ACTION_LEGACY_DIRECT_TOGGLE -> handleDirect(context, Command.TOGGLE)
         }
     }
 
@@ -85,7 +89,11 @@ class PluginReceiver : BroadcastReceiver() {
         PluginContract.ACTION_DIRECT_START,
         PluginContract.ACTION_DIRECT_STOP,
         PluginContract.ACTION_DIRECT_RESTART,
-        PluginContract.ACTION_DIRECT_TOGGLE -> true
+        PluginContract.ACTION_DIRECT_TOGGLE,
+        PluginContract.ACTION_LEGACY_DIRECT_START,
+        PluginContract.ACTION_LEGACY_DIRECT_STOP,
+        PluginContract.ACTION_LEGACY_DIRECT_RESTART,
+        PluginContract.ACTION_LEGACY_DIRECT_TOGGLE -> true
         else -> false
     }
 

@@ -9,6 +9,7 @@ import android.os.Bundle;
 
 public class ForwardDhizukuProvider extends ContentProvider {
 
+    public static final String OMNISHIZUKU_AUTHORITY = "com.krishna.omnishizuku.dhizuku_server.provider";
     public static final String SHEVERY_AUTHORITY = "com.hamondev.shevery.dhizuku_server.provider";
 
     @Override
@@ -20,11 +21,17 @@ public class ForwardDhizukuProvider extends ContentProvider {
     public Bundle call(String method, String arg, Bundle extras) {
         try {
             if (getContext() != null) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    Uri uri = Uri.parse("content://" + SHEVERY_AUTHORITY);
-                    return getContext().getContentResolver().call(uri, method, arg, extras);
-                } else {
-                    return getContext().getContentResolver().call(SHEVERY_AUTHORITY, method, arg, extras);
+                for (String auth : new String[]{OMNISHIZUKU_AUTHORITY, SHEVERY_AUTHORITY}) {
+                    try {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                            Uri uri = Uri.parse("content://" + auth);
+                            Bundle res = getContext().getContentResolver().call(uri, method, arg, extras);
+                            if (res != null) return res;
+                        } else {
+                            Bundle res = getContext().getContentResolver().call(auth, method, arg, extras);
+                            if (res != null) return res;
+                        }
+                    } catch (Throwable ignored) {}
                 }
             }
         } catch (Throwable ignored) {
