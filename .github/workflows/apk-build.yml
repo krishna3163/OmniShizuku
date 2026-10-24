@@ -118,24 +118,14 @@ jobs:
             build-release.log
           if-no-files-found: ignore
 
-      - name: Upload debug APK Artifact
+      - name: Upload all APKs as Artifact
         if: always()
         uses: actions/upload-artifact@v7
         with:
-          name: omnishizuku-debug
+          name: omnishizuku-all-apks
           path: |
-            out/apk/*debug*.apk
-            manager/build/outputs/apk/debug/*.apk
-          if-no-files-found: warn
-
-      - name: Upload release APK Artifact
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: omnishizuku-release
-          path: |
-            out/apk/*release*.apk
-            manager/build/outputs/apk/release/*.apk
+            out/apk/*.apk
+            manager/build/outputs/apk/**/*.apk
           if-no-files-found: warn
 
       - name: Publish to GitHub Releases
@@ -143,15 +133,11 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          # Collect APK files from out/apk and fallback to outputs/apk
-          APK_FILES=$(find out/apk -name "*.apk" 2>/dev/null | sort -u | tr '\n' ' ')
-          if [ -z "$APK_FILES" ]; then
-            APK_FILES=$(find manager/build/outputs/apk -name "*.apk" 2>/dev/null | sort -u | tr '\n' ' ')
-          fi
+          APK_FILES=$(find out/apk manager/build/outputs/apk -name "*.apk" 2>/dev/null | sort -u | tr '\n' ' ')
           echo "Discovered APK files: $APK_FILES"
           if [ -z "$APK_FILES" ]; then
-            echo "No APK files found to publish."
-            exit 0
+            echo "::error::No APK files found to publish!"
+            exit 1
           fi
 
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
@@ -171,8 +157,8 @@ jobs:
             echo "Creating release '$RELEASE_TAG'..."
             gh release create "$RELEASE_TAG" $APK_FILES \
               --title "$RELEASE_TITLE" \
-              --target "${{ github.sha }}" \
               $EXTRA_FLAGS \
-              --generate-notes || true
+              --generate-notes
           fi
+
 
