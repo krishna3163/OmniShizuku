@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dialog_top_padding"
+    android:scrollbars="vertical">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="?android:dialogPreferredPadding"
+        android:showDividers="middle"
+        android:divider="@drawable/spacing_list_item_vertical">
+
+        <TextView
+            style="@style/TextAppearance.Material3.TitleMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_report_dialog_before_reporting" />
+
+        <TextView
+            android:id="@+id/updateText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_report_dialog_update" />
+
+        <TextView
+            android:id="@+id/wikiText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_report_dialog_wiki" />
+
+        <TextView
+            android:id="@+id/issuesText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_report_dialog_issues" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginVertical="8dp"
+            android:background="?colorOutline" />
+
+        <TextView
+            android:id="@+id/methodText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_report_dialog_method"
+            android:textStyle="bold" />
+
+        <TextView
+            style="@style/TextAppearance.Material3.BodySmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_report_dialog_log_note" />
+
+        <!-- Nothing goes into the issue by itself. The log is here, on the other hand, so a
+             report that needs one can attach the whole file rather than a tail of it: handed to
+             wherever the reporter wants it - the browser's file picker, a mail to themselves,
+             anything that can hold a file. -->
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/shareLog"
+            style="@style/Widget.Material3.Button.TextButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/bug_report_dialog_share_log" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

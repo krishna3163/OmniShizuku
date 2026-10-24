@@ -38,6 +38,7 @@ import androidx.tv.material3.SurfaceDefaults as TvSurfaceDefaults
 import androidx.tv.material3.ClickableSurfaceDefaults as TvClickableSurfaceDefaults
 import androidx.tv.material3.Text as TvText
 import moe.shizuku.manager.Helps
+import moe.shizuku.manager.ui.compose.htmlToPlainText
 import moe.shizuku.manager.R
 import moe.shizuku.manager.model.ServiceStatus
 import moe.shizuku.manager.ui.compose.ShizukuIcon
@@ -78,8 +79,8 @@ internal fun TVHomeScreen(
     val adbPermission = status.permission
     val canUseWirelessAdb = Build.VERSION.SDK_INT >= Build.VERSION_CODES.R || EnvironmentUtils.getAdbTcpPort() > 0
 
-    val diagnostics = remember(status, grantedCount, localNetworkPermissionState) {
-        buildDiagnostics(context, status, grantedCount, localNetworkPermissionState)
+    val diagnostics = remember(status, grantedCount, localNetworkPermissionState, isRooted) {
+        buildDiagnostics(context, status, grantedCount, localNetworkPermissionState, isRooted)
     }
 
     Row(modifier = Modifier.fillMaxSize()) {

@@ -39,11 +39,11 @@ class AdbPairingService : Service() {
             return Intent(context, AdbPairingService::class.java).setAction(startAction)
         }
 
-        private fun stopIntent(context: Context): Intent {
+        fun stopIntent(context: Context): Intent {
             return Intent(context, AdbPairingService::class.java).setAction(stopAction)
         }
 
-        private fun replyIntent(context: Context, port: Int): Intent {
+        fun replyIntent(context: Context, port: Int): Intent {
             return Intent(context, AdbPairingService::class.java).setAction(replyAction).putExtra(portKey, port)
         }
     }

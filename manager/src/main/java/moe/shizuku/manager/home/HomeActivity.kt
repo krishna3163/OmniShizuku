@@ -1196,7 +1196,7 @@ abstract class HomeActivity : AppActivity() {
     }
 }
 
-private data class LocalNetworkPermissionState(
+internal data class LocalNetworkPermissionState(
     val permissions: List<String>,
     val missingPermissions: List<String>
 ) {
@@ -2349,7 +2349,7 @@ private fun formatServiceUptime(millis: Long): String {
     }
 }
 
-private fun buildServiceSummary(context: android.content.Context, status: ServiceStatus): String {
+internal fun buildServiceSummary(context: android.content.Context, status: ServiceStatus): String {
     if (!status.isRunning) return ""
 
     val user = when {
@@ -2370,16 +2370,16 @@ private fun buildServiceSummary(context: android.content.Context, status: Servic
     return htmlToPlainText(raw)
 }
 
-private fun buildDiagnostics(
+internal fun buildDiagnostics(
     context: android.content.Context,
     status: ServiceStatus,
     grantedCount: Int,
     localNetworkPermissionState: LocalNetworkPermissionState,
     isRooted: Boolean,
-    watchdogEnabled: Boolean,
-    dhizukuEnabled: Boolean,
-    tcpMode: Boolean,
-    launchMode: Int
+    watchdogEnabled: Boolean = false,
+    dhizukuEnabled: Boolean = false,
+    tcpMode: Boolean = false,
+    launchMode: Int = 0
 ): String {
     val versionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName
     val localNetwork = if (localNetworkPermissionState.required) {

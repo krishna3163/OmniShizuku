@@ -38,7 +38,7 @@ object InstalledPackages {
      * same answer from this side and only one of them is true.
      */
     fun all(context: Context, flags: Int): List<PackageInfo> {
-        val fromShell = ShizukuSystemApis.getInstalledPackagesAsShell(
+        val fromShell = ShizukuSystemApis.getInstalledPackages(
             flags.toLong(), UserHandleCompat.myUserId()
         )
         if (fromShell.isNotEmpty()) return fromShell
@@ -57,7 +57,7 @@ object InstalledPackages {
      * rather than the whole list.
      */
     fun one(context: Context, packageName: String, flags: Int): PackageInfo? {
-        val fromShell = ShizukuSystemApis.getPackageInfoAsShell(
+        val fromShell = ShizukuSystemApis.getPackageInfo(
             packageName, flags.toLong(), UserHandleCompat.myUserId()
         )
         if (fromShell != null) return fromShell

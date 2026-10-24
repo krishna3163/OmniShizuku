@@ -22,6 +22,7 @@ object ModuleSettings {
     private const val KEY_RECOMMAND_ACTION = "adb_modules_recommand_action"
     private const val KEY_TRUSTED_MODULES = "adb_modules_trusted_modules"
     private const val KEY_CONNECTOR_ENABLED = "shizuku_connector_enabled"
+    private const val KEY_TAPI_ENABLED = "shizuku_tapi_enabled"
     private const val KEY_DHIZUKU_ENABLED = "shizuku_dhizuku_enabled"
     private const val KEY_VERBOSE_LOGGING = "shizuku_verbose_logging"
     private const val KEY_NOTIFY_DEATH = "shizuku_notify_service_death"
@@ -223,6 +224,14 @@ object ModuleSettings {
 
     fun setConnectorEnabled(value: Boolean) {
         ShizukuSettings.getPreferences().edit().putBoolean(KEY_CONNECTOR_ENABLED, value).apply()
+    }
+
+    fun isTapiEnabled(): Boolean {
+        return ShizukuSettings.getPreferences().getBoolean(KEY_TAPI_ENABLED, false)
+    }
+
+    fun setTapiEnabled(value: Boolean) {
+        ShizukuSettings.getPreferences().edit().putBoolean(KEY_TAPI_ENABLED, value).apply()
     }
 
     fun isDhizukuEnabled(): Boolean {

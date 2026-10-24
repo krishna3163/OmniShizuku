@@ -39,6 +39,43 @@ object EnvironmentUtils {
         return isTV(application)
     }
 
+    fun isTlsSupported(): Boolean {
+        return if (isTelevision())
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
+        else Build.VERSION.SDK_INT >= Build.VERSION_CODES.R
+    }
+
+    fun isAdbEnabled(): Boolean {
+        val appContext = moe.shizuku.manager.ShizukuApplication.appContext
+        if (Settings.Global.getInt(appContext.contentResolver, Settings.Global.ADB_ENABLED, 0) > 0) {
+            return true
+        }
+        return Build.VERSION.SDK_INT >= 37
+    }
+
+    fun isUsbDebuggingEnabled(): Boolean = isAdbEnabled()
+
+    fun isWirelessDebuggingEnabled(): Boolean = runCatching {
+        val appContext = moe.shizuku.manager.ShizukuApplication.appContext
+        Settings.Global.getInt(appContext.contentResolver, "adb_wifi_enabled", 0) == 1
+    }.getOrDefault(false)
+
+    fun isAdbWifiOverhauled(): Boolean = Build.VERSION.SDK_INT >= 37
+
+    fun isWifiConnected(): Boolean {
+        val appContext = moe.shizuku.manager.ShizukuApplication.appContext
+        val cm = appContext.getSystemService(Context.CONNECTIVITY_SERVICE) as android.net.ConnectivityManager
+        val network = cm.activeNetwork ?: return false
+        val capabilities = cm.getNetworkCapabilities(network) ?: return false
+        return capabilities.hasTransport(android.net.NetworkCapabilities.TRANSPORT_WIFI)
+    }
+
+    fun getAdbTlsPort(): Int = SystemProperties.getInt("service.adb.tls.port", -1)
+
+    fun getBootCount(): Int =
+        Settings.Global.getInt(moe.shizuku.manager.ShizukuApplication.appContext.contentResolver, Settings.Global.BOOT_COUNT, -1)
+
+    @JvmStatic
     fun isRooted(): Boolean {
         return Shell.getShell().isRoot
     }

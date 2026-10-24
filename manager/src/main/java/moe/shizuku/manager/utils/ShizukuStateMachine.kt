@@ -1,5 +1,10 @@
 package moe.shizuku.manager.utils
 
+import android.Manifest.permission.WRITE_SECURE_SETTINGS
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.SystemClock
+import android.provider.Settings
 import android.util.Log
 import java.util.concurrent.CopyOnWriteArrayList
 import java.util.concurrent.atomic.AtomicReference
@@ -8,47 +13,55 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
-import moe.shizuku.manager.AppConstants
+import moe.shizuku.manager.ShizukuApplication
 import moe.shizuku.manager.ShizukuSettings
-import moe.shizuku.manager.adb.AdbArm
-import moe.shizuku.manager.application
-import moe.shizuku.manager.service.WatchdogManager
+import moe.shizuku.manager.manage.Hiding
+import moe.shizuku.manager.utils.Diag
+import moe.shizuku.manager.manage.HidingGrants
+import moe.shizuku.manager.manage.LabsReapply
+import moe.shizuku.manager.receiver.ShizukuReceiverStarter
+import moe.shizuku.manager.start.grantLocalHotspotPermissionIfNeeded
+import moe.shizuku.manager.start.grantWriteSecureSettingsIfNeeded
 import rikka.shizuku.Shizuku
 
+private val appContext = ShizukuApplication.appContext
+
 /**
- * Centralized state machine for the Shizuku server lifecycle.
+ * The same one-time handing over, for the two grants the hiding lists need.
  *
- * Replaces scattered pingBinder() checks with a single source of truth.
- * State transitions are driven by binder received/dead listeners and explicit
- * set() calls. UI can observe via [asFlow] for reactive state updates.
+ * Only while a list is actually in use, which is where this deliberately differs from the
+ * permission granted beside it: that one is needed by the start flow itself, while these two are
+ * only ever read by the hiding watch - and usage access is a real special-access grant, not one
+ * of the harmless ones. Somebody who has never made a hiding list should not be handing it out.
  *
- * States:
- * - STARTING: Server is being launched (root, ADB, or Dhizuku)
- * - RUNNING: Binder is alive (pingBinder() returns true)
- * - STOPPING: Stop has been requested, waiting for binder to die
- * - STOPPED: Binder is dead, stop was expected (or initial state)
- * - CRASHED: Binder died unexpectedly (not from an explicit stop)
+ * It exists because the permission above it is granted here, on the server being seen running,
+ * and hiding's two have no better trigger: this is the moment the shell becomes available, and
+ * without a shell there is nothing to ask with.
  */
+private fun grantHidingAccessIfListsAreInUse() {
+    if (!Hiding.hasAnyApp()) return
+    HidingGrants.ensureQuietly()
+}
+
 object ShizukuStateMachine {
 
     enum class State { STARTING, RUNNING, STOPPING, STOPPED, CRASHED }
 
-    private val TAG = AppConstants.TAG
+    /**
+     * How long a poll leaves STARTING alone. The same minute `Starter.waitForBinder` waits for the
+     * binder, so a start that is still being waited on is not contradicted by the poll that
+     * asks whether it has finished.
+     */
+    const val STARTING_GRACE_MS = 60_000L
 
-    private val state = AtomicReference<State>(State.STOPPED)
+    private var state = AtomicReference<State>(State.STOPPED)
+
+    /** When the state last became STARTING, on the elapsed-realtime clock. */
+    @Volatile
+    private var startingSince = 0L
     private val listeners = CopyOnWriteArrayList<(State) -> Unit>()
-    private var listenersRegistered = false
 
     init {
-        registerListeners()
-        if (Shizuku.pingBinder()) {
-            state.set(State.RUNNING)
-        }
-    }
-
-    private fun registerListeners() {
-        if (listenersRegistered) return
-        listenersRegistered = true
         Shizuku.addBinderReceivedListenerSticky(
             Shizuku.OnBinderReceivedListener { set(State.RUNNING) }
         )
@@ -59,102 +72,202 @@ object ShizukuStateMachine {
 
     fun get(): State = state.get()
 
-    private fun transitionAtomic(transform: (State) -> State) {
-        var oldState: State
-        var newState: State
-        do {
-            oldState = state.get()
-            newState = transform(oldState)
-            if (oldState == newState) return
-        } while (!state.compareAndSet(oldState, newState))
-
-        Log.i("Shizuku", "State transition: $oldState -> $newState")
-        java.util.ArrayList<(State) -> Unit>().apply {
-            listeners.forEach { add(it) }
-        }.forEach { it(newState) }
-    }
-
-    fun set(newState: State) = transitionAtomic { newState }
-
-    /**
-     * Pre-start lifecycle coordinator.
-     * If the server is currently RUNNING or pingBinder() is true, this is an intentional restart:
-     * sets [WatchdogManager.expectingDeath] to true to swallow the upcoming SIGKILL binder death,
-     * and sets state to [State.STARTING].
-     * If the server was STOPPED, moves to [State.STARTING] with expectingDeath = false.
-     */
-    fun onStartRequested() {
-        if (isRunning() || Shizuku.pingBinder()) {
-            WatchdogManager.expectingDeath = true
-        }
-        set(State.STARTING)
-    }
-
-    /**
-     * Fallback when a starter fails or times out.
-     * Reconciles state to STOPPED (if pingBinder is false) or RUNNING (if binder arrived).
-     */
-    fun onStartFailed() {
-        if (Shizuku.pingBinder()) {
-            set(State.RUNNING)
-        } else {
-            set(State.STOPPED)
-        }
-    }
-
-    /**
-     * Pre-stop lifecycle coordinator.
-     * Transitions state to [State.STOPPING] when a user or system stop is requested.
-     */
-    fun onStopRequested() {
-        set(State.STOPPING)
-    }
-
-    /**
-     * Called when the binder dies. If a stop was requested (explicit STOPPING or
-     * userStopRequested), disarm USB debugging if configured and transition to STOPPED.
-     * If the server was RUNNING without a stop request, it crashed unless an expected
-     * restart death is active ([WatchdogManager.isExpectingDeathActive]).
-     */
-    internal fun setDead() = transitionAtomic {
-        when {
-            it == State.STOPPING || WatchdogManager.isUserStopRequested() -> {
-                try {
-                    val appContext = application.applicationContext
-                    if (ShizukuSettings.getAutoDisableUsbDebugging()) {
-                        // WRITE_SECURE_SETTINGS or Device Owner — AdbArm picks the path.
-                        AdbArm.disarmUsbDebugging(appContext)
-                    }
-                } catch (e: Exception) {
-                    Log.w(TAG, "Failed to auto-disable USB debugging on stop", e)
+    private fun transition(transform: (State) -> State) {
+        val oldState = state.getAndUpdate(transform)
+        val newState = transform(oldState)
+        if(oldState != newState) {
+            // Every transition, into the log the phone can read: "why did Shizuku stop" is
+            // usually answered by the sequence of these rather than by any one line.
+            val stamp = if (newState == State.STARTING || newState == State.RUNNING) BootTimeline.suffix() else ""
+            Diag.info("ShizukuStateMachine", "${oldState.name} -> ${newState.name}$stamp")
+            // After the line, so the RUNNING that ends the first start is itself stamped.
+            if (newState == State.RUNNING) BootTimeline.markRunning()
+            if (newState == State.STARTING) startingSince = SystemClock.elapsedRealtime()
+            // A confirmed running server lifts manual-stop suppression, so a
+            // later crash is auto-restarted by the watchdog.
+            if (newState == State.RUNNING) {
+                ShizukuSettings.setManuallyStopped(false)
+                // A server that is up is one the watchdog may keep up: the boot gate is over
+                // until the next reboot.
+                ShizukuSettings.setServerRanSinceBoot(true)
+                // The server is up, so it can hand us the ADB-only permission the wireless
+                // flow needs the user shouldn't have to reach for a computer for it.
+                grantWriteSecureSettingsIfNeeded()
+                // And the one the no-network start's hotspot needs, which Android 17 leaves
+                // ungranted on a fresh install because its own ask is for a different
+                // permission there - see [localHotspotPermission].
+                grantLocalHotspotPermissionIfNeeded()
+                grantHidingAccessIfListsAreInUse()
+                // And whatever the platform has lost: a block is its state and goes with the
+                // framework - a full reboot or a soft one - while the list of what was blocked is
+                // this app's. This is the first moment there is a server to run the commands
+                // with, and the platform is asked what is still in place rather than a reboot
+                // being guessed at.
+                LabsReapply.putBack()
+                // Remember how the server was launched so later background starts
+                // know whether to use root or wireless debugging (previously done by
+                // the removed HomeViewModel).
+                runCatching {
+                    ShizukuSettings.setLastLaunchMode(
+                        if (Shizuku.getUid() == 0) ShizukuSettings.LaunchMethod.ROOT
+                        else ShizukuSettings.LaunchMethod.ADB
+                    )
                 }
-                State.STOPPED
+                // A start this app queued and is still waiting to make is answered by the server
+                // being up, whoever started it: the queued work goes, and with it the "Waiting for
+                // Wi-Fi" notification it left behind over a service that is already running. Left
+                // there, that work would have come due when a network appeared and started a
+                // second server on top of the one that is here now.
+                runCatching { ShizukuReceiverStarter.onServerRunning(appContext) }
+                    .onFailure { Diag.warn("ShizukuStateMachine", "Could not drop the queued start", it) }
             }
-            it == State.RUNNING -> {
-                if (WatchdogManager.isExpectingDeathActive()) {
-                    State.STARTING
-                } else {
-                    State.CRASHED
-                }
+            // A deliberate stop (STOPPING -> STOPPED) is where the debugging toggles get
+            // switched off, if the settings ask for it.
+            if (oldState == State.STOPPING && newState == State.STOPPED) {
+                disableDebuggingTogglesIfAsked()
             }
-            it == State.STARTING -> State.STARTING
+
+            // Deliberately NOT clearing the recorded transport when the server stops.
+            // It describes how the server was launched, so it stays true after the
+            // launch ends and clearing it here also wiped it on every transient
+            // STOPPED while a start was still coming up (the binder is not up yet),
+            // which left a running server being reported as "Unknown".
+            // The broadcast goes out first, and the listeners are each guarded.
+            //
+            // This is the one piece of news that leaves the app, and it used to sit after the
+            // listener loop, so a listener that threw took it with it. Measured on the device
+            // while answering issue #80: the transitions were logged from this very block and no
+            // broadcast reached the system for any of them, while the same action sent from a
+            // shell was recorded. A status broadcast is not something a listener gets to cancel,
+            // and neither is a listener's own failure the state machine's problem.
+            when (newState) {
+                State.RUNNING, State.STOPPED, State.CRASHED -> sendShizukuChangedBroadcast(newState)
+                else -> Unit
+            }
+            listeners.forEach { listener ->
+                runCatching { listener(newState) }
+                    .onFailure { Diag.warn("ShizukuStateMachine", "A state listener failed", it) }
+            }
+            Log.d("ShizukuStateMachine", newState.toString())
+        }
+    }
+
+    // Broadcast so automation apps (e.g. MacroDroid/Tasker) can react to
+    // Shizuku starting or stopping.
+    private fun sendShizukuChangedBroadcast(newState: State) {
+        val status = if (newState == State.RUNNING) 1 else 0
+        val intent = Intent("${appContext.packageName}.SHIZUKU_CHANGED").apply {
+            putExtra("status", status)
+            addFlags(
+                Intent.FLAG_INCLUDE_STOPPED_PACKAGES or
+                    // Sent urgently rather than as bookkeeping to catch up on: this is a status
+                    // change somebody's automation is waiting on.
+                    Intent.FLAG_RECEIVER_FOREGROUND
+            )
+        }
+        // Written down either way round: whether it went, and what it said. A send that fails is
+        // the one thing an automation author needs to know about, and without this line it looks
+        // exactly like nobody having registered for it.
+        runCatching { appContext.sendBroadcast(intent) }
+            .onSuccess { Diag.info("ShizukuStateMachine", "status broadcast sent: $status") }
+            .onFailure { Diag.warn("ShizukuStateMachine", "Could not send the status broadcast", it) }
+    }
+
+    fun set(newState: State) = transition { newState }
+
+    fun setDead() = transition {
+        when (it) {
+            State.RUNNING -> State.CRASHED
+            State.STOPPING -> State.STOPPED
             else -> it
         }
     }
 
     /**
-     * Force a state refresh by pinging the binder.
-     * Returns the current state after refresh.
+     * Turns the debugging toggles off after a deliberate stop, when the user asked for
+     * that in settings.
+     *
+     * Called from the transition rather than from [setDead] because the binder dying can
+     * be noticed by [update] first which reaches STOPPED from STOPPING just the same,
+     * and used to skip this entirely.
      */
-    fun update(): State {
-        val currentState = if (Shizuku.pingBinder()) State.RUNNING else State.STOPPED
-        set(currentState)
-        return currentState
+    private fun disableDebuggingTogglesIfAsked() {
+        try {
+            val granted = appContext.checkSelfPermission(WRITE_SECURE_SETTINGS) ==
+                PackageManager.PERMISSION_GRANTED
+            if (!granted) return
+
+            if (ShizukuSettings.getAutoDisableUsbDebugging()) {
+                Settings.Global.putInt(appContext.contentResolver, Settings.Global.ADB_ENABLED, 0)
+            }
+            // Wireless debugging is kept on by default that is what lets Shizuku restart
+            // with no Wi-Fi so turning it off with Shizuku is opt-in. The opt-in is
+            // ignored while the experiment that keeps it on without a network is in use:
+            // stopping Shizuku would otherwise undo the state the whole trick exists to
+            // hold, and the next start would have to win it all over again.
+            if (ShizukuSettings.getAutoDisableWirelessDebugging() &&
+                !ShizukuSettings.getForceWirelessDebugging()
+            ) {
+                Settings.Global.putInt(appContext.contentResolver, "adb_wifi_enabled", 0)
+            }
+        } catch (e: Exception) {
+            Log.w("ShizukuStateMachine", "Failed to disable the debugging toggles", e)
+        }
     }
 
-    fun isRunning(): Boolean = get() == State.RUNNING
+    /**
+     * How long the state has been STARTING, or null when it is something else.
+     *
+     * What lets a caller tell a start that is under way from one that was abandoned, which the
+     * state alone cannot: see [STARTING_GRACE_MS].
+     */
+    fun startingAgeMs(): Long? =
+        if (state.get() == State.STARTING) SystemClock.elapsedRealtime() - startingSince else null
 
-    fun isDead(): Boolean = get() == State.STOPPED || get() == State.CRASHED
+    /**
+     * Brings the state in line with the binder.
+     *
+     * A failed ping does not end a start that is still inside [STARTING_GRACE_MS]: the server is
+     * expected to be unreachable then, and calling it STOPPED announced a stop that had not
+     * happened. A start that really failed says so itself, through [markStartFailed].
+     */
+    fun update(): State {
+        val alive = Shizuku.pingBinder()
+        val state = resolvePolledState(get(), alive, startingAgeMs(), STARTING_GRACE_MS)
+        if (state != get()) set(state)
+        // Also covers a server that was already running when this process started, or a
+        // permission that was revoked behind our back: there is no transition to hook then.
+        if (state == State.RUNNING) {
+            grantWriteSecureSettingsIfNeeded()
+            grantLocalHotspotPermissionIfNeeded()
+            grantHidingAccessIfListsAreInUse()
+        }
+        return state
+    }
+
+    /**
+     * A start that failed for real: STOPPED, unless the server turns out to be up after all.
+     *
+     * [update] no longer turns a failed ping during STARTING into STOPPED, so the places that know
+     * a start is over say so here instead. Not for a cancelled start, which usually means another
+     * start took over the work.
+     */
+    fun markStartFailed(): State {
+        if (Shizuku.pingBinder()) {
+            set(State.RUNNING)
+            return State.RUNNING
+        }
+        set(State.STOPPED)
+        return State.STOPPED
+    }
+
+    fun isRunning(): Boolean {
+        return get() == State.RUNNING
+    }
+
+    fun isDead(): Boolean {
+        return (get() == State.STOPPED || get() == State.CRASHED) 
+    }
 
     fun addListener(listener: (State) -> Unit) {
         listeners.add(listener)
@@ -165,21 +278,31 @@ object ShizukuStateMachine {
         listeners.remove(listener)
     }
 
-    /**
-     * Reactive state observation for Compose UI.
-     * Emits the current state immediately on collection, then on every transition.
-     */
     fun asFlow(): Flow<State> = callbackFlow {
         val listener: (State) -> Unit = { trySend(it).isSuccess }
         addListener(listener)
         awaitClose { removeListener(listener) }
     }
 
-    /**
-     * Suspending awaiter that waits until the server enters [State.RUNNING].
-     * If the server is already RUNNING (or pingBinder() returns true), completes immediately (0ms).
-     * Otherwise suspends on state flow transitions until RUNNING is emitted or [timeoutMs] elapses.
-     */
+    fun onStartRequested() {
+        try {
+            if (isRunning() || Shizuku.pingBinder()) {
+                moe.shizuku.manager.service.WatchdogManager.expectingDeath = true
+            }
+        } catch (_: Throwable) {}
+        set(State.STARTING)
+    }
+
+    fun recordStarting() = onStartRequested()
+
+    fun onStartFailed() {
+        markStartFailed()
+    }
+
+    fun onStopRequested() {
+        set(State.STOPPING)
+    }
+
     suspend fun awaitRunning(timeoutMs: Long = 10_000L): Boolean {
         if (isRunning() || Shizuku.pingBinder()) {
             if (!isRunning()) set(State.RUNNING)
@@ -191,11 +314,6 @@ object ShizukuStateMachine {
         } ?: (isRunning() || Shizuku.pingBinder())
     }
 
-    /**
-     * Suspending awaiter that waits until the server stops or crashes.
-     * If the server is already STOPPED/CRASHED, completes immediately (0ms).
-     * Otherwise suspends on state flow transitions until STOPPED or CRASHED is emitted or [timeoutMs] elapses.
-     */
     suspend fun awaitStopped(timeoutMs: Long = 5_000L): Boolean {
         if (isDead() && !Shizuku.pingBinder()) {
             return true

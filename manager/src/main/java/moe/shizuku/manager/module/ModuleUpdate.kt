@@ -25,5 +25,5 @@ data class ModuleUpdate(
      * to install is not an update however new it claims to be.
      */
     fun isNewerThan(module: AdbModule): Boolean =
-        zipUrl.isNotEmpty() && versionCode > (module.prop.versionCode ?: 0L)
+        zipUrl.isNotEmpty() && versionCode > (module.versionCode ?: 0L)
 }

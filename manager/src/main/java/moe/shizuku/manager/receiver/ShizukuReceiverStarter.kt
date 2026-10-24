@@ -1,119 +1,401 @@
 package moe.shizuku.manager.receiver
 
 import android.app.Notification
-import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import androidx.work.WorkManager
 import com.topjohnwu.superuser.Shell
 import moe.shizuku.manager.R
 import moe.shizuku.manager.AppConstants
 import moe.shizuku.manager.ShizukuSettings
-import moe.shizuku.manager.ShizukuSettings.LaunchMethod
-import moe.shizuku.manager.adb.AdbArm
+import moe.shizuku.manager.start.StartFailureKind
+import moe.shizuku.manager.service.WatchdogGuard
+import moe.shizuku.manager.start.StartStatusReporter
+import moe.shizuku.manager.start.StartMethodGuard
+import moe.shizuku.manager.start.StartTransport
+import moe.shizuku.manager.start.hasWriteSecureSettings
+import moe.shizuku.manager.start.needsWriteSecureSettingsFor
+import moe.shizuku.manager.start.startMethodLabelRes
 import moe.shizuku.manager.starter.Starter
+import moe.shizuku.manager.starter.StarterActivity
 import moe.shizuku.manager.utils.EnvironmentUtils
+import moe.shizuku.manager.utils.SettingsPage
 import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.UserHandleCompat
+import moe.shizuku.manager.utils.createChannelCompat
+import moe.shizuku.manager.ktx.isUserUnlockedCompat
+import moe.shizuku.manager.service.LockedBootStartService
+import moe.shizuku.manager.start.AdbStartRun
 import moe.shizuku.manager.worker.AdbStartWorker
+import moe.shizuku.manager.utils.BootTimeline
+import moe.shizuku.manager.utils.Diag
 
 object ShizukuReceiverStarter {
 
     const val NOTIFICATION_ID = 1447
-    internal const val CHANNEL_ID = "shizuku_receiver_starter"
-    private val adbStarting = java.util.concurrent.atomic.AtomicBoolean(false)
-    internal var channelCreated = false
+    private const val CHANNEL_ID = "AdbStartWorker"
 
     enum class WorkerState {
         AWAITING_WIFI,
         AWAITING_RETRY,
+        CONNECTING,
+        WAITING_FOR_UNLOCK,
+        FORCING_WIRELESS,
         RUNNING,
-        // STOPPED cancels any stale progress UI (see updateNotification();the
-        // terminal path re-posts the error after it on the same NOTIFICATION_ID.)
         STOPPED
     }
 
-    fun start(context: Context, forceStart: Boolean = false) {
-        if ((UserHandleCompat.myUserId() > 0 || ShizukuStateMachine.isRunning()) && !forceStart) return
+    /**
+     * Starts Shizuku with [startMethod], defaulting to the method chosen in
+     * settings. Every entry point goes through here the Start button, start on
+     * boot, the watchdog, the manual-start intent and the pairing flow so they
+     * all behave the same instead of guessing from whichever method worked last.
+     *
+     * [userInitiated] means a person asked for *this* start from a control in front of them, and
+     * nothing else counts. It is what decides whether a wireless start with no Wi-Fi fails at once
+     * or waits: somebody looking at the screen is owed the answer now, while a start that arrived
+     * from another app's intent, from the pairing flow or from a boot is nobody's tap and waits for
+     * the network - which is what the unattended starts have to do, since Wi-Fi routinely arrives a
+     * few seconds after they try.
+     *
+     * [reason] names the entry point, for the log only.
+     *
+     * One start at a time: a request that arrives while another is under way joins it instead of
+     * queueing its own, unless it is a Restart somebody tapped. See [decideStart].
+     */
+    fun start(
+        context: Context,
+        forceStart: Boolean = false,
+        userInitiated: Boolean = false,
+        @ShizukuSettings.StartMethod startMethod: Int = ShizukuSettings.getStartMethod(),
+        reason: String = "unspecified"
+    ) {
+        // Who asked, written down for every request: a server replaced out of the blue has no
+        // other trace of what replaced it.
+        Diag.info(
+            AppConstants.TAG,
+            "Start requested by $reason (forced=$forceStart, user=$userInitiated)" +
+                BootTimeline.suffix()
+        )
 
-        if (!adbStarting.compareAndSet(false, true)) {
-            Log.i(AppConstants.TAG, "adbStart already in progress, skipping")
+        // A start request from any entry point clears manual-stop suppression.
+        ShizukuSettings.setManuallyStopped(false)
+        // And it ends the watchdog's boot gate: a server asked for is a server worth keeping
+        // alive, so a failed start from here may be retried.
+        ShizukuSettings.setServerRanSinceBoot(true)
+
+        // Ask the binder rather than trusting the last thing this process heard. A server
+        // stopped from somewhere else, or one that died while the manager was not looking,
+        // left the belief behind, and a start was then ignored in silence: a tap that does
+        // nothing at all, until a reboot resets the belief. The refusal is also said out
+        // loud now, because a tap that quietly does nothing is the worst of the two.
+        // Asked before anything is marked or queued: a request that is only joining a start
+        // must leave the watchdog's guard, the running method and the status card as that start
+        // set them.
+        val inFlightAgeMs = AdbStartRun.inFlightAgeMs()
+            ?: ShizukuStateMachine.startingAgeMs()?.takeIf { it < ShizukuStateMachine.STARTING_GRACE_MS }
+        val binderAlive = UserHandleCompat.myUserId() > 0 ||
+            ShizukuStateMachine.update() == ShizukuStateMachine.State.RUNNING
+        // Before the first unlock nothing below may touch WorkManager: its database is in storage
+        // that cannot be read yet, and asking for it takes the process down. A wireless start is
+        // made in the foreground service instead; any other waits for the unlock to ask again.
+        val userUnlocked = context.isUserUnlockedCompat()
+        val decision = decideStart(
+            binderAlive,
+            forceStart,
+            userInitiated,
+            startInFlight = inFlightAgeMs != null,
+            userUnlocked = userUnlocked,
+            canStartLocked = canStartBeforeUnlock(startMethod)
+        )
+        when (decision) {
+            StartDecision.IGNORE_RUNNING -> {
+                Diag.info(AppConstants.TAG, "Start ignored: the service is already running")
+                return
+            }
+            StartDecision.JOIN_IN_FLIGHT -> {
+                Diag.info(
+                    AppConstants.TAG,
+                    "Start requested by $reason joined the one already in flight " +
+                        "(${(inFlightAgeMs ?: 0L) / 1000} s old)"
+                )
+                return
+            }
+            StartDecision.DEFER_UNTIL_UNLOCK -> {
+                Diag.info(
+                    AppConstants.TAG,
+                    "Start requested by $reason deferred: the user has not unlocked yet and " +
+                        "method $startMethod cannot start before that" + BootTimeline.suffix()
+                )
+                return
+            }
+            StartDecision.START, StartDecision.START_LOCKED -> Unit
+        }
+        val lockedStart = decision == StartDecision.START_LOCKED
+
+        // The one request that gets past a start in flight is a Restart somebody tapped, and it
+        // replaces the start by cancelling it: queued work is replaced by enqueueing over it, but a
+        // start running in the foreground service is not queued work and nothing below would touch
+        // it. Cancelled here, and the new start made once it has really ended - cancelling does not
+        // interrupt the blocking calls in an attempt, so "asked to stop" is not yet "will not send
+        // its starter", and the second starter is the one that kills the first one's server.
+        if (decision == StartDecision.START && LockedBootStartService.isRunning()) {
+            LockedBootStartService.cancelRun("replaced by a restart requested by $reason") {
+                start(
+                    context,
+                    forceStart,
+                    userInitiated,
+                    startMethod,
+                    "$reason (after cancelling the start begun before the unlock)"
+                )
+            }
             return
         }
+        // A forced start replaces whatever is there, so the binder death on the way is ours,
+        // and the watchdog reads a binder death as a crash unless it is told otherwise: it
+        // would answer a deliberate Restart with a crash notification and a second start
+        // racing this one.
+        //
+        // Marked for any forced start rather than only when this process can still see the
+        // server, because by the time a start request is handled the old server may already
+        // be gone: there is nothing left to ping then, and the death it left behind would go
+        // through unclaimed. The mark carries a deadline, so the worst a forced start with
+        // nothing to replace can do is ignore one genuine death inside the next half minute.
+        if (forceStart) {
+            Diag.info(AppConstants.TAG, "Forced start: the server's death is expected")
+            WatchdogGuard.expectDeath()
+        }
 
-        try {
-            if (ShizukuSettings.getLastLaunchMode() == LaunchMethod.ROOT) {
-                rootStart(context)
-            } else if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.R || EnvironmentUtils.isTelevision() || EnvironmentUtils.getAdbTcpPort() > 0)
-                && ShizukuSettings.getLastLaunchMode() == LaunchMethod.ADB) {
-                    if (AdbArm.canArm(context)) {
-                        AdbStartWorker.enqueue(context)
-                        // Cancel the startup notification (id 1005) since the worker
-                        // notification (id 1447) is now the source of truth.
-                        moe.shizuku.manager.service.StartupNotificationManager.dismiss(context)
-                        // Post the banner that matches reality: AWAITING_WIFI only when Wi-Fi
-                        // is actually required-but-unavailable (previously this unconditionally
-                        // posted AWAITING_WIFI, so any re-invocation on Wi-Fi overwrote the
-                        // worker's RUNNING state with a stale "awaiting Wi-Fi" banner).
-                        // Parked while no unmetered network exists — same condition as
-                        // the worker's constraint (see AdbStartWorker.enqueueWithPolicy);
-                        // TCP mode does NOT mean the boot can run without Wi-Fi: wireless
-                        // ADB still needs the live local network to discover/connect.
-                        val state = if (!AdbStartWorker.isUnmeteredNetworkAvailable(context)) {
-                            WorkerState.AWAITING_WIFI
-                        } else {
-                            WorkerState.RUNNING
-                        }
-                        updateNotification(context, state)
-                    } else {
-                        showPermissionErrorNotification(context)
-                    }
-                } else {
-                    showPermissionErrorNotification(context)
-                }
-        } catch (e: Exception) {
-            Log.w(AppConstants.TAG, "Background start not supported")
-        } finally {
-            adbStarting.set(false)
+        // Root can be gone since the method was chosen (an OTA, root switched off), and a
+        // root start with nothing to escalate with does nothing at all so a start that
+        // asks for root on a device without it falls back to wireless debugging instead of
+        // failing silently. The setting stays Root, so root coming back restores the method
+        // on the next start without the user having to pick it again.
+        //
+        // Not asked before the unlock: probing root spawns a shell, and the method is a wireless one
+        // already (that is what [canStartBeforeUnlock] says), which the guard would not change.
+        val method = if (lockedStart) startMethod else StartMethodGuard.resolve(startMethod)
+
+        StartStatusReporter.starting()
+
+        // Remember how this launch was started: the status card and the notification
+        // report the method the server is actually running under, which isn't always
+        // the one configured for the next start.
+        ShizukuSettings.setRunningStartMethod(method)
+
+        when (method) {
+            ShizukuSettings.StartMethod.ROOT -> rootStart(context)
+            ShizukuSettings.StartMethod.SYSTEM -> systemStart(context)
+            else -> adbStart(context, userInitiated, method, lockedStart)
         }
     }
 
-    fun buildNotification(context: Context, msg: String? = null): Notification {
+    /**
+     * The system start runs the built-in exploit (or an external command) through
+     * [StarterActivity], which needs the app in the foreground a background start
+     * such as boot or the watchdog cannot drive it.
+     */
+    private fun systemStart(context: Context) {
+        // "Custom command" is the same start with the escalation left to the user: no
+        // device exploit is attempted, and the activity says what to run and waits for the
+        // binder instead. The setting used to be read by nothing at all, so choosing it
+        // changed a preference and nothing else.
+        val custom =
+            ShizukuSettings.getSystemStartMethod() == ShizukuSettings.SYSTEM_START_CUSTOM
+
+        val started = runCatching {
+            context.startActivity(
+                Intent(context, StarterActivity::class.java)
+                    .putExtra(StarterActivity.EXTRA_IS_SYSTEM, true)
+                    .putExtra(StarterActivity.EXTRA_SYSTEM_CUSTOM, custom)
+                    .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
+        }.isSuccess
+
+        if (!started) {
+            StartStatusReporter.failed(context.getString(R.string.start_failed_system_needs_app))
+        }
+    }
+
+    private fun adbStart(
+        context: Context,
+        userInitiated: Boolean,
+        startMethod: Int,
+        lockedStart: Boolean = false
+    ) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R
+            && !EnvironmentUtils.isTelevision()
+            && EnvironmentUtils.getAdbTcpPort() <= 0
+        ) {
+            StartStatusReporter.failed(context.getString(R.string.start_failed_unsupported))
+            Diag.warn(AppConstants.TAG, "Background start not supported")
+            return
+        }
+
+        // This used to refuse every ADB start without WRITE_SECURE_SETTINGS, including the
+        // ones that never write anything: a USB start, a classic-port start, and a wireless
+        // start whose debugging toggle is already on. On a fresh install where the grant
+        // from the previous install is gone that demanded a computer before Shizuku could
+        // start at all. Now only the start that actually has to switch wireless debugging on
+        // is held up, and only because it cannot be done without the permission.
+        if (context.needsWriteSecureSettingsFor(startMethod) && !context.hasWriteSecureSettings()) {
+            StartStatusReporter.failed(
+                context.getString(
+                    R.string.start_failed_write_secure_settings,
+                    context.packageName
+                ),
+                // The card opens Wireless debugging so the user can switch it on by hand 
+                // the permission is only how the app would have done it for them.
+                StartFailureKind.SETTINGS
+            )
+            showPermissionErrorNotification(context, startMethod)
+            return
+        }
+
+        val hasWifi = EnvironmentUtils.isWifiConnected()
+        val television = EnvironmentUtils.isTelevision()
+
+        // A wireless start needs a network the system turns wireless debugging back off
+        // without one, so discovery can never find a port. Only fail the start the user
+        // asked for, though: an unattended one (boot, watchdog) must keep trying instead,
+        // because Wi-Fi routinely arrives a few seconds after boot and failing it there
+        // just leaves Shizuku down. The worker carries a Wi-Fi constraint and retries, so
+        // it starts by itself once the network is up.
+        //
+        // Which starts need it is asked of the same place the worker asks it, rather than being
+        // read off the method: a start that chose no network (Without Wi-Fi, or the experiment
+        // that makes the same start) needs none, and neither does one that TCP mode has left a
+        // classic port to use. Comparing the method alone refused exactly those - a phone with
+        // Wi-Fi off and the no-network mode on was sent to connect to a Wi-Fi network by the
+        // wireless card, which passes the plain wireless method, while the same start arriving
+        // as an intent went ahead, since an unattended start is never refused (issue #79).
+        val withoutNetwork = startMethod == ShizukuSettings.StartMethod.WIRELESS_NO_NETWORK
+        val wirelessStart = startMethod == ShizukuSettings.StartMethod.WIRELESS || withoutNetwork
+        val needsNetwork = wirelessStart && StartTransport.wifiRequired(
+            EnvironmentUtils.getAdbTcpPort(),
+            ShizukuSettings.getTcpMode(),
+            ShizukuSettings.getForceWirelessDebugging() || withoutNetwork
+        )
+        if (userInitiated && needsNetwork && !hasWifi && !television) {
+            StartStatusReporter.failed(
+                context.getString(R.string.start_failed_wifi_required),
+                StartFailureKind.WIFI
+            )
+            return
+        }
+
+        // User-initiated starts never wait for Wi-Fi; unattended background restarts
+        // honour the "wait for Wi-Fi" setting.
+        val immediate = userInitiated || !ShizukuSettings.getWaitForWifi()
+
+        if (lockedStart) {
+            // The service does not wait for a network the way the queued work does: it makes one
+            // attempt. So a start that needs Wi-Fi, has none yet and is meant to wait for it is
+            // left for the unlock, where the queued work's own constraint takes over. Wi-Fi
+            // routinely associates a few seconds after the boot that started this.
+            if (needsNetwork && !immediate && !hasWifi && !television) {
+                StartStatusReporter.clear()
+                Diag.info(
+                    AppConstants.TAG,
+                    "Start before the unlock left for the unlock: it needs Wi-Fi and there is none yet"
+                )
+                return
+            }
+            if (!LockedBootStartService.start(context, startMethod)) {
+                StartStatusReporter.clear()
+            }
+            return
+        }
+
+        AdbStartWorker.enqueue(context, startMethod = startMethod, immediate = immediate)
+        // "Waiting for Wi-Fi" only when there is a wait: a start that goes ahead without one
+        // would say it was waiting for a network it does not use, which is the line the user
+        // reads after a tap that already worked.
+        updateNotification(
+            context,
+            if (needsNetwork && !immediate) WorkerState.AWAITING_WIFI else WorkerState.RUNNING
+        )
+    }
+
+    /**
+     * A server that is up, and a start that was still waiting for a network.
+     *
+     * The two only meet when the server arrived by another route: a root or system start from the
+     * card, or an `adb` connection from a computer, while this app's own wireless start sat on its
+     * Wi-Fi constraint. Nothing took that queued work back, so its notification stayed on the phone
+     * saying "Waiting for Wi-Fi" over a service that was already running - and the moment a network
+     * did appear, the worker would have started a second server on top of the one that was there,
+     * replacing the root server the user had just started by hand.
+     *
+     * Called from the state machine on every RUNNING transition rather than from the starts
+     * themselves, because the start that won need not be one of ours.
+     *
+     * A worker already in flight is left alone: that one is what brought this server up, it
+     * cancels its own notification when it is done, and cancelling it here would end a start
+     * mid-connect - the TCP port it opens afterwards, and the settle check that reconnects a
+     * server the platform took away again, both run after the binder appears.
+     */
+    fun onServerRunning(context: Context) {
+        if (AdbStartRun.inFlight) return
+        // Nothing can be queued before the unlock, and asking WorkManager for its instance then is
+        // an exception (a process that woke without credential storage has none). The notification
+        // is still ours to take down.
+        if (context.isUserUnlockedCompat()) {
+            WorkManager.getInstance(context).cancelUniqueWork(AdbStartWorker.UNIQUE_WORK_NAME)
+        }
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        ensureChannel(context)
+        nm.cancel(NOTIFICATION_ID)
+    }
+
+    fun buildNotification(
+        context: Context,
+        msg: String? = null,
+        @ShizukuSettings.StartMethod startMethod: Int = ShizukuSettings.getStartMethod()
+    ): Notification {
+        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.createChannelCompat(
+            CHANNEL_ID,
+            context.getString(R.string.wadb_notification_title),
+            NotificationManager.IMPORTANCE_LOW
+        )
 
         val cancelIntent = Intent(context, NotifCancelReceiver::class.java)
         val cancelPendingIntent = PendingIntent.getBroadcast(
-            context, 0x7F010001, cancelIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context, 0, cancelIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val attemptNowIntent = Intent(context, NotifAttemptReceiver::class.java)
+            // Keep the retry on the same method the start used.
+            .putExtra(AppConstants.EXTRA_START_METHOD, startMethod)
         val attemptNowPendingIntent = PendingIntent.getBroadcast(
-            context, 0x7F010002, attemptNowIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context, 0, attemptNowIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val restoreIntent = Intent(context, NotifRestoreReceiver::class.java)
         val restorePendingIntent = PendingIntent.getBroadcast(
-            context, 0x7F010003, restoreIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context, 0, restoreIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        val wifiIntent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse("https://github.com/HmnDev-Tech/shevery/wiki#shizuku-isnt-starting-on-boot-for-me"))
+        val wifiIntent = SettingsPage.InternetPanel.buildIntent(context)
         val wifiPendingIntent = PendingIntent.getActivity(
-            context, 0x7F010004, wifiIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
+            context, 0, wifiIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
         val nb = NotificationCompat.Builder(context, CHANNEL_ID)
 
-        if (msg != null) nb.setContentText(msg)
+        // Say which method this start is using, next to the state, so the notification
+        // answers "over wireless, USB, system or root?" on its own.
+        nb.setContentText(
+            listOfNotNull(context.getString(startMethodLabelRes(startMethod)), msg)
+                .joinToString(" · ")
+        )
 
         return nb
             .setSmallIcon(R.drawable.ic_system_icon)
@@ -127,73 +409,76 @@ object ShizukuReceiverStarter {
             .build()
     }
 
-    fun updateNotification(context: Context, state: WorkerState) {
-        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        // STOPPED means "no notification" — explicitly cancel any stale one
-        // (previously returned without cancelling, leaving a stale "stopped"
-        // notification visible even after the service started successfully).
-        if (state == WorkerState.STOPPED) {
-            nm.cancel(NOTIFICATION_ID)
-            return
-        }
+    fun updateNotification(
+        context: Context,
+        state: WorkerState,
+        @ShizukuSettings.StartMethod startMethod: Int = ShizukuSettings.getStartMethod()
+    ) {
+        if (state == WorkerState.STOPPED) return
         val msgId = when (state) {
             WorkerState.AWAITING_WIFI -> R.string.wadb_notification_wifi_required
             WorkerState.AWAITING_RETRY -> R.string.wadb_notification_retry
+            WorkerState.CONNECTING -> R.string.wadb_notification_connecting
+            WorkerState.WAITING_FOR_UNLOCK -> R.string.wadb_notification_waiting_for_unlock
+            WorkerState.FORCING_WIRELESS -> R.string.wadb_notification_forcing_wireless
             else -> null
         }
         val msg = if (msgId != null) context.getString(msgId) else null
-        nm.notify(NOTIFICATION_ID, buildNotification(context, msg))
+        val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        nm.notify(NOTIFICATION_ID, buildNotification(context, msg, startMethod))
     }
 
     private fun rootStart(context: Context) {
         if (!Shell.getShell().isRoot) {
+            // [start] has already dropped root when the device doesn't have it, so reaching
+            // here means it was revoked in between. Say so instead of returning silently:
+            // the card would otherwise sit on "starting" for a start that never happened.
+            Diag.warn(AppConstants.TAG, "Root was revoked before the start could use it")
             Shell.getCachedShell()?.close()
+            StartStatusReporter.failed(context.getString(R.string.start_failed_root_unavailable))
+            ShizukuStateMachine.markStartFailed()
             return
         }
 
         try {
-            ShizukuStateMachine.onStartRequested()
+            ShizukuStateMachine.set(ShizukuStateMachine.State.STARTING)
             Shell.cmd(Starter.internalCommand).exec()
         } catch (e: Exception) {
-            Log.e(AppConstants.TAG, "Failed to start Shizuku with root", e)
-            ShizukuStateMachine.onStartFailed()
+            Diag.error(AppConstants.TAG, "Failed to start Shizuku with root", e)
+            ShizukuStateMachine.markStartFailed()
         }
     }
 
-    private fun showPermissionErrorNotification(context: Context) {
+    private fun showPermissionErrorNotification(
+        context: Context,
+        @ShizukuSettings.StartMethod startMethod: Int
+    ) {
+
         val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        ensureChannel(context)
-
-        val builder = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(R.drawable.ic_server_error_24dp)
-            .setContentTitle(context.getString(R.string.wadb_error_title))
-            .setContentText(context.getString(R.string.wadb_permission_error_notification_content))
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setAutoCancel(true)
-
-        val wikiUrl = "https://github.com/HmnDev-Tech/shevery/wiki#shizuku-isnt-starting-on-boot-for-me"
-        val intent = Intent(Intent.ACTION_VIEW, android.net.Uri.parse(wikiUrl))
-        val pendingIntent = PendingIntent.getActivity(
-            context, 0x7F010005, intent,
-            PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+        nm.createChannelCompat(
+            CHANNEL_ID,
+            context.getString(R.string.wadb_notification_title),
+            NotificationManager.IMPORTANCE_LOW
         )
-        builder.setContentIntent(pendingIntent)
 
-        nm.notify(NOTIFICATION_ID, builder.build())
-    }
+        val webpageIntent = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/thedjchi/Shizuku/wiki#shizuku-isnt-starting-on-boot-for-me"))
+        val pendingWebpageIntent = PendingIntent.getActivity(
+            context, 0, webpageIntent, PendingIntent.FLAG_IMMUTABLE
+        )
 
-    internal fun ensureChannel(context: Context) {
-        if (channelCreated) return
-        channelCreated = true
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val nm = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            nm.createNotificationChannel(
-                NotificationChannel(
-                    CHANNEL_ID,
-                    context.getString(R.string.wadb_notification_title),
-                    NotificationManager.IMPORTANCE_LOW
-                )
-            )
-        }
+        // Name the method this start was using, like the other status notifications.
+        val msg = context.getString(R.string.wadb_permission_error_notification_content) +
+            " · " + context.getString(startMethodLabelRes(startMethod))
+
+        val notification = NotificationCompat.Builder(context, CHANNEL_ID)
+            .setSmallIcon(R.drawable.ic_system_icon)
+            .setContentTitle(context.getString(R.string.wadb_permission_error_notification_title))
+            .setContentText(msg)
+            .setSilent(true)
+            .setContentIntent(pendingWebpageIntent)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(msg))
+            .build()
+
+        nm.notify(NOTIFICATION_ID, notification)
     }
 }

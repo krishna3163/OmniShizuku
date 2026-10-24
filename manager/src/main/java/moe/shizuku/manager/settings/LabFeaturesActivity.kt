@@ -42,12 +42,12 @@ class LabFeaturesActivity : AppActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            var connectorEnabled by remember { mutableStateOf(ModuleSettings.isConnectorEnabled()) }
-            var tapiEnabled by remember { mutableStateOf(ModuleSettings.isTapiEnabled()) }
-            var nightDogEnabled by remember { mutableStateOf(try { NightDogController.isEnabled() } catch (_: Throwable) { false }) }
-            var showUnsafeDialog by remember { mutableStateOf(false) }
-            var showTapiWarningDialog by remember { mutableStateOf(false) }
-            var showNightDogDialog by remember { mutableStateOf(false) }
+            var connectorEnabled by remember { mutableStateOf<Boolean>(ModuleSettings.isConnectorEnabled()) }
+            var tapiEnabled by remember { mutableStateOf<Boolean>(ModuleSettings.isTapiEnabled()) }
+            var nightDogEnabled by remember { mutableStateOf<Boolean>(try { NightDogController.isEnabled() } catch (_: Throwable) { false }) }
+            var showUnsafeDialog by remember { mutableStateOf<Boolean>(false) }
+            var showTapiWarningDialog by remember { mutableStateOf<Boolean>(false) }
+            var showNightDogDialog by remember { mutableStateOf<Boolean>(false) }
 
             val isWatch = moe.shizuku.manager.utils.EnvironmentUtils.isWatch(this@LabFeaturesActivity)
             if (isWatch) {

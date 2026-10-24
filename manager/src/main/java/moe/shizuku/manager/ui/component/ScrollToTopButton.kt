@@ -1,0 +1,108 @@
+package moe.shizuku.manager.ui.component
+
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.ScrollState
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowUpward
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SmallFloatingActionButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
+import moe.shizuku.manager.R
+
+/**
+ * The way back to the top of a list, once it has been scrolled past the first screen.
+ *
+ * Shown only while there is something above: a button that is always there asks for a look every
+ * time a list is opened, and the first item is already in view then. Fades and scales in so the
+ * appearance is not a jump.
+ *
+ * [bottomPadding] is the room the screen gave its list for whatever floats over it - the tab bar,
+ * usually - and the button is put just above that, so it never covers the bar and the bar never
+ * covers it. A screen with a button of its own at the bottom passes its height as [extraBottom]
+ * and the two stack.
+ *
+ * Place it inside a Box, at `Alignment.BottomEnd`.
+ */
+@Composable
+fun ScrollToTopButton(
+    listState: LazyListState,
+    bottomPadding: Dp,
+    modifier: Modifier = Modifier,
+    extraBottom: Dp = 0.dp
+) {
+    val scrolled by remember {
+        derivedStateOf {
+            listState.firstVisibleItemIndex > 0 || listState.firstVisibleItemScrollOffset > 0
+        }
+    }
+    val scope = rememberCoroutineScope()
+
+    AnimatedVisibility(
+        visible = scrolled,
+        enter = fadeIn() + scaleIn(),
+        exit = fadeOut() + scaleOut(),
+        modifier = modifier
+    ) {
+        SmallFloatingActionButton(
+            onClick = { scope.launch { listState.animateScrollToItem(0) } },
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.padding(end = 16.dp, bottom = bottomPadding + 16.dp + extraBottom)
+        ) {
+            Icon(
+                Icons.Filled.ArrowUpward,
+                contentDescription = stringResource(R.string.scroll_to_top)
+            )
+        }
+    }
+}
+
+/**
+ * The same button for a screen built on `verticalScroll` rather than a lazy list: a settings form
+ * or a long dialog, where there is no item to scroll to and only an offset.
+ */
+@Composable
+fun ScrollToTopButton(
+    scrollState: ScrollState,
+    bottomPadding: Dp,
+    modifier: Modifier = Modifier,
+    extraBottom: Dp = 0.dp
+) {
+    val scrolled by remember { derivedStateOf { scrollState.value > 0 } }
+    val scope = rememberCoroutineScope()
+
+    AnimatedVisibility(
+        visible = scrolled,
+        enter = fadeIn() + scaleIn(),
+        exit = fadeOut() + scaleOut(),
+        modifier = modifier
+    ) {
+        SmallFloatingActionButton(
+            onClick = { scope.launch { scrollState.animateScrollTo(0) } },
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.padding(end = 16.dp, bottom = bottomPadding + 16.dp + extraBottom)
+        ) {
+            Icon(
+                Icons.Filled.ArrowUpward,
+                contentDescription = stringResource(R.string.scroll_to_top)
+            )
+        }
+    }
+}

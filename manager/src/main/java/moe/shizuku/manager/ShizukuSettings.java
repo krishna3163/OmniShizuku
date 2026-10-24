@@ -129,6 +129,14 @@ public class ShizukuSettings {
         getPreferences().edit().putBoolean(AUTO_DISABLE_USB_DEBUGGING, enabled).apply();
     }
 
+    public static boolean getAutoDisableWirelessDebugging() {
+        return getPreferences().getBoolean(Keys.KEY_AUTO_DISABLE_WIRELESS_DEBUGGING, false);
+    }
+
+    public static void setAutoDisableWirelessDebugging(boolean enabled) {
+        getPreferences().edit().putBoolean(Keys.KEY_AUTO_DISABLE_WIRELESS_DEBUGGING, enabled).apply();
+    }
+
     public static boolean getStartOnBootAdb() {
         return getPreferences().getBoolean(START_ON_BOOT_ADB, false);
     }
@@ -151,14 +159,6 @@ public class ShizukuSettings {
 
     public static void setTcpModePromptSuppressed(boolean suppressed) {
         getPreferences().edit().putBoolean(SUPPRESS_TCP_MODE_PROMPT, suppressed).apply();
-    }
-
-    public static int getLastAdbPort() {
-        return getPreferences().getInt(LAST_ADB_PORT, -1);
-    }
-
-    public static void setLastAdbPort(int port) {
-        getPreferences().edit().putInt(LAST_ADB_PORT, port).apply();
     }
 
     public static boolean isClassicNav() {
@@ -241,4 +241,261 @@ public class ShizukuSettings {
         return token;
     }
 
+    public static class Keys {
+        public static final String KEY_START_ON_BOOT = "start_on_boot";
+        public static final String KEY_ADB_WITHOUT_DEVELOPER_OPTIONS = "adb_without_developer_options";
+        public static final String KEY_WATCHDOG = "watchdog";
+        public static final String KEY_SERVER_RAN_SINCE_BOOT = "server_ran_since_boot";
+        public static final String KEY_BOOT_COUNT = "boot_count";
+        public static final String KEY_TCP_MODE = "tcp_mode";
+        public static final String KEY_TCP_PORT = "tcp_port";
+        public static final String KEY_AUTO_DISABLE_USB_DEBUGGING = "auto_disable_usb_debugging";
+        public static final String KEY_AUTO_DISABLE_WIRELESS_DEBUGGING = "auto_disable_wireless_debugging";
+        public static final String KEY_LANGUAGE = "language";
+        public static final String KEY_NIGHT_MODE = "night_mode";
+        public static final String KEY_MANUALLY_STOPPED = "manually_stopped";
+        public static final String KEY_LAST_ADB_PORT = "last_adb_port";
+        public static final String KEY_PERSIST_ADB_PORT = "persist_adb_port";
+        public static final String KEY_REQUIRE_INTENT_TOKEN = "require_intent_token";
+        public static final String KEY_FORCE_WIRELESS_DEBUGGING = "force_wireless_debugging";
+        public static final String KEY_START_METHOD = "start_method";
+        public static final String KEY_RUNNING_START_METHOD = "running_start_method";
+        public static final String KEY_CATEGORY_ADVANCED = "category_advanced";
+        public static final String KEY_LAST_ADB_TRANSPORT = "last_adb_transport";
+        public static final String KEY_LAST_ADB_PORT_BOOT = "last_adb_port_boot";
+        public static final String KEY_WAIT_FOR_WIFI = "wait_for_wifi";
+        public static final String KEY_SYSTEM_START_METHOD = "system_start_method";
+        public static final String KEY_LEGACY_PAIRING = "legacy_pairing";
+        public static final String KEY_TRANSLATION = "translation";
+        public static final String KEY_TRANSLATION_CONTRIBUTORS = "translation_contributors";
+        public static final String KEY_LIGHT_THEME = "light_theme";
+        public static final String KEY_BLACK_NIGHT_THEME = "black_night_theme";
+        public static final String KEY_USE_SYSTEM_COLOR = "use_system_color";
+        public static final String KEY_UPDATE_MODE = "update_mode";
+        public static final String KEY_HELP = "help";
+        public static final String KEY_REPORT_BUG = "report_bug";
+    }
+
+    public static class UpdateMode {
+        public static final int OFF = 0;
+        public static final int STABLE = 1;
+        public static final int BETA = 2;
+    }
+
+    public static final int ADB_TRANSPORT_UNKNOWN = 0;
+    public static final int ADB_TRANSPORT_TLS = 1;
+    public static final int ADB_TRANSPORT_TCP = 2;
+
+    public static final String SYSTEM_START_EXPLOIT = "exploit";
+    public static final String SYSTEM_START_CUSTOM = "custom";
+
+    @IntDef({
+        StartMethod.WIRELESS,
+        StartMethod.USB,
+        StartMethod.SYSTEM,
+        StartMethod.ROOT,
+        StartMethod.WIRELESS_NO_NETWORK,
+    })
+    @Retention(SOURCE)
+    public @interface StartMethod {
+        int WIRELESS = 0;
+        int USB = 1;
+        int SYSTEM = 2;
+        int ROOT = 3;
+        int WIRELESS_NO_NETWORK = 4;
+    }
+
+    @StartMethod
+    public static int getStartMethod() {
+        int defaultMethod = EnvironmentUtils.isRooted()
+                ? StartMethod.ROOT
+                : StartMethod.WIRELESS;
+        return getPreferences().getInt(Keys.KEY_START_METHOD, defaultMethod);
+    }
+
+    public static void setStartMethod(@StartMethod int method) {
+        getPreferences().edit().putInt(Keys.KEY_START_METHOD, method).apply();
+    }
+
+    public static int getRunningStartMethod() {
+        return getPreferences().getInt(Keys.KEY_RUNNING_START_METHOD, -1);
+    }
+
+    public static void setRunningStartMethod(@StartMethod int method) {
+        getPreferences().edit().putInt(Keys.KEY_RUNNING_START_METHOD, method).apply();
+    }
+
+    public static boolean getRequireIntentToken() {
+        return getPreferences().getBoolean(Keys.KEY_REQUIRE_INTENT_TOKEN, true);
+    }
+
+    public static void setRequireIntentToken(boolean require) {
+        getPreferences().edit().putBoolean(Keys.KEY_REQUIRE_INTENT_TOKEN, require).apply();
+    }
+
+    public static boolean getAdbWithoutDeveloperOptions() {
+        return getPreferences().getBoolean(Keys.KEY_ADB_WITHOUT_DEVELOPER_OPTIONS, false);
+    }
+
+    public static void setAdbWithoutDeveloperOptions(Context context, boolean enable) {
+        getPreferences().edit().putBoolean(Keys.KEY_ADB_WITHOUT_DEVELOPER_OPTIONS, enable).apply();
+    }
+
+    public static boolean getWatchdog() {
+        return getPreferences().getBoolean(Keys.KEY_WATCHDOG, false);
+    }
+
+    public static void setWatchdog(boolean enabled) {
+        getPreferences().edit().putBoolean(Keys.KEY_WATCHDOG, enabled).apply();
+    }
+
+    public static boolean getManuallyStopped() {
+        return getPreferences().getBoolean(Keys.KEY_MANUALLY_STOPPED, false);
+    }
+
+    public static void setManuallyStopped(boolean stopped) {
+        getPreferences().edit().putBoolean(Keys.KEY_MANUALLY_STOPPED, stopped).apply();
+    }
+
+    public static boolean getPersistAdbPort() {
+        return getPreferences().getBoolean(Keys.KEY_PERSIST_ADB_PORT, false);
+    }
+
+    public static void setPersistAdbPort(boolean enable) {
+        getPreferences().edit().putBoolean(Keys.KEY_PERSIST_ADB_PORT, enable).apply();
+    }
+
+    public static int getTcpPort() {
+        try {
+            return Integer.parseInt(getPreferences().getString(Keys.KEY_TCP_PORT, "5555"));
+        } catch (Exception e) {
+            return 5555;
+        }
+    }
+
+    public static void setTcpPort(Integer port) {
+        if (port != null) {
+            getPreferences().edit().putString(Keys.KEY_TCP_PORT, Integer.toString(port)).apply();
+        }
+    }
+
+    public static boolean getStartOnBoot(Context context) {
+        return getStartOnBoot();
+    }
+
+    public static boolean getServerRanSinceBoot() {
+        return getPreferences().getBoolean(Keys.KEY_SERVER_RAN_SINCE_BOOT, false);
+    }
+
+    public static void setServerRanSinceBoot(boolean ran) {
+        getPreferences().edit().putBoolean(Keys.KEY_SERVER_RAN_SINCE_BOOT, ran).apply();
+    }
+
+    public static boolean isWatchdogStartAllowed() {
+        return getPreferences().getBoolean(Keys.KEY_START_ON_BOOT, false) || getServerRanSinceBoot();
+    }
+
+    public static void noteBootIfNeeded(Context context) {
+        int bootCount = android.provider.Settings.Global.getInt(
+                context.getContentResolver(), android.provider.Settings.Global.BOOT_COUNT, -1);
+        if (bootCount <= 0) return;
+
+        int stored = getPreferences().getInt(Keys.KEY_BOOT_COUNT, -1);
+        if (bootCount == stored) return;
+
+        getPreferences().edit()
+                .putInt(Keys.KEY_BOOT_COUNT, bootCount)
+                .putBoolean(Keys.KEY_SERVER_RAN_SINCE_BOOT, false)
+                .apply();
+    }
+
+    public static boolean getForceWirelessDebugging() {
+        return getPreferences().getBoolean(Keys.KEY_FORCE_WIRELESS_DEBUGGING, false);
+    }
+
+    public static int getLastAdbTransport() {
+        return getPreferences().getInt(Keys.KEY_LAST_ADB_TRANSPORT, ADB_TRANSPORT_UNKNOWN);
+    }
+
+    public static void setLastAdbTransport(int transport) {
+        getPreferences().edit().putInt(Keys.KEY_LAST_ADB_TRANSPORT, transport).apply();
+    }
+
+    public static int getLastAdbPort() {
+        return getPreferences().getInt(Keys.KEY_LAST_ADB_PORT, -1);
+    }
+
+    public static void setLastAdbPort(int port) {
+        getPreferences().edit().putInt(Keys.KEY_LAST_ADB_PORT, port).apply();
+    }
+
+    public static int getLastAdbPortBoot() {
+        return getPreferences().getInt(Keys.KEY_LAST_ADB_PORT_BOOT, -1);
+    }
+
+    public static void setLastAdbPortBoot(int bootCount) {
+        getPreferences().edit().putInt(Keys.KEY_LAST_ADB_PORT_BOOT, bootCount).apply();
+    }
+
+    public static boolean getWaitForWifi() {
+        return getPreferences().getBoolean(Keys.KEY_WAIT_FOR_WIFI, true);
+    }
+
+    public static void setWaitForWifi(boolean enable) {
+        getPreferences().edit().putBoolean(Keys.KEY_WAIT_FOR_WIFI, enable).apply();
+    }
+
+    public static void setForceWirelessDebugging(boolean enable) {
+        getPreferences().edit().putBoolean(Keys.KEY_FORCE_WIRELESS_DEBUGGING, enable).apply();
+    }
+
+    public static String getSystemStartMethod() {
+        return getPreferences().getString(Keys.KEY_SYSTEM_START_METHOD, SYSTEM_START_CUSTOM);
+    }
+
+    public static void setSystemStartMethod(String method) {
+        getPreferences().edit().putString(Keys.KEY_SYSTEM_START_METHOD, method).apply();
+    }
+
+    public static boolean getTcpMode() {
+        return isTcpMode();
+    }
+
+    public static boolean getLegacyPairing() {
+        return getPreferences().getBoolean(Keys.KEY_LEGACY_PAIRING, false);
+    }
+
+    public static String getLanguageTag() {
+        String tag = getPreferences().getString(Keys.KEY_LANGUAGE, null);
+        return TextUtils.isEmpty(tag) ? moe.shizuku.manager.utils.AppLocale.SYSTEM : tag;
+    }
+
+    public static void setLanguageTag(String tag) {
+        getPreferences().edit().putString(Keys.KEY_LANGUAGE, tag).apply();
+    }
+
+    public static int getUpdateMode() {
+        return getPreferences().getInt(Keys.KEY_UPDATE_MODE, UpdateMode.STABLE);
+    }
+
+    public static String getLastPromptedVersion() {
+        return getPreferences().getString("lastPromptedVersion", "");
+    }
+
+    public static void setLastPromptedVersion(String version) {
+        getPreferences().edit().putString("lastPromptedVersion", version).apply();
+    }
+
+    public static void setWatchdog(Context context, boolean enable) {
+        setWatchdog(enable);
+        try {
+            if (enable) {
+                moe.shizuku.manager.service.WatchdogService.start(context);
+                moe.shizuku.manager.receiver.WatchdogAlarmReceiver.schedule(context);
+            } else {
+                moe.shizuku.manager.service.WatchdogService.stop(context);
+                moe.shizuku.manager.receiver.WatchdogAlarmReceiver.cancel(context);
+            }
+        } catch (Throwable ignored) {}
+    }
 }

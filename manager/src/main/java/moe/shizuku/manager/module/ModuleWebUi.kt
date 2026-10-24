@@ -34,7 +34,7 @@ object ModuleWebUi {
         mode: ModuleAccessMode,
         trusted: Boolean = false,
     ): Boolean = module.enabled && mode == ModuleAccessMode.FULL &&
-        (module.prop.usesShellBridge || trusted)
+        (module.declaresShellBridge || trusted)
 
     /**
      * Whether [module]'s service script may be started.
@@ -58,6 +58,12 @@ object ModuleWebUi {
      * named in a refusal instead of being rounded off. The rest of the options are refused by name
      * for the same reason - see [unsupportedOption].
      */
+    internal fun unsupportedOption(optionsJson: String?): String? {
+        val json = optionsJson?.takeIf { it.isNotBlank() } ?: return null
+        return listOf("stdin", "cwd", "env", "envVars", "workingDirectory")
+            .firstOrNull { name -> Regex("\"\\s*$name\\s*\"").containsMatchIn(json) }
+    }
+
     sealed interface Options {
         /** How long the command is given, in seconds, already clamped to the format's range. */
         data class Supported(val timeoutSeconds: Int) : Options
@@ -123,10 +129,10 @@ object ModuleWebUi {
     ): String = buildJsonObject {
         put("id", module.id)
         put("name", module.name)
-        put("version", module.prop.version)
-        put("versionCode", module.prop.versionCode)
-        put("author", module.prop.author)
-        put("description", module.prop.description)
+        put("version", module.version.orEmpty())
+        put("versionCode", module.versionCode ?: 0L)
+        put("author", module.author.orEmpty())
+        put("description", module.description.orEmpty())
         put("enabled", module.enabled)
         put("accessMode", mode.value)
         put("trusted", trusted)
@@ -143,7 +149,7 @@ object ModuleWebUi {
             put("webBridge", canUseShellBridge(module, mode, trusted))
             put("webNetwork", false)
             put("webDownload", false)
-            put("declaresShellBridge", module.prop.usesShellBridge)
+            put("declaresShellBridge", module.declaresShellBridge)
         }
     }.toString()
 

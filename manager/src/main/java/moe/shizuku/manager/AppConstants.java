@@ -11,4 +11,9 @@ public class AppConstants {
 
     private static final String PACKAGE = "moe.shizuku.manager";
     public static final String EXTRA = PACKAGE + ".extra";
+
+    // Previously declared on HomeActivity; kept so existing intents keep working.
+    public static final String EXTRA_SHOW_PAIRING_DIALOG = "show_pairing_dialog";
+    public static final String EXTRA_START_METHOD = "start_method";
+    public static final String EXTRA_START_SERVICE_VIA_WADB = "start_service_via_wadb";
 }

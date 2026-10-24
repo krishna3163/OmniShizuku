@@ -93,7 +93,8 @@ object ModulePackage {
                 throw ModuleInstallException(ModuleInstallProblem.NOT_A_MODULE)
             }
 
-            return AdbModule(prop, installed)
+            return AdbModuleManager.readModule(installed)
+                ?: throw ModuleInstallException(ModuleInstallProblem.NOT_A_MODULE)
         } catch (e: Throwable) {
             staging.deleteRecursively()
             throw e

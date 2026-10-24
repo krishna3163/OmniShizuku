@@ -25,3 +25,10 @@ fun Context.createDeviceProtectedStorageContextCompatWhenLocked(): Context {
         this
     }
 }
+
+/**
+ * Whether credential-encrypted storage is readable yet. False from boot until the first unlock,
+ * which is when the app can run (it is direct-boot aware) and WorkManager's database cannot be read.
+ */
+fun Context.isUserUnlockedCompat(): Boolean =
+    getSystemService(UserManager::class.java)?.isUserUnlocked != false

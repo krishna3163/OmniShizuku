@@ -8,7 +8,6 @@ import android.service.quicksettings.TileService
 import moe.shizuku.manager.MainActivity
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ShizukuSettings
-import moe.shizuku.manager.starter.ServiceStartHelper
 import rikka.shizuku.Shizuku
 
 /**
@@ -46,8 +45,7 @@ class ServiceTile : TileService() {
 
         if (Shizuku.pingBinder()) {
             try {
-                // 手动停止：通知看门狗这是主人的明确操作，别 3 秒后又拉起来
-                moe.shizuku.manager.watchdog.WatchdogService.noteIntentionalStop()
+                ShizukuSettings.setManuallyStopped(true)
                 Shizuku.exit()
             } catch (_: Throwable) {
             }
@@ -55,18 +53,12 @@ class ServiceTile : TileService() {
             return
         }
 
-        when (ShizukuSettings.getLastLaunchMode()) {
-            ShizukuSettings.LaunchMethod.ROOT -> {
-                ServiceStartHelper.startRoot { updateTile() }
-            }
-            ShizukuSettings.LaunchMethod.ADB -> {
-                if (ServiceStartHelper.canAdbAutoStart(this)) {
-                    ServiceStartHelper.startAdb(this) { updateTile() }
-                } else {
-                    openMainActivity()
-                }
-            }
-            else -> openMainActivity()
+        try {
+            ShizukuSettings.setManuallyStopped(false)
+            moe.shizuku.manager.receiver.ShizukuReceiverStarter.start(this)
+            updateTile()
+        } catch (_: Throwable) {
+            openMainActivity()
         }
     }
 

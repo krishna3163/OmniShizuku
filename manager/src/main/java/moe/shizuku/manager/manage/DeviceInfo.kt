@@ -312,7 +312,7 @@ object DeviceInfo {
      * Any app may ask for these, so this is the half of the screen that works with Shizuku
      * stopped - and the average current in particular is only available this way.
      */
-    private fun batteryProperty(property: Int): Int? = runCatching {
+    private fun batteryProperty(property: Int): Int? = runCatching<Int?> {
         ShizukuApplication.application.getSystemService(BatteryManager::class.java)
             ?.getIntProperty(property)
     }.getOrNull()

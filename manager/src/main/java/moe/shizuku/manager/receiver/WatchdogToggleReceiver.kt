@@ -15,6 +15,6 @@ class WatchdogToggleReceiver : BroadcastReceiver() {
             "$id.WATCHDOG_TOGGLE" -> !ShizukuSettings.getWatchdog()
             else -> return
         }
-        ShizukuSettings.setWatchdog(context, enable)
+        ShizukuSettings.setWatchdog(enable)
     }
 }

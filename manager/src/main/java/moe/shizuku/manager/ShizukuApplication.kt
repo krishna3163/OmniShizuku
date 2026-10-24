@@ -16,6 +16,12 @@ class ShizukuApplication : Application() {
 
     companion object {
 
+        lateinit var application: ShizukuApplication
+            private set
+
+        lateinit var appContext: Context
+            private set
+
         init {
             logd("ShizukuApplication", "init")
 
@@ -47,6 +53,7 @@ class ShizukuApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         application = this
+        appContext = applicationContext
         init(this)
         moe.shizuku.manager.service.WatchdogManager.init(this)
         moe.shizuku.manager.service.WatchdogManager.reconcileService(this)

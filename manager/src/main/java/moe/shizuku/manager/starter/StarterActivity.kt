@@ -226,6 +226,8 @@ class StarterActivity : AppActivity() {
 
         const val EXTRA_IS_ROOT = "$EXTRA.IS_ROOT"
         const val EXTRA_IS_DHIZUKU = "$EXTRA.IS_DHIZUKU"
+        const val EXTRA_IS_SYSTEM = "$EXTRA.IS_SYSTEM"
+        const val EXTRA_SYSTEM_CUSTOM = "$EXTRA.SYSTEM_CUSTOM"
         const val EXTRA_HOST = "$EXTRA.HOST"
         const val EXTRA_PORT = "$EXTRA.PORT"
     }
@@ -326,18 +328,16 @@ private class ViewModel(context: Context, root: Boolean, dhizuku: Boolean, host:
         postResult()
 
         viewModelScope.launch(Dispatchers.IO) {
-            ShizukuStateMachine.onStartRequested()
+            ShizukuStateMachine.recordStarting()
             runCatching {
-                AdbStarter.start(host, port, context = appContext, force = true, listener = {
+                AdbStarter.startAdb(appContext, port, {
                     synchronized(outputLock) {
-                        sb.append(String(it))
+                        sb.append(it)
                     }
                     postResult()
-                }, log = {
-                    appendLine(it)
                 })
             }.onFailure {
-                ShizukuStateMachine.onStartFailed()
+                ShizukuStateMachine.markStartFailed()
                 it.printStackTrace()
 
                 if (it is java.security.GeneralSecurityException) {

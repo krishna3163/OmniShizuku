@@ -397,32 +397,7 @@
             android:enabled="true"
             android:exported="false" />
 
-        <!-- Home Screen Command Shortcut Activity (Stellar) -->
-        <activity
-            android:name=".shortcut.CommandShortcutActivity"
-            android:exported="true"
-            android:label="@string/home_terminal_title">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <!-- Root Compatibility & Service Doctor (ShizukuPlus) -->
-        <activity
-            android:name=".rootcompat.RootCompatibilityActivity"
-            android:exported="false"
-            android:label="Root Compatibility" />
-        <activity
-            android:name=".rootcompat.ServiceDoctorActivity"
-            android:exported="false"
-            android:label="Service Doctor" />
-
-        <!-- Diagnostics & Audit (Xhizuku) -->
-        <activity
-            android:name=".diagnostics.AuditActivity"
-            android:exported="false"
-            android:label="Audit &amp; Diagnostics" />
+        <!-- Lab Features -->
         <activity
             android:name=".settings.LabFeaturesActivity"
             android:exported="false"

@@ -1,0 +1,163 @@
+package moe.shizuku.manager.stealth
+
+import android.app.Application
+import android.util.Log
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import moe.shizuku.manager.R
+import moe.shizuku.manager.utils.ApkUtils.*
+import moe.shizuku.manager.utils.Diag
+import java.io.File
+
+sealed class UiState {
+    data class Idle(
+        val action: Action,
+    ) : UiState()
+
+    object Loading : UiState()
+
+    data class Pending(
+        val apk: File,
+        val apkType: ApkType
+    ) : UiState()
+
+    data class Error(
+        val error: Exception,
+    ) : UiState()
+}
+
+enum class Action {
+    HIDE,
+    UNHIDE,
+    REHIDE
+}
+
+enum class ApkType {
+    CLONE,
+    STUB
+}
+
+class StealthTutorialViewModel(
+    application: Application,
+) : AndroidViewModel(application) {
+    private val app: Application = getApplication()
+    private val appContext = app.applicationContext
+
+    private val _uiState = MutableLiveData<UiState>(UiState.Idle(Action.HIDE))
+    val uiState: LiveData<UiState> = _uiState
+
+    private var _packageName: String? = null
+    private var _displayName: String? = null
+
+    private fun isShizukuHidden() =
+        runCatching {
+            appContext.packageManager.getPackageInfo(ORIGINAL_PACKAGE_NAME, 0)
+        }.isFailure
+
+    init {
+        refresh()
+    }
+
+    fun refresh() {
+        val action =
+            if (isShizukuHidden()) Action.UNHIDE
+            else if (app.packageName == ORIGINAL_PACKAGE_NAME) Action.HIDE
+            else Action.REHIDE
+        _uiState.value = UiState.Idle(action)
+    }
+
+    fun setPackageName(packageName: String? = null) {
+        _packageName = packageName ?: app.packageName.appendRandomSuffix()
+    }
+
+    /** The name the copy is listed under, or null for the one it already has. */
+    fun setDisplayName(displayName: String? = null) {
+        _displayName = displayName
+    }
+
+    fun createApk(apkType: ApkType) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                _uiState.postValue(UiState.Loading)
+
+                val apk =
+                    when (apkType) {
+                        ApkType.CLONE -> {
+                            File(app.applicationInfo.sourceDir)
+                                .changePackageName(
+                                    _packageName!!,
+                                    maybeCreateSigningKey = true,
+                                    displayName = _displayName
+                                )
+                        }
+                        ApkType.STUB ->
+                            // The stub holds the name clients still ask for and passes what it
+                            // receives to this app, which is the copy that is installed.
+                            createStubApk(ORIGINAL_PACKAGE_NAME, app.packageName)
+                    }
+
+                _uiState.postValue(UiState.Pending(apk, apkType))
+            } catch (e: Exception) {
+                _uiState.postValue(UiState.Error(e))
+                Log.e("StealthTutorialViewModel", "Error creating APK", e)
+                // The dialog can show the sentence; the stack goes to the log this app keeps,
+                // which is how a failure inside the repackaging libraries is ever identified.
+                Diag.error("Stealth", "Could not prepare the repackaged APK", e)
+            }
+        }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        workDir.deleteRecursively()
+    }
+}
+
+/**
+ * The longest a launcher name can be and still be one: past this most launchers cut it off with
+ * an ellipsis, which leaves a name that cannot tell the copy from the app it is a copy of.
+ */
+const val MAX_DISPLAY_NAME_LENGTH = 30
+
+/** The problem with [this] as a launcher name, or null when there is none. */
+fun String.validateDisplayName(): Int? = when {
+    // Blank is not a problem: it means the copy keeps the name it has.
+    trim().length > MAX_DISPLAY_NAME_LENGTH -> R.string.stealth_error_display_name_too_long
+
+    else -> null
+}
+
+fun String.validatePackageName(): Int? =
+    when {
+        this.isBlank() -> null
+
+        !this.matches(Regex("^[a-zA-Z0-9.]+$")) ->
+            R.string.stealth_error_invalid_characters
+
+        this.split('.').any { it.firstOrNull()?.isDigit() == true } ->
+            R.string.stealth_error_segment_starts_with_number
+
+        this.split('.').size < 2 ->
+            R.string.stealth_error_needs_two_segments
+
+        this.endsWith('.') ->
+            R.string.stealth_error_ends_with_period
+
+        else -> null
+    }
+
+private fun String.appendRandomSuffix(): String {
+    val letters = ('a'..'z')
+    val chars = letters + ('0'..'9')
+
+    val first = letters.random()
+    val rest = (1..4).map { chars.random() }
+
+    val randomSuffix = (listOf(first) + rest).joinToString("")
+
+    return "$this.$randomSuffix"
+}
