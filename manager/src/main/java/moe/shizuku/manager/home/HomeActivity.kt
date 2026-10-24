@@ -494,7 +494,10 @@ abstract class HomeActivity : AppActivity() {
                 CompositionLocalProvider(
                     LocalFloatingNavBarVisible provides floatingNavBarVisible
                 ) {
-                    if (!unlocked) {
+                    var showSplashAnimation by rememberSaveable { mutableStateOf(true) }
+
+                    Box(Modifier.fillMaxSize()) {
+                        if (!unlocked) {
                         LockedScreen(
                             onUnlock = {
                                 AuthManager.authenticate(
@@ -1019,8 +1022,18 @@ abstract class HomeActivity : AppActivity() {
             }
         }
     }
-}
-}
+
+                        if (showSplashAnimation) {
+                            AppOpeningSplashScreen(
+                                onAnimationEnd = {
+                                    showSplashAnimation = false
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+        }
 
         Shizuku.addBinderReceivedListenerSticky(binderReceivedListener)
         Shizuku.addBinderDeadListener(binderDeadListener)
