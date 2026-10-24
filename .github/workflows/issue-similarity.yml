@@ -11,7 +11,7 @@ jobs:
     permissions:
       issues: write
     steps:
-      - uses: actions-cool/issues-similarity-analysis@20737dd6c499d011bea77827f373c7f94843891a # v1.1.1
+      - uses: actions-cool/issues-similarity-analysis@0a5ea211e6a178915f0f754968fc94ff845bcb41 # v1.3.2
         with:
           filter-threshold: 0.8
           title-excludes: 'bug, enhancement, feature'
