@@ -1,158 +1,222 @@
-# Shevery
+[English](README.md) | [Русский](README.ru.md) | [Қазақша](README.kk.md) | [Qazaqşa (Latın)](README.kk-Latn.md) | [Português](README.pt.md) | [Español](README.es.md) | [العربية](README.ar.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
+
+# ⚡ OmniShizuku
 
 <div align="center">
 
-[![Stars](https://img.shields.io/github/stars/HmnDev-Tech/shevery?style=for-the-badge&color=yellow)](https://github.com/HmnDev-Tech/shevery/stargazers) [![Forks](https://img.shields.io/github/forks/HmnDev-Tech/shevery?style=for-the-badge&color=orange)](https://github.com/HmnDev-Tech/shevery/network/members) [![Downloads](https://img.shields.io/github/downloads/HmnDev-Tech/shevery/total?style=for-the-badge&color=green)](https://github.com/HmnDev-Tech/shevery/releases) [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/hmndevtech)
+<img src="screenshots/logo.png" width="160" height="160" alt="Logotipo do OmniShizuku" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0,200,255,0.3);" />
+
+# 👑 O Modo Deus para Android
+### Chega de instalar 4 aplicativos diferentes. Experimente a verdadeira liberdade de privilégios — Sem necessidade de Root.
+
+[![Stars](https://img.shields.io/github/stars/krishna3163/OmniShizuku?style=for-the-badge&color=yellow)](https://github.com/krishna3163/OmniShizuku/stargazers)
+[![Forks](https://img.shields.io/github/forks/krishna3163/OmniShizuku?style=for-the-badge&color=orange)](https://github.com/krishna3163/OmniShizuku/network/members)
+[![Build Android APK](https://img.shields.io/github/actions/workflow/status/krishna3163/OmniShizuku/apk-build.yml?branch=main&style=for-the-badge&label=Build%20APK)](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml)
+[![Releases](https://img.shields.io/github/v/release/krishna3163/OmniShizuku?style=for-the-badge&color=blue)](https://github.com/krishna3163/OmniShizuku/releases)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](LICENSE)
+[![Android Support](https://img.shields.io/badge/Android-7.0%20to%2017%20(API%2024--37)-success?style=for-the-badge&logo=android)](https://developer.android.com)
+
+**Nome do Pacote:** `com.krishna.omnishizuku`
+
+[⚡ Baixar APK mais recente](#-download-instantâneo-e-início-rápido) • [✨ Recursos matadores](#-o-que-torna-o-omnishizuku-imbatível) • [⚔️ Comparativo definitivo](#️-o-confronto-definitivo-omnishizuku-vs-os-outros) • [📚 Documentação completa](docs/)
 
 </div>
 
-[English](README.md) | [Русский](README.ru.md) | [Қазақша](README.kk.md) | [Qazaqşa (Latın)](README.kk-Latn.md) | [Português](README.pt.md) | [Español](README.es.md) | [العربية](README.ar.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
+---
 
-## Estado do fork
+## 💥 Cansado das complicações do Shizuku?
+
+Sejamos sinceros:
+- ❌ **Cansado de ver seu servidor Shizuku encerrando sozinho** quando o Android gerencia a memória de forma agressiva?
+- ❌ **Cansado de alternar entre 4 aplicativos diferentes** apenas para gerenciar seu celular? *(Shizuku para APIs + Dhizuku para Device Owner + aShell para terminal + Shizuku-Keeper para manter ativo)*.
+- ❌ **Quer módulos ZIP estilo Magisk** para ajustes de bateria e desempenho, mas não pode desbloquear o bootloader ou perder o Knox e o acesso a apps de bancos?
+- ❌ **Cansado de erros incompreensíveis no terminal** sem nenhuma orientação?
+
+### 🚀 Conheça o OmniShizuku.
+**O OmniShizuku substitui todos eles.** Ele reúne o clássico protocolo binder privilegiado do Shizuku, o motor modular de extensões do Shizuku-Next, os controles de Device Owner do Dhizuku, a inteligência de terminal do Gemini AI e a recuperação autorreparadora do NightDog em **um superaplicativo espetacular em Material 3 com proteção biométrica.**
+
+---
+
+## ✨ O que torna o OmniShizuku imbatível?
+
+### 1. 📦 "Magisk para quem não tem Root" (Motor de Módulos ADB)
+Instale módulos ZIP autônomos diretamente do seu celular — sem bootloader desbloqueado, sem root e sem anular a garantia!
+- **Formato Completo de Módulo:** Suporte a `module.prop`, banners visuais, ferramentas de execução rápida `action.sh` e serviços contínuos em segundo plano (`service.sh`).
+- **Painéis WebUI Integrados:** Os módulos podem renderizar painéis interativos HTML5/JavaScript com integração IPC nativa via `window.Shizuku`!
+- **Catálogo Online no GitHub:** Navegue, baixe e atualize módulos da comunidade com apenas um toque.
+- **Políticas de Segurança:** Modo Seguro (Safe Mode) com sandbox, tempo limite de execução, cotas de saída e logs de auditoria.
+
+### 2. 🐕 Daemon Indestrutível (NightDog Watchdog v14.5)
+- A frustração nº 1 dos usuários de ADB é o servidor fechando em segundo plano.
+- O OmniShizuku conta com o daemon sentinela **NightDog Watchdog**, que monitora constantemente o sinal do servidor.
+- Se o Android encerrar o processo por falta de RAM, o NightDog **revive e reinicia automaticamente o servidor via Depuração sem fio** sem precisar reconectar ao PC!
+
+### 3. 🛡️ Superponte de Device Owner e Dhizuku
+- Gerenciamento completo de Device Owner (DPM) integrado nativamente.
+- Configure escopos de delegação granulares, congele bloatware indesejado, alterne restrições do sistema e gerencie políticas.
+- **100% Compatível com Dhizuku:** Aplicativos desenvolvidos para o Dhizuku se comunicam perfeitamente com o OmniShizuku!
+
+### 4. 🤖 Console Comput e Copiloto Gemini AI
+- Shell ADB interativo e privilegiado integrado com botões de atalho para macros.
+- **Diagnóstico com Gemini AI:** Travou em um erro enigmático no terminal? O Gemini AI traduz automaticamente logs complexos em explicações claras e passos práticos.
+- **Commandium AI:** Gere comandos shell avançados apenas descrevendo o que deseja em linguagem natural!
+
+### 5. 🔒 Proteção Biométrica Nível Fort Knox
+- Impeça que pessoas não autorizadas ou aplicativos maliciosos explorem seu ambiente privilegiado.
+- Bloqueio Biométrico Mestre: Proteja concessões de permissões, execução de módulos e configurações sensíveis com **impressão digital, desbloqueio facial ou PIN/senha do aparelho**.
+
+### 6. 🧪 Todas as 15 Ferramentas de Laboratório (Herdadas do Shizuku-Next)
+O OmniShizuku mantém **100% das consagradas ferramentas do Shizuku-Next**:
+- 🌐 **Firewall por Aplicativo:** Bloqueie o acesso à internet de qualquer app sem VPN e sem root (`cmd connectivity set-package-networking-enabled <uid> false`).
+- 🕶️ **Ocultação Dinâmica de 6 Camadas:** Esconda o status privilegiado e ADB de apps com detecções rigorosas.
+- 🔑 **Visualizador de Senhas Wi-Fi:** Leia senhas de redes Wi-Fi salvas em texto simples sem root.
+- 📁 **Gerenciador de Arquivos Privilegiado:** Navegue e modifique diretórios protegidos do sistema Android.
+- 🚀 **Inicializador de Activities Ocultas:** Abra menus de teste e telas secretas do fabricante.
+- 🌙 **Modo Escuro Forçado:** Imponha o modo escuro AMOLED mesmo em aplicativos sem suporte nativo.
+- 🖥️ **Ajustes de Exibição:** Altere resolução, densidade de DPI e force taxas de atualização altas de 120Hz.
+- ⚡ **Menu Avançado de Energia:** Reinicie diretamente em Modo Recovery, Fastboot e Bootloader.
+- 🛑 **Parar o Exterminador de Processos Fantasma:** Desative o limite de 32 processos do Android 12+ para cargas pesadas no Termux ou compilações.
+- 📦 **Motor Split-APK InstallerX:** Instale pacotes divididos, contorne restrições de downgrade e injete parâmetros avançados de instalação.
+
+---
+
+## ⚔️ O confronto definitivo: OmniShizuku vs os outros
+
+Veja como o OmniShizuku se destaca em relação a qualquer outra solução no ecossistema Android:
+
+| Recurso / Capacidade | Shizuku Oficial | Shizuku-Next | ShizukuPlus / Shizako | Dhizuku | Magisk / Root | ⚡ **OmniShizuku** |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Sem necessidade de Root?** | ✅ Sim | ✅ Sim | ✅ Sim | ✅ Sim | ❌ **Não (Aciona Knox)** | 🌟 **Sim (100% Sem Root)** |
+| **API Binder Privilegiada** | ✅ Sim | ✅ Sim | ✅ Sim | ❌ Não | ❌ Não | 🌟 **Sim (Altíssima velocidade)**|
+| **Controle Device Owner (DPM)** | ❌ Não | ❌ Não | ❌ Não | ✅ Sim | ❌ Não | 🌟 **Sim (Integrado)** |
+| **Compatibilidade com Dhizuku** | ❌ Não | ❌ Não | ❌ Não | ✅ Sim | ❌ Não | 🌟 **Sim (Protocolo Duplo)** |
+| **Motor de Módulos ZIP (tipo Magisk)**| ❌ Não | ✅ Sim | ❌ Não | ❌ Não | ✅ Sim (Apenas Root) | 🌟 **Sim (ZIPs sem Root!)** |
+| **WebUI de Módulos e Ponte JS** | ❌ Não | ✅ Sim | ❌ Não | ❌ Não | ❌ Não | 🌟 **Sim (Painéis HTML5)** |
+| **Terminal com AI (Gemini / Comput)** | ❌ Não | ❌ Não | ❌ Não | ❌ Não | ❌ Não | 🌟 **Sim (Diagnósticos por AI)**|
+| **Auto-recuperação (NightDog)** | ❌ Não | ⚠️ Básico | ❌ Não | ❌ Não | ❌ Não | 🌟 **Sim (Auto-reinício)** |
+| **Bloqueio Biométrico / PIN** | ❌ Não | ❌ Não | ❌ Não | ❌ Não | ❌ Não | 🌟 **Sim (Proteção por biometria)**|
+| **15 Ferramentas Labs (Firewall/Wi-Fi)**| ❌ Não | ✅ Sim | ⚠️ Parcial | ❌ Não | ❌ Não | 🌟 **Sim (Todas as 15)** |
+| **Ocultação Anti-detecção (6 Camadas)**| ❌ Não | ✅ Sim | ⚠️ Básico | ❌ Não | ⚠️ Exige Zygisk | 🌟 **Sim (Auto-ocultação)** |
+| **Suporte a Android 17 / API 37** | ❌ Obsoleto | ⚠️ API 36 | ❌ Obsoleto | ❌ Obsoleto | ⚠️ Manual | 🌟 **Sim (compileSdk 37)** |
+| **Interface Moderna Compose Material 3**| ❌ Antiga | ⚠️ Parcial | ❌ Antiga | ❌ Antiga | ❌ Antiga | 🌟 **Sim (Expressive M3)** |
+
+> **O Veredito:** Enquanto outros forks oferecem apenas uma peça isolada, **o OmniShizuku é a solução completa.**
+
+---
+
+## 📸 Demonstração visual
+
+<div align="center">
+
+| 📱 Painel Principal | 🤖 Console Comput AI | 📦 Gerenciador de Módulos ADB | ⚙️ Configurações e Labs |
+| :---: | :---: | :---: | :---: |
+| <img src="screenshots/main.png" width="220" /> | <img src="screenshots/comput.png" width="220" /> | <img src="screenshots/modules.png" width="220" /> | <img src="screenshots/settings.png" width="220" /> |
+| *Status do servidor e atalhos rápidos* | *Explicações de AI, macros e commandium* | *Módulos ZIP, WebUIs e catálogos* | *Biometria, firewall e 15 ferramentas* |
+
+</div>
+
+---
+
+## 🚀 Download instantâneo e início rápido
 
 > [!IMPORTANT]
-> **Ação de migração necessária:** devido à alteração do identificador do app (`moe.shizuku.privileged.api` -> `com.hamondev.shevery`), você **DEVE DESINSTALAR** qualquer versão antiga do app oficial Shizuku Manager do seu dispositivo antes de instalar o Shevery. Caso contrário, eles entrarão em conflito.
-> Referência do projeto original: <https://github.com/RikkaApps/Shizuku>
->
+> **Instalação limpa recomendada:** Devido à mudança para nosso pacote exclusivo (`com.krishna.omnishizuku`), por favor **desinstale versões antigas do Shizuku ou Shevery** antes de instalar para evitar conflitos de assinatura do Android.
 
-## Novidades do fork
+### Passo 1: Baixar o aplicativo
+- 📦 **Compilações CI Recentes (a cada commit):** [GitHub Actions](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml) &rarr; Role até **Artifacts** e baixe `omnishizuku-release.apk`.
+- 🏷️ **Versões Estáveis no GitHub:** [Página de Releases](https://github.com/krishna3163/OmniShizuku/releases)
 
-- Interface do gerenciador em Jetpack Compose com componentes Material 3 Expressive, animações, interruptores e ícones arredondados.
-- **Suporte experimental ao Dhizuku**: sistema dedicado de ponte Device Owner, disponível nos recursos de Laboratório.
-- Recurso **«Comput» aprimorado** baseado em shell/adb, com explicações do Gemini, macros e criação de comandos via Commandium AI.
-- Trabalho de compatibilidade com Android 16/17 usando SDK e ferramentas de build atuais neste fork.
-- Tela de módulos ADB para instalar e gerenciar módulos ZIP.
-- Recursos dos módulos: `module.prop`, banner, chave de ativar/desativar, `action.sh`, `service.sh` controlado por política, WebUI local, exclusão, verificações de caminho, limites de tamanho, limites de saída e registros das últimas execuções.
-- Configurações de política dos módulos: modo seguro, acesso total e controle de ações em segundo plano.
-- Catálogo de módulos com instalação direta.
+### Passo 2: Inicie com seu método preferido
 
-## Documentação
+```mermaid
+graph LR
+    A["Iniciar OmniShizuku"] --> B["Depuração sem fio"]
+    A --> C["PC / Cabo OTG Shell"]
+    A --> D["Acesso Root direto"]
+    A --> E["Dhizuku Device Owner"]
+    B --> F(("⚡ Servidor em execução"))
+    C --> F
+    D --> F
+    E --> F
+```
 
-- [Guia de módulos ADB](docs/adb-modules-guide.md)
-- [Referência da API de módulos ADB](docs/adb-modules-api.md)
-- [API de conectores Shizuku](docs/shizuku-connectors.md)
-- [Compatibilidade com Android 17](docs/android-17-compatibility.md)
-- [Guia de publicação de módulos ADB](docs/github-catalog.md)
+1. **Depuração sem fio (Android 11+ / Não requer PC):**
+   - Opções do desenvolvedor &rarr; Ative **Depuração sem fio** &rarr; Toque em **Parear dispositivo com código de pareamento**.
+   - Digite o código de 6 dígitos no OmniShizuku e toque em **Iniciar**.
+2. **Via Computador (ADB USB Shell):**
+   ```bash
+   adb shell sh /sdcard/Android/data/com.krishna.omnishizuku/starter.sh
+   ```
+3. **Dispositivo com Root (Magisk / KernelSU / APatch):**
+   - Abra o OmniShizuku &rarr; Toque em **Iniciar via Root** &rarr; Conceda permissão de Superusuário.
+4. **Via Dhizuku (Device Owner):**
+   - Autorize o OmniShizuku no aplicativo Dhizuku para gerenciamento em segundo plano.
 
-## Contexto
+---
 
-Ao desenvolver apps que precisam de root, o método mais comum é executar alguns comandos no shell su. Por exemplo, existe um app que usa o comando `pm enable/disable` para ativar/desativar componentes.
+## 📚 Documentação detalhada
 
-Esse método tem desvantagens muito grandes:
+Consulte nossos manuais técnicos completos na pasta [`docs/`](docs/):
 
-1. **Extremamente lento** (criação de múltiplos processos)
-2. Precisa processar textos (**super não confiável**)
-3. As possibilidades ficam limitadas aos comandos disponíveis
-4. Mesmo que o ADB tenha permissões suficientes, o app precisa de root para funcionar
+| Documento | Assunto |
+| :--- | :--- |
+| 📖 [**Guia do Agente Comput AI**](docs/comput-agent.md) | Ambiente do terminal, copiloto Gemini AI e macros. |
+| 🛡️ [**Guia de Device Owner e DPM**](docs/device-owner.md) | Configuração de Profile Owner, restrições e escopos de delegação. |
+| 📦 [**Guia do Usuário de Módulos ADB**](docs/adb-modules-guide.md) | Instalação de módulos ZIP, Modo Seguro e solução de problemas. |
+| 🛠️ [**Referência de API de Módulos ADB**](docs/adb-modules-api.md) | Desenvolvimento de módulos: hooks, variáveis de ambiente e ponte WebUI. |
+| 🌐 [**Publicação no Catálogo do GitHub**](docs/github-catalog.md) | Empacotamento e publicação de módulos para o catálogo global. |
+| 🕶️ [**Edição Stealth e Stubs**](docs/stealth-and-stubs.md) | Ocultação de privilégios contra inspeções de segurança. |
+| 🧪 [**Labs, Ocultação de USB e Firewall**](docs/lab-and-extras.md) | Bloqueio de rede, ocultação em 6 camadas e acessibilidade. |
+| 🔌 [**Plugin para Tasker e MacroDroid**](docs/tasker-plugin.md) | Gatilhos de automação, intents de broadcast e scripts de início. |
+| 🐕 [**Recuperação com NightDog Watchdog**](docs/nightdog.md) | Monitoramento de integridade do daemon e arquitetura de reconexão. |
+| 🚀 [**Compatibilidade com Android 17**](docs/android-17-compatibility.md) | Modificações arquiteturais para compileSdk 37 / Android Baklava. |
+| 📡 [**Referência de Intents**](docs/intents.md) | Documentação de todos os intents de broadcast suportados. |
 
-O Shizuku usa uma abordagem completamente diferente. Veja a descrição detalhada abaixo.
+---
 
-## Guia do usuário e download
+## 💻 Compilação a partir do código-fonte
 
-<https://shizuku.rikka.app/>
+```bash
+# 1. Clone o repositório com submódulos
+git clone --recurse-submodules https://github.com/krishna3163/OmniShizuku.git
+cd OmniShizuku
 
-## Capturas de tela
+# 2. Compilar variante de depuração (Debug)
+./gradlew :manager:assembleDebug
 
-<details>
-  <summary>Clique para abrir as capturas de tela</summary>
-  <br/>
-  <table>
-    <tr>
-      <td align="center"><img src="screenshots/main.png" width="300" /><br/><b>Tela principal</b></td>
-      <td align="center"><img src="screenshots/comput.png" width="300" /><br/><b>Console Comput</b></td>
-    </tr>
-    <tr>
-      <td align="center"><img src="screenshots/modules.png" width="300" /><br/><b>Módulos ADB</b></td>
-      <td align="center"><img src="screenshots/settings.png" width="300" /><br/><b>Configurações</b></td>
-    </tr>
-  </table>
-</details>
+# 3. Compilar variante de lançamento (Release)
+./gradlew :manager:assembleRelease
+```
+*Os APKs gerados estarão localizados em `manager/build/outputs/apk/{debug,release}/`.*
 
-## Como o Shevery funciona?
+---
 
-Primeiro, precisamos falar sobre como os apps usam as APIs do sistema. Por exemplo, se o app quiser obter os apps instalados, todos sabemos que devemos usar `PackageManager#getInstalledPackages()`. Na verdade, isso é um processo de comunicação entre processos (IPC) do processo do app com o processo do servidor do sistema; o framework Android apenas faz o trabalho interno por nós.
+## 🙏 Agradecimentos especiais e Galeria de Honra
 
-O Android usa o `binder` para esse tipo de IPC. O `Binder` permite que o lado do servidor conheça o uid e o pid do lado do cliente, para que o servidor do sistema possa verificar se o app tem permissão para realizar a operação.
+O OmniShizuku foi construído com base em projetos revolucionários. Expressamos nosso profundo respeito e gratidão a:
 
-Normalmente, se existe um «gerenciador» (por exemplo, `PackageManager`) para os apps usarem, deve existir um «serviço» (por exemplo, `PackageManagerService`) no processo do servidor do sistema. Podemos pensar de forma simples: se o app detém o `binder` do «serviço», ele pode se comunicar com o «serviço». O processo do app recebe os binders dos serviços do sistema ao iniciar.
+* **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** — A genial arquitetura de binder privilegiado concebida por Rikka.
+* **[HmnDev-Tech/shevery](https://github.com/HmnDev-Tech/shevery)** — Recursos de base, interface expandida e suporte a múltiplos módulos.
+* **[iamr0s/Dhizuku](https://github.com/iamr0s/Dhizuku)** e **[rosan/Dhizuku](https://github.com/rosan/Dhizuku)** — Conceitos de gerenciamento de Device Owner e protocolos de comunicação.
+* **[timschneeb/ShizuStore](https://github.com/timschneeb/ShizuStore)** — Padrões de sincronização com repositórios de lojas de apps.
+* **[wxxsfxyzm/InstallerX-Revived](https://github.com/wxxsfxyzm/InstallerX-Revived)** — Métodos de instalação de Split-APKs e fluxos de armazenamento temporário.
+* **[zacharee/InstallWithOptions](https://github.com/zacharee/InstallWithOptions)** — Parâmetros minuciosos de instalação e flags de bypass.
+* **[d4rken/porter](https://github.com/d4rken/porter)** — Classes utilitárias limpas para IPC do Android e wrappers de binder.
+* **[topjohnwu/libsu](https://github.com/topjohnwu/libsu)** — Gestão de serviços em root shell e transações confiáveis de binder.
+* **[kerneldroid](https://github.com/kerneldroid)** — Componentes de UI em Compose, catálogo de módulos e trabalho de compatibilidade com Android 17 / API 37.
+* **[DP-Hridayan/aShellYou](https://github.com/DP-Hridayan/aShellYou)** — Interface de terminal para comandos ADB e ferramentas de computação.
+* **[protonpony/Shizuku-Keeper](https://github.com/protonpony/Shizuku-Keeper)** — Arquitetura de inicialização automática do daemon de depuração sem fio no boot.
+* **[Landon Moran](https://github.com/LandonMoran)** — Contribuições na ponte com Dhizuku, correções na pilha de rede TCP e estabilidade geral.
 
-O Shizuku orienta os usuários a executar primeiro um processo, o servidor Shizuku, com root ou ADB. Quando o app inicia, o `binder` do servidor Shizuku também é enviado ao app.
+---
 
-O recurso mais importante que o Shevery oferece é atuar como intermediário: receber solicitações do app, enviá-las ao servidor do sistema e devolver os resultados. Veja o método `transactRemote` na classe `rikka.shizuku.server.ShizukuService` e a classe `moe.shizuku.api.ShizukuBinderWrapper` para mais detalhes.
+## 📜 100% Gratuito e Código Aberto
 
-Assim, alcançamos nosso objetivo: usar as APIs do sistema com permissões mais altas. E, para o app, é quase idêntico ao uso direto das APIs do sistema.
-
-## Guia do desenvolvedor
-
-### API e exemplo
-
-https://github.com/RikkaApps/Shizuku-API
-
-### Migrando de versões pré-v11
-
-> Os aplicativos existentes continuam funcionando, é claro.
-
-https://github.com/RikkaApps/Shizuku-API#migration-guide-for-existing-applications-use-shizuku-pre-v11
-
-### Atenção
-
-1. As permissões do ADB são limitadas
-
-   O ADB tem permissões limitadas e diferentes conforme a versão do sistema. Você pode ver as permissões concedidas ao ADB [aqui](https://github.com/aosp-mirror/platform_frameworks_base/blob/master/packages/Shell/AndroidManifest.xml).
-
-   Antes de chamar a API, você pode usar `ShizukuService#getUid` para verificar se o Shizuku está rodando como usuário ADB, ou usar `ShizukuService#checkPermission` para verificar se o servidor tem permissões suficientes.
-
-2. Limitação de APIs ocultas a partir do Android 9
-
-   A partir do Android 9, o uso de APIs ocultas é limitado para apps normais. Use outros métodos (como <https://github.com/LSPosed/AndroidHiddenApiBypass>).
-
-3. Android 8.0 e ADB
-
-   Atualmente, o serviço Shizuku obtém o processo do app combinando `IActivityManager#registerProcessObserver` e `IActivityManager#registerUidObserver` (26+) para garantir que o processo do app seja enviado ao iniciar. Porém, na API 26, o ADB não tem permissão para usar `registerUidObserver`; por isso, se você precisar usar o Shizuku em um processo que talvez não seja iniciado por uma Activity, recomenda-se disparar o envio do binder iniciando uma activity transparente.
-
-4. O uso direto de `transactRemote` exige atenção
-
-   * A API pode ser diferente em versões distintas do Android; verifique com cuidado. Além disso, `android.app.IActivityManager` existe na forma aidl na API 26 e posteriores, e `android.app.IActivityManager$Stub` existe apenas na API 26.
-
-   * `SystemServiceHelper.getTransactionCode` pode não obter o código de transação correto; por exemplo, `android.content.pm.IPackageManager$Stub.TRANSACTION_getInstalledPackages` não existe na API 25, e lá existe `android.content.pm.IPackageManager$Stub.TRANSACTION_getInstalledPackages_47` (esse caso já foi tratado, mas não se exclui que possa haver outras situações). Esse problema não ocorre com o método `ShizukuBinderWrapper`.
-
-## Desenvolvendo o próprio Shizuku
-
-### Build
-
-- Clone com `git clone --recurse-submodules`
-- Execute a tarefa do Gradle `:manager:assembleDebug` ou `:manager:assembleRelease`
-
-A tarefa `:manager:assembleDebug` gera um servidor depurável. Você pode anexar um depurador ao `shizuku_server` para depurar o servidor. Atenção: no Android Studio, em «Run/Debug configurations», a opção «Always install with package manager» deve estar marcada, para que o servidor use o código mais recente.
-
-## Como funciona o «Iniciar (via Dhizuku)»?
-
-* Primeiro, você precisa iniciar o Shevery via PC/OTG ou depuração sem fio.
-* Em seguida, inicie o Dhizuku.
-  - Não inicie o Shevery via Dhizuku primeiro.
-
-## Licença
-
-Todos os arquivos de código deste projeto são licenciados sob Apache 2.0
-
-## Créditos
-
-* [kerneldroid](https://github.com/kerneldroid) - por partes da interface do app, do sistema de catálogo de módulos e do suporte ao Android 17.
-* [RikkaApps/Shizuku](https://github.com/rikkaapps/Shizuku) - pela Shizuku API e pelas fontes principais.
-* [Landon Moran](https://github.com/LandonMoran) - por correções de Dhizuku, TCP etc.
-* [DP-Hridayan](https://github.com/DP-Hridayan/aShellYou) - por partes da interface «Comput».
-* [protonpony/Shizuku-Keeper](https://github.com/protonpony/Shizuku-Keeper) - pelo «Início automático na inicialização via depuração sem fio».
-
-## E mais...
-
-Agora você pode publicar seu módulo ADB!
-Siga estes passos:
-- Crie seu módulo.
-- Crie um repositório GH para este módulo.
-- Adicione o tópico «shevery-modules».
-- Adicione os fontes e o release com o módulo.
+O OmniShizuku é um software livre distribuído sob a licença **[Apache License 2.0](LICENSE)**.
 
 > [!CAUTION]
-> **Aviso de app gratuito**
->
-> O Shevery é um app **totalmente gratuito**. Não pague a gerenciadores de arquivos de terceiros nem a serviços de nuvem para baixar este aplicativo.
+> **Aviso de Aplicativo Gratuito:** O OmniShizuku é e sempre será **100% gratuito e de código aberto**. Nunca pague a nenhum site terceiro, vendedor ou serviço de hospedagem para fazer o download deste aplicativo.
+
+<div align="center">
+  <sub>Desenvolvido com carinho por <b>Krishna</b> e pela comunidade de código aberto do Android.</sub>
+</div>

@@ -36,7 +36,7 @@ jobs:
         run: |
           yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
           yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 --licenses > /dev/null 2>&1 || true
-          echo "y" | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 "platforms;android-37.0" "platforms;android-37" "build-tools;37.0.0" "ndk;29.0.14206865" || true
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 "platforms;android-37.0" "platforms;android-37" "build-tools;37.0.0" "ndk;29.0.14206865" || true
           if [ -d "$ANDROID_SDK_ROOT/platforms/android-37.0" ] && [ ! -d "$ANDROID_SDK_ROOT/platforms/android-37" ]; then
             ln -s "$ANDROID_SDK_ROOT/platforms/android-37.0" "$ANDROID_SDK_ROOT/platforms/android-37"
           fi
@@ -70,16 +70,19 @@ jobs:
           mkdir -p ~/.android ~/.config/.android
           keytool -genkeypair -v -keystore ~/.android/debug.keystore \
             -storepass android -alias androiddebugkey -keypass android \
-            -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 10000
-            cp -f ~/.android/debug.keystore ~/.config/.android/debug.keystore 2>/dev/null || true
+            -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 10000 || true
+          cp -f ~/.android/debug.keystore ~/.config/.android/debug.keystore 2>/dev/null || true
 
       - name: Build debug APK
         run: |
+          set -e -o pipefail
           chmod +x gradlew 2>/dev/null || true
           ./gradlew :manager:assembleDebug --stacktrace --no-daemon 2>&1 | tee build-debug.log
 
       - name: Build release APK
-        run: ./gradlew :manager:assembleRelease --stacktrace --no-daemon 2>&1 | tee build-release.log
+        run: |
+          set -e -o pipefail
+          ./gradlew :manager:assembleRelease --stacktrace --no-daemon 2>&1 | tee build-release.log
 
       - name: Dump build log on failure
         if: failure()
