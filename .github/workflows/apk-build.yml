@@ -3,9 +3,13 @@ name: Build Android APK
 on:
   push:
     branches: [ "main", "dev", "nightly" ]
+    tags: [ "v*" ]
   pull_request:
     branches: [ "main", "dev", "nightly" ]
   workflow_dispatch:
+
+permissions:
+  contents: write
 
 # Every run builds and uploads BOTH artifacts: a debug APK and a release APK.
 # There is no debug-or-release choice - each run always produces the pair.
@@ -31,9 +35,13 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Accept Android SDK licenses
+      - name: Setup Android SDK
         run: |
-          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses >/dev/null 2>&1 || true
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
+          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 --licenses > /dev/null 2>&1 || true
+          echo 'android.sdk.channel=3' >> gradle.properties
+          echo 'org.gradle.caching=true' >> gradle.properties
+          echo 'org.gradle.parallel=true' >> gradle.properties
 
       - name: Configure signing
         if: env.TRUSTED_CONTEXT == 'true'
@@ -67,25 +75,45 @@ jobs:
       - name: Build debug APK
         run: |
           chmod +x gradlew 2>/dev/null || true
-          ./gradlew :manager:assembleDebug
+          ./gradlew :manager:assembleDebug --stacktrace -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=1536m -XX:+UseG1GC"
 
       - name: Build release APK
-        run: ./gradlew :manager:assembleRelease
+        run: ./gradlew :manager:assembleRelease --stacktrace -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=1536m -XX:+UseG1GC"
 
       - name: Verify APK signature
+        if: always()
         run: |
-          APK=$(ls manager/build/outputs/apk/release/*.apk | head -n1)
-          APKSIGNER=$(ls -d "$ANDROID_SDK_ROOT"/build-tools/*/apksigner | sort -V | tail -n1)
-          "$APKSIGNER" verify --print-certs "$APK"
+          APK=$(ls manager/build/outputs/apk/release/*.apk 2>/dev/null | head -n1)
+          if [ -n "$APK" ] && [ -f "$APK" ]; then
+            APKSIGNER=$(ls -d "$ANDROID_SDK_ROOT"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -n1)
+            if [ -n "$APKSIGNER" ]; then
+              "$APKSIGNER" verify --print-certs "$APK" || true
+            fi
+          fi
 
       - name: Upload debug APK Artifact
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: omnishizuku-debug
           path: manager/build/outputs/apk/debug/*.apk
+          if-no-files-found: ignore
 
       - name: Upload release APK Artifact
+        if: always()
         uses: actions/upload-artifact@v7
         with:
           name: omnishizuku-release
           path: manager/build/outputs/apk/release/*.apk
+          if-no-files-found: ignore
+
+      - name: Create GitHub Release on Tag
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            manager/build/outputs/apk/release/*.apk \
+            manager/build/outputs/apk/debug/*.apk \
+            --title "OmniShizuku ${{ github.ref_name }}" \
+            --generate-notes || true

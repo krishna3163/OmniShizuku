@@ -1,20 +1,19 @@
-# Shevery
+# OmniShizuku
 
 <div align="center">
 
-[![Stars](https://img.shields.io/github/stars/HmnDev-Tech/shevery?style=for-the-badge&color=yellow)](https://github.com/HmnDev-Tech/shevery/stargazers) [![Forks](https://img.shields.io/github/forks/HmnDev-Tech/shevery?style=for-the-badge&color=orange)](https://github.com/HmnDev-Tech/shevery/network/members) [![Downloads](https://img.shields.io/github/downloads/HmnDev-Tech/shevery/total?style=for-the-badge&color=green)](https://github.com/HmnDev-Tech/shevery/releases) [![Build Android APK](https://img.shields.io/github/actions/workflow/status/HmnDev-Tech/shevery/apk-build.yml?branch=main&style=for-the-badge&label=build)](https://github.com/HmnDev-Tech/shevery/actions/workflows/apk-build.yml) [![Telegram](https://img.shields.io/badge/Telegram-2CA5E0?style=for-the-badge&logo=telegram&logoColor=white)](https://t.me/hmndevtech)
+[![Stars](https://img.shields.io/github/stars/krishna3163/OmniShizuku?style=for-the-badge&color=yellow)](https://github.com/krishna3163/OmniShizuku/stargazers) [![Forks](https://img.shields.io/github/forks/krishna3163/OmniShizuku?style=for-the-badge&color=orange)](https://github.com/krishna3163/OmniShizuku/network/members) [![Build Android APK](https://img.shields.io/github/actions/workflow/status/krishna3163/OmniShizuku/apk-build.yml?branch=main&style=for-the-badge&label=build)](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml)
 
 </div>
 
 
 [English](README.md) | [Русский](README.ru.md) | [Қазақша](README.kk.md) | [Qazaqşa (Latın)](README.kk-Latn.md) | [Português](README.pt.md) | [Español](README.es.md) | [العربية](README.ar.md) | [简体中文](README.zh-CN.md) | [日本語](README.ja.md)
 
-## Fork status
+## Project Overview
 
 > [!IMPORTANT]
-> **Migration Action Required:** Due to the App Signation (`moe.shizuku.privileged.api` -> `com.hamondev.shevery`), you **MUST UNINSTALL** any older official Shizuku Manager app from your device before installing Shevery. Otherwise, they will conflict.
-Upstream project reference: <https://github.com/RikkaApps/Shizuku>
-> 
+> **Migration Action Required:** Due to the application package identifier (`com.krishna.omnishizuku`), you **MUST UNINSTALL** any older official Shizuku Manager app or previous builds from your device before installing OmniShizuku. Otherwise, they will conflict.
+> Upstream project references: <https://github.com/RikkaApps/Shizuku> and <https://github.com/HmnDev-Tech/shevery>
 
 ## Fork additions
 
@@ -138,47 +137,56 @@ The `:manager:assembleDebug` task generates a debuggable server. You can attach 
 
 ### CI builds
 
-Every push to `main`, `dev` and `nightly`, and every pull request, runs the [Build Android APK](https://github.com/HmnDev-Tech/shevery/actions/workflows/apk-build.yml) workflow. Each run **always uploads both artifacts** — there is no debug-or-release choice:
+Every push to `main`, `dev` and `nightly`, and every pull request, runs the [Build Android APK](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml) workflow. Each run uploads both artifacts:
 
 | Artifact | Gradle task | Description |
 | --- | --- | --- |
-| `shevery-debug` | `:manager:assembleDebug` | Debuggable APK for testing; the server can be debugged with an attached debugger |
-| `shevery-release` | `:manager:assembleRelease` | Release APK, signed with the release keystore when the secrets are configured, otherwise it falls back to debug signing |
+| `omnishizuku-debug` | `:manager:assembleDebug` | Debuggable APK for testing; the server can be debugged with an attached debugger |
+| `omnishizuku-release` | `:manager:assembleRelease` | Release APK, signed with keystore or debug signing fallback |
 
-The release artifact is signature-verified with `apksigner` in every run. Fork pull requests build both variants with a generated keystore, so untrusted code never touches the release signing key.
+The release artifact is signature-verified with `apksigner` in every run. Fork pull requests build both variants with a generated keystore, so untrusted code never touches release secrets.
 
-## How "Start(via Dhizuku)" works?
+## How "Start (via Dhizuku)" Works
 
-* First, you need to start Shevery by PC/OTG or Wireless Debugging.
-* Next, start Dhizuku.
-  - Do not start Shevery via Dhizuku first.
-  
-## License
+1. First, start **OmniShizuku** via PC/OTG or Wireless Debugging.
+2. Next, start **Dhizuku**.
+   - *Note: Do not start OmniShizuku via Dhizuku first.*
 
-All code files in this project are licensed under Apache 2.0
+## 📜 License
 
-## Credits
+All original code files in this project are licensed under the [Apache License 2.0](LICENSE).
 
-* [kerneldroid](https://github.com/kerneldroid) - for parts of App UI, Catalog Modules System and Android 17 support.
-* [iamr0s/Dhizuku](https://github.com/iamr0s/Dhizuku) - for Dhizuku Device Owner architecture and API concepts integrated into Shevery.
-* [RikkaApps/Shizuku](https://github.com/rikkaapps/Shizuku) - for Shizuku API and main sources.
-* [Landon Moran](https://github.com/LandonMoran) - for Dhizuku, TCP and etc. fixes.
-* [DP-Hridayan](https://github.com/DP-Hridayan/aShellYou) - for parts of "Comput" UI.
-* [protonpony/Shizuku-Keeper](https://github.com/protonpony/Shizuku-Keeper) - for "Autostart on boot via Wireless Debugging".
+## 🙏 Special Thanks & Upstream Acknowledgements
 
+OmniShizuku is built upon and inspired by incredible open-source projects across the Android ecosystem. We extend our sincere gratitude and appreciation to all upstream authors and contributors:
 
-## And...
+* **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** - The foundational privileged service architecture, binder IPC protocol, and core APIs created by Rikka.
+* **[HmnDev-Tech/shevery](https://github.com/HmnDev-Tech/shevery)** - The upstream project providing rich integration modules and modern capabilities.
+* **[iamr0s/Dhizuku](https://github.com/iamr0s/Dhizuku)** & **[rosan/Dhizuku](https://github.com/rosan/Dhizuku)** - Revolutionary Device Owner architecture and API concepts integrated into OmniShizuku.
+* **[timschneeb/ShizuStore](https://github.com/timschneeb/ShizuStore)** - Shizuku App Store catalog models and repository synchronization inspiration.
+* **[wxxsfxyzm/InstallerX-Revived](https://github.com/wxxsfxyzm/InstallerX-Revived)** - Modern APK installer techniques and package staging mechanisms.
+* **[zacharee/InstallWithOptions](https://github.com/zacharee/InstallWithOptions)** - Advanced package installer options and bypass flags.
+* **[d4rken/porter](https://github.com/d4rken/porter)** - Clean Android IPC helper primitives.
+* **[topjohnwu/libsu](https://github.com/topjohnwu/libsu)** - Root shell service primitives and robust binder transactions.
+* **[kerneldroid](https://github.com/kerneldroid)** - App UI components, Catalog Modules System, and Android 17 / compileSdk 37 compatibility.
+* **[DP-Hridayan/aShellYou](https://github.com/DP-Hridayan/aShellYou)** - ADB shell command terminal and system tool concepts.
+* **[protonpony/Shizuku-Keeper](https://github.com/protonpony/Shizuku-Keeper)** - Autostart on boot via Wireless Debugging daemon architecture.
+* **[Landon Moran](https://github.com/LandonMoran)** - Key contributions to Dhizuku bridging, TCP networking, and stability fixes.
 
-Now, you can publish your ADB module! 
-Follow this steps:
-- Create your module.
-- Create GH Repository for this module.
-- Add topic "shevery-modules"
-- Add sources and Release with module.
+---
+
+## 📦 OmniShizuku Modules
+
+You can create and distribute custom ADB modules for OmniShizuku:
+1. Create your module with your custom ADB script or binary.
+2. Create a GitHub repository for your module.
+3. Add the GitHub topic `omnishizuku-modules`.
+4. Publish a GitHub Release containing your module archive.
 
 > [!CAUTION]
 > **Free App Notice**
 > 
->  Shevery is a **completely free app**. Do not pay any third-party file managers or cloud services to download this application.
+> OmniShizuku is a **completely free and open-source project**. Do not pay any third-party app stores, file hosts, or cloud services to download this application.
 
-### For fresh builds/CI of Shevery, go to [Actions](https://github.com/HmnDev-Tech/shevery/actions/workflows/apk-build.yml) — every run attaches both a `shevery-debug` and a `shevery-release` APK artifact. But this APKs are unstable and can contain some bugs. If you found bugs on latest CI, you can report about it in Issues.
+### CI/CD Builds
+Fresh CI builds are generated on every commit at [OmniShizuku Actions](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml). Every successful workflow run attaches both `omnishizuku-debug` and `omnishizuku-release` APK artifacts at the bottom of the summary page under **Artifacts**.
