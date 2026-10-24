@@ -1021,19 +1021,18 @@ abstract class HomeActivity : AppActivity() {
                 }
             }
         }
-    }
 
-                        if (showSplashAnimation) {
-                            AppOpeningSplashScreen(
-                                onAnimationEnd = {
-                                    showSplashAnimation = false
-                                }
-                            )
-                        }
-                    }
+        if (showSplashAnimation) {
+            AppOpeningSplashScreen(
+                onAnimationEnd = {
+                    showSplashAnimation = false
                 }
-            }
+            )
         }
+    }
+}
+}
+}
 
         Shizuku.addBinderReceivedListenerSticky(binderReceivedListener)
         Shizuku.addBinderDeadListener(binderDeadListener)

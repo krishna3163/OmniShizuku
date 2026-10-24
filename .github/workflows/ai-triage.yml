@@ -27,23 +27,7 @@ on:
   # commit_comment:           # commit review
   #   types: [created]
 
-permissions:
-  issues: write
-  pull-requests: write
-  # write (not read) because the moderation feature persists a small
-  # per-author offense-count JSON file to the repo via the Contents API
-  # (see internal/moderation), and the rate limiters for the privileged
-  # comment features persist their own per-author trigger timestamps the
-  # same way. This does NOT, by itself, grant the bot the ability to delete
-  # issues or block users — those need the separate, more privileged
-  # moderation-token input below.
-  contents: write
-  # Permissions for the optional features. Declared unconditionally so that
-  # turning a feature on doesn't ALSO require editing this file: they only
-  # widen what the token COULD do, and every one of those features is off
-  # by default and gated behind a live permission check in the bot.
-  discussions: write        # discussions-enabled (reply in Discussions)
-  actions: write            # workflow-dispatch-enabled (workflow_dispatch API)
+permissions: read-all
 
 concurrency:
   group: ai-triage-${{ github.event.issue.number || github.event.pull_request.number || github.event.comment.id || github.event.discussion.number || github.run_id }}
@@ -52,11 +36,17 @@ concurrency:
 jobs:
   triage:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+      contents: write
+      discussions: write
+      actions: write
     steps:
       # Check out ONLY the repo's base branch (the bot's own code plus
       # .github/ai-triage/*), not the PR's head — see the pull_request_target
       # note above.
-      - uses: actions/checkout@v7
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
       - uses: ./.github/actions/ai-triage-bot
         with:

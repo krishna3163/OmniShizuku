@@ -33,9 +33,7 @@ on:
   pull_request_target:
     types: [opened, reopened, synchronize, ready_for_review]
 
-permissions:
-  issues: write
-  pull-requests: write
+permissions: read-all
 
 concurrency:
   group: copilot-auto-${{ github.event.issue.number || github.event.pull_request.number }}
@@ -45,6 +43,8 @@ jobs:
   copilot-on-issue:
     if: github.event_name == 'issues' && github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - name: Assign issue to Copilot coding agent
         env:
@@ -83,6 +83,9 @@ jobs:
   copilot-review-on-pr:
     if: github.event_name == 'pull_request_target' && github.event.sender.type != 'Bot'
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      issues: write
     steps:
       - name: Purge Vercel bot comments
         env:

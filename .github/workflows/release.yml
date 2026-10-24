@@ -28,8 +28,7 @@ on:
         default: false
         type: boolean
 
-permissions:
-  contents: write
+permissions: read-all
 
 concurrency:
   group: release
@@ -39,6 +38,8 @@ jobs:
   owner-gate:
     name: Repository owner check
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Reject everyone but the repository owner
         env:
@@ -57,9 +58,11 @@ jobs:
     name: Build & publish release
     needs: owner-gate
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Check out ${{ inputs.ref }}
-        uses: actions/checkout@v7
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
@@ -76,7 +79,7 @@ jobs:
           esac
 
       - name: Set up JDK 21
-        uses: actions/setup-java@v5
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
         with:
           java-version: '21'
           distribution: 'temurin'
