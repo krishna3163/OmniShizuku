@@ -138,12 +138,41 @@ jobs:
             manager/build/outputs/apk/release/*.apk
           if-no-files-found: warn
 
-      - name: Create GitHub Release on Tag
-        if: startsWith(github.ref, 'refs/tags/v')
+      - name: Publish to GitHub Releases
+        if: (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main') && github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create "${{ github.ref_name }}" \
-            out/apk/*.apk \
-            --title "OmniShizuku ${{ github.ref_name }}" \
-            --generate-notes || true
+          # Collect APK files from out/apk and fallback to outputs/apk
+          APK_FILES=$(find out/apk -name "*.apk" 2>/dev/null | sort -u | tr '\n' ' ')
+          if [ -z "$APK_FILES" ]; then
+            APK_FILES=$(find manager/build/outputs/apk -name "*.apk" 2>/dev/null | sort -u | tr '\n' ' ')
+          fi
+          echo "Discovered APK files: $APK_FILES"
+          if [ -z "$APK_FILES" ]; then
+            echo "No APK files found to publish."
+            exit 0
+          fi
+
+          if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
+            RELEASE_TAG="${{ github.ref_name }}"
+            RELEASE_TITLE="OmniShizuku ${RELEASE_TAG}"
+            EXTRA_FLAGS=""
+          else
+            RELEASE_TAG="latest"
+            RELEASE_TITLE="OmniShizuku Rolling Pre-Release"
+            EXTRA_FLAGS="--prerelease"
+          fi
+
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            echo "Release '$RELEASE_TAG' exists. Updating APK assets..."
+            gh release upload "$RELEASE_TAG" $APK_FILES --clobber
+          else
+            echo "Creating release '$RELEASE_TAG'..."
+            gh release create "$RELEASE_TAG" $APK_FILES \
+              --title "$RELEASE_TITLE" \
+              --target "${{ github.sha }}" \
+              $EXTRA_FLAGS \
+              --generate-notes || true
+          fi
+

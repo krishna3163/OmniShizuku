@@ -2,7 +2,7 @@
 
 <div align="center">
 
-<img src="screenshots/logo.png" width="130" height="130" alt="OmniShizuku Logo" />
+<img src="screenshots/logo.png" width="160" height="160" alt="OmniShizuku Mascot Logo" style="border-radius: 28px; box-shadow: 0 10px 30px rgba(0,200,255,0.3);" />
 
 # 👑 The God Mode for Android
 ### Stop Installing 4 Different Apps. Experience True Privileged Freedom — No Root Required.
