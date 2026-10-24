@@ -148,7 +148,7 @@ afterEvaluate {
                 copy {
                     from apk
                     into rootProject.layout.projectDirectory.dir('out/apk')
-                    rename { "shevery-v${versionName}-${buildType}.apk" }
+                    rename { "omnishizuku-v${versionName}-${buildType}.apk" }
                 }
                 if (buildType == 'release') {
                     def mapping = layout.buildDirectory.file("outputs/mapping/release/mapping.txt").get().asFile

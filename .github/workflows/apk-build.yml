@@ -91,10 +91,16 @@ jobs:
           tail -n 250 build-release.log 2>/dev/null || true
           echo "::endgroup::"
 
+      - name: Locate generated APKs
+        if: always()
+        run: |
+          echo "=== FOUND APKS IN BUILD ==="
+          find . -name "*.apk" 2>/dev/null || true
+
       - name: Verify APK signature
         if: always()
         run: |
-          APK=$(ls manager/build/outputs/apk/release/*.apk 2>/dev/null | head -n1)
+          APK=$(find out/apk manager/build/outputs/apk/release -name "*.apk" 2>/dev/null | head -n1)
           if [ -n "$APK" ] && [ -f "$APK" ]; then
             APKSIGNER=$(ls -d "$ANDROID_SDK_ROOT"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -n1)
             if [ -n "$APKSIGNER" ]; then
@@ -117,16 +123,20 @@ jobs:
         uses: actions/upload-artifact@v7
         with:
           name: omnishizuku-debug
-          path: manager/build/outputs/apk/debug/*.apk
-          if-no-files-found: ignore
+          path: |
+            out/apk/*debug*.apk
+            manager/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn
 
       - name: Upload release APK Artifact
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: omnishizuku-release
-          path: manager/build/outputs/apk/release/*.apk
-          if-no-files-found: ignore
+          path: |
+            out/apk/*release*.apk
+            manager/build/outputs/apk/release/*.apk
+          if-no-files-found: warn
 
       - name: Create GitHub Release on Tag
         if: startsWith(github.ref, 'refs/tags/v')
@@ -134,7 +144,6 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh release create "${{ github.ref_name }}" \
-            manager/build/outputs/apk/release/*.apk \
-            manager/build/outputs/apk/debug/*.apk \
+            out/apk/*.apk \
             --title "OmniShizuku ${{ github.ref_name }}" \
             --generate-notes || true
