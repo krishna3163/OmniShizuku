@@ -27,3 +27,21 @@ tsconfig.tsbuildinfo
 /tmp/
 .backup_plus_server/
 
+# Design and scratch docs
+DESIGN.md
+design.md
+*.design.md
+
+# Web / Vercel artifacts
+/app/
+/components/
+/lib/
+/next.config.mjs
+/package.json
+/package-lock.json
+/pnpm-lock.yaml
+/postcss.config.mjs
+/tsconfig.json
+/vercel.json
+
+
