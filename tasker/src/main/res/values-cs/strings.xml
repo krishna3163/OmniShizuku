@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Spustit server</string>
+    <string name="tasker_command_stop">Zastavit server</string>
+    <string name="tasker_command_restart">Restartovat server</string>
+    <string name="tasker_command_toggle">Přepnout server</string>
+    <string name="tasker_blurb_start">Shevery: spustit server</string>
+    <string name="tasker_blurb_stop">Shevery: zastavit server</string>
+    <string name="tasker_blurb_restart">Shevery: restartovat server</string>
+    <string name="tasker_blurb_toggle">Shevery: přepnout server</string>
+    <string name="tasker_condition_running">Server běží</string>
+    <string name="tasker_blurb_condition">Shevery: server běží</string>
+    <string name="tasker_save">Uložit</string>
+    <string name="tasker_cancel">Zrušit</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Upozornění automatizace</string>
+    <string name="notification_auth_missing_title">Vyžadován ověřovací token</string>
+    <string name="notification_auth_missing_message">Přidejte extra “auth” do svého záměru. Token naleznete v Nastavení → Automatizace.</string>
+    <string name="notification_auth_invalid_title">Neplatný ověřovací token</string>
+    <string name="notification_auth_invalid_message">Ujistěte se, že token ve vašem záměru odpovídá tokenu v Nastavení Shevery.</string>
+    <string name="notification_connectors_disabled_title">Konektory automatizace zakázány</string>
+    <string name="notification_connectors_disabled_message">Záměr automatizace byl zablokován, protože konektory Shevery jsou v Nastavení zakázány. Klepnutím povolte.</string>
+</resources>

@@ -1,0 +1,39 @@
+public final class eu/darken/porter/sdk/extras/PorterShell {
+	public static final fun exec (Leu/darken/porter/sdk/PorterConnection;[Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun exec$default (Leu/darken/porter/sdk/PorterConnection;[Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+	public static final fun startProcess (Leu/darken/porter/sdk/PorterConnection;[Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static synthetic fun startProcess$default (Leu/darken/porter/sdk/PorterConnection;[Ljava/lang/String;Ljava/lang/String;Lkotlin/coroutines/Continuation;ILjava/lang/Object;)Ljava/lang/Object;
+}
+
+public final class eu/darken/porter/sdk/extras/PorterShellException : java/lang/RuntimeException {
+}
+
+public final class eu/darken/porter/sdk/extras/PorterShellProcess : java/lang/Process {
+	public fun destroy ()V
+	public fun exitValue ()I
+	public fun getErrorStream ()Ljava/io/InputStream;
+	public fun getInputStream ()Ljava/io/InputStream;
+	public fun getOutputStream ()Ljava/io/OutputStream;
+	public final fun getPid ()Ljava/lang/Integer;
+	public final fun signal (ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public fun waitFor ()I
+}
+
+public final class eu/darken/porter/sdk/extras/PorterShellResult {
+	public final fun getErrors ()Ljava/lang/String;
+	public final fun getExitCode ()I
+	public final fun getOutput ()Ljava/lang/String;
+	public fun toString ()Ljava/lang/String;
+}
+
+public final class eu/darken/porter/sdk/extras/PorterSystemProperties {
+	public static final fun getSystemPropertyBoolean (Leu/darken/porter/sdk/PorterConnection;Ljava/lang/String;ZLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getSystemPropertyInt (Leu/darken/porter/sdk/PorterConnection;Ljava/lang/String;ILkotlin/coroutines/Continuation;)Ljava/lang/Object;
+	public static final fun getSystemPropertyLong (Leu/darken/porter/sdk/PorterConnection;Ljava/lang/String;JLkotlin/coroutines/Continuation;)Ljava/lang/Object;
+}
+
+public final class eu/darken/porter/sdk/extras/PorterSystemServices {
+	public static final field INSTANCE Leu/darken/porter/sdk/extras/PorterSystemServices;
+	public final fun getSystemService (Ljava/lang/String;)Landroid/os/IBinder;
+}
+

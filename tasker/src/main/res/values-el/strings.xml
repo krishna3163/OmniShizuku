@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Εκκίνηση διακομιστή</string>
+    <string name="tasker_command_stop">Διακοπή διακομιστή</string>
+    <string name="tasker_command_restart">Επανεκκίνηση διακομιστή</string>
+    <string name="tasker_command_toggle">Εναλλαγή διακομιστή</string>
+    <string name="tasker_blurb_start">Shevery: εκκίνηση διακομιστή</string>
+    <string name="tasker_blurb_stop">Shevery: διακοπή διακομιστή</string>
+    <string name="tasker_blurb_restart">Shevery: επανεκκίνηση διακομιστή</string>
+    <string name="tasker_blurb_toggle">Shevery: εναλλαγή διακομιστή</string>
+    <string name="tasker_condition_running">Ο διακομιστής εκτελείται</string>
+    <string name="tasker_blurb_condition">Shevery: ο διακομιστής εκτελείται</string>
+    <string name="tasker_save">Αποθήκευση</string>
+    <string name="tasker_cancel">Ακύρωση</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Ειδοποιήσεις αυτοματισμού</string>
+    <string name="notification_auth_missing_title">Απαιτείται διακριτικό ελέγχου ταυτότητας</string>
+    <string name="notification_auth_missing_message">Προσθέστε το extra “auth” στο intent σας. Μπορείτε να βρείτε το διακριτικό σας στις Ρυθμίσεις → Αυτοματισμός.</string>
+    <string name="notification_auth_invalid_title">Μη έγκυρο διακριτικό ελέγχου ταυτότητας</string>
+    <string name="notification_auth_invalid_message">Βεβαιωθείτε ότι το διακριτικό στο intent ταιριάζει με αυτό στις Ρυθμίσεις του Shevery.</string>
+    <string name="notification_connectors_disabled_title">Σύνδεσμοι αυτοματισμού απενεργοποιημένοι</string>
+    <string name="notification_connectors_disabled_message">Ένα intent αυτοματισμού αποκλείστηκε επειδή οι σύνδεσμοι του Shevery είναι απενεργοποιημένοι στις Ρυθμίσεις. Πατήστε για ενεργοποίηση.</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Avvia server</string>
+    <string name="tasker_command_stop">Arresta server</string>
+    <string name="tasker_command_restart">Riavvia server</string>
+    <string name="tasker_command_toggle">Alterna server</string>
+    <string name="tasker_blurb_start">Shevery: avvia server</string>
+    <string name="tasker_blurb_stop">Shevery: arresta server</string>
+    <string name="tasker_blurb_restart">Shevery: riavvia server</string>
+    <string name="tasker_blurb_toggle">Shevery: alterna server</string>
+    <string name="tasker_condition_running">Il server è in esecuzione</string>
+    <string name="tasker_blurb_condition">Shevery: il server è in esecuzione</string>
+    <string name="tasker_save">Salva</string>
+    <string name="tasker_cancel">Annulla</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Avvisi di automazione</string>
+    <string name="notification_auth_missing_title">Token di autenticazione richiesto</string>
+    <string name="notification_auth_missing_message">Aggiungi l\'extra “auth” al tuo intent. Puoi trovare il tuo token in Impostazioni → Automazione.</string>
+    <string name="notification_auth_invalid_title">Token di autenticazione non valido</string>
+    <string name="notification_auth_invalid_message">Assicurati che il token nel tuo intent corrisponda a quello nelle Impostazioni di Shevery.</string>
+    <string name="notification_connectors_disabled_title">Connettori di automazione disabilitati</string>
+    <string name="notification_connectors_disabled_message">Un intent di automazione è stato bloccato perché i connettori di Shevery sono disabilitati nelle Impostazioni. Tocca per abilitare.</string>
+</resources>

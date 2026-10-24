@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">เริ่มเซิร์ฟเวอร์</string>
+    <string name="tasker_command_stop">หยุดเซิร์ฟเวอร์</string>
+    <string name="tasker_command_restart">รีสตาร์ทเซิร์ฟเวอร์</string>
+    <string name="tasker_command_toggle">สลับเซิร์ฟเวอร์</string>
+    <string name="tasker_blurb_start">Shevery: เริ่มเซิร์ฟเวอร์</string>
+    <string name="tasker_blurb_stop">Shevery: หยุดเซิร์ฟเวอร์</string>
+    <string name="tasker_blurb_restart">Shevery: รีสตาร์ทเซิร์ฟเวอร์</string>
+    <string name="tasker_blurb_toggle">Shevery: สลับเซิร์ฟเวอร์</string>
+    <string name="tasker_condition_running">เซิร์ฟเวอร์กำลังทำงาน</string>
+    <string name="tasker_blurb_condition">Shevery: เซิร์ฟเวอร์กำลังทำงาน</string>
+    <string name="tasker_save">บันทึก</string>
+    <string name="tasker_cancel">ยกเลิก</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">การแจ้งเตือนอัตโนมัติ</string>
+    <string name="notification_auth_missing_title">ต้องใช้โทเค็นการยืนยันตัวตน</string>
+    <string name="notification_auth_missing_message">เพิ่ม “auth” พิเศษใน Intent ของคุณ คุณสามารถค้นหาโทเค็นได้ที่ การตั้งค่า → อัตโนมัติ</string>
+    <string name="notification_auth_invalid_title">โทเค็นการยืนยันตัวตนไม่ถูกต้อง</string>
+    <string name="notification_auth_invalid_message">ตรวจสอบให้แน่ใจว่าโทเค็นใน Intent ของคุณตรงกับโทเค็นในการตั้งค่า Shevery</string>
+    <string name="notification_connectors_disabled_title">ตัวเชื่อมต่ออัตโนมัติถูกปิดใช้งาน</string>
+    <string name="notification_connectors_disabled_message">Intent อัตโนมัติถูกบล็อกเนื่องจากตัวเชื่อมต่อ Shevery ถูกปิดใช้งานในการตั้งค่า แตะเพื่อเปิดใช้งาน</string>
+</resources>

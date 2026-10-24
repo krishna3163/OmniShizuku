@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Start server</string>
+    <string name="tasker_command_stop">Stop server</string>
+    <string name="tasker_command_restart">Genstart server</string>
+    <string name="tasker_command_toggle">Skift server</string>
+    <string name="tasker_blurb_start">Shevery: start server</string>
+    <string name="tasker_blurb_stop">Shevery: stop server</string>
+    <string name="tasker_blurb_restart">Shevery: genstart server</string>
+    <string name="tasker_blurb_toggle">Shevery: skift server</string>
+    <string name="tasker_condition_running">Serveren kører</string>
+    <string name="tasker_blurb_condition">Shevery: serveren kører</string>
+    <string name="tasker_save">Gem</string>
+    <string name="tasker_cancel">Annuller</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Automatiseringsadvarsler</string>
+    <string name="notification_auth_missing_title">Godkendelsestoken påkrævet</string>
+    <string name="notification_auth_missing_message">Tilføj extra “auth” til din intent. Du kan finde dit token under Indstillinger → Automatisering.</string>
+    <string name="notification_auth_invalid_title">Ugyldigt godkendelsestoken</string>
+    <string name="notification_auth_invalid_message">Sørg for, at tokenet i din intent matcher det i Shevery Indstillinger.</string>
+    <string name="notification_connectors_disabled_title">Automatiseringsstik deaktiveret</string>
+    <string name="notification_connectors_disabled_message">En automatiseringsintent blev blokeret, fordi Shevery-stik er deaktiveret i Indstillinger. Tryk for at aktivere.</string>
+</resources>

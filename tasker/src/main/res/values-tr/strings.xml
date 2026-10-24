@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Sunucuyu başlat</string>
+    <string name="tasker_command_stop">Sunucuyu durdur</string>
+    <string name="tasker_command_restart">Sunucuyu yeniden başlat</string>
+    <string name="tasker_command_toggle">Sunucuyu değiştir</string>
+    <string name="tasker_blurb_start">Shevery: sunucuyu başlat</string>
+    <string name="tasker_blurb_stop">Shevery: sunucuyu durdur</string>
+    <string name="tasker_blurb_restart">Shevery: sunucuyu yeniden başlat</string>
+    <string name="tasker_blurb_toggle">Shevery: sunucuyu değiştir</string>
+    <string name="tasker_condition_running">Sunucu çalışıyor</string>
+    <string name="tasker_blurb_condition">Shevery: sunucu çalışıyor</string>
+    <string name="tasker_save">Kaydet</string>
+    <string name="tasker_cancel">İptal</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Otomasyon Uyarıları</string>
+    <string name="notification_auth_missing_title">Kimlik doğrulama belirteci gerekli</string>
+    <string name="notification_auth_missing_message">Intent\'inize “auth” ekstrasını ekleyin. Belirtecinizi Ayarlar → Otomasyon altında bulabilirsiniz.</string>
+    <string name="notification_auth_invalid_title">Geçersiz kimlik doğrulama belirteci</string>
+    <string name="notification_auth_invalid_message">Intent\'inizdeki belirtecin Shevery Ayarları\'ndakiyle eşleştiğinden emin olun.</string>
+    <string name="notification_connectors_disabled_title">Otomasyon bağlayıcıları devre dışı</string>
+    <string name="notification_connectors_disabled_message">Shevery bağlayıcıları Ayarlar\'da devre dışı bırakıldığı için bir otomasyon intent\'i engellendi. Etkinleştirmek için dokunun.</string>
+</resources>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Szerver indítása</string>
+    <string name="tasker_command_stop">Szerver leállítása</string>
+    <string name="tasker_command_restart">Szerver újraindítása</string>
+    <string name="tasker_command_toggle">Szerver átváltása</string>
+    <string name="tasker_blurb_start">Shevery: szerver indítása</string>
+    <string name="tasker_blurb_stop">Shevery: szerver leállítása</string>
+    <string name="tasker_blurb_restart">Shevery: szerver újraindítása</string>
+    <string name="tasker_blurb_toggle">Shevery: szerver átváltása</string>
+    <string name="tasker_condition_running">A szerver fut</string>
+    <string name="tasker_blurb_condition">Shevery: a szerver fut</string>
+    <string name="tasker_save">Mentés</string>
+    <string name="tasker_cancel">Mégse</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Automatizálási figyelmeztetések</string>
+    <string name="notification_auth_missing_title">Hitelesítési token szükséges</string>
+    <string name="notification_auth_missing_message">Adja hozzá az “auth” extrát az intenthez. A tokent a Beállítások → Automatizálás menüpontban találja.</string>
+    <string name="notification_auth_invalid_title">Érvénytelen hitelesítési token</string>
+    <string name="notification_auth_invalid_message">Győződjön meg arról, hogy az intentben lévő token megegyezik a Shevery beállításaiban szereplővel.</string>
+    <string name="notification_connectors_disabled_title">Automatizálási összekötők letiltva</string>
+    <string name="notification_connectors_disabled_message">Egy automatizálási intent blokkolva lett, mert a Shevery összekötők le vannak tiltva a Beállításokban. Koppintson az engedélyezéshez.</string>
+</resources>

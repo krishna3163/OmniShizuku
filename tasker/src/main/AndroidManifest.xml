@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <application>
+        <activity
+            android:name=".EditActivity"
+            android:exported="true"
+            android:label="@string/tasker_plugin_name"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_SETTING" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.EDIT_CONDITION" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".PluginReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.FIRE_SETTING" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.twofortyfouram.locale.intent.action.QUERY_CONDITION" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.hamondev.shevery.action.START_SERVER" />
+                <action android:name="com.hamondev.shevery.action.STOP_SERVER" />
+                <action android:name="com.hamondev.shevery.action.RESTART_SERVER" />
+                <action android:name="com.hamondev.shevery.action.TOGGLE_SERVER" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

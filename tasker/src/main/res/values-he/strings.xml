@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">הפעל שרת</string>
+    <string name="tasker_command_stop">עצור שרת</string>
+    <string name="tasker_command_restart">הפעל מחדש שרת</string>
+    <string name="tasker_command_toggle">החלף מצב שרת</string>
+    <string name="tasker_blurb_start">Shevery: הפעל שרת</string>
+    <string name="tasker_blurb_stop">Shevery: עצור שרת</string>
+    <string name="tasker_blurb_restart">Shevery: הפעל מחדש שרת</string>
+    <string name="tasker_blurb_toggle">Shevery: החלף מצב שרת</string>
+    <string name="tasker_condition_running">השרת פועל</string>
+    <string name="tasker_blurb_condition">Shevery: השרת פועל</string>
+    <string name="tasker_save">שמור</string>
+    <string name="tasker_cancel">ביטול</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">התראות אוטומציה</string>
+    <string name="notification_auth_missing_title">נדרש אסימון אימות</string>
+    <string name="notification_auth_missing_message">הוסף את תוספת ה-“auth” ל-intent שלך. תוכל למצוא את האסימון בהגדרות ← אוטומציה.</string>
+    <string name="notification_auth_invalid_title">אסימון אימות לא תקין</string>
+    <string name="notification_auth_invalid_message">ודא שהאסימון ב-intent תואם לאסימון בהגדרות Shevery.</string>
+    <string name="notification_connectors_disabled_title">מחברי האוטומציה מושבתים</string>
+    <string name="notification_connectors_disabled_message">Intent של אוטומציה נחסם מכיוון שמחברי Shevery מושבתים בהגדרות. הקש להפעלה.</string>
+</resources>

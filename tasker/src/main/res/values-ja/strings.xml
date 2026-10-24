@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">サーバーを起動</string>
+    <string name="tasker_command_stop">サーバーを停止</string>
+    <string name="tasker_command_restart">サーバーを再起動</string>
+    <string name="tasker_command_toggle">サーバーを切り替え</string>
+    <string name="tasker_blurb_start">Shevery: サーバーを起動</string>
+    <string name="tasker_blurb_stop">Shevery: サーバーを停止</string>
+    <string name="tasker_blurb_restart">Shevery: サーバーを再起動</string>
+    <string name="tasker_blurb_toggle">Shevery: サーバーを切り替え</string>
+    <string name="tasker_condition_running">サーバーが実行中</string>
+    <string name="tasker_blurb_condition">Shevery: サーバーが実行中</string>
+    <string name="tasker_save">保存</string>
+    <string name="tasker_cancel">キャンセル</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">自動化アラート</string>
+    <string name="notification_auth_missing_title">認証トークンが必要です</string>
+    <string name="notification_auth_missing_message">インテントに「auth」Extra を追加してください。トークンは「設定 → 自動化」で確認できます。</string>
+    <string name="notification_auth_invalid_title">無効な認証トークン</string>
+    <string name="notification_auth_invalid_message">インテント内のトークンが Shevery の設定と一致していることを確認してください。</string>
+    <string name="notification_connectors_disabled_title">自動化コネクタが無効です</string>
+    <string name="notification_connectors_disabled_message">Shevery の設定でコネクタが無効化されているため、自動化インテントがブロックされました。タップして有効化してください。</string>
+</resources>

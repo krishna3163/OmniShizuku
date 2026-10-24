@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Pornește serverul</string>
+    <string name="tasker_command_stop">Oprește serverul</string>
+    <string name="tasker_command_restart">Repornește serverul</string>
+    <string name="tasker_command_toggle">Comută serverul</string>
+    <string name="tasker_blurb_start">Shevery: pornește serverul</string>
+    <string name="tasker_blurb_stop">Shevery: oprește serverul</string>
+    <string name="tasker_blurb_restart">Shevery: repornește serverul</string>
+    <string name="tasker_blurb_toggle">Shevery: comută serverul</string>
+    <string name="tasker_condition_running">Serverul rulează</string>
+    <string name="tasker_blurb_condition">Shevery: serverul rulează</string>
+    <string name="tasker_save">Salvează</string>
+    <string name="tasker_cancel">Anulează</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Alerte de automatizare</string>
+    <string name="notification_auth_missing_title">Token de autentificare necesar</string>
+    <string name="notification_auth_missing_message">Adăugați extra “auth” la intent. Puteți găsi tokenul în Setări → Automatizare.</string>
+    <string name="notification_auth_invalid_title">Token de autentificare nevalid</string>
+    <string name="notification_auth_invalid_message">Asigurați-vă că tokenul din intent coincide cu cel din Setările Shevery.</string>
+    <string name="notification_connectors_disabled_title">Conectori de automatizare dezactivați</string>
+    <string name="notification_connectors_disabled_message">Un intent de automatizare a fost blocat deoarece conectorii Shevery sunt dezactivați în Setări. Atingeți pentru activare.</string>
+</resources>

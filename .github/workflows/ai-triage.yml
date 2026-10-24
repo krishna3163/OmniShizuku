@@ -1,0 +1,122 @@
+name: AI Triage
+
+on:
+  issues:
+    types: [opened]
+  # pull_request_target (not pull_request!) is deliberate: the bot needs
+  # write access (labels/comments) even for PRs from forks. This is safe
+  # because we do NOT check out or execute the PR's own code — only read
+  # its diff and file contents via the GitHub API. If you ever add a step
+  # like `actions/checkout` with a ref on the PR's head, or run any code
+  # from the PR, remove pull_request_target — that's the classic "pwn
+  # request" vulnerability.
+  pull_request_target:
+    types: [opened]
+
+  # --- Optional triggers for the action's extra features ---------------
+  # All of them are OFF by default in action.yml. Uncomment a block ONLY
+  # together with its `*-enabled: 'true'` input below — a trigger with its
+  # feature still off just makes the workflow run on every matching event
+  # and exit immediately, which burns a CI minute (setup-go + go get) each
+  # time for nothing.
+  #
+  # issue_comment:            # AI agent + workflow-dispatch-by-comment
+  #   types: [created]
+  # discussion_comment:       # Discussions Q&A
+  #   types: [created]
+  # commit_comment:           # commit review
+  #   types: [created]
+
+permissions:
+  issues: write
+  pull-requests: write
+  # write (not read) because the moderation feature persists a small
+  # per-author offense-count JSON file to the repo via the Contents API
+  # (see internal/moderation), and the rate limiters for the privileged
+  # comment features persist their own per-author trigger timestamps the
+  # same way. This does NOT, by itself, grant the bot the ability to delete
+  # issues or block users — those need the separate, more privileged
+  # moderation-token input below.
+  contents: write
+  # Permissions for the optional features. Declared unconditionally so that
+  # turning a feature on doesn't ALSO require editing this file: they only
+  # widen what the token COULD do, and every one of those features is off
+  # by default and gated behind a live permission check in the bot.
+  discussions: write        # discussions-enabled (reply in Discussions)
+  actions: write            # workflow-dispatch-enabled (workflow_dispatch API)
+
+concurrency:
+  group: ai-triage-${{ github.event.issue.number || github.event.pull_request.number || github.event.comment.id || github.event.discussion.number || github.run_id }}
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    runs-on: ubuntu-latest
+    steps:
+      # Check out ONLY the repo's base branch (the bot's own code plus
+      # .github/ai-triage/*), not the PR's head — see the pull_request_target
+      # note above.
+      - uses: actions/checkout@v7
+
+      - uses: ./.github/actions/ai-triage-bot
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          gemini-api-keys: ${{ secrets.GEMINI_API_KEYS }}
+          # Optional parameters — uncomment and adjust as needed:
+          # gemini-model: gemini-3.5-flash-lite
+          # gemini-max-retries: '3'           # extra retries per key on 429/503 before key rotation
+          # gemini-retry-base-delay-ms: '2000' # exponential backoff base (doubles per attempt)
+          # gemini-retry-max-delay-ms: '20000' # backoff cap
+          # templates-path: .github/ai-triage/templates.md  # optional canned-patterns file
+          # spam-window-minutes: '60'
+          # spam-threshold: '5'
+          # max-files: '4'
+          # max-extracted-paths: '30'   # anti-abuse: max file paths accepted from an issue body
+          # max-referenced-issues: '5'  # max other issues/PRs (via "#123") resolved for context
+          # max-api-calls: '60'         # circuit breaker: max GitHub API calls per run
+          # max-attachments: '4'        # 0 = never read screenshots/files from the issue/PR
+          # max-attachment-bytes: '8000000'
+          #
+          # Duplicate detection (ON by default — set 'false' to opt out):
+          # duplicate-detection-enabled: 'true'
+          # max-duplicate-candidates: '5'
+          # duplicate-search-keywords: '6'
+          # duplicate-min-similarity: '0.12'
+          # duplicate-max-body-chars: '1500'
+          #
+          # Discussions Q&A — needs the discussion_comment trigger and the
+          # discussions: write permission above, plus the owner/collaborator
+          # permission check; also requires .github/ai-triage/discussion_instructions.md:
+          # discussions-enabled: 'true'
+          # discussion-trigger: '@github-discussions'
+          #
+          # AI agent (opens proposed PRs / related issues on request) — needs
+          # the issue_comment trigger above and .github/ai-triage/agent_instructions.md:
+          # agent-enabled: 'true'
+          # agent-trigger: '@github-actions'
+          #
+          # Commit review (owner-only) — needs the commit_comment trigger
+          # above and .github/ai-triage/commit_review_instructions.md:
+          # commit-review-enabled: 'true'
+          # commit-review-trigger: '@github-discussions'
+          #
+          # Workflow dispatch by comment (owner-only) — needs the issue_comment
+          # trigger and the actions: write permission above. Targets must name
+          # an EXISTING workflow that declares its own workflow_dispatch trigger
+          # (apk-build.yml, app.yml and release.yml all do):
+          # workflow-dispatch-enabled: 'true'
+          # workflow-dispatch-trigger: '@github-discussions'
+          # workflow-dispatch-targets: >-
+          #   [{"name":"app-build","keywords":["build","compile","app"],"workflow":"app.yml","ref":"head"},
+          #    {"name":"apk","keywords":["apk","release"],"workflow":"apk-build.yml","ref":"head"},
+          #    {"name":"release","keywords":["release"],"workflow":"release.yml","ref":"head"}]
+          #
+          # Moderation (doxxing/severe-abuse auto-removal, ban on repeat
+          # offense) works out of the box in "soft" mode: violating content
+          # gets redacted, closed, and locked automatically. To also
+          # actually DELETE the issue and actually BLOCK a repeat offender,
+          # provide a separate, more privileged PAT here — see
+          # moderation-token's description in action.yml for the exact
+          # scopes required and why github-token above can't do this:
+          # moderation-token: ${{ secrets.MODERATION_TOKEN }}
+          # moderation-log-issue: '1'   # post an audit trail comment on issue #1 for every moderation action

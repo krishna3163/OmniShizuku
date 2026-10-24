@@ -1,0 +1,86 @@
+{
+  "labels": [
+    {
+      "name": "bug",
+      "color": "d73a4a",
+      "description": "Confirmed bug: the claimed behavior reproduces and is backed up by the code",
+      "applies_to": ["issue"]
+    },
+    {
+      "name": "enhancement",
+      "color": "a2eeef",
+      "description": "A well-reasoned proposal for an improvement or new functionality",
+      "applies_to": ["issue"]
+    },
+    {
+      "name": "question",
+      "color": "d876e3",
+      "description": "A genuine question about using/understanding the project, not a bug report",
+      "applies_to": ["issue"]
+    },
+    {
+      "name": "invalid",
+      "color": "e4e669",
+      "description": "Filed in good faith, but the claimed problem isn't confirmed by the code or is user error",
+      "applies_to": ["issue"]
+    },
+    {
+      "name": "needs-info",
+      "color": "d4c5f9",
+      "description": "Not enough data to reach a conclusion: missing reproduction steps, version, logs, a file, etc.",
+      "applies_to": ["issue"]
+    },
+    {
+      "name": "duplicate",
+      "color": "cfd3d7",
+      "description": "Looks like an already-existing issue or PR",
+      "applies_to": ["issue", "pull_request"]
+    },
+    {
+      "name": "docs",
+      "color": "0075ca",
+      "description": "About documentation, not code",
+      "applies_to": ["issue", "pull_request"]
+    },
+    {
+      "name": "good-pr",
+      "color": "0e8a16",
+      "description": "A solid PR: clear diff, solves the stated problem, follows the repo's conventions",
+      "applies_to": ["pull_request"]
+    },
+    {
+      "name": "needs-work",
+      "color": "fbca04",
+      "description": "A legitimate PR, but the diff has issues: style, bugs, missing tests, etc.",
+      "applies_to": ["pull_request"]
+    },
+    {
+      "name": "trash",
+      "color": "b60205",
+      "description": "Junk: spam, ads, abuse, no real content, bots",
+      "applies_to": ["issue", "pull_request"],
+      "mechanical": true
+    },
+    {
+      "name": "spam",
+      "color": "5319e7",
+      "description": "Flooding: too many issues from the same author in a short time (mechanical antispam, not AI)",
+      "applies_to": ["issue"],
+      "mechanical": true
+    },
+    {
+      "name": "moderation-removed",
+      "color": "000000",
+      "description": "Content removed automatically: personal data (doxxing) and/or severe targeted abuse (mechanical moderation action, not a quality label)",
+      "applies_to": ["issue", "pull_request"],
+      "mechanical": true
+    },
+    {
+      "name": "needs-triage",
+      "color": "cccccc",
+      "description": "Technical fallback label: the model returned a value that isn't in this list",
+      "applies_to": ["issue", "pull_request"],
+      "mechanical": true
+    }
+  ]
+}

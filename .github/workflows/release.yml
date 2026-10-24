@@ -1,0 +1,104 @@
+name: Create latest release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Tag to release (e.g. v13.8.0-r28). Created from <ref> when it does not exist yet."
+        required: true
+        type: string
+      title:
+        description: "Release title (defaults to the tag)."
+        required: false
+        default: ""
+        type: string
+      notes:
+        description: "Release notes (Markdown). Leave empty to generate them from commits and merged PRs."
+        required: false
+        default: ""
+        type: string
+      ref:
+        description: "Git ref the release points at."
+        required: false
+        default: "dev"
+        type: string
+      prerelease:
+        description: "Mark as pre-release (a pre-release is never marked as Latest)."
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  owner-gate:
+    name: Repository owner check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Reject everyone but the repository owner
+        env:
+          ACTOR: ${{ github.actor }}
+          OWNER: ${{ github.repository_owner }}
+        run: |
+          actor="${ACTOR,,}"
+          owner="${OWNER,,}"
+          if [ -z "$actor" ] || [ "$actor" != "$owner" ]; then
+            echo "::error::Releases are restricted to the repository owner ($OWNER). '$ACTOR' is a collaborator or contributor."
+            exit 1
+          fi
+          echo "Repository owner verified: $ACTOR"
+
+  release:
+    name: Create latest release
+    needs: owner-gate
+    runs-on: ubuntu-latest
+    environment: release
+    steps:
+      - name: Check out ${{ inputs.ref }}
+        uses: actions/checkout@v7
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Validate tag
+        env:
+          TAG: ${{ inputs.tag }}
+        run: |
+          case "$TAG" in
+            ""|*[!A-Za-z0-9._-]*)
+              echo "::error::Invalid tag name: '$TAG'"
+              exit 1
+              ;;
+          esac
+
+      - name: Create release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+          TITLE: ${{ inputs.title }}
+          NOTES: ${{ inputs.notes }}
+          REF: ${{ inputs.ref }}
+          PRERELEASE: ${{ inputs.prerelease }}
+        run: |
+          args=( "$TAG" --target "$REF" )
+          if [ -n "$TITLE" ]; then
+            args+=( --title "$TITLE" )
+          else
+            args+=( --title "$TAG" )
+          fi
+          if [ -n "$NOTES" ]; then
+            args+=( --notes "$NOTES" )
+          else
+            args+=( --generate-notes )
+          fi
+          if [ "$PRERELEASE" = "true" ]; then
+            args+=( --prerelease )
+          else
+            args+=( --latest )
+          fi
+          gh release create "${args[@]}"

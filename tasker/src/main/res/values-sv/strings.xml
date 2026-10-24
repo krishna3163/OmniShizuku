@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Starta server</string>
+    <string name="tasker_command_stop">Stoppa server</string>
+    <string name="tasker_command_restart">Starta om server</string>
+    <string name="tasker_command_toggle">Växla server</string>
+    <string name="tasker_blurb_start">Shevery: starta server</string>
+    <string name="tasker_blurb_stop">Shevery: stoppa server</string>
+    <string name="tasker_blurb_restart">Shevery: starta om server</string>
+    <string name="tasker_blurb_toggle">Shevery: växla server</string>
+    <string name="tasker_condition_running">Servern körs</string>
+    <string name="tasker_blurb_condition">Shevery: servern körs</string>
+    <string name="tasker_save">Spara</string>
+    <string name="tasker_cancel">Avbryt</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Automationsvarningar</string>
+    <string name="notification_auth_missing_title">Autentiseringstoken krävs</string>
+    <string name="notification_auth_missing_message">Lägg till extra “auth” till din intent. Du hittar din token under Inställningar → Automation.</string>
+    <string name="notification_auth_invalid_title">Ogiltig autentiseringstoken</string>
+    <string name="notification_auth_invalid_message">Se till att token i din intent matchar den i Shevery-inställningarna.</string>
+    <string name="notification_connectors_disabled_title">Automationsanslutningar inaktiverade</string>
+    <string name="notification_connectors_disabled_message">En automationsintent blockerades eftersom Shevery-anslutningar är inaktiverade i Inställningar. Tryck för att aktivera.</string>
+</resources>

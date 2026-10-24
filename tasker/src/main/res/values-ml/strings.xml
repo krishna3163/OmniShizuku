@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Start server</string>
+    <string name="tasker_command_stop">Stop server</string>
+    <string name="tasker_command_restart">Restart server</string>
+    <string name="tasker_command_toggle">Toggle server</string>
+    <string name="tasker_blurb_start">Shevery: start server</string>
+    <string name="tasker_blurb_stop">Shevery: stop server</string>
+    <string name="tasker_blurb_restart">Shevery: restart server</string>
+    <string name="tasker_blurb_toggle">Shevery: toggle server</string>
+    <string name="tasker_condition_running">Server is running</string>
+    <string name="tasker_blurb_condition">Shevery: server is running</string>
+    <string name="tasker_save">Save</string>
+    <string name="tasker_cancel">Cancel</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Automation Alerts</string>
+    <string name="notification_auth_missing_title">Auth token required</string>
+    <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under ക്രമീകരണങ്ങൾ → Automation.</string>
+    <string name="notification_auth_invalid_title">Invalid auth token</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery ക്രമീകരണങ്ങൾ.</string>
+    <string name="notification_connectors_disabled_title">Automation connectors disabled</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in ക്രമീകരണങ്ങൾ. Tap to enable.</string>
+</resources>

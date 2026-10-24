@@ -1,0 +1,476 @@
+name: 'Gemini AI Triage Bot'
+description: >
+  Triages GitHub issues and PRs with Gemini: auto-labels, comments,
+  duplicate detection, spam and abuse protection.
+author: 'sysv86'
+branding:
+  icon: 'cpu'
+  color: 'purple'
+
+inputs:
+  github-token:
+    description: 'Token for the GitHub API (usually secrets.GITHUB_TOKEN)'
+    required: true
+  gemini-api-keys:
+    description: 'One or more Gemini API keys (comma/newline separated, up to 100)'
+    required: true
+  gemini-model:
+    description: 'Gemini model ID'
+    required: false
+    default: 'gemini-3.5-flash-lite'
+  gemini-max-retries:
+    description: >
+      On a Gemini rate-limit/transient error (429, RESOURCE_EXHAUSTED, 503,
+      ...), how many EXTRA times to retry the SAME key (with exponential
+      backoff) before rotating to the next key in the pool. 0 disables
+      retrying and restores the old "try each key once" behavior.
+    required: false
+    default: '3'
+  gemini-retry-base-delay-ms:
+    description: 'Backoff delay (ms) before the 2nd attempt on a rate-limited key; doubles on each subsequent attempt'
+    required: false
+    default: '2000'
+  gemini-retry-max-delay-ms:
+    description: 'Backoff delay cap (ms) — exponential growth never waits longer than this between retries'
+    required: false
+    default: '20000'
+  repo-context-path:
+    description: 'Path to system prompt #1 (repository description)'
+    required: false
+    default: '.github/ai-triage/repo_context.md'
+  instructions-path:
+    description: 'Path to system prompt #2 (instructions/tone)'
+    required: false
+    default: '.github/ai-triage/instructions.md'
+  templates-path:
+    description: 'Path to system prompt #3 (optional): canned patterns/responses for recurring issue/PR shapes. Missing file = feature simply skipped'
+    required: false
+    default: '.github/ai-triage/templates.md'
+  labels-config-path:
+    description: 'Path to the JSON config of allowed labels'
+    required: false
+    default: '.github/ai-triage/labels.json'
+  spam-window-minutes:
+    description: 'Time window for the antispam check, in minutes'
+    required: false
+    default: '60'
+  spam-threshold:
+    description: 'How many issues from one author within the window counts as flooding (strictly more than this)'
+    required: false
+    default: '5'
+  max-files:
+    description: 'Max repository files the AI reads per analysis (2-4 recommended)'
+    required: false
+    default: '4'
+  max-file-bytes:
+    description: 'Max size of a single file read, in bytes (truncated beyond this)'
+    required: false
+    default: '20000'
+  max-diff-bytes:
+    description: 'Max diff size in bytes (truncated beyond this)'
+    required: false
+    default: '30000'
+  max-extracted-paths:
+    description: 'Max file paths the bot will accept from an issue body before treating it as abuse and skipping AI analysis'
+    required: false
+    default: '30'
+  max-referenced-issues:
+    description: 'Max other issues/PRs (referenced via "#123" in the body) the bot will fetch for context per analysis. 0 disables it'
+    required: false
+    default: '5'
+  duplicate-detection-enabled:
+    description: >
+      Whether the bot searches for and flags likely duplicate issues/PRs
+      before the normal label/comment flow. A keyword-overlap search
+      shortlists candidates; the AI then compares full text against full
+      text and decides for itself — a genuine match gets the "duplicate"
+      label, an explanatory comment, and the issue/PR is closed
+      automatically. Set to 'false' to disable the whole feature.
+    required: false
+    default: 'true'
+  max-duplicate-candidates:
+    description: 'Max shortlisted duplicate candidates fetched in full and shown to the AI per analysis'
+    required: false
+    default: '5'
+  duplicate-search-keywords:
+    description: 'Max significant keywords extracted from the title, used to search for duplicate candidates'
+    required: false
+    default: '6'
+  duplicate-min-similarity:
+    description: 'Minimum local keyword-overlap score (0.0-1.0) a candidate needs to be shown to the AI at all — filters out loosely-related search noise'
+    required: false
+    default: '0.12'
+  duplicate-max-body-chars:
+    description: 'Max characters of a duplicate candidate body kept for scoring/prompting (truncated beyond this)'
+    required: false
+    default: '1500'
+  max-api-calls:
+    description: 'Circuit breaker: max GitHub API calls allowed in a single run before the bot aborts without posting anything'
+    required: false
+    default: '60'
+  max-attachments:
+    description: 'Max attachments (screenshots/files) from the issue/PR body to process per analysis. 0 disables attachment processing entirely'
+    required: false
+    default: '4'
+  max-attachment-bytes:
+    description: 'Max size of a SINGLE attachment, in bytes'
+    required: false
+    default: '8000000'
+  max-attachment-total-bytes:
+    description: 'Total byte budget for all attachments in one run'
+    required: false
+    default: '20000000'
+  attachment-fetch-timeout-seconds:
+    description: 'Timeout for downloading a single attachment, in seconds'
+    required: false
+    default: '15'
+  moderation-token:
+    description: >
+      OPTIONAL. A personal access token with ELEVATED rights, used ONLY for
+      really deleting an issue and really blocking a user when the AI flags
+      a doxxing/severe-abuse violation. Leaving this empty is a normal, safe
+      default — github-token (even with issues/pull-requests/contents
+      write) CANNOT do either of these things, no matter how you configure
+      `permissions:`, because GitHub gates issue deletion behind repo ADMIN
+      rights and user blocking behind a separate "Blocking users"
+      permission, and the default Actions token qualifies for neither.
+      Without this input, a flagged violation is still handled: the content
+      is redacted, closed, and the thread is locked — it just isn't
+      actually deleted, and a repeat offender isn't actually blocked, only
+      logged as one. To enable the real thing: for an org-owned repo, a
+      classic PAT with `admin:org` (+ `repo`) from an account with admin
+      rights on the repo; for a personal-account repo, a fine-grained PAT
+      with "Administration: write", "Issues: write", and the personal
+      "Blocking users: write" permission. Store it as a secret, never as
+      plain text.
+    required: false
+    default: ''
+  moderation-state-path:
+    description: 'Path to the JSON file the bot uses to remember per-author moderation offense counts across runs'
+    required: false
+    default: '.github/ai-triage/moderation-state.json'
+  moderation-log-issue:
+    description: 'Issue number to post an audit-trail comment on for every moderation action taken (deletion/block/redaction). 0 disables this'
+    required: false
+    default: '0'
+  discussions-enabled:
+    description: >
+      OFF by default. Turns on a SEPARATE feature from issue/PR triage: the
+      bot does nothing to Discussions on its own — it only reacts when a
+      repo owner or collaborator (verified live via the GitHub API, checked
+      on every trigger) @-mentions discussion-trigger in a discussion
+      comment, then reads the discussion + its comments + the repo's code
+      and posts one answer as a reply. Requires `discussions: write` in the
+      workflow's `permissions:` block and a `discussion_comment` trigger (see
+      the workflow example in the README) — without both, this input alone
+      does nothing.
+    required: false
+    default: 'false'
+  discussion-trigger:
+    description: >
+      The text phrase that must appear in a discussion comment to trigger
+      the bot (case-insensitive substring match). This is NOT a real GitHub
+      @-mention — GitHub can't notify an account that doesn't exist — it's a
+      plain-text convention, same as how other bots key off e.g.
+      "@dependabot rebase" in a comment body. Everything after the phrase in
+      the same comment is passed to the AI as the question to answer.
+    required: false
+    default: '@github-discussions'
+  discussion-instructions-path:
+    description: 'Path to system prompt #4 (discussions Q&A tone/rules). Only read when discussions-enabled is true; required to exist in that case'
+    required: false
+    default: '.github/ai-triage/discussion_instructions.md'
+  discussion-spam-window-minutes:
+    description: 'Time window for the discussion-trigger rate limit, in minutes (protects against a compromised/careless collaborator account triggering the bot in a loop — random users can never trigger it at all, see discussions-enabled)'
+    required: false
+    default: '60'
+  discussion-spam-threshold:
+    description: 'How many times the SAME author can trigger the bot within the window before being rate-limited (strictly more than this)'
+    required: false
+    default: '5'
+  discussion-state-path:
+    description: 'Path to the JSON file the bot uses to remember per-author discussion-trigger timestamps across runs (for the rate limit above)'
+    required: false
+    default: '.github/ai-triage/discussion-state.json'
+  discussion-max-comments:
+    description: 'Max existing top-level comments (each with up to 10 of its own replies) fetched as context for one discussion Q&A run'
+    required: false
+    default: '40'
+  agent-enabled:
+    description: >
+      OFF by default. Turns on a THIRD feature, separate from issue/PR
+      triage and from GitHub Discussions Q&A: an authorized repo owner or
+      collaborator (verified live via the GitHub API, same check as
+      discussions-enabled) can @-mention agent-trigger in a comment on an
+      issue, a PR, or — if discussions-enabled is ALSO true — a discussion,
+      pointing the bot at a target issue/PR ("make me a PR to fix this
+      issue: #31", "make another issue related to this: #32", "read this
+      PR: #51 and make a better version"), and the bot opens a new PR with
+      a proposed code change, or files a new related issue. Every generated
+      PR is a NEW pull request for human review — nothing is ever
+      auto-merged, and the target issue/PR is never modified. Requires an
+      `issue_comment` trigger in the workflow (see the README) — without
+      it, this input alone does nothing for issue/PR comments (discussion
+      comments only need discussion_comment, already required by
+      discussions-enabled).
+    required: false
+    default: 'false'
+  agent-trigger:
+    description: >
+      The text phrase that must appear in a comment to trigger an agent
+      command (case-insensitive, and tolerant of a space/hyphen/underscore
+      anywhere the phrase has one — "@github-actions", "@GitHub actions",
+      and "@GitHub-actions," all match the default). Not a real GitHub
+      @-mention. Everything after the phrase is parsed as the command.
+    required: false
+    default: '@github-actions'
+  agent-instructions-path:
+    description: 'Path to system prompt #5 (agent code/issue-generation tone and security rules). Only read when agent-enabled is true; required to exist in that case'
+    required: false
+    default: '.github/ai-triage/agent_instructions.md'
+  agent-allowed-users:
+    description: >
+      OPTIONAL extra allowlist (comma/newline/space-separated GitHub
+      logins) on top of the live admin/write permission check: when set,
+      the trigger author must be BOTH a verified admin/write collaborator
+      AND listed here. Empty (default) trusts the live permission check
+      alone, exactly like the Discussions feature.
+    required: false
+    default: ''
+  agent-max-context-files:
+    description: 'Max repository files the agent reads in full as grounding for one command'
+    required: false
+    default: '6'
+  agent-max-tree-entries:
+    description: 'Max repo-tree path entries (names only, no content) shown to the AI when a "fix this issue" command cites no specific file and it has to guess which files are relevant'
+    required: false
+    default: '500'
+  agent-max-output-files:
+    description: 'Max files a single generated code change may create/modify/delete. A proposal above this is refused outright, no partial PR'
+    required: false
+    default: '6'
+  agent-max-output-bytes:
+    description: 'Max TOTAL bytes of new file content across one generated code change. Also refused outright (not truncated) if exceeded'
+    required: false
+    default: '150000'
+  agent-max-output-tokens:
+    description: 'Gemini response token budget for the code-generation call specifically — much larger than every other call in this bot, since the response can contain full file contents'
+    required: false
+    default: '16384'
+  agent-branch-prefix:
+    description: 'Prepended to every branch the agent creates (e.g. "ai-agent/31-1700000000123456")'
+    required: false
+    default: 'ai-agent/'
+  agent-spam-window-minutes:
+    description: 'Time window for the agent-trigger rate limit, in minutes (protects against a compromised/careless collaborator account triggering the agent in a loop — random users can never trigger it at all)'
+    required: false
+    default: '60'
+  agent-spam-threshold:
+    description: 'How many times the SAME author can trigger the agent within the window before being rate-limited (strictly more than this)'
+    required: false
+    default: '3'
+  agent-state-path:
+    description: 'Path to the JSON file the bot uses to remember per-author agent-trigger timestamps across runs (for the rate limit above)'
+    required: false
+    default: '.github/ai-triage/agent-state.json'
+  commit-review-enabled:
+    description: >
+      OFF by default. Turns on a FOURTH feature, separate from issue/PR
+      triage, Discussions Q&A, and the AI Agent: the repository OWNER
+      specifically (verified live via the GitHub API as holding `admin`
+      permission — stricter than the `admin`-or-`write` bar every other
+      feature uses) can comment directly on a commit and @-mention
+      commit-review-trigger ("@github-discussions, rate my commit fix") to
+      get an AI rating of that one commit's message and diff. Requires a
+      `commit_comment` trigger in the workflow (see the README) — without
+      it, this input alone does nothing.
+    required: false
+    default: 'false'
+  commit-review-trigger:
+    description: 'The text phrase that must appear in a comment on a commit to trigger a review (case-insensitive substring match). Not a real GitHub @-mention'
+    required: false
+    default: '@github-discussions'
+  commit-review-instructions-path:
+    description: 'Path to system prompt #6 (commit-review tone and rating rubric). Only read when commit-review-enabled is true; required to exist in that case'
+    required: false
+    default: '.github/ai-triage/commit_review_instructions.md'
+  commit-review-allowed-users:
+    description: >
+      OPTIONAL extra allowlist (comma/newline/space-separated GitHub
+      logins) on top of the live owner (admin) permission check: when set,
+      the trigger author must be BOTH verified as the repo owner AND
+      listed here. Empty (default) trusts the live permission check alone.
+    required: false
+    default: ''
+  commit-review-spam-window-minutes:
+    description: 'Time window for the commit-review trigger rate limit, in minutes'
+    required: false
+    default: '60'
+  commit-review-spam-threshold:
+    description: 'How many times the SAME author can trigger a commit review within the window before being rate-limited (strictly more than this)'
+    required: false
+    default: '5'
+  commit-review-state-path:
+    description: 'Path to the JSON file the bot uses to remember per-author commit-review-trigger timestamps across runs (for the rate limit above)'
+    required: false
+    default: '.github/ai-triage/commit-review-state.json'
+  workflow-dispatch-enabled:
+    description: >
+      OFF by default. Turns on a FIFTH feature, separate from every other
+      feature above: the repository OWNER specifically (same `admin`-only
+      bar as commit-review-enabled) can @-mention workflow-dispatch-trigger
+      in a comment on an issue or PR ("@github-discussions, run the
+      tests", "@github-discussions, start the release APK build") to
+      trigger a pre-configured GitHub Actions workflow via the
+      `workflow_dispatch` API. This bot NEVER writes, edits, or infers the
+      contents of the workflow that runs — you must configure at least one
+      target in workflow-dispatch-targets FIRST, naming a real workflow
+      file that already exists in .github/workflows/ and declares its own
+      `on: workflow_dispatch:` trigger; setting this to 'true' with no
+      targets configured is a hard config error and the bot refuses to
+      start. No AI model is involved in choosing which target runs — see
+      workflow-dispatch-targets. Requires an `issue_comment` trigger in
+      the workflow (see the README) and `actions: write` in `permissions:`
+      (separate from `contents`/`issues` — GitHub's workflow_dispatch API
+      needs it specifically).
+    required: false
+    default: 'false'
+  workflow-dispatch-trigger:
+    description: 'The text phrase that must appear in an issue/PR comment to trigger a workflow dispatch (case-insensitive substring match). Not a real GitHub @-mention'
+    required: false
+    default: '@github-discussions'
+  workflow-dispatch-targets:
+    description: >
+      REQUIRED (non-empty) when workflow-dispatch-enabled is true. A JSON
+      array of the workflows an owner may trigger this way. Each entry:
+      {"name": "test", "keywords": ["test","verify","compile"], "workflow":
+      "ci-tests.yml", "ref": "head", "inputs": {"pr_number":
+      "{{pr_number}}"}}. "name" and "workflow" are required; "workflow" is
+      the file name (or numeric ID) of an EXISTING workflow under
+      .github/workflows/. "ref" is "default" (the repo's default branch,
+      the default if omitted), "head" (the triggering PR's own branch —
+      falls back to the default branch, with a note in the reply, for a
+      plain issue or a fork PR, since workflow_dispatch can only target a
+      ref inside this repository), or a literal branch/tag name. "inputs"
+      are passed straight to that workflow's own `workflow_dispatch:
+      inputs:` schema; values may contain the literal placeholders
+      "{{pr_number}}", "{{ref}}", "{{triggered_by}}", substituted before
+      dispatch. With more than one target configured, "keywords" (matched
+      case-insensitively as substrings against the text after the trigger
+      phrase) picks which one a given comment means; with exactly one
+      target, keywords are optional. Example with two targets:
+      '[{"name":"test","keywords":["test","verify","compile"],"workflow":"ci-tests.yml","ref":"head","inputs":{"pr_number":"{{pr_number}}"}},{"name":"release-apk","keywords":["release","apk","build"],"workflow":"release-apk.yml","ref":"head","inputs":{"pr_number":"{{pr_number}}","mode":"release"}}]'
+    required: false
+    default: ''
+  workflow-dispatch-allowed-users:
+    description: >
+      OPTIONAL extra allowlist (comma/newline/space-separated GitHub
+      logins) on top of the live owner (admin) permission check: when set,
+      the trigger author must be BOTH verified as the repo owner AND
+      listed here. Empty (default) trusts the live permission check alone.
+    required: false
+    default: ''
+  workflow-dispatch-spam-window-minutes:
+    description: 'Time window for the workflow-dispatch trigger rate limit, in minutes'
+    required: false
+    default: '60'
+  workflow-dispatch-spam-threshold:
+    description: 'How many times the SAME author can trigger a workflow dispatch within the window before being rate-limited (strictly more than this)'
+    required: false
+    default: '3'
+  workflow-dispatch-state-path:
+    description: 'Path to the JSON file the bot uses to remember per-author workflow-dispatch-trigger timestamps across runs (for the rate limit above)'
+    required: false
+    default: '.github/ai-triage/workflow-dispatch-state.json'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: Setup Go
+      uses: actions/setup-go@v5
+      with:
+        go-version: '1.26'
+
+    - name: Resolve Go dependencies
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: |
+        go get google.golang.org/genai@latest
+        go mod tidy
+
+    - name: Run AI Triage Bot
+      shell: bash
+      working-directory: ${{ github.action_path }}
+      run: go run ./cmd/bot
+      env:
+        # --- Core triage ---
+        GITHUB_TOKEN: ${{ inputs.github-token }}
+        GEMINI_API_KEYS: ${{ inputs.gemini-api-keys }}
+        GEMINI_MODEL: ${{ inputs.gemini-model }}
+        GEMINI_MAX_RETRIES: ${{ inputs.gemini-max-retries }}
+        GEMINI_RETRY_BASE_DELAY_MS: ${{ inputs.gemini-retry-base-delay-ms }}
+        GEMINI_RETRY_MAX_DELAY_MS: ${{ inputs.gemini-retry-max-delay-ms }}
+        REPO_CONTEXT_PATH: ${{ inputs.repo-context-path }}
+        INSTRUCTIONS_PATH: ${{ inputs.instructions-path }}
+        TEMPLATES_PATH: ${{ inputs.templates-path }}
+        LABELS_CONFIG_PATH: ${{ inputs.labels-config-path }}
+        SPAM_WINDOW_MINUTES: ${{ inputs.spam-window-minutes }}
+        SPAM_THRESHOLD: ${{ inputs.spam-threshold }}
+        MAX_FILES: ${{ inputs.max-files }}
+        MAX_FILE_BYTES: ${{ inputs.max-file-bytes }}
+        MAX_DIFF_BYTES: ${{ inputs.max-diff-bytes }}
+        MAX_EXTRACTED_PATHS: ${{ inputs.max-extracted-paths }}
+        MAX_REFERENCED_ISSUES: ${{ inputs.max-referenced-issues }}
+        MAX_API_CALLS: ${{ inputs.max-api-calls }}
+        MAX_ATTACHMENTS: ${{ inputs.max-attachments }}
+        MAX_ATTACHMENT_BYTES: ${{ inputs.max-attachment-bytes }}
+        MAX_ATTACHMENT_TOTAL_BYTES: ${{ inputs.max-attachment-total-bytes }}
+        ATTACHMENT_FETCH_TIMEOUT_SECONDS: ${{ inputs.attachment-fetch-timeout-seconds }}
+        MODERATION_TOKEN: ${{ inputs.moderation-token }}
+        MODERATION_STATE_PATH: ${{ inputs.moderation-state-path }}
+        MODERATION_LOG_ISSUE: ${{ inputs.moderation-log-issue }}
+        # --- Duplicate detection ---
+        DUPLICATE_DETECTION_ENABLED: ${{ inputs.duplicate-detection-enabled }}
+        MAX_DUPLICATE_CANDIDATES: ${{ inputs.max-duplicate-candidates }}
+        DUPLICATE_SEARCH_KEYWORDS: ${{ inputs.duplicate-search-keywords }}
+        DUPLICATE_MIN_SIMILARITY: ${{ inputs.duplicate-min-similarity }}
+        DUPLICATE_MAX_BODY_CHARS: ${{ inputs.duplicate-max-body-chars }}
+        # --- Discussions Q&A (needs a discussion_comment trigger + discussions: write) ---
+        DISCUSSIONS_ENABLED: ${{ inputs.discussions-enabled }}
+        DISCUSSION_TRIGGER: ${{ inputs.discussion-trigger }}
+        DISCUSSION_INSTRUCTIONS_PATH: ${{ inputs.discussion-instructions-path }}
+        DISCUSSION_SPAM_WINDOW_MINUTES: ${{ inputs.discussion-spam-window-minutes }}
+        DISCUSSION_SPAM_THRESHOLD: ${{ inputs.discussion-spam-threshold }}
+        DISCUSSION_STATE_PATH: ${{ inputs.discussion-state-path }}
+        DISCUSSION_MAX_COMMENTS: ${{ inputs.discussion-max-comments }}
+        # --- AI agent (needs an issue_comment trigger) ---
+        AGENT_ENABLED: ${{ inputs.agent-enabled }}
+        AGENT_TRIGGER: ${{ inputs.agent-trigger }}
+        AGENT_INSTRUCTIONS_PATH: ${{ inputs.agent-instructions-path }}
+        AGENT_ALLOWED_USERS: ${{ inputs.agent-allowed-users }}
+        AGENT_MAX_CONTEXT_FILES: ${{ inputs.agent-max-context-files }}
+        AGENT_MAX_TREE_ENTRIES: ${{ inputs.agent-max-tree-entries }}
+        AGENT_MAX_OUTPUT_FILES: ${{ inputs.agent-max-output-files }}
+        AGENT_MAX_OUTPUT_BYTES: ${{ inputs.agent-max-output-bytes }}
+        AGENT_MAX_OUTPUT_TOKENS: ${{ inputs.agent-max-output-tokens }}
+        AGENT_BRANCH_PREFIX: ${{ inputs.agent-branch-prefix }}
+        AGENT_SPAM_WINDOW_MINUTES: ${{ inputs.agent-spam-window-minutes }}
+        AGENT_SPAM_THRESHOLD: ${{ inputs.agent-spam-threshold }}
+        AGENT_STATE_PATH: ${{ inputs.agent-state-path }}
+        # --- Commit review (needs a commit_comment trigger) ---
+        COMMIT_REVIEW_ENABLED: ${{ inputs.commit-review-enabled }}
+        COMMIT_REVIEW_TRIGGER: ${{ inputs.commit-review-trigger }}
+        COMMIT_REVIEW_INSTRUCTIONS_PATH: ${{ inputs.commit-review-instructions-path }}
+        COMMIT_REVIEW_ALLOWED_USERS: ${{ inputs.commit-review-allowed-users }}
+        COMMIT_REVIEW_SPAM_WINDOW_MINUTES: ${{ inputs.commit-review-spam-window-minutes }}
+        COMMIT_REVIEW_SPAM_THRESHOLD: ${{ inputs.commit-review-spam-threshold }}
+        COMMIT_REVIEW_STATE_PATH: ${{ inputs.commit-review-state-path }}
+        # --- Workflow dispatch by comment (needs an issue_comment trigger + actions: write) ---
+        WORKFLOW_DISPATCH_ENABLED: ${{ inputs.workflow-dispatch-enabled }}
+        WORKFLOW_DISPATCH_TRIGGER: ${{ inputs.workflow-dispatch-trigger }}
+        WORKFLOW_DISPATCH_TARGETS: ${{ inputs.workflow-dispatch-targets }}
+        WORKFLOW_DISPATCH_ALLOWED_USERS: ${{ inputs.workflow-dispatch-allowed-users }}
+        WORKFLOW_DISPATCH_SPAM_WINDOW_MINUTES: ${{ inputs.workflow-dispatch-spam-window-minutes }}
+        WORKFLOW_DISPATCH_SPAM_THRESHOLD: ${{ inputs.workflow-dispatch-spam-threshold }}
+        WORKFLOW_DISPATCH_STATE_PATH: ${{ inputs.workflow-dispatch-state-path }}
+        GITHUB_WORKSPACE: ${{ github.workspace }}

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">بدء الخادم</string>
+    <string name="tasker_command_stop">إيقاف الخادم</string>
+    <string name="tasker_command_restart">إعادة تشغيل الخادم</string>
+    <string name="tasker_command_toggle">تبديل حالة الخادم</string>
+    <string name="tasker_blurb_start">Shevery: بدء الخادم</string>
+    <string name="tasker_blurb_stop">Shevery: إيقاف الخادم</string>
+    <string name="tasker_blurb_restart">Shevery: إعادة تشغيل الخادم</string>
+    <string name="tasker_blurb_toggle">Shevery: تبديل حالة الخادم</string>
+    <string name="tasker_condition_running">الخادم قيد التشغيل</string>
+    <string name="tasker_blurb_condition">Shevery: الخادم قيد التشغيل</string>
+    <string name="tasker_save">حفظ</string>
+    <string name="tasker_cancel">إلغاء</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">تنبيهات الأتمتة</string>
+    <string name="notification_auth_missing_title">رمز المصادقة مطلوب</string>
+    <string name="notification_auth_missing_message">أضف “auth” الإضافي إلى قصدك. يمكنك العثور على رمزك ضمن الإعدادات ← الأتمتة.</string>
+    <string name="notification_auth_invalid_title">رمز مصادقة غير صالح</string>
+    <string name="notification_auth_invalid_message">تأكد من مطابقة الرمز في قصدك للرمز الموجود في إعدادات Shevery.</string>
+    <string name="notification_connectors_disabled_title">موصلات الأتمتة معطلة</string>
+    <string name="notification_connectors_disabled_message">تم حظر قصد الأتمتة لأن موصلات Shevery معطلة في الإعدادات. انقر للتمكين.</string>
+</resources>

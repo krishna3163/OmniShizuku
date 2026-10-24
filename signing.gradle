@@ -1,0 +1,47 @@
+def ksFile = rootProject.file('signing.properties')
+def props = new Properties()
+if (ksFile.canRead()) {
+    props.load(new FileInputStream(ksFile))
+
+    def ksPath = props['KEYSTORE_FILE']
+    File targetKeystore = null
+    if (ksPath != null && !ksPath.isBlank()) {
+        def f1 = new File(ksPath)
+        if (f1.isAbsolute() && f1.exists()) {
+            targetKeystore = f1
+        } else {
+            def fRoot = rootProject.file(ksPath)
+            if (fRoot.exists()) {
+                targetKeystore = fRoot
+            } else {
+                def fLocal = file(ksPath)
+                if (fLocal.exists()) {
+                    targetKeystore = fLocal
+                } else {
+                    targetKeystore = fRoot
+                }
+            }
+        }
+    }
+
+    if (targetKeystore != null && targetKeystore.exists()) {
+        android.signingConfigs.sign.storeFile targetKeystore
+        android.signingConfigs.sign.storePassword props['KEYSTORE_PASSWORD']
+        android.signingConfigs.sign.keyAlias props['KEYSTORE_ALIAS']
+        android.signingConfigs.sign.keyPassword props['KEYSTORE_ALIAS_PASSWORD']
+    } else {
+        android.signingConfigs.sign.storeFile = android.signingConfigs.debug.storeFile
+        android.signingConfigs.sign.storePassword = android.signingConfigs.debug.storePassword
+        android.signingConfigs.sign.keyAlias = android.signingConfigs.debug.keyAlias
+        android.signingConfigs.sign.keyPassword = android.signingConfigs.debug.keyPassword
+    }
+} else {
+    android.signingConfigs.sign.storeFile = android.signingConfigs.debug.storeFile
+    android.signingConfigs.sign.storePassword = android.signingConfigs.debug.storePassword
+    android.signingConfigs.sign.keyAlias = android.signingConfigs.debug.keyAlias
+    android.signingConfigs.sign.keyPassword = android.signingConfigs.debug.keyPassword
+}
+
+android.signingConfigs.sign.enableV1Signing = true
+android.signingConfigs.sign.enableV2Signing = true
+android.signingConfigs.sign.enableV3Signing = true

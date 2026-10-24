@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Start server</string>
+    <string name="tasker_command_stop">Stop server</string>
+    <string name="tasker_command_restart">Restart server</string>
+    <string name="tasker_command_toggle">Toggle server</string>
+    <string name="tasker_blurb_start">Shevery: start server</string>
+    <string name="tasker_blurb_stop">Shevery: stop server</string>
+    <string name="tasker_blurb_restart">Shevery: restart server</string>
+    <string name="tasker_blurb_toggle">Shevery: toggle server</string>
+    <string name="tasker_condition_running">Server is running</string>
+    <string name="tasker_blurb_condition">Shevery: server is running</string>
+    <string name="tasker_save">Save</string>
+    <string name="tasker_cancel">Cancel</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Сигнали за автоматизация</string>
+    <string name="notification_auth_missing_title">Изисква се токен за удостоверяване</string>
+    <string name="notification_auth_missing_message">Добавете екстра “auth” към вашия intent. Можете да намерите вашия токен в Настройки → Автоматизация.</string>
+    <string name="notification_auth_invalid_title">Невалиден токен за удостоверяване</string>
+    <string name="notification_auth_invalid_message">Уверете се, че токенът във вашия intent съвпада с този в Настройки на Shevery.</string>
+    <string name="notification_connectors_disabled_title">Конекторите за автоматизация са изключени</string>
+    <string name="notification_connectors_disabled_message">Интент за автоматизация беше блокиран, защото конекторите на Shevery са изключени в Настройки. Докоснете за активиране.</string>
+</resources>

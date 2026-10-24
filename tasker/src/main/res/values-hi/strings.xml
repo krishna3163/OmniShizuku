@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">सर्वर शुरू करें</string>
+    <string name="tasker_command_stop">सर्वर बंद करें</string>
+    <string name="tasker_command_restart">सर्वर पुनरारंभ करें</string>
+    <string name="tasker_command_toggle">सर्वर टॉगल करें</string>
+    <string name="tasker_blurb_start">Shevery: सर्वर शुरू करें</string>
+    <string name="tasker_blurb_stop">Shevery: सर्वर बंद करें</string>
+    <string name="tasker_blurb_restart">Shevery: सर्वर पुनरारंभ करें</string>
+    <string name="tasker_blurb_toggle">Shevery: सर्वर टॉगल करें</string>
+    <string name="tasker_condition_running">सर्वर चल रहा है</string>
+    <string name="tasker_blurb_condition">Shevery: सर्वर चल रहा है</string>
+    <string name="tasker_save">सहेजें</string>
+    <string name="tasker_cancel">रद्द करें</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">स्वचालन अलर्ट</string>
+    <string name="notification_auth_missing_title">प्रमाणीकरण टोकन आवश्यक है</string>
+    <string name="notification_auth_missing_message">अपने इंटेंट में “auth” अतिरिक्त जोड़ें। आप सेटिंग्स → स्वचालन के तहत अपना टोकन पा सकते हैं।</string>
+    <string name="notification_auth_invalid_title">अमान्य प्रमाणीकरण टोकन</string>
+    <string name="notification_auth_invalid_message">सुनिश्चित करें कि आपके इंटेंट का टोकन Shevery सेटिंग्स के टोकन से मेल खाता है।</string>
+    <string name="notification_connectors_disabled_title">स्वचालन कनेक्टर्स अक्षम हैं</string>
+    <string name="notification_connectors_disabled_message">एक स्वचालन इंटेंट को ब्लॉक कर दिया गया क्योंकि सेटिंग्स में Shevery कनेक्टर्स अक्षम हैं। सक्षम करने के लिए टैप करें।</string>
+</resources>

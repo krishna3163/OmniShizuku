@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Démarrer le serveur</string>
+    <string name="tasker_command_stop">Arrêter le serveur</string>
+    <string name="tasker_command_restart">Redémarrer le serveur</string>
+    <string name="tasker_command_toggle">Basculer le serveur</string>
+    <string name="tasker_blurb_start">Shevery : démarrer le serveur</string>
+    <string name="tasker_blurb_stop">Shevery : arrêter le serveur</string>
+    <string name="tasker_blurb_restart">Shevery : redémarrer le serveur</string>
+    <string name="tasker_blurb_toggle">Shevery : basculer le serveur</string>
+    <string name="tasker_condition_running">Le serveur est en cours d\'exécution</string>
+    <string name="tasker_blurb_condition">Shevery : le serveur est en cours d\'exécution</string>
+    <string name="tasker_save">Enregistrer</string>
+    <string name="tasker_cancel">Annuler</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Alertes d\'automatisation</string>
+    <string name="notification_auth_missing_title">Jeton d\'authentification requis</string>
+    <string name="notification_auth_missing_message">Ajoutez l\'extra « auth » à votre intent. Vous trouverez votre jeton dans Paramètres → Automatisation.</string>
+    <string name="notification_auth_invalid_title">Jeton d\'authentification invalide</string>
+    <string name="notification_auth_invalid_message">Assurez-vous que le jeton de votre intent correspond à celui des paramètres Shevery.</string>
+    <string name="notification_connectors_disabled_title">Connecteurs d\'automatisation désactivés</string>
+    <string name="notification_connectors_disabled_message">Un intent d\'automatisation a été bloqué car les connecteurs Shevery sont désactivés dans les paramètres. Appuyez pour activer.</string>
+</resources>

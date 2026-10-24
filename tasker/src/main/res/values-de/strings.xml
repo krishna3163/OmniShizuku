@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="tasker_plugin_name">Shevery Tasker</string>
+    <string name="tasker_command_start">Server starten</string>
+    <string name="tasker_command_stop">Server stoppen</string>
+    <string name="tasker_command_restart">Server neu starten</string>
+    <string name="tasker_command_toggle">Server umschalten</string>
+    <string name="tasker_blurb_start">Shevery: Server starten</string>
+    <string name="tasker_blurb_stop">Shevery: Server stoppen</string>
+    <string name="tasker_blurb_restart">Shevery: Server neu starten</string>
+    <string name="tasker_blurb_toggle">Shevery: Server umschalten</string>
+    <string name="tasker_condition_running">Server läuft</string>
+    <string name="tasker_blurb_condition">Shevery: Server läuft</string>
+    <string name="tasker_save">Speichern</string>
+    <string name="tasker_cancel">Abbrechen</string>
+
+    <!-- Automation Alert Notifications -->
+    <string name="notification_channel_automation_alerts">Automatisierungs-Warnungen</string>
+    <string name="notification_auth_missing_title">Authentifizierungs-Token erforderlich</string>
+    <string name="notification_auth_missing_message">Fügen Sie das Extra „auth“ zu Ihrem Intent hinzu. Sie finden Ihr Token unter Einstellungen → Automatisierung.</string>
+    <string name="notification_auth_invalid_title">Ungültiges Authentifizierungs-Token</string>
+    <string name="notification_auth_invalid_message">Stellen Sie sicher, dass das Token in Ihrem Intent mit dem in den Shevery-Einstellungen übereinstimmt.</string>
+    <string name="notification_connectors_disabled_title">Automatisierungs-Connectors deaktiviert</string>
+    <string name="notification_connectors_disabled_message">Ein Automatisierungs-Intent wurde blockiert, da die Shevery-Connectors in den Einstellungen deaktiviert sind. Zum Aktivieren tippen.</string>
+</resources>

@@ -1,0 +1,16 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'rikka.shizuku.common'
+    buildFeatures {
+        buildConfig = false
+    }
+}
+
+dependencies {
+    implementation 'androidx.annotation:annotation:1.9.1'
+    implementation libs.hidden.compat
+    compileOnly libs.hidden.stub
+}
