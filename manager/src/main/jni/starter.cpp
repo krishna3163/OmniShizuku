@@ -35,7 +35,7 @@
 #define EXIT_MANAGER_APP_NOT_FOUND 50
 #define STABLE_UPTIME_RESET_SECS 60
 
-#define PACKAGE_NAME "com.hamondev.shevery"
+#define PACKAGE_NAME "com.krishna.omnishizuku"
 #define SERVER_NAME "shizuku_server"
 #define SERVER_CLASS_PATH "rikka.shizuku.server.ShizukuService"
 
@@ -402,15 +402,21 @@ int main(int argc, char *argv[]) {
     }
 
     if (apk_path.empty()) {
-        auto f = popen("pm path " PACKAGE_NAME, "r");
-        if (f) {
-            char line[PATH_MAX]{0};
-            fgets(line, PATH_MAX, f);
-            trim(line);
-            if (strstr(line, "package:") == line) {
-                apk_path = line + strlen("package:");
+        const char *pkgs[] = {PACKAGE_NAME, "com.hamondev.shevery", "moe.shizuku.privileged.api", nullptr};
+        for (int i = 0; pkgs[i] != nullptr; i++) {
+            std::string cmd = std::string("pm path ") + pkgs[i];
+            auto f = popen(cmd.c_str(), "r");
+            if (f) {
+                char line[PATH_MAX]{0};
+                fgets(line, PATH_MAX, f);
+                trim(line);
+                if (strstr(line, "package:") == line) {
+                    apk_path = line + strlen("package:");
+                    pclose(f);
+                    break;
+                }
+                pclose(f);
             }
-            pclose(f);
         }
     }
 

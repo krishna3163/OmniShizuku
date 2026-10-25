@@ -405,13 +405,25 @@
         <service
             android:name=".service.HidingWatchService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:targetApi="34">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Monitors app installations and package state changes to reapply hiding rules." />
+        </service>
 
         <!-- Self-Healing Watchdog Service (Shizuku-Next) -->
         <service
             android:name=".service.WatchdogService"
             android:enabled="true"
-            android:exported="false" />
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:targetApi="34">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Monitors Shizuku service status and automatically recovers it if terminated." />
+        </service>
 
         <!-- Locked Boot Start Service (Shizuku-Next Direct-Boot) -->
         <service

@@ -1,8 +1,15 @@
 package af.shizuku.common.util;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
+
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@RunWith(RobolectricTestRunner.class)
+@Config(sdk = 28)
 public class OsUtilsTest {
 
     @Test
@@ -13,20 +20,6 @@ public class OsUtilsTest {
 
     @Test
     public void testGetPid() {
-        int pid = OsUtils.getPid();
-        assertTrue("PID should be non-negative", pid >= 0);
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-
-import static org.junit.Assert.assertEquals;
-
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = 28)
-public class OsUtilsTest {
-
-    @Test
-    public void testGetPid() {
         // Given the constraints of Robolectric and modern Java reflection, the best approach
         // is to verify the method works without crashing, returns a consistent non-negative value,
         // and corresponds to the Robolectric environment's behavior.
@@ -34,7 +27,7 @@ public class OsUtilsTest {
         int pid = OsUtils.getPid();
 
         // The process ID should be >= 0 (Robolectric might return 0 if not fully shadowed, or an actual PID)
-        org.junit.Assert.assertTrue("PID should be >= 0", pid >= 0);
+        assertTrue("PID should be >= 0", pid >= 0);
 
         // We can also verify that multiple calls return the same cached value (since it's a static final field)
         int secondPidCall = OsUtils.getPid();

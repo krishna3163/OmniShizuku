@@ -257,7 +257,8 @@ class AppDetailActivity : AppActivity() {
                                     )
                                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                                         if (versionName.isNotBlank()) {
-                                            VersionBadge(text = "v$versionName")
+                                            val displayVersion = if (versionName.startsWith("v", ignoreCase = true)) versionName else "v$versionName"
+                                            VersionBadge(text = displayVersion)
                                         }
                                         if (requiresRoot) {
                                             VersionBadge(

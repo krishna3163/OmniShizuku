@@ -41,11 +41,11 @@ class DhizukuProvider : ContentProvider() {
             if (!isCallerAuthorized()) throw SecurityException("Unauthorized UID ${Binder.getCallingUid()}")
         }
 
-        override fun unbindUserServiceByConnection(connection: IDhizukuUserServiceConnection?, bundle: Bundle?) {
+        override fun unbindUserService(bundle: Bundle?) {
             if (!isCallerAuthorized()) throw SecurityException("Unauthorized UID ${Binder.getCallingUid()}")
         }
 
-        override fun unbindUserServiceByConnection(p0: IDhizukuUserServiceConnection?, p1: Bundle?) {
+        override fun unbindUserServiceByConnection(connection: IDhizukuUserServiceConnection?, bundle: Bundle?) {
             if (!isCallerAuthorized()) throw SecurityException("Unauthorized UID ${Binder.getCallingUid()}")
         }
 

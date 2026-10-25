@@ -141,6 +141,7 @@ afterEvaluate {
             mustRunAfter("assemble${buildTypeCapitalized}")
             doLast {
                 def versionName = rootProject.ext.versionName
+                def versionPrefix = versionName.startsWith("v") ? versionName : "v${versionName}"
                 def apkDir = layout.buildDirectory.dir("outputs/apk/${buildType}").get().asFile
                 def apk = fileTree(apkDir) { include '*.apk' }.files.find { it.name.endsWith('.apk') }
                 if (apk == null) {
@@ -149,7 +150,7 @@ afterEvaluate {
                 copy {
                     from apk
                     into rootProject.layout.projectDirectory.dir('out/apk')
-                    rename { "omnishizuku-v${versionName}-${buildType}.apk" }
+                    rename { "omnishizuku-${versionPrefix}-${buildType}.apk" }
                 }
                 if (buildType == 'release') {
                     def mapping = layout.buildDirectory.file("outputs/mapping/release/mapping.txt").get().asFile

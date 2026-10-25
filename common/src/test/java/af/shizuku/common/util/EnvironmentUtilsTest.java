@@ -3,31 +3,44 @@ package af.shizuku.common.util;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.os.Build;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
+import org.robolectric.util.ReflectionHelpers;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(sdk = 28)
+@Config(sdk = {34})
 public class EnvironmentUtilsTest {
 
+    private String originalManufacturer;
+    private int originalSdkInt;
     private Context mockContext;
     private UiModeManager mockUiModeManager;
 
     @Before
     public void setUp() {
+        originalManufacturer = Build.MANUFACTURER;
+        originalSdkInt = Build.VERSION.SDK_INT;
+
         mockContext = Mockito.mock(Context.class);
         mockUiModeManager = Mockito.mock(UiModeManager.class);
-
-        // Mock getSystemService(Class) which is added in API 23
         Mockito.when(mockContext.getSystemService(UiModeManager.class)).thenReturn(mockUiModeManager);
+    }
+
+    @After
+    public void tearDown() {
+        ReflectionHelpers.setStaticField(Build.class, "MANUFACTURER", originalManufacturer);
+        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", originalSdkInt);
     }
 
     @Test
@@ -67,37 +80,6 @@ public class EnvironmentUtilsTest {
         Context contextWithoutUiModeManager = Mockito.mock(Context.class);
         Mockito.when(contextWithoutUiModeManager.getSystemService(UiModeManager.class)).thenReturn(null);
         EnvironmentUtils.isWatch(contextWithoutUiModeManager);
-import android.os.Build;
-
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.robolectric.RobolectricTestRunner;
-import org.robolectric.annotation.Config;
-import org.robolectric.util.ReflectionHelpers;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-@RunWith(RobolectricTestRunner.class)
-@Config(sdk = {34}) // Limit max SDK to avoid Robolectric Target SDK 37 issue
-public class EnvironmentUtilsTest {
-
-    private String originalManufacturer;
-    private int originalSdkInt;
-
-    @Before
-    public void setUp() {
-        originalManufacturer = Build.MANUFACTURER;
-        originalSdkInt = Build.VERSION.SDK_INT;
-    }
-
-    @After
-    public void tearDown() {
-        ReflectionHelpers.setStaticField(Build.class, "MANUFACTURER", originalManufacturer);
-        ReflectionHelpers.setStaticField(Build.VERSION.class, "SDK_INT", originalSdkInt);
     }
 
     @Test

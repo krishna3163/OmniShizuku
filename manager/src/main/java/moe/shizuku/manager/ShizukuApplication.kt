@@ -11,9 +11,16 @@ import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.core.util.BuildUtils.atLeast30
 import rikka.material.app.LocaleDelegate
 
-lateinit var application: ShizukuApplication
+val application: ShizukuApplication
+    get() = ShizukuApplication.application
 
 class ShizukuApplication : Application() {
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        Companion.application = this
+        Companion.appContext = this
+    }
 
     companion object {
 
