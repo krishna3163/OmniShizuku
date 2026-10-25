@@ -46,7 +46,7 @@ jobs:
       # Check out ONLY the repo's base branch (the bot's own code plus
       # .github/ai-triage/*), not the PR's head — see the pull_request_target
       # note above.
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.3.0
 
       - uses: ./.github/actions/ai-triage-bot
         with:
