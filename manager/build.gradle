@@ -233,7 +233,7 @@ dependencies {
     implementation 'dev.rikka.rikkax.lifecycle:lifecycle-viewmodel-lazy:2.0.0'
 
     implementation 'io.github.vvb2060.ndk:boringssl:20251124-lto-ndk29'
-    implementation 'org.lsposed.libcxx:libcxx:29.0.14206865'
+    implementation 'org.lsposed.libcxx:libcxx:30.0.16248370'
 
     implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.1'
 
