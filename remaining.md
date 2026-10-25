@@ -89,7 +89,8 @@ The following features from `ALL_REPOSITORIES_FEATURES_MASTER.md` are **NOT** ye
 
 ---
 
-### 3. Essentials Subsystems (Dynamic Island SDK, Hardware Mods & 20+ Engines)
+### 3. Essentials Subsystems (Dynamic Island SDK, Hardware Mods & 20+ Engines) ✅ [INTEGRATED]
+* **Status**: Integrated in OmniShizuku under Labs tab with dedicated subsystems: Dynamic Island (`island/`), Battery Center & Charging Guard (`battery/`), Smart Pixels AMOLED Saver (`display/smartpixels/`), Photo Watermark & EXIF Studio (`watermark/`), Pocket Mode Guard (`hardware/pocket/`), "Shut Up" Media Muter (`audio/shutup/`), Edge Lighting (`lighting/`), Volume Key Track Skipper (`media/`), Screen Security & DRM Unlock (`security/`), and App Freezer (`freeze/`).
 * **Source Repository**: `essentials` (#26)
 * **Source Location**: `/home/krishna/Downloads/tv/essentials`
 * **Remaining Features**:
