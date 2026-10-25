@@ -7,6 +7,12 @@ android {
     buildFeatures {
         buildConfig = false
     }
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 dependencies {
@@ -20,4 +26,5 @@ dependencies {
     testImplementation 'androidx.test.ext:junit:1.1.5'
     testImplementation 'org.mockito:mockito-core:4.11.0'
     testImplementation 'org.robolectric:shadows-framework:4.11.1'
+    testImplementation 'org.robolectric:robolectric:4.13'
 }
