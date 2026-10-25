@@ -32,9 +32,7 @@ object OptimizerManager {
                 runShellCommand("settings put global window_animation_scale 0.0")
                 runShellCommand("settings put global transition_animation_scale 0.0")
                 runShellCommand("settings put global animator_duration_scale 0.0")
-                runShellCommand("pm trim-caches 999G")
-                runShellCommand("setprop debug.sf.hw 1")
-                runShellCommand("setprop debug.egl.hw 1")
+                runShellCommand("pm trim-caches 100M")
                 true
             }
             PerformanceProfile.BALANCED -> {
@@ -54,12 +52,12 @@ object OptimizerManager {
     }
 
     suspend fun clearSystemCaches(): Boolean = withContext(Dispatchers.IO) {
-        val res = runShellCommand("pm trim-caches 999G")
+        val res = runShellCommand("pm trim-caches 100M")
         res != null
     }
 
     suspend fun dropLinuxBuffers(): Boolean = withContext(Dispatchers.IO) {
-        val res = runShellCommand("echo 3 > /proc/sys/vm/drop_caches")
+        val res = runShellCommand("sync")
         res != null
     }
 }

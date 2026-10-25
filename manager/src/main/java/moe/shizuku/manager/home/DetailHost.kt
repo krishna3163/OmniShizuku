@@ -147,6 +147,7 @@ fun DetailHost(
                     Detail.OPTIMIZER -> moe.shizuku.manager.optimizer.OptimizerScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.EDGE_LIGHTING -> moe.shizuku.manager.lighting.EdgeLightingScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.MEDIA_KEYS -> moe.shizuku.manager.media.MediaKeyScreen(bottomPadding = 0.dp, onBack = onBack)
+                    Detail.ESSENTIALS -> moe.shizuku.manager.essentials.EssentialsScreen(bottomPadding = 0.dp, onBack = onBack, onOpenDetail = onOpenDetail)
                     Detail.ISLAND -> moe.shizuku.manager.island.IslandScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.BATTERY_CENTER -> moe.shizuku.manager.battery.BatteryCenterScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.SMART_PIXELS -> moe.shizuku.manager.display.smartpixels.SmartPixelsScreen(bottomPadding = 0.dp, onBack = onBack)

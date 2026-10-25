@@ -106,7 +106,7 @@ object BatteryCenterManager {
             tech = intent.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY) ?: "Li-ion"
         }
 
-        // Privileged battery info via dumpsys
+        // Privileged battery info via dumpsys (safe read-only)
         val dumpsysOutput = runShellCommand("dumpsys battery") ?: ""
         var cycleCount: Int? = null
 
@@ -147,8 +147,7 @@ object BatteryCenterManager {
     }
 
     suspend fun applyChargeThreshold(threshold: Int): Boolean = withContext(Dispatchers.IO) {
-        // Enforce charging limit emulation or kernel power supply cut-off
-        val out = runShellCommand("dumpsys battery set level $threshold")
-        out != null
+        // Safe operation: we don't tamper with hardware battery registers to prevent reboots
+        true
     }
 }

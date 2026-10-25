@@ -102,6 +102,7 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     // Every feature there is, in no particular order. The order is worked out below.
     val entries = listOf(
         LabEntry(R.string.tab_manage, Icons.Outlined.AdminPanelSettings, Detail.APP_OPS),
+        LabEntry(R.string.tab_essentials, Icons.Outlined.AutoAwesome, Detail.ESSENTIALS),
         LabEntry(R.string.tab_shell, Icons.Outlined.Terminal, Detail.SHELL),
         LabEntry(
             AppToggleFeature.FIREWALL.titleRes,

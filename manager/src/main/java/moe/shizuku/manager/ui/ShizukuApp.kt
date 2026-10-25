@@ -194,6 +194,7 @@ enum class Detail(
     OPTIMIZER,
     EDGE_LIGHTING,
     MEDIA_KEYS,
+    ESSENTIALS,
     ISLAND,
     BATTERY_CENTER,
     SMART_PIXELS,
@@ -431,6 +432,7 @@ fun ShizukuApp() {
                             Detail.OPTIMIZER -> moe.shizuku.manager.optimizer.OptimizerScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.EDGE_LIGHTING -> moe.shizuku.manager.lighting.EdgeLightingScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.MEDIA_KEYS -> moe.shizuku.manager.media.MediaKeyScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.ESSENTIALS -> moe.shizuku.manager.essentials.EssentialsScreen(bottomPadding = 0.dp, onBack = { detail = null }, onOpenDetail = { detail = it })
                             Detail.ISLAND -> moe.shizuku.manager.island.IslandScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.BATTERY_CENTER -> moe.shizuku.manager.battery.BatteryCenterScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.SMART_PIXELS -> moe.shizuku.manager.display.smartpixels.SmartPixelsScreen(bottomPadding = 0.dp, onBack = { detail = null })

@@ -45,8 +45,8 @@ object PocketModeManager {
     }
 
     suspend fun lockScreenPrivileged(): Boolean = withContext(Dispatchers.IO) {
-        // Shizuku power sleep keyevent
-        val out = runShellCommand("input keyevent 26")
+        // KEYCODE_SLEEP (223) safely puts screen to sleep without triggering long-press power reboot
+        val out = runShellCommand("input keyevent 223")
         out != null
     }
 }

@@ -2069,6 +2069,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="tab_optimizer">Axeron Gaming Optimizer</string>
     <string name="tab_edge_lighting">Notification Edge Lighting</string>
     <string name="tab_media_keys">Volume Key Track Skipper</string>
+    <string name="tab_essentials">Essentials Hub</string>
     <string name="tab_dynamic_island">Dynamic Island</string>
     <string name="tab_battery_center">Battery Center &amp; Guard</string>
     <string name="tab_smart_pixels">Smart Pixels (AMOLED Saver)</string>
