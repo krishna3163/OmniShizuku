@@ -155,7 +155,8 @@ jobs:
           fi
 
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
-            echo "Release '$RELEASE_TAG' exists. Updating APK assets..."
+            echo "Release '$RELEASE_TAG' exists. Updating release details and APK assets..."
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_TITLE" --prerelease=false || true
             gh release upload "$RELEASE_TAG" $APK_FILES --clobber
           else
             echo "Creating release '$RELEASE_TAG'..."
