@@ -47,7 +47,6 @@ jobs:
       # .github/ai-triage/*), not the PR's head — see the pull_request_target
       # note above.
       - uses: actions/checkout@v4.2.2
-      - uses: actions/checkout@v4
 
       - uses: ./.github/actions/ai-triage-bot
         with:
