@@ -43,7 +43,7 @@ public class RenderNodeBlurController implements BlurController {
     // This tracks BlurView location in scrollable containers, during animations, etc.
     private final ViewTreeObserver.OnPreDrawListener drawListener = () -> {
         saveOnScreenLocation();
-        updateRenderNodeProperties();
+        drawSnapshot();
         return true;
     };
 
@@ -88,10 +88,7 @@ public class RenderNodeBlurController implements BlurController {
     // https://cs.android.com/android/platform/superproject/main/+/main:external/skia/src/core/SkImageFilterTypes.cpp;drc=61197364367c9e404c7da6900658f1b16c42d0da;l=2103
     // https://cs.android.com/android/platform/superproject/main/+/main:frameworks/base/libs/hwui/jni/RenderEffect.cpp;l=39;drc=61197364367c9e404c7da6900658f1b16c42d0da?q=nativeCreateBlurEffect&ss=android%2Fplatform%2Fsuperproject%2Fmain
     private void hardwarePath(Canvas canvas) {
-        // TODO would be good to keep it the size of the BlurView instead of the target, but then the animation
-        //  like translation and rotation would go out of bounds. Not sure if there's a good fix for this
-        blurNode.setPosition(0, 0, target.getWidth(), target.getHeight());
-        updateRenderNodeProperties();
+        blurNode.setPosition(0, 0, blurView.getWidth(), blurView.getHeight());
 
         drawSnapshot();
 
@@ -109,32 +106,19 @@ public class RenderNodeBlurController implements BlurController {
         canvas.restore();
     }
 
-    private void updateRenderNodeProperties() {
-        BlurViewTransform t = BlurViewTransform.compute(blurView, blurViewLocation, targetLocation);
-
-        float layoutTranslationX = -t.layoutLeft;
-        float layoutTranslationY = -t.layoutTop;
-
-        // Pivot at the center of the BlurView in target coordinates, invariant under the view's transforms.
-        blurNode.setPivotX(blurView.getWidth() / 2f - layoutTranslationX);
-        blurNode.setPivotY(blurView.getHeight() / 2f - layoutTranslationY);
-        blurNode.setTranslationX(layoutTranslationX);
-        blurNode.setTranslationY(layoutTranslationY);
-        // Counter-scale so the visually expanded area shows the correct underlying content.
-        blurNode.setScaleX(1f / t.scaleX);
-        blurNode.setScaleY(1f / t.scaleY);
-        // Counter-rotate so the blurred content stays aligned with the background.
-        blurNode.setRotationZ(-t.rotationDeg);
-
-        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.S) {
-            // There's a bug on API 31 - blurNode doesn't get re-rendered on setting new translation/scale/rotation,
-            // so we need to re-apply the blur effect to trigger a redraw.
-            applyBlur();
-        }
-    }
-
     private void drawSnapshot() {
         RecordingCanvas recordingCanvas = blurNode.beginRecording();
+
+        BlurViewTransform t = BlurViewTransform.compute(blurView, blurViewLocation, targetLocation);
+
+        recordingCanvas.translate(-t.layoutLeft, -t.layoutTop);
+
+        float pivotX = blurView.getWidth() / 2f + t.layoutLeft;
+        float pivotY = blurView.getHeight() / 2f + t.layoutTop;
+
+        recordingCanvas.scale(1f / t.scaleX, 1f / t.scaleY, pivotX, pivotY);
+        recordingCanvas.rotate(-t.rotationDeg, pivotX, pivotY);
+
         if (frameClearDrawable != null) {
             frameClearDrawable.draw(recordingCanvas);
         }
@@ -266,15 +250,15 @@ public class RenderNodeBlurController implements BlurController {
     }
 
     void updateRotation(float rotation) {
-        blurNode.setRotationZ(-rotation);
+        drawSnapshot();
     }
 
     public void updateScaleX(float scaleX) {
-        blurNode.setScaleX(1 / scaleX);
+        drawSnapshot();
     }
 
     public void updateScaleY(float scaleY) {
-        blurNode.setScaleY(1 / scaleY);
+        drawSnapshot();
     }
 
     private void saveOnScreenLocation() {
