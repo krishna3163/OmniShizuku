@@ -1,6 +1,6 @@
 module aitriage
 
-go 1.26
+go 1.23
 
 // google.golang.org/genai is fetched during the workflow via
 // `go get google.golang.org/genai@latest` + `go mod tidy` (see action.yml),
