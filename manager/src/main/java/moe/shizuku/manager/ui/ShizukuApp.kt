@@ -190,6 +190,10 @@ enum class Detail(
     AUDIO_MASTER,
     TETHER,
     SECURITY,
+    AUTODND,
+    OPTIMIZER,
+    EDGE_LIGHTING,
+    MEDIA_KEYS,
     STEALTH,
     TERMINAL,
     INTENTS,
@@ -417,6 +421,10 @@ fun ShizukuApp() {
                             Detail.AUDIO_MASTER -> moe.shizuku.manager.audio.AudioMasterScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.TETHER -> moe.shizuku.manager.tether.TetherScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.SECURITY -> moe.shizuku.manager.security.ScreenSecurityScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.AUTODND -> moe.shizuku.manager.dnd.AutoDndScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.OPTIMIZER -> moe.shizuku.manager.optimizer.OptimizerScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.EDGE_LIGHTING -> moe.shizuku.manager.lighting.EdgeLightingScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.MEDIA_KEYS -> moe.shizuku.manager.media.MediaKeyScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.TERMINAL -> TerminalScreen(onBack = { detail = null })
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })
