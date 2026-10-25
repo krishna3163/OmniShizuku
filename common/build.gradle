@@ -9,6 +9,11 @@ android {
     }
     testOptions {
         unitTests.returnDefaultValues = true
+
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -17,4 +22,7 @@ dependencies {
     implementation libs.hidden.compat
     compileOnly libs.hidden.stub
     testImplementation 'junit:junit:4.13.2'
+
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.robolectric:robolectric:4.13'
 }
