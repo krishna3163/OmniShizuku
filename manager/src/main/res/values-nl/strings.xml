@@ -260,8 +260,8 @@ De exportfunctie maakt gebruik van SAF (Storage Access Framework). Er is gemeld 
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s ondersteunt geen moderne Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[De oude versie van Shevery wordt sinds maart 2019 niet meer ondersteund. Bovendien werkt de oude versie van Shevery niet op nieuwere Android-systemen.<p>Vraag de ontwikkelaar van <b>%1$s</b> om een update uit te brengen.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s vraagt om de oude Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> ondersteunt de moderne versie van Shevery, maar vraagt om de verouderde versie van Shevery. Dit kan komen doordat Shevery niet actief is; controleer dit alstublieft in de Shevery-app.<p>De verouderde versie van Shevery wordt sinds maart 2019 niet meer ondersteund.]]></string>
-    <string name="dialog_requesting_legacy_button_open_shizuku">Open Shevery</string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> ondersteunt de moderne versie van OmniShizuku, maar vraagt om de verouderde versie van OmniShizuku. Dit kan komen doordat OmniShizuku niet actief is; controleer dit alstublieft in de OmniShizuku-app.<p>De verouderde versie van OmniShizuku wordt sinds maart 2019 niet meer ondersteund.]]></string>
+    <string name="dialog_requesting_legacy_button_open_shizuku">Open OmniShizuku</string>
     <string name="lab_features_title"><![CDATA[Kenmerken van het laboratorium]]></string>
     <string name="lab_features_summary"><![CDATA[Experimentele functies]]></string>
     <string name="shizuku_connectors_title"><![CDATA[Shevery-connectoren]]></string>
@@ -585,8 +585,8 @@ Klaar voor opdrachten.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Vaste naviatiebalk gebruiken in plaats van een gebarenbalk]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Bedien Shevery met automatisatie-apps</string>
-    <string name="home_automation_description">Apps zoals Tasker en MacroDroid kunnen intents verzenden om Shevery automatisch te starten, stoppen, herstarten of om te schakelen.</string>
+    <string name="home_automation_title">Bedien OmniShizuku met automatisatie-apps</string>
+    <string name="home_automation_description">Apps zoals Tasker en MacroDroid kunnen intents verzenden om OmniShizuku automatisch te starten, stoppen, herstarten of om te schakelen.</string>
     <string name="home_automation_button_view_intents">Intents weergeven</string>
     <string name="home_automation_bottom_sheet_intents">Automatisatie-intents</string>
     <string name="home_automation_bottom_sheet_description">Configureer intents in Tasker of MacroDroid, of voer de opdracht rechtstreeks uit vanuit Termux / ADB. Tik om te kopiëren.</string>
@@ -600,7 +600,7 @@ Klaar voor opdrachten.]]></string>
     <string name="home_automation_regenerate_token">Token opnieuw genereren</string>
     <string name="home_automation_regenerate_token_confirm">Weet u zeker dat u het token opnieuw wilt genereren? Geconfigureerde intents moeten worden bijgewerkt met het nieuwe token.</string>
     <string name="automation_security_group_title">Authenticatie &amp; Beveiliging</string>
-    <string name="automation_security_description">Rechtstreekse broadcast-intents vereisen dit geheime authenticatietoken doorgegeven als de \'auth\'-extra (-e auth &lt;token&gt;). Dit beschermt Shevery tegen ongeautoriseerde apps.</string>
+    <string name="automation_security_description">Rechtstreekse broadcast-intents vereisen dit geheime authenticatietoken doorgegeven als de \'auth\'-extra (-e auth &lt;token&gt;). Dit beschermt OmniShizuku tegen ongeautoriseerde apps.</string>
     <string name="automation_regenerate_token_summary">Genereer een nieuw geheim token en maak het huidige ongeldig</string>
     <string name="automation_target_component_label">Ontvangercomponent</string>
     <string name="home_automation_connectors_disabled_status">Connectors uitgeschakeld (Intents inactief)</string>
@@ -613,7 +613,7 @@ Klaar voor opdrachten.]]></string>
     <string name="notification_auth_missing_title">Authenticatietoken vereist</string>
     <string name="notification_auth_missing_message">Voeg de “auth” extra toe aan uw intent. U vindt uw token onder Instellingen → Automatisering.</string>
     <string name="notification_auth_invalid_title">Ongeldige authenticatietoken</string>
-    <string name="notification_auth_invalid_message">Zorg ervoor dat het token in uw intent overeenkomt met dat in Shevery Instellingen.</string>
+    <string name="notification_auth_invalid_message">Zorg ervoor dat het token in uw intent overeenkomt met dat in OmniShizuku Instellingen.</string>
     <string name="notification_connectors_disabled_title">Automatiseringsconnectors uitgeschakeld</string>
-    <string name="notification_connectors_disabled_message">Een automatiseringsintent is geblokkeerd omdat Shevery-connectors zijn uitgeschakeld in Instellingen. Tik om in te schakelen.</string>
+    <string name="notification_connectors_disabled_message">Een automatiseringsintent is geblokkeerd omdat OmniShizuku-connectors zijn uitgeschakeld in Instellingen. Tik om in te schakelen.</string>
 </resources>

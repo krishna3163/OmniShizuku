@@ -220,7 +220,7 @@ Eksportfunktionen bruger SAF (Storage Access Framework). Det forlyder, at MIUI f
     <string name="action_about"><![CDATA[Om]]></string>
     <string name="about_source_code_button"><![CDATA[Kildekode]]></string>
     <string name="about_view_source_code"><![CDATA[Se kildekoden på %s]]></string>
-    <string name="action_stop">Stop Shevery</string>
+    <string name="action_stop">Stop OmniShizuku</string>
     <string name="dialog_stop_message"><![CDATA[Shevery-tjenesten vil blive indstillet.]]></string>
     <string name="service_already_stopped"><![CDATA[Shevery-tjenesten er allerede indstillet.]]></string>
     <string name="service_stop_success"><![CDATA[Shevery-tjenesten er indstillet.]]></string>
@@ -258,7 +258,7 @@ h er blevet kopieret til udklipsholderen.]]></string>
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s understøtter ikke moderne Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Den gamle version af Shevery er udfaset siden marts 2019. Desuden fungerer den gamle version af Shevery ikke på nyere Android-systemer.<p>Bed udvikleren af <b>%1$s</b> om at opdatere appen.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s anmoder om den gamle version af Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> understøtter den moderne version af Shevery, men anmoder om den ældre version af Shevery. Dette kan skyldes, at Shevery ikke kører; tjek venligst i Shevery-appen.<p>Den ældre version af Shevery er udfaset siden marts 2019.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> understøtter den moderne version af OmniShizuku, men anmoder om den ældre version af OmniShizuku. Dette kan skyldes, at OmniShizuku ikke kører; tjek venligst i OmniShizuku-appen.<p>Den ældre version af OmniShizuku er udfaset siden marts 2019.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Åbn Shevery]]></string>
     <string name="lab_features_title"><![CDATA[Laboratoriets faciliteter]]></string>
     <string name="lab_features_summary"><![CDATA[Eksperimentelle funktioner]]></string>
@@ -585,8 +585,8 @@ Klar til kommandoer.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Styr Shevery med automatiseringsapps</string>
-    <string name="home_automation_description">Apps som Tasker og MacroDroid kan sende intents til automatisk at starte, stoppe, genstarte eller skifte Shevery.</string>
+    <string name="home_automation_title">Styr OmniShizuku med automatiseringsapps</string>
+    <string name="home_automation_description">Apps som Tasker og MacroDroid kan sende intents til automatisk at starte, stoppe, genstarte eller skifte OmniShizuku.</string>
     <string name="home_automation_button_view_intents">Vis intents</string>
     <string name="home_automation_bottom_sheet_intents">Automatiserings-intents</string>
     <string name="home_automation_bottom_sheet_description">Konfigurer intents i Tasker eller MacroDroid, eller kør kommandoen direkte fra Termux / ADB. Tryk for at kopiere.</string>
@@ -600,7 +600,7 @@ Klar til kommandoer.]]></string>
     <string name="home_automation_regenerate_token">Gendan token</string>
     <string name="home_automation_regenerate_token_confirm">Er du sikker på, at du vil genoprette tokenet? Eventuelle konfigurerede intents skal opdateres med det nye token.</string>
     <string name="automation_security_group_title">Godkendelse og sikkerhed</string>
-    <string name="automation_security_description">Direkte broadcast-intents kræver denne hemmelige godkendelsestoken sendt som \'auth\'-ekstra (-e auth &lt;token&gt;). Dette beskytter Shevery mod uautoriserede apps.</string>
+    <string name="automation_security_description">Direkte broadcast-intents kræver denne hemmelige godkendelsestoken sendt som \'auth\'-ekstra (-e auth &lt;token&gt;). Dette beskytter OmniShizuku mod uautoriserede apps.</string>
     <string name="automation_regenerate_token_summary">Generer et nyt hemmeligt token og gør det eksisterende ugyldigt</string>
     <string name="automation_target_component_label">Modtagerkomponent</string>
     <string name="home_automation_connectors_disabled_status">Konnektorer deaktiveret (Intents inaktive)</string>
@@ -613,7 +613,7 @@ Klar til kommandoer.]]></string>
     <string name="notification_auth_missing_title">Godkendelsestoken påkrævet</string>
     <string name="notification_auth_missing_message">Tilføj extra “auth” til din intent. Du kan finde dit token under Indstillinger → Automatisering.</string>
     <string name="notification_auth_invalid_title">Ugyldigt godkendelsestoken</string>
-    <string name="notification_auth_invalid_message">Sørg for, at tokenet i din intent matcher det i Shevery Indstillinger.</string>
+    <string name="notification_auth_invalid_message">Sørg for, at tokenet i din intent matcher det i OmniShizuku Indstillinger.</string>
     <string name="notification_connectors_disabled_title">Automatiseringsstik deaktiveret</string>
-    <string name="notification_connectors_disabled_message">En automatiseringsintent blev blokeret, fordi Shevery-stik er deaktiveret i Indstillinger. Tryk for at aktivere.</string>
+    <string name="notification_connectors_disabled_message">En automatiseringsintent blev blokeret, fordi OmniShizuku-stik er deaktiveret i Indstillinger. Tryk for at aktivere.</string>
 </resources>

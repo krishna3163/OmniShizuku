@@ -585,8 +585,8 @@ Gotowość do przyjmowania poleceń.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Używaj stałego paska na dole zamiast pływającej pigułki]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Steruj Shevery za pomocą aplikacji do automatyzacji</string>
-    <string name="home_automation_description">Aplikacje takie jak Tasker i MacroDroid mogą wysyłać intencje, aby automatycznie uruchamiać, zatrzymywać, restartować lub przełączać Shevery.</string>
+    <string name="home_automation_title">Steruj OmniShizuku za pomocą aplikacji do automatyzacji</string>
+    <string name="home_automation_description">Aplikacje takie jak Tasker i MacroDroid mogą wysyłać intencje, aby automatycznie uruchamiać, zatrzymywać, restartować lub przełączać OmniShizuku.</string>
     <string name="home_automation_button_view_intents">Wyświetl intencje</string>
     <string name="home_automation_bottom_sheet_intents">Intencje automatyzacji</string>
     <string name="home_automation_bottom_sheet_description">Skonfiguruj intencje w Taskerze lub MacroDroidzie albo uruchom polecenie bezpośrednio z Termuksa / ADB. Dotknij, aby skopiować.</string>
@@ -600,7 +600,7 @@ Gotowość do przyjmowania poleceń.]]></string>
     <string name="home_automation_regenerate_token">Wygeneruj token ponownie</string>
     <string name="home_automation_regenerate_token_confirm">Czy na pewno chcesz ponownie wygenerować token? Wszystkie skonfigurowane intencje będą wymagały zaktualizowania o nowy token.</string>
     <string name="automation_security_group_title">Uwierzytelnianie i bezpieczeństwo</string>
-    <string name="automation_security_description">Bezpośrednie intencje broadcastowe wymagają przekazania tego tajnego tokenu jako parametru \'auth\' (-e auth &lt;token&gt;). Chroni to Shevery przed nieautoryzowanymi aplikacjami.</string>
+    <string name="automation_security_description">Bezpośrednie intencje broadcastowe wymagają przekazania tego tajnego tokenu jako parametru \'auth\' (-e auth &lt;token&gt;). Chroni to OmniShizuku przed nieautoryzowanymi aplikacjami.</string>
     <string name="automation_regenerate_token_summary">Wygeneruj nowy tajny token i unieważnij istniejący</string>
     <string name="automation_target_component_label">Komponent odbiornika</string>
     <string name="home_automation_connectors_disabled_status">Konektory wyłączone (Intencje nieaktywne)</string>
@@ -613,7 +613,7 @@ Gotowość do przyjmowania poleceń.]]></string>
     <string name="notification_auth_missing_title">Wymagany token uwierzytelniania</string>
     <string name="notification_auth_missing_message">Dodaj parametr “auth” do intencji. Swój token znajdziesz w Ustawienia → Automatyzacja.</string>
     <string name="notification_auth_invalid_title">Nieprawidłowy token uwierzytelniania</string>
-    <string name="notification_auth_invalid_message">Upewnij się, że token w intencji zgadza się z tokenem w Ustawieniach Shevery.</string>
+    <string name="notification_auth_invalid_message">Upewnij się, że token w intencji zgadza się z tokenem w Ustawieniach OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Konektory automatyzacji wyłączone</string>
-    <string name="notification_connectors_disabled_message">Intencja automatyzacji została zablokowana, ponieważ konektory Shevery są wyłączone w Ustawieniach. Dotknij, aby włączyć.</string>
+    <string name="notification_connectors_disabled_message">Intencja automatyzacji została zablokowana, ponieważ konektory OmniShizuku są wyłączone w Ustawieniach. Dotknij, aby włączyć.</string>
 </resources>

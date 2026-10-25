@@ -258,7 +258,7 @@
     <string name="dialog_legacy_not_support_title"><![CDATA[Το %1$s δεν υποστηρίζει το σύγχρονο Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Η παλαιά έκδοση του Shevery έχει καταργηθεί από τον Μάρτιο του 2019. Επιπλέον, η παλαιά έκδοση του Shevery δεν λειτουργεί σε νεότερα συστήματα Android.<p>Παρακαλούμε ζητήστε από τον προγραμματιστή του <b>%1$s</b> να πραγματοποιήσει ενημέρωση.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[Το %1$s ζητά το παλαιό Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> διαθέτει υποστήριξη για τη σύγχρονη έκδοση του Shevery, αλλά ζητά την παλαιά έκδοση του Shevery. Αυτό μπορεί να οφείλεται στο ότι το Shevery δεν εκτελείται· παρακαλώ, ελέγξτε την εφαρμογή Shevery.<p>Η παλαιά έκδοση του Shevery έχει καταργηθεί από τον Μάρτιο του 2019.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> διαθέτει υποστήριξη για τη σύγχρονη έκδοση του OmniShizuku, αλλά ζητά την παλαιά έκδοση του OmniShizuku. Αυτό μπορεί να οφείλεται στο ότι το OmniShizuku δεν εκτελείται· παρακαλώ, ελέγξτε την εφαρμογή OmniShizuku.<p>Η παλαιά έκδοση του OmniShizuku έχει καταργηθεί από τον Μάρτιο του 2019.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Άνοιξε το Shevery]]></string>
     <string name="lab_features_title"><![CDATA[Χαρακτηριστικά του εργαστηρίου]]></string>
     <string name="lab_features_summary"><![CDATA[Πειραματικά χαρακτηριστικά]]></string>
@@ -299,7 +299,7 @@
     <string name="watchdog_service_text"><![CDATA[Παρακολούθηση της υπηρεσίας Shevery για ανάκτηση μέσω keep-alive]]></string>
     <string name="watchdog_action_turn_off"><![CDATA[Απενεργοποίηση]]></string>
     <string name="watchdog_action_channel_settings"><![CDATA[Απενεργοποίηση ειδοποιήσεων]]></string>
-    <string name="notification_control_channel_name">Έλεγχος Shevery</string>
+    <string name="notification_control_channel_name">Έλεγχος OmniShizuku</string>
     <string name="notification_startup_channel_name"><![CDATA[Shevery: μια νεοφυής επιχείρηση]]></string>
     <string name="notification_startup_title"><![CDATA[Έναρξη του Shevery]]></string>
     <string name="notification_startup_enabling_wifi"><![CDATA[Ενεργοποίηση εντοπισμού σφαλμάτων μέσω Wi-Fi…]]></string>
@@ -585,8 +585,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Έλεγχος του Shevery με εφαρμογές αυτοματισμού</string>
-    <string name="home_automation_description">Εφαρμογές όπως το Tasker και το MacroDroid μπορούν να στείλουν intents για αυτόματη εκκίνηση, διακοπή, επανεκκίνηση ή εναλλαγή του Shevery.</string>
+    <string name="home_automation_title">Έλεγχος του OmniShizuku με εφαρμογές αυτοματισμού</string>
+    <string name="home_automation_description">Εφαρμογές όπως το Tasker και το MacroDroid μπορούν να στείλουν intents για αυτόματη εκκίνηση, διακοπή, επανεκκίνηση ή εναλλαγή του OmniShizuku.</string>
     <string name="home_automation_button_view_intents">Προβολή intents</string>
     <string name="home_automation_bottom_sheet_intents">Intents αυτοματισμού</string>
     <string name="home_automation_bottom_sheet_description">Ρυθμίστε intents στο Tasker ή το MacroDroid ή εκτελέστε την εντολή απευθείας από το Termux / ADB. Πατήστε για αντιγραφή.</string>
@@ -600,7 +600,7 @@
     <string name="home_automation_regenerate_token">Αναγέννηση διακριτικού</string>
     <string name="home_automation_regenerate_token_confirm">Είστε βέβαιοι ότι θέλετε να αναγεννήσετε το διακριτικό; Τυχόν διαμορφωμένα intents θα πρέπει να ενημερωθούν με το νέο διακριτικό.</string>
     <string name="automation_security_group_title">Έλεγχος ταυτότητας και ασφάλεια</string>
-    <string name="automation_security_description">Τα άμεσα intents μετάδοσης απαιτούν αυτό το μυστικό διακριτικό ως πρόσθετο \'auth\' (-e auth &lt;token&gt;). Αυτό προστατεύει το Shevery από μη εξουσιοδοτημένες εφαρμογές.</string>
+    <string name="automation_security_description">Τα άμεσα intents μετάδοσης απαιτούν αυτό το μυστικό διακριτικό ως πρόσθετο \'auth\' (-e auth &lt;token&gt;). Αυτό προστατεύει το OmniShizuku από μη εξουσιοδοτημένες εφαρμογές.</string>
     <string name="automation_regenerate_token_summary">Δημιουργία νέου μυστικού διακριτικού και ακύρωση του υπάρχοντος</string>
     <string name="automation_target_component_label">Στοιχείο δέκτη</string>
     <string name="home_automation_connectors_disabled_status">Σύνδεσμοι απενεργοποιημένοι (Ανενεργά intents)</string>
@@ -613,7 +613,7 @@
     <string name="notification_auth_missing_title">Απαιτείται διακριτικό ελέγχου ταυτότητας</string>
     <string name="notification_auth_missing_message">Προσθέστε το extra “auth” στο intent σας. Μπορείτε να βρείτε το διακριτικό σας στις Ρυθμίσεις → Αυτοματισμός.</string>
     <string name="notification_auth_invalid_title">Μη έγκυρο διακριτικό ελέγχου ταυτότητας</string>
-    <string name="notification_auth_invalid_message">Βεβαιωθείτε ότι το διακριτικό στο intent ταιριάζει με αυτό στις Ρυθμίσεις του Shevery.</string>
+    <string name="notification_auth_invalid_message">Βεβαιωθείτε ότι το διακριτικό στο intent ταιριάζει με αυτό στις Ρυθμίσεις του OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Σύνδεσμοι αυτοματισμού απενεργοποιημένοι</string>
-    <string name="notification_connectors_disabled_message">Ένα intent αυτοματισμού αποκλείστηκε επειδή οι σύνδεσμοι του Shevery είναι απενεργοποιημένοι στις Ρυθμίσεις. Πατήστε για ενεργοποίηση.</string>
+    <string name="notification_connectors_disabled_message">Ένα intent αυτοματισμού αποκλείστηκε επειδή οι σύνδεσμοι του OmniShizuku είναι απενεργοποιημένοι στις Ρυθμίσεις. Πατήστε για ενεργοποίηση.</string>
 </resources>

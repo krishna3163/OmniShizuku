@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Открыть Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> имеет поддержку актуального Shevery, но запрашивает его устаревшую версию. Возможно это происходит оттого, что Shevery не запущен, пожалуйста, перепроверьте в приложении Shevery.<p>Изначальная версия Shevery признана устаревшей ещё в марте 2019 года.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> имеет поддержку актуального OmniShizuku, но запрашивает его устаревшую версию. Возможно это происходит оттого, что OmniShizuku не запущен, пожалуйста, перепроверьте в приложении OmniShizuku.<p>Изначальная версия OmniShizuku признана устаревшей ещё в марте 2019 года.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s запрашивает устаревшую версию Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Изначальная версия Shevery устарела с марта 2019 года. Кроме того, она не работает на новых системах Android.<p>Пожалуйста, попросите разработчика <b>%1$s</b> внести поправки.]]></string>
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s не поддерживает актуальную версию Shevery]]></string>
@@ -634,8 +634,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[Использовать фиксированную нижнюю панель вместо плавающей капсулы]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Управление Shevery через автоматизацию</string>
-    <string name="home_automation_description">Приложения вроде Tasker и MacroDroid могут отправлять интенты для автоматического запуска, остановки, перезапуска или переключения Shevery.</string>
+    <string name="home_automation_title">Управление OmniShizuku через автоматизацию</string>
+    <string name="home_automation_description">Приложения вроде Tasker и MacroDroid могут отправлять интенты для автоматического запуска, остановки, перезапуска или переключения OmniShizuku.</string>
     <string name="home_automation_button_view_intents">Просмотр интентов</string>
     <string name="home_automation_bottom_sheet_intents">Интенты автоматизации</string>
     <string name="home_automation_bottom_sheet_description">Настройте интенты в Tasker или MacroDroid либо выполните команду напрямую из Termux / ADB. Нажмите для копирования.</string>
@@ -649,7 +649,7 @@
     <string name="home_automation_regenerate_token">Перегенерировать токен</string>
     <string name="home_automation_regenerate_token_confirm">Вы уверены, что хотите перегенерировать токен? Все настроенные интенты в Tasker или MacroDroid потребуется обновить.</string>
     <string name="automation_security_group_title">Аутентификация и безопасность</string>
-    <string name="automation_security_description">Прямые broadcast-интенты требуют передачи секретного токена через параметр \'auth\' (-e auth &lt;token&gt;). Это защищает Shevery от несанкционированных приложений.</string>
+    <string name="automation_security_description">Прямые broadcast-интенты требуют передачи секретного токена через параметр \'auth\' (-e auth &lt;token&gt;). Это защищает OmniShizuku от несанкционированных приложений.</string>
     <string name="automation_regenerate_token_summary">Сгенерировать новый секретный токен и аннулировать текущий</string>
     <string name="automation_target_component_label">Компонент приемника</string>
     <string name="home_automation_connectors_disabled_status">Коннекторы отключены (интенты неактивны)</string>
@@ -662,7 +662,7 @@
     <string name="notification_auth_missing_title">Требуется токен аутентификации</string>
     <string name="notification_auth_missing_message">Добавьте extra «auth» в ваш интент. Токен можно найти в меню «Настройки → Автоматизация».</string>
     <string name="notification_auth_invalid_title">Недействительный токен аутентификации</string>
-    <string name="notification_auth_invalid_message">Убедитесь, что токен в интенте совпадает с токеном в настройках Shevery.</string>
+    <string name="notification_auth_invalid_message">Убедитесь, что токен в интенте совпадает с токеном в настройках OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Коннекторы автоматизации отключены</string>
-    <string name="notification_connectors_disabled_message">Интент автоматизации заблокирован, так как коннекторы Shevery отключены в Настройках. Нажмите, чтобы включить.</string>
+    <string name="notification_connectors_disabled_message">Интент автоматизации заблокирован, так как коннекторы OmniShizuku отключены в Настройках. Нажмите, чтобы включить.</string>
 </resources>

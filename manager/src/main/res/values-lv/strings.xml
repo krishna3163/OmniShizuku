@@ -258,7 +258,7 @@ Eksportēšanas funkcija izmanto SAF (Storage Access Framework). Ir ziņots, ka 
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s neatbalsta mūsdienīgo Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Vecā versija „Shevery“ ir novecojusi kopš 2019. gada marta. Turklāt vecā versija „Shevery“ nedarbojas jaunākajās „Android“ sistēmās.<p>Lūdzu, lūdziet <b>%1$s</b> izstrādātāju veikt atjauninājumu.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s pieprasa vecā versija Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> atbalsta modernāko Shevery versiju, taču tiek pieprasīta vecā Shevery versija. Iespējams, tas notiek tāpēc, ka Shevery nedarbojas; lūdzu, pārbaudiet Shevery lietotnē.<p>Vecā Shevery versija vairs netiek atbalstīta kopš 2019. gada marta.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> atbalsta modernāko OmniShizuku versiju, taču tiek pieprasīta vecā OmniShizuku versija. Iespējams, tas notiek tāpēc, ka OmniShizuku nedarbojas; lūdzu, pārbaudiet OmniShizuku lietotnē.<p>Vecā OmniShizuku versija vairs netiek atbalstīta kopš 2019. gada marta.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Atvērt Shevery]]></string>
     <string name="lab_features_title"><![CDATA[Laboratorijas iespējas]]></string>
     <string name="lab_features_summary"><![CDATA[Eksperimentālās funkcijas]]></string>
@@ -585,8 +585,8 @@ Gatava komandu pieņemšanai.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -600,7 +600,7 @@ Gatava komandu pieņemšanai.]]></string>
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -613,7 +613,7 @@ Gatava komandu pieņemšanai.]]></string>
     <string name="notification_auth_missing_title">Auth token required</string>
     <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under Iestatījumi → Automation.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
-    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery Iestatījumi.</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku Iestatījumi.</string>
     <string name="notification_connectors_disabled_title">Automation connectors disabled</string>
-    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in Iestatījumi. Tap to enable.</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because OmniShizuku connectors are disabled in Iestatījumi. Tap to enable.</string>
 </resources>

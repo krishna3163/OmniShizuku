@@ -585,8 +585,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">ควบคุม Shevery ด้วยแอปอัตโนมัติ</string>
-    <string name="home_automation_description">แอปอย่าง Tasker และ MacroDroid สามารถส่ง Intent เพื่อเริ่ม หยุด รีสตาร์ท หรือสลับ Shevery โดยอัตโนมัติ</string>
+    <string name="home_automation_title">ควบคุม OmniShizuku ด้วยแอปอัตโนมัติ</string>
+    <string name="home_automation_description">แอปอย่าง Tasker และ MacroDroid สามารถส่ง Intent เพื่อเริ่ม หยุด รีสตาร์ท หรือสลับ OmniShizuku โดยอัตโนมัติ</string>
     <string name="home_automation_button_view_intents">ดู Intent</string>
     <string name="home_automation_bottom_sheet_intents">Intent อัตโนมัติ</string>
     <string name="home_automation_bottom_sheet_description">กำหนดค่า Intent ใน Tasker หรือ MacroDroid หรือเรียกใช้คำสั่งโดยตรงจาก Termux / ADB แตะเพื่อคัดลอก</string>
@@ -600,7 +600,7 @@
     <string name="home_automation_regenerate_token">สร้างโทเค็นใหม่</string>
     <string name="home_automation_regenerate_token_confirm">แน่ใจหรือไม่ว่าต้องการสร้างโทเค็นใหม่ Intent ที่กำหนดค่าไว้จะต้องอัปเดตด้วยโทเค็นใหม่</string>
     <string name="automation_security_group_title">การตรวจสอบสิทธิ์และความปลอดภัย</string>
-    <string name="automation_security_description">Intent การแพร่ภาพโดยตรงต้องใช้โทเค็นลับนี้ส่งเป็นส่วนเสริม \'auth\' (-e auth &lt;token&gt;) ซึ่งจะช่วยปกป้อง Shevery จากแอปที่ไม่ได้รับอนุญาต</string>
+    <string name="automation_security_description">Intent การแพร่ภาพโดยตรงต้องใช้โทเค็นลับนี้ส่งเป็นส่วนเสริม \'auth\' (-e auth &lt;token&gt;) ซึ่งจะช่วยปกป้อง OmniShizuku จากแอปที่ไม่ได้รับอนุญาต</string>
     <string name="automation_regenerate_token_summary">สร้างโทเค็นลับใหม่และยกเลิกโทเค็นเดิม</string>
     <string name="automation_target_component_label">คอมโพเนนต์ตัวรับ</string>
     <string name="home_automation_connectors_disabled_status">ตัวเชื่อมต่อถูกปิดใช้งาน (Intent ไม่ทำงาน)</string>
@@ -613,7 +613,7 @@
     <string name="notification_auth_missing_title">ต้องใช้โทเค็นการยืนยันตัวตน</string>
     <string name="notification_auth_missing_message">เพิ่ม “auth” พิเศษใน Intent ของคุณ คุณสามารถค้นหาโทเค็นได้ที่ การตั้งค่า → อัตโนมัติ</string>
     <string name="notification_auth_invalid_title">โทเค็นการยืนยันตัวตนไม่ถูกต้อง</string>
-    <string name="notification_auth_invalid_message">ตรวจสอบให้แน่ใจว่าโทเค็นใน Intent ของคุณตรงกับโทเค็นในการตั้งค่า Shevery</string>
+    <string name="notification_auth_invalid_message">ตรวจสอบให้แน่ใจว่าโทเค็นใน Intent ของคุณตรงกับโทเค็นในการตั้งค่า OmniShizuku</string>
     <string name="notification_connectors_disabled_title">ตัวเชื่อมต่ออัตโนมัติถูกปิดใช้งาน</string>
-    <string name="notification_connectors_disabled_message">Intent อัตโนมัติถูกบล็อกเนื่องจากตัวเชื่อมต่อ Shevery ถูกปิดใช้งานในการตั้งค่า แตะเพื่อเปิดใช้งาน</string>
+    <string name="notification_connectors_disabled_message">Intent อัตโนมัติถูกบล็อกเนื่องจากตัวเชื่อมต่อ OmniShizuku ถูกปิดใช้งานในการตั้งค่า แตะเพื่อเปิดใช้งาน</string>
 </resources>

@@ -153,6 +153,28 @@ public class ShizukuSettings {
         getPreferences().edit().putBoolean(KEEP_START_ON_BOOT, enabled).apply();
     }
 
+    public static void setStartOnBoot(Context context, boolean enabled) {
+        getPreferences().edit().putBoolean(KEEP_START_ON_BOOT, enabled).apply();
+        updateBootReceiver(context);
+    }
+
+    public static void updateBootReceiver(Context context) {
+        if (context == null) return;
+        boolean needed = getPreferences().getBoolean(KEEP_START_ON_BOOT, false);
+        android.content.ComponentName bootCompleteReceiver = new android.content.ComponentName(
+            context.getPackageName(),
+            "moe.shizuku.manager.receiver.BootCompleteReceiver"
+        );
+        try {
+            context.getPackageManager().setComponentEnabledSetting(
+                bootCompleteReceiver,
+                needed ? android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_ENABLED : android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                android.content.pm.PackageManager.DONT_KILL_APP
+            );
+        } catch (Throwable ignored) {
+        }
+    }
+
     public static boolean isTcpModePromptSuppressed() {
         return getPreferences().getBoolean(SUPPRESS_TCP_MODE_PROMPT, false);
     }

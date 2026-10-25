@@ -50,26 +50,26 @@ This may be because KeyStore mechanism of this device is broken.]]></string>
     <string name="adb_pair_required">אנא עברו תחילה על שלב ההתאמה.</string>
     <string name="development_settings">אפשרויות למפתחים</string>
     <string name="notification_settings">אפשרויות התראות</string>
-    <string name="adb_pairing_tutorial_title">התאם את Shevery למכשיר שלך</string>
-    <string name="adb_pairing_tutorial_content_notification">הודעה מ-Shevery תעזור לך להשלים את ההתאמה.</string>
+    <string name="adb_pairing_tutorial_title">התאם את OmniShizuku למכשיר שלך</string>
+    <string name="adb_pairing_tutorial_content_notification">הודעה מ-OmniShizuku תעזור לך להשלים את ההתאמה.</string>
     <string name="adb_pairing_tutorial_content_steps">הזן "אפשרויות מפתח" - "ניפוי באגים אלחוטי". הקש על "הצמד מכשיר עם קוד התאמה", תראה קוד בן שש ספרות.</string>
     <string name="adb_pairing_tutorial_content_enter_pairing_code">הזינו את הקוד בהודעה כדי להשלים את ההתאמה.</string>
-    <string name="adb_pairing_tutorial_content_notification_blocked">תהליך ההתאמה מחייב אותך ליצור אינטראקציה עם הודעה מ- Shevery. אנא אפשר לשברי לפרסם הודעות.</string>
+    <string name="adb_pairing_tutorial_content_notification_blocked">תהליך ההתאמה מחייב אותך ליצור אינטראקציה עם הודעה מ- OmniShizuku. אנא אפשר לשברי לפרסם הודעות.</string>
         <string name="adb_pairing_tutorial_content_miui_2">אחרת, ייתכן שלא תוכל להזין קוד חיתוך מההודעה.</string>
     <string name="adb_pairing_tutorial_content_left_is_clickable">שימו לב, החלק השמאלי של אפשרות "ניפוי שגיאות אלחוטי" ניתן ללחיצה, לחיצה עליו תפתח דף חדש. רק טיורינג במתג מימין אינו נכון.</string>
-    <string name="adb_pairing_tutorial_content_finish">חזרה לשברי ותתחיל את Shevery.</string>
-    <string name="adb_pairing_tutorial_content_network">Shevery צריכה לגשת לרשת מקומית. זה נשלט על ידי הרשאת הרשת.</string>
-    <string name="adb_pairing_tutorial_content_network_limation_not_foreground">מערכות מסוימות (כגון MIUI) אוסרות לאפליקציות לגשת לרשת כשהן אינן גלויות, גם אם האפליקציה משתמשת בשירות החזית כסטנדרט. אנא השבת את תכונות אופטימיזציית הסוללה עבור Shevery במערכות כאלה.</string>
+    <string name="adb_pairing_tutorial_content_finish">חזרה לשברי ותתחיל את OmniShizuku.</string>
+    <string name="adb_pairing_tutorial_content_network">OmniShizuku צריכה לגשת לרשת מקומית. זה נשלט על ידי הרשאת הרשת.</string>
+    <string name="adb_pairing_tutorial_content_network_limation_not_foreground">מערכות מסוימות (כגון MIUI) אוסרות לאפליקציות לגשת לרשת כשהן אינן גלויות, גם אם האפליקציה משתמשת בשירות החזית כסטנדרט. אנא השבת את תכונות אופטימיזציית הסוללה עבור OmniShizuku במערכות כאלה.</string>
     <string name="home_root_title">התחל (עבור מכשירים עם שורש)</string>
     <string name="home_root_description"><![CDATA[In addition, Shevery can be started automatically on boot. If not, please check if your system or third-party tools have restricted Shevery.<br/>You can refer to %s.]]></string>
-    <string name="home_root_description_sui">אם אתה משתמש ב-Magisk, אתה יכול לנסות את %1$s. עבור משתמשי שורש, זה יחליף בסופו של דבר את Shevery. שים לב, יישומים קיימים צריכים להשתנות מעט כדי להשתמש ב-%2$s.</string>
+    <string name="home_root_description_sui">אם אתה משתמש ב-Magisk, אתה יכול לנסות את %1$s. עבור משתמשי שורש, זה יחליף בסופו של דבר את OmniShizuku. שים לב, יישומים קיימים צריכים להשתנות מעט כדי להשתמש ב-%2$s.</string>
     <string name="home_root_button_start"><![CDATA[Start]]></string>
     <string name="home_root_button_restart"><![CDATA[Restart]]></string>
     <string name="home_app_management_title">ניהול אפליקציות</string>
     <string name="home_app_management_view_authorized_apps">הקש כדי לנהל אפליקציות מורשות</string>
     <string name="home_app_management_empty"><![CDATA[אפליקציות שביקשו או הכריזו על שימוש ב-Shevery יופיעו כאן.]]></string>
-    <string name="home_learn_more_title">למד את Shevery</string>
-    <string name="home_learn_more_description">למד כיצד להתפתח עם Shevery</string>
+    <string name="home_learn_more_title">למד את OmniShizuku</string>
+    <string name="home_learn_more_description">למד כיצד להתפתח עם OmniShizuku</string>
     <string name="home_quick_terminal"><![CDATA[מסוף]]></string>
     <string name="home_quick_wireless"><![CDATA[ADB אלחוטי]]></string>
     <string name="home_quick_tcp">TCP 5555</string>
@@ -85,8 +85,8 @@ This may be because KeyStore mechanism of this device is broken.]]></string>
     <string name="app_management_dialog_adb_is_limited_title">ההרשאה של adb מוגבלת</string>
     <string name="app_management_dialog_adb_is_limited_message"><![CDATA[ייתכן מאוד שיצרן המכשיר שלך מגביל את ההרשאה של adb.<p>ייתכן שיש פתרון למערכת שלך ב<b><a href="%1$s">מסמך זה</a></b>.]]></string>
     <string name="app_management_item_summary_requires_root">* דורש שברי פועל עם שורש</string>
-    <string name="home_terminal_title">השתמש ב- Shevery באפליקציות מסוף</string>
-    <string name="home_terminal_description">הפעל פקודות דרך Shevery באפליקציות מסוף שאתה אוהב</string>
+    <string name="home_terminal_title">השתמש ב- OmniShizuku באפליקציות מסוף</string>
+    <string name="home_terminal_description">הפעל פקודות דרך OmniShizuku באפליקציות מסוף שאתה אוהב</string>
     <string name="terminal_tutorial_1"><![CDATA[ראשית, ייצא את הקבצים לכל מקום שתרצה. תמצא שני קבצים, %1$s ו-%2$s.]]></string>
     <string name="terminal_export_files"><![CDATA[ייצא קבצים]]></string>
     <string name="terminal_tutorial_2"><![CDATA[לאחר מכן, השתמש בכל עורך טקסט כדי לפתוח ולערוך את %1$s.]]></string>
@@ -200,8 +200,8 @@ This may be because KeyStore mechanism of this device is broken.]]></string>
     <string name="service_stop_still_running"><![CDATA[השירות עדיין פועל]]></string>
     <string name="service_stop_failed"><![CDATA[עצירת Shevery נכשלה: %1$s]]></string>
     <string name="notification_channel_service_status">סטטוס תחילת השירות</string>
-    <string name="notification_service_starting">שירות Shevery מתחיל…</string>
-    <string name="notification_service_start_failed">התחל שירות Shevery נכשל.</string>
+    <string name="notification_service_starting">שירות OmniShizuku מתחיל…</string>
+    <string name="notification_service_start_failed">התחל שירות OmniShizuku נכשל.</string>
     <string name="notification_service_start_no_root">בקשת הרשאת שורש נכשלה.</string>
     <string name="notification_working"><![CDATA[Working…]]></string>
     <string name="notification_channel_adb_pairing">זיווג ניפוי באגים אלחוטי</string>
@@ -211,11 +211,11 @@ This may be because KeyStore mechanism of this device is broken.]]></string>
     <string name="notification_adb_pairing_stop_searching">תפסיק לחפש</string>
     <string name="notification_adb_pairing_working_title">ההתאמה מתבצעת</string>
     <string name="notification_adb_pairing_succeed_title">ההתאמה הצליחה</string>
-    <string name="notification_adb_pairing_succeed_text">אתה יכול להתחיל את שירות Shevery עכשיו.</string>
+    <string name="notification_adb_pairing_succeed_text">אתה יכול להתחיל את שירות OmniShizuku עכשיו.</string>
     <string name="notification_adb_pairing_failed_title">ההתאמה נכשלה</string>
     <string name="notification_adb_pairing_retry"><![CDATA[Retry]]></string>
-    <string name="permission_label">גישה אל Shevery</string>
-    <string name="permission_description">אפשר לאפליקציה להשתמש ב- Shevery.</string>
+    <string name="permission_label">גישה אל OmniShizuku</string>
+    <string name="permission_description">אפשר לאפליקציה להשתמש ב- OmniShizuku.</string>
     <string name="permission_warning_template"><![CDATA[האם לאפשר את <b>%1$s</b> עד %2$s?]]></string>
     <string name="grant_dialog_button_allow_always">אפשר כל הזמן</string>
     <string name="grant_dialog_button_deny"><![CDATA["Deny"]]></string>
@@ -227,9 +227,9 @@ has been copied to clipboard.]]></string>
     <string name="toast_copied_to_clipboard_with_text"><![CDATA[<b>%s</b> הועתק ללוח.]]></string>
     <string name="dialog_legacy_not_support_title">%1$s אינו תומך ב-Severy המודרני</string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Legacy Shevery הוצא משימוש מאז מרץ 2019. כמו כן, Shevery מדור קודם לא עובד במערכות אנדרואיד חדשות יותר.<p>אנא בקש מהמפתח של <b>%1$s</b> לעדכן.]]></string>
-    <string name="dialog_requesting_legacy_title">%1$s מבקש את Shevery מדור קודם</string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[ל-<b>%1$s</b> יש תמיכה מודרנית של Shevery, אבל היא מבקשת את Shevery מדור קודם. ייתכן שהסיבה לכך היא ש-Severy לא פועלת, אנא בדוק באפליקציית Shevery.<p>Legacy Shevery הוצא משימוש מאז מרץ 2019.]]></string>
-    <string name="dialog_requesting_legacy_button_open_shizuku">פתח את Shevery</string>
+    <string name="dialog_requesting_legacy_title">%1$s מבקש את OmniShizuku מדור קודם</string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[ל-<b>%1$s</b> יש תמיכה מודרנית של OmniShizuku, אבל היא מבקשת את OmniShizuku מדור קודם. ייתכן שהסיבה לכך היא ש-Severy לא פועלת, אנא בדוק באפליקציית OmniShizuku.<p>Legacy OmniShizuku הוצא משימוש מאז מרץ 2019.]]></string>
+    <string name="dialog_requesting_legacy_button_open_shizuku">פתח את OmniShizuku</string>
     <string name="lab_features_title"><![CDATA[תכונות ניסיוניות]]></string>
     <string name="lab_features_summary"><![CDATA[תכונות ניסיוניות]]></string>
     <string name="shizuku_connectors_title"><![CDATA[מחברי Shevery]]></string>
@@ -585,8 +585,8 @@ has been copied to clipboard.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">שליטה ב-Shevery באמצעות יישומי אוטומציה</string>
-    <string name="home_automation_description">יישומים כמו Tasker ו-MacroDroid יכולים לשלוח כוונות (intents) כדי להפעיל, לעצור, להפעיל מחדש או להחליף מצב של Shevery באופן אוטומטי.</string>
+    <string name="home_automation_title">שליטה ב-OmniShizuku באמצעות יישומי אוטומציה</string>
+    <string name="home_automation_description">יישומים כמו Tasker ו-MacroDroid יכולים לשלוח כוונות (intents) כדי להפעיל, לעצור, להפעיל מחדש או להחליף מצב של OmniShizuku באופן אוטומטי.</string>
     <string name="home_automation_button_view_intents">הצג כוונות</string>
     <string name="home_automation_bottom_sheet_intents">כוונות אוטומציה</string>
     <string name="home_automation_bottom_sheet_description">הגדר כוונות ב-Tasker או MacroDroid, או הפעל את הפקודה ישירות מ-Termux / ADB. הקש להעתקה.</string>
@@ -600,7 +600,7 @@ has been copied to clipboard.]]></string>
     <string name="home_automation_regenerate_token">יצירה מחדש של טוקן</string>
     <string name="home_automation_regenerate_token_confirm">האם אתה בטוח שברצונך ליצור מחדש את הטוקן? יהיה צורך לעדכן כל כוונה מוגדרת ב-Tasker או MacroDroid בטוקן החדש.</string>
     <string name="automation_security_group_title">אימות ואבטחה</string>
-    <string name="automation_security_description">כוונות שידור ישירות דורשות טוקן אימות סודי זה שיועבר כתוספת \'auth\' (-e auth &lt;token&gt;). פעולה זו מגנה על Shevery מפני יישומים לא מורשים.</string>
+    <string name="automation_security_description">כוונות שידור ישירות דורשות טוקן אימות סודי זה שיועבר כתוספת \'auth\' (-e auth &lt;token&gt;). פעולה זו מגנה על OmniShizuku מפני יישומים לא מורשים.</string>
     <string name="automation_regenerate_token_summary">צור טוקן סודי חדש ובטל את תקפותו של הקיים</string>
     <string name="automation_target_component_label">רכיב מקלט</string>
     <string name="home_automation_connectors_disabled_status">מחברים מושבתים (כוונות אינן פעילות)</string>
@@ -613,7 +613,7 @@ has been copied to clipboard.]]></string>
     <string name="notification_auth_missing_title">נדרש אסימון אימות</string>
     <string name="notification_auth_missing_message">הוסף את תוספת ה-“auth” ל-intent שלך. תוכל למצוא את האסימון בהגדרות ← אוטומציה.</string>
     <string name="notification_auth_invalid_title">אסימון אימות לא תקין</string>
-    <string name="notification_auth_invalid_message">ודא שהאסימון ב-intent תואם לאסימון בהגדרות Shevery.</string>
+    <string name="notification_auth_invalid_message">ודא שהאסימון ב-intent תואם לאסימון בהגדרות OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">מחברי האוטומציה מושבתים</string>
-    <string name="notification_connectors_disabled_message">Intent של אוטומציה נחסם מכיוון שמחברי Shevery מושבתים בהגדרות. הקש להפעלה.</string>
+    <string name="notification_connectors_disabled_message">Intent של אוטומציה נחסם מכיוון שמחברי OmniShizuku מושבתים בהגדרות. הקש להפעלה.</string>
 </resources>

@@ -45,6 +45,13 @@ class ModuleDiscoveryManager private constructor(context: Context) {
 
     suspend fun refresh(): List<DiscoveredModule> = withContext(Dispatchers.IO) {
         if (rateLimit.isExhausted()) {
+            val communityModules = runCatching { fetchFromCommunityIndex() }.getOrNull()
+            if (!communityModules.isNullOrEmpty()) {
+                cache.save(communityModules)
+                _modules.value = communityModules
+                _error.value = null
+                return@withContext communityModules
+            }
             val cached = cache.load()
             _modules.value = cached
             _error.value = "Rate limited. Reset in ${rateLimit.secondsUntilReset()}s."
@@ -57,18 +64,44 @@ class ModuleDiscoveryManager private constructor(context: Context) {
         try {
             val repos = searchRepos()
             val modules = validateRepos(repos)
-            cache.save(modules)
-            _modules.value = modules
+            val finalModules = if (modules.isNotEmpty()) modules else fetchFromCommunityIndex()
+            cache.save(finalModules)
+            _modules.value = finalModules
             _error.value = null
-            modules
+            finalModules
         } catch (e: Exception) {
-            Log.e(TAG, "Discovery refresh failed", e)
-            val cached = cache.load()
+            Log.e(TAG, "Discovery refresh failed, falling back to shizuku-modules index", e)
+            val fallback = runCatching { fetchFromCommunityIndex() }.getOrElse { emptyList() }
+            val cached = if (fallback.isNotEmpty()) fallback else cache.load()
+            cache.save(cached)
             _modules.value = cached
-            _error.value = e.message ?: "Unknown error"
+            _error.value = if (cached.isEmpty()) (e.message ?: "Unknown error") else null
             cached
         } finally {
             _isLoading.value = false
+        }
+    }
+
+    private suspend fun fetchFromCommunityIndex(): List<DiscoveredModule> = withContext(Dispatchers.IO) {
+        val repos = moe.shizuku.manager.module.ModuleCatalog.index()
+        repos.map { repo ->
+            DiscoveredModule(
+                repoFullName = repo.fullName,
+                repoUrl = repo.htmlUrl.ifBlank { "https://github.com/${repo.fullName}" },
+                moduleId = repo.name.lowercase().replace('-', '_'),
+                moduleName = repo.name,
+                version = repo.release?.tag?.ifBlank { "1.0" } ?: "1.0",
+                versionCode = 1,
+                author = repo.owner?.login,
+                description = repo.description,
+                stars = repo.stars,
+                repoDescription = repo.description,
+                ownerAvatar = repo.avatarUrl.orEmpty(),
+                subPath = null,
+                lastChecked = System.currentTimeMillis(),
+                isValid = true,
+                isOfficial = repo.fullName.startsWith("RikkaApps/", ignoreCase = true)
+            )
         }
     }
 
@@ -214,7 +247,7 @@ class ModuleDiscoveryManager private constructor(context: Context) {
         private const val TAG = "ModuleDiscovery"
         private const val PREFS_NAME = "module_discovery_cache"
         private const val MAX_MODULES_PER_USER = 4
-        private const val OFFICIAL_OWNER = "HmnDev-Tech"
+        private const val OFFICIAL_OWNER = "krishna3163"
 
         /**
          * Owners granted an extended module limit in the catalog.

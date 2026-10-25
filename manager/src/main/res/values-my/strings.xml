@@ -155,7 +155,7 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="modules_webui"><![CDATA[မော်ဂျူး WebUI]]></string>
     <string name="modules_delete"><![CDATA[Delete]]></string>
     <string name="modules_delete_title">မော်ဂျူးကို ဖျက်မလား။</string>
-    <string name="modules_delete_message">%s ကို Shevery မော်ဂျူးသိုလှောင်မှုမှ ဖယ်ရှားပါမည်။</string>
+    <string name="modules_delete_message">%s ကို OmniShizuku မော်ဂျူးသိုလှောင်မှုမှ ဖယ်ရှားပါမည်။</string>
     <string name="modules_action_result">လုပ်ဆောင်ချက် ပြီးပါပြီ- %d ထွက်ပါ။</string>
     <string name="modules_action_failed">လုပ်ဆောင်ချက် မအောင်မြင်ပါ။</string>
     <string name="modules_service_result">ဝန်ဆောင်မှု ပြီးပါပြီ- %d ထွက်ပါ။</string>
@@ -194,12 +194,12 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="modules_search_placeholder">ကတ်တလောက် မော်ဂျူးများကို ရှာဖွေပါ...</string>
     <string name="action_about"><![CDATA[About]]></string>
     <string name="about_source_code_button"><![CDATA[အရင်းအမြစ်ကုဒ်]]></string>
-    <string name="action_stop">Shevery ရပ်ပါ။</string>
+    <string name="action_stop">OmniShizuku ရပ်ပါ။</string>
     <string name="dialog_stop_message"><![CDATA[Shevery ဝန်ဆောင်မှုကို ရပ်တန့်ပါမည်။]]></string>
     <string name="service_already_stopped"><![CDATA[Shevery ဝန်ဆောင်မှုကို ရပ်တန့်နေပြီဖြစ်သည်။]]></string>
-    <string name="service_stop_success">Shevery ဝန်ဆောင်မှု ရပ်တန့်သွားသည်။</string>
+    <string name="service_stop_success">OmniShizuku ဝန်ဆောင်မှု ရပ်တန့်သွားသည်။</string>
     <string name="service_stop_still_running">ဝန်ဆောင်မှုသည် ဆက်လက်လည်ပတ်နေပါသည်။</string>
-    <string name="service_stop_failed">Shevery: %1$s ကို ရပ်တန့်ရန် မအောင်မြင်ပါ။</string>
+    <string name="service_stop_failed">OmniShizuku: %1$s ကို ရပ်တန့်ရန် မအောင်မြင်ပါ။</string>
     <string name="notification_channel_service_status"><![CDATA[ဝန်ဆောင်မှုစတင်မှုအခြေအနေ]]></string>
     <string name="notification_service_starting"><![CDATA[Shevery ဝန်ဆောင်မှု စတင်နေပါပြီ...]]></string>
     <string name="notification_service_start_failed"><![CDATA[Shevery ဝန်ဆောင်မှုကို စတင်ခြင်း မအောင်မြင်ပါ။]]></string>
@@ -482,13 +482,13 @@ Ready for commands.]]></string>
     <string name="diagnostics_limited"><![CDATA[limited]]></string>
     <string name="diagnostics_unknown"><![CDATA[unknown]]></string>
     <string name="error_protect_title"><![CDATA[ErrorProtect]]></string>
-    <string name="error_protect_summary">ဝန်ဆောင်မှုအခြေအနေကို စောင့်ကြည့်သည်။ ပြဿနာများ သို့မဟုတ် ပျက်စီးမှုများ တွေ့ရှိပါက Shevery ကို အလိုအလျောက် ပြန်လည်စတင်သည်။</string>
+    <string name="error_protect_summary">ဝန်ဆောင်မှုအခြေအနေကို စောင့်ကြည့်သည်။ ပြဿနာများ သို့မဟုတ် ပျက်စီးမှုများ တွေ့ရှိပါက OmniShizuku ကို အလိုအလျောက် ပြန်လည်စတင်သည်။</string>
     <string name="settings_tcp_5555_title">TCP ချိတ်ဆက်မှု 5555</string>
     <string name="settings_tcp_5555_summary">Wireless Debugging Port အပ်ဒိတ်များမပါဘဲ ၎င်းကို ဆက်လက်လုပ်ဆောင်ရန် ဒေသတွင်း ADB ဆာဗာကို 5555 ဆိပ်ကမ်းတွင် ချိတ်ပါ။</string>
     <string name="settings_tcp_5555_button">5555 သို့ ချည်နှောင်ပါ။</string>
     <string name="settings_tcp_5555_bind_success">ADB ကို TCP ပို့တ် 5555 သို့ အောင်မြင်စွာ ချိတ်တွဲထားသည်။</string>
     <string name="settings_tcp_5555_bind_failed">ADB ကို port 5555: %1$s နှင့် ချိတ်၍မရပါ။</string>
-    <string name="settings_tcp_5555_bind_failed_generic">Root၊ Dhizuku သို့မဟုတ် Active Shevery လိုအပ်သည်။</string>
+    <string name="settings_tcp_5555_bind_failed_generic">Root၊ Dhizuku သို့မဟုတ် Active OmniShizuku လိုအပ်သည်။</string>
     <string name="accessibility_manager_title"><![CDATA[သုံးစွဲနိုင်မှုမန်နေဂျာ]]></string>
     <string name="accessibility_manager_lab_group"><![CDATA[Accessibility]]></string>
     <string name="accessibility_manager_lab_title">သုံးစွဲနိုင်မှုမန်နေဂျာ</string>
@@ -498,11 +498,11 @@ Ready for commands.]]></string>
     <string name="accessibility_manager_keep_alive_summary">စနစ် သို့မဟုတ် အသုံးပြုသူက ၎င်းတို့ကို ပိတ်သည့်အခါတွင် ပင်ထိုးထားသည့် သုံးစွဲနိုင်မှုဝန်ဆောင်မှုများကို ပြန်လည်ဖွင့်ပါ။</string>
     <string name="accessibility_manager_auto_boot_title">boot တွင်စတင်ပါ။</string>
     <string name="accessibility_manager_auto_boot_summary">စက်ပြန်ဖွင့်ပြီးနောက် Keep-alive daemon ကို အလိုအလျောက်စတင်ပါ။</string>
-    <string name="accessibility_manager_shizuku_required">Shevery က မပြေးပါဘူး။ ဝင်ရောက်နိုင်မှုဝန်ဆောင်မှုများကို ဖွင့်ရန် သို့မဟုတ် ပိတ်ရန် ၎င်းကို စတင်ပါ။</string>
+    <string name="accessibility_manager_shizuku_required">OmniShizuku က မပြေးပါဘူး။ ဝင်ရောက်နိုင်မှုဝန်ဆောင်မှုများကို ဖွင့်ရန် သို့မဟုတ် ပိတ်ရန် ၎င်းကို စတင်ပါ။</string>
     <string name="accessibility_manager_services_group">အများသုံးစွဲနိုင်မှု ဝန်ဆောင်မှုများ (%1$d)</string>
     <string name="accessibility_manager_services_empty">ထည့်သွင်းအသုံးပြုနိုင်သော ဝန်ဆောင်မှုများ မတွေ့ပါ။</string>
     <string name="accessibility_manager_service_no_description">ဝန်ဆောင်မှုက ဖော်ပြချက်မရှိပါ။</string>
-    <string name="accessibility_manager_write_failed">ဝင်ရောက်နိုင်မှု ဝန်ဆောင်မှုများကို အပ်ဒိတ်လုပ်ရန် မအောင်မြင်ပါ။ Shevery လည်ပတ်နေပြီး ခွင့်ပြုချက်ရှိကြောင်း စစ်ဆေးပါ။</string>
+    <string name="accessibility_manager_write_failed">ဝင်ရောက်နိုင်မှု ဝန်ဆောင်မှုများကို အပ်ဒိတ်လုပ်ရန် မအောင်မြင်ပါ။ OmniShizuku လည်ပတ်နေပြီး ခွင့်ပြုချက်ရှိကြောင်း စစ်ဆေးပါ။</string>
     <string name="accessibility_manager_pin">အသက်ရှင်နေစေရန် ဝန်ဆောင်မှုကို ပင်ထိုးပါ။</string>
     <string name="accessibility_manager_unpin">ဝန်ဆောင်မှုကို ပင်ဖြုတ်ပါ။</string>
     <string name="accessibility_daemon_channel_name">သုံးစွဲနိုင်မှု ရှင်သန်နေပါစေ။</string>
@@ -513,7 +513,7 @@ Ready for commands.]]></string>
     <string name="settings_compat_stub_installed">%1$s မှတစ်ဆင့် ဟောင်းနွမ်းသော ပင်တိုင်ကို ထည့်သွင်းထားသည်။</string>
     <string name="settings_compat_stub_uninstalled">အမွေအနှစ်စာတိုကို ဖယ်ရှားခဲ့သည်။</string>
     <string name="settings_compat_stub_failed"><![CDATA[%2$s: %3$s မှတစ်ဆင့် အမွေဆက်ခံ ပင်တိုင် %1$s ကို မအောင်မြင်ပါ။]]></string>
-    <string name="settings_compat_stub_none">ချန်နယ်မရနိုင်ပါ (Shevery ဦးစွာစတင်ပါ)</string>
+    <string name="settings_compat_stub_none">ချန်နယ်မရနိုင်ပါ (OmniShizuku ဦးစွာစတင်ပါ)</string>
     <string name="home_status_service_version_update"><![CDATA[ဗားရှင်း %2$s, %1$s ဗားရှင်း %3$s သို့ အပ်ဒိတ်လုပ်ရန် ပြန်စပါ။]]></string>
     <string name="home_adb_title"><![CDATA[ကွန်ပျူတာနှင့် ချိတ်ဆက်ခြင်းဖြင့် စတင်ပါ။]]></string>
     <string name="home_adb_description"><![CDATA[root မပြုထားသေးသော စက်များအတွက် adb ကို အသုံးပြုပြီး Shevery ကို စတင်ဖွင့်ရန် လိုအပ်ပါသည် (ကွန်ပျူတာနှင့် ချိတ်ဆက်ထားရမည်)။ စက်ကို ပြန်စတင်တိုင်း ဤလုပ်ငန်းစဉ်ကို ထပ်မံ ဆောင်ရွက်ရမည်။ ကျေးဇူးပြု၍ <b><a href="%1$s">အကူအညီကို ဖတ်ရှုပါ</b>။]]></string>
@@ -581,8 +581,8 @@ Ready for commands.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -596,7 +596,7 @@ Ready for commands.]]></string>
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -609,7 +609,7 @@ Ready for commands.]]></string>
     <string name="notification_auth_missing_title">Auth token required</string>
     <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under ဆက်တင်များ → Automation.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
-    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery ဆက်တင်များ.</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku ဆက်တင်များ.</string>
     <string name="notification_connectors_disabled_title">Automation connectors disabled</string>
-    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in ဆက်တင်များ. Tap to enable.</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because OmniShizuku connectors are disabled in ဆက်တင်များ. Tap to enable.</string>
 </resources>

@@ -3,7 +3,7 @@
     <string name="shevery_update_auto_check"><![CDATA[Проверете за актуализации във фонов режим]]></string>
     <string name="shevery_update_auto_check_summary"><![CDATA[Търсете нови версии дори когато приложението е затворено]]></string>
     <string name="update_settings_frequency_label"><![CDATA[Проверете честотата]]></string>
-    <string name="home_update_available_title">Налична актуализация на Shevery: %s</string>
+    <string name="home_update_available_title">Налична актуализация на OmniShizuku: %s</string>
     <string name="home_update_available_body">Готова е по-нова версия. Докоснете за изтегляне.</string>
     <string name="translation_contributors">sermart1234, ruvlad</string>
     <string name="accessibility_navigate_up"><![CDATA[Нагоре]]></string>
@@ -258,7 +258,7 @@
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s не поддържа съвременния Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Старата версия на Shevery вече не се поддържа от март 2019 г. Освен това старата версия на Shevery не работи на по-новите версии на Android.<p>Моля, помолете разработчика на <b>%1$s</b> да я актуализира.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s иска старата версия на Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> поддържа съвременната версия на Shevery, но изисква старата версия на Shevery. Това може да се дължи на факта, че Shevery не работи – моля, проверете в приложението Shevery.<p>Старата версия на Shevery вече не се поддържа от март 2019 г.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> поддържа съвременната версия на OmniShizuku, но изисква старата версия на OmniShizuku. Това може да се дължи на факта, че OmniShizuku не работи – моля, проверете в приложението OmniShizuku.<p>Старата версия на OmniShizuku вече не се поддържа от март 2019 г.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Отвори Шевери]]></string>
     <string name="lab_features_title"><![CDATA[Характеристики на лабораторията]]></string>
     <string name="lab_features_summary"><![CDATA[Експериментални характеристики]]></string>
@@ -299,7 +299,7 @@
     <string name="watchdog_service_text"><![CDATA[Наблюдение на услугата „Shevery“ с цел възстановяване чрез keep-alive]]></string>
     <string name="watchdog_action_turn_off"><![CDATA[Изключване]]></string>
     <string name="watchdog_action_channel_settings"><![CDATA[Изключване на сигналите]]></string>
-    <string name="notification_control_channel_name">Shevery Control</string>
+    <string name="notification_control_channel_name">OmniShizuku Control</string>
     <string name="notification_startup_channel_name"><![CDATA[Стартъпът „Shevery“]]></string>
     <string name="notification_startup_title"><![CDATA[Начало на „Шевери“]]></string>
     <string name="notification_startup_enabling_wifi"><![CDATA[Активиране на отладката чрез Wi-Fi…]]></string>
@@ -585,8 +585,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -600,7 +600,7 @@
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -613,7 +613,7 @@
     <string name="notification_auth_missing_title">Изисква се токен за удостоверяване</string>
     <string name="notification_auth_missing_message">Добавете екстра “auth” към вашия intent. Можете да намерите вашия токен в Настройки → Автоматизация.</string>
     <string name="notification_auth_invalid_title">Невалиден токен за удостоверяване</string>
-    <string name="notification_auth_invalid_message">Уверете се, че токенът във вашия intent съвпада с този в Настройки на Shevery.</string>
+    <string name="notification_auth_invalid_message">Уверете се, че токенът във вашия intent съвпада с този в Настройки на OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Конекторите за автоматизация са изключени</string>
-    <string name="notification_connectors_disabled_message">Интент за автоматизация беше блокиран, защото конекторите на Shevery са изключени в Настройки. Докоснете за активиране.</string>
+    <string name="notification_connectors_disabled_message">Интент за автоматизация беше блокиран, защото конекторите на OmniShizuku са изключени в Настройки. Докоснете за активиране.</string>
 </resources>

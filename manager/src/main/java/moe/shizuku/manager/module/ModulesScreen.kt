@@ -129,7 +129,7 @@ fun ModulesScreen(
     onOpenWebUi: (String) -> Unit,
     onCreateShortcut: ((AdbModule) -> Unit)? = null,
     listState: LazyListState = rememberLazyListState(),
-    modulesState: MutableState<List<AdbModule>>
+    modulesState: MutableState<List<AdbModule>> = remember { mutableStateOf(emptyList()) }
 ) {
     val context = LocalContext.current
     val view = LocalView.current

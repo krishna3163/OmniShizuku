@@ -590,8 +590,8 @@ La funzione di esportazione utilizza SAF (Storage Access Framework). È stato se
     <string name="settings_classic_nav_summary"><![CDATA[Usa una barra inferiore fissa invece della pillola mobile]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Controlla Shevery con le app di automazione</string>
-    <string name="home_automation_description">App come Tasker e MacroDroid possono inviare intent per avviare, arrestare, riavviare o alternare Shevery automaticamente.</string>
+    <string name="home_automation_title">Controlla OmniShizuku con le app di automazione</string>
+    <string name="home_automation_description">App come Tasker e MacroDroid possono inviare intent per avviare, arrestare, riavviare o alternare OmniShizuku automaticamente.</string>
     <string name="home_automation_button_view_intents">Visualizza intent</string>
     <string name="home_automation_bottom_sheet_intents">Intent di automazione</string>
     <string name="home_automation_bottom_sheet_description">Configura gli intent in Tasker o MacroDroid, oppure esegui il comando direttamente da Termux / ADB. Tocca per copiare.</string>
@@ -605,7 +605,7 @@ La funzione di esportazione utilizza SAF (Storage Access Framework). È stato se
     <string name="home_automation_regenerate_token">Rigenera token</string>
     <string name="home_automation_regenerate_token_confirm">Sei sicuro di voler rigenerare il token? Tutti gli intent configurati dovranno essere aggiornati con il nuovo token.</string>
     <string name="automation_security_group_title">Autenticazione e sicurezza</string>
-    <string name="automation_security_description">Gli intent di broadcast diretto richiedono questo token di autenticazione segreto passato come extra \'auth\' (-e auth &lt;token&gt;). Questo protegge Shevery da app non autorizzate.</string>
+    <string name="automation_security_description">Gli intent di broadcast diretto richiedono questo token di autenticazione segreto passato come extra \'auth\' (-e auth &lt;token&gt;). Questo protegge OmniShizuku da app non autorizzate.</string>
     <string name="automation_regenerate_token_summary">Genera un nuovo token segreto e invalida quello esistente</string>
     <string name="automation_target_component_label">Componente ricevitore</string>
     <string name="home_automation_connectors_disabled_status">Connettori disabilitati (Intent inattivi)</string>
@@ -618,7 +618,7 @@ La funzione di esportazione utilizza SAF (Storage Access Framework). È stato se
     <string name="notification_auth_missing_title">Token di autenticazione richiesto</string>
     <string name="notification_auth_missing_message">Aggiungi l\'extra “auth” al tuo intent. Puoi trovare il tuo token in Impostazioni → Automazione.</string>
     <string name="notification_auth_invalid_title">Token di autenticazione non valido</string>
-    <string name="notification_auth_invalid_message">Assicurati che il token nel tuo intent corrisponda a quello nelle Impostazioni di Shevery.</string>
+    <string name="notification_auth_invalid_message">Assicurati che il token nel tuo intent corrisponda a quello nelle Impostazioni di OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Connettori di automazione disabilitati</string>
-    <string name="notification_connectors_disabled_message">Un intent di automazione è stato bloccato perché i connettori di Shevery sono disabilitati nelle Impostazioni. Tocca per abilitare.</string>
+    <string name="notification_connectors_disabled_message">Un intent di automazione è stato bloccato perché i connettori di OmniShizuku sono disabilitati nelle Impostazioni. Tocca per abilitare.</string>
 </resources>

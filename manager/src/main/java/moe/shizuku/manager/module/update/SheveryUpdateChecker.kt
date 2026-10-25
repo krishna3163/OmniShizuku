@@ -176,8 +176,8 @@ class SheveryUpdateChecker private constructor() {
 
     companion object {
         private const val TAG = "SheveryUpdateChecker"
-        private const val REPO_OWNER = "HmnDev-Tech"
-        private const val REPO_NAME = "shevery"
+        private const val REPO_OWNER = "krishna3163"
+        private const val REPO_NAME = "OmniShizuku"
 
         @Volatile
         private var instance: SheveryUpdateChecker? = null

@@ -585,8 +585,8 @@ Fungsi ekspor ini menggunakan SAF (Storage Access Framework). Dilaporkan bahwa M
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Kontrol Shevery dengan aplikasi otomasi</string>
-    <string name="home_automation_description">Aplikasi seperti Tasker dan MacroDroid dapat mengirim intent untuk memulai, menghentikan, memulai ulang, atau beralih Shevery secara otomatis.</string>
+    <string name="home_automation_title">Kontrol OmniShizuku dengan aplikasi otomasi</string>
+    <string name="home_automation_description">Aplikasi seperti Tasker dan MacroDroid dapat mengirim intent untuk memulai, menghentikan, memulai ulang, atau beralih OmniShizuku secara otomatis.</string>
     <string name="home_automation_button_view_intents">Lihat intent</string>
     <string name="home_automation_bottom_sheet_intents">Intent Otomasi</string>
     <string name="home_automation_bottom_sheet_description">Konfigurasikan intent di Tasker atau MacroDroid, atau jalankan perintah langsung dari Termux / ADB. Ketuk untuk menyalin.</string>
@@ -600,7 +600,7 @@ Fungsi ekspor ini menggunakan SAF (Storage Access Framework). Dilaporkan bahwa M
     <string name="home_automation_regenerate_token">Buat ulang token</string>
     <string name="home_automation_regenerate_token_confirm">Yakin ingin membuat ulang token? Semua intent yang telah dikonfigurasi harus diperbarui dengan token baru.</string>
     <string name="automation_security_group_title">Autentikasi &amp; Keamanan</string>
-    <string name="automation_security_description">Intent siaran langsung memerlukan token autentikasi rahasia ini yang diteruskan sebagai ekstra \'auth\' (-e auth &lt;token&gt;). Ini melindungi Shevery dari aplikasi yang tidak sah.</string>
+    <string name="automation_security_description">Intent siaran langsung memerlukan token autentikasi rahasia ini yang diteruskan sebagai ekstra \'auth\' (-e auth &lt;token&gt;). Ini melindungi OmniShizuku dari aplikasi yang tidak sah.</string>
     <string name="automation_regenerate_token_summary">Hasilkan token rahasia baru dan batalkan token yang lama</string>
     <string name="automation_target_component_label">Komponen Penerima</string>
     <string name="home_automation_connectors_disabled_status">Konektor Dinonaktifkan (Intent Tidak Aktif)</string>
@@ -613,7 +613,7 @@ Fungsi ekspor ini menggunakan SAF (Storage Access Framework). Dilaporkan bahwa M
     <string name="notification_auth_missing_title">Token autentikasi diperlukan</string>
     <string name="notification_auth_missing_message">Tambahkan ekstra “auth” ke intent Anda. Anda dapat menemukan token di Pengaturan → Otomasi.</string>
     <string name="notification_auth_invalid_title">Token autentikasi tidak valid</string>
-    <string name="notification_auth_invalid_message">Pastikan token di intent Anda cocok dengan yang ada di Pengaturan Shevery.</string>
+    <string name="notification_auth_invalid_message">Pastikan token di intent Anda cocok dengan yang ada di Pengaturan OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Konektor otomasi dinonaktifkan</string>
-    <string name="notification_connectors_disabled_message">Intent otomasi diblokir karena konektor Shevery dinonaktifkan di Pengaturan. Ketuk untuk mengaktifkan.</string>
+    <string name="notification_connectors_disabled_message">Intent otomasi diblokir karena konektor OmniShizuku dinonaktifkan di Pengaturan. Ketuk untuk mengaktifkan.</string>
 </resources>

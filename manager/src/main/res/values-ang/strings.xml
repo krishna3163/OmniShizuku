@@ -550,7 +550,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="starting_root_shell"><![CDATA[Starting root shell…]]></string>
     <string name="toast_copied_to_clipboard_with_text"><![CDATA[<b>%s</b> has been copied to clipboard.]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Legacy Shevery has been deprecated since March 2019. Also, legacy Shevery does not work on newer Android systems.<p>Please ask the developer of <b>%1$s</b> to update.]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> has modern Shevery support, but it\'s requesting legacy Shevery. This could because Shevery is not running, please check in Shevery app.<p>Legacy Shevery has been deprecated since March 2019.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> has modern OmniShizuku support, but it\'s requesting legacy OmniShizuku. This could because OmniShizuku is not running, please check in OmniShizuku app.<p>Legacy OmniShizuku has been deprecated since March 2019.]]></string>
     <string name="home_dhizuku_title"><![CDATA[Start (via Dhizuku)]]></string>
     <string name="home_dhizuku_description"><![CDATA[For devices managed by Dhizuku, you can start Shevery directly using Device Owner privileges.]]></string>
 <string name="tcp_prompt_dialog_title"><![CDATA[Wilt thou enable the persistent TCP mode?]]></string>
@@ -584,8 +584,8 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -599,7 +599,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -612,7 +612,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="notification_auth_missing_title">Auth token required</string>
     <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under Settings → Automation.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
-    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery Settings.</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku Settings.</string>
     <string name="notification_connectors_disabled_title">Automation connectors disabled</string>
-    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in Settings. Tap to enable.</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because OmniShizuku connectors are disabled in Settings. Tap to enable.</string>
 </resources>

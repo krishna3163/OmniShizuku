@@ -38,7 +38,7 @@ object AuthorizationManager {
         }
     }
 
-    fun getPackages(): List<PackageInfo> {
+    fun getPackages(exclude: List<String> = emptyList()): List<PackageInfo> {
         val packages: MutableList<PackageInfo> = ArrayList()
         if (Shizuku.isPreV11() || (Shizuku.getVersion() == 11 && Shizuku.getServerPatchVersion() < 3)) {
             val allPackages: MutableList<PackageInfo> = ArrayList()
@@ -50,14 +50,14 @@ object AuthorizationManager {
                 }
             }
             for (pi in allPackages) {
-                if (BuildConfig.APPLICATION_ID == pi.packageName) continue
+                if (pi.packageName in exclude || BuildConfig.APPLICATION_ID == pi.packageName) continue
                 if (pi.applicationInfo?.metaData?.getBoolean("moe.shizuku.client.V3_SUPPORT") != true) continue
                 if (pi.requestedPermissions?.contains(Manifest.permission.API_V23) != true) continue
 
                 packages.add(pi)
             }
         } else {
-            packages.addAll(getApplications(-1))
+            packages.addAll(getApplications(-1).filter { it.packageName !in exclude })
         }
         return packages
     }

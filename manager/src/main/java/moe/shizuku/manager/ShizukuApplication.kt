@@ -6,6 +6,7 @@ import android.os.Build
 import androidx.appcompat.app.AppCompatDelegate
 import com.topjohnwu.superuser.Shell
 import moe.shizuku.manager.ktx.logd
+import moe.shizuku.manager.ktx.isUserUnlockedCompat
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.core.util.BuildUtils.atLeast30
 import rikka.material.app.LocaleDelegate
@@ -62,6 +63,25 @@ class ShizukuApplication : Application() {
         moe.shizuku.manager.worker.AdbNetworkObserver.register(this)
         moe.shizuku.manager.module.update.SheveryAutoUpdateWorker.maybeSchedule(this)
         registerActivityLifecycleCallbacks(moe.shizuku.manager.security.AuthManager)
+
+        runCatching { getExternalFilesDir(null)?.mkdirs() }
+        runCatching { getExternalMediaDirs()?.firstOrNull()?.mkdirs() }
+        ShizukuSettings.updateBootReceiver(this)
+
+        if (ShizukuSettings.getWatchdog() && isUserUnlockedCompat()) {
+            moe.shizuku.manager.service.WatchdogService.start(this)
+        }
+        moe.shizuku.manager.receiver.UserUnlockedStarter.registerIfLocked(this)
+        moe.shizuku.manager.receiver.WatchdogAlarmReceiver.schedule(this)
+
+        if (moe.shizuku.manager.manage.Hiding.isActive() || moe.shizuku.manager.manage.ForceDark.hasWorkToDo()) {
+            kotlin.concurrent.thread(name = "hiding-watch-restart") {
+                moe.shizuku.manager.service.HidingWatchService.refresh(this)
+            }
+        }
+        kotlin.concurrent.thread(name = "activities-assistant-restore") {
+            moe.shizuku.manager.manage.Activities.restorePending()
+        }
     }
 
 }

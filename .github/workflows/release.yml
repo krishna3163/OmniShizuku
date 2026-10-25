@@ -62,7 +62,7 @@ jobs:
       contents: write
     steps:
       - name: Check out ${{ inputs.ref }}
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
@@ -79,7 +79,7 @@ jobs:
           esac
 
       - name: Set up JDK 21
-        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        uses: actions/setup-java@3a4f6e1af504cf6a31855fa899c6aa5355ba6c12 # v4.7.0
         with:
           java-version: '21'
           distribution: 'temurin'
@@ -89,13 +89,6 @@ jobs:
         run: |
           yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
           yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 --licenses > /dev/null 2>&1 || true
-          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 "platforms;android-37.0" "platforms;android-37" "build-tools;37.0.0" "ndk;29.0.14206865" || true
-          if [ -d "$ANDROID_SDK_ROOT/platforms/android-37.0" ] && [ ! -d "$ANDROID_SDK_ROOT/platforms/android-37" ]; then
-            ln -s "$ANDROID_SDK_ROOT/platforms/android-37.0" "$ANDROID_SDK_ROOT/platforms/android-37"
-          fi
-          if [ -d "$ANDROID_SDK_ROOT/platforms/android-37" ] && [ ! -d "$ANDROID_SDK_ROOT/platforms/android-37.0" ]; then
-            ln -s "$ANDROID_SDK_ROOT/platforms/android-37" "$ANDROID_SDK_ROOT/platforms/android-37.0"
-          fi
           echo 'android.sdk.channel=3' >> gradle.properties
           echo 'org.gradle.caching=true' >> gradle.properties
           echo 'org.gradle.parallel=true' >> gradle.properties

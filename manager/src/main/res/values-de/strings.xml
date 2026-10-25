@@ -585,8 +585,8 @@ wurde in die Zwischenablage kopiert.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Feste Navigationsleiste statt schwebender Pille verwenden]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Shevery mit Automatisierungs-Apps steuern</string>
-    <string name="home_automation_description">Apps wie Tasker und MacroDroid können Intents senden, um Shevery automatisch zu starten, zu stoppen, neu zu starten oder umzuschalten.</string>
+    <string name="home_automation_title">OmniShizuku mit Automatisierungs-Apps steuern</string>
+    <string name="home_automation_description">Apps wie Tasker und MacroDroid können Intents senden, um OmniShizuku automatisch zu starten, zu stoppen, neu zu starten oder umzuschalten.</string>
     <string name="home_automation_button_view_intents">Intents anzeigen</string>
     <string name="home_automation_bottom_sheet_intents">Automatisierungs-Intents</string>
     <string name="home_automation_bottom_sheet_description">Konfigurieren Sie Intents in Tasker oder MacroDroid oder führen Sie den Befehl direkt über Termux / ADB aus. Tippen zum Kopieren.</string>
@@ -600,7 +600,7 @@ wurde in die Zwischenablage kopiert.]]></string>
     <string name="home_automation_regenerate_token">Token neu generieren</string>
     <string name="home_automation_regenerate_token_confirm">Sind Sie sicher, dass Sie das Token neu generieren möchten? Alle konfigurierten Intents müssen mit dem neuen Token aktualisiert werden.</string>
     <string name="automation_security_group_title">Authentifizierung &amp; Sicherheit</string>
-    <string name="automation_security_description">Direkte Broadcast-Intents erfordern dieses geheime Authentifizierungs-Token im \'auth\'-Extra (-e auth &lt;token&gt;). Dies schützt Shevery vor unbefugten Apps.</string>
+    <string name="automation_security_description">Direkte Broadcast-Intents erfordern dieses geheime Authentifizierungs-Token im \'auth\'-Extra (-e auth &lt;token&gt;). Dies schützt OmniShizuku vor unbefugten Apps.</string>
     <string name="automation_regenerate_token_summary">Neues Geheimtoken generieren und das vorhandene ungültig machen</string>
     <string name="automation_target_component_label">Empfänger-Komponente</string>
     <string name="home_automation_connectors_disabled_status">Connectors deaktiviert (Intents inaktiv)</string>
@@ -613,7 +613,7 @@ wurde in die Zwischenablage kopiert.]]></string>
     <string name="notification_auth_missing_title">Authentifizierungs-Token erforderlich</string>
     <string name="notification_auth_missing_message">Fügen Sie das Extra „auth“ zu Ihrem Intent hinzu. Sie finden Ihr Token unter Einstellungen → Automatisierung.</string>
     <string name="notification_auth_invalid_title">Ungültiges Authentifizierungs-Token</string>
-    <string name="notification_auth_invalid_message">Stellen Sie sicher, dass das Token in Ihrem Intent mit dem in den Shevery-Einstellungen übereinstimmt.</string>
+    <string name="notification_auth_invalid_message">Stellen Sie sicher, dass das Token in Ihrem Intent mit dem in den OmniShizuku-Einstellungen übereinstimmt.</string>
     <string name="notification_connectors_disabled_title">Automatisierungs-Connectors deaktiviert</string>
-    <string name="notification_connectors_disabled_message">Ein Automatisierungs-Intent wurde blockiert, da die Shevery-Connectors in den Einstellungen deaktiviert sind. Zum Aktivieren tippen.</string>
+    <string name="notification_connectors_disabled_message">Ein Automatisierungs-Intent wurde blockiert, da die OmniShizuku-Connectors in den Einstellungen deaktiviert sind. Zum Aktivieren tippen.</string>
 </resources>

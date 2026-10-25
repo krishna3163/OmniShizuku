@@ -260,7 +260,7 @@ har kopierats till urklipp.]]></string>
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s stöder inte modern Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Den äldre versionen av Shevery har inte längre rekommenderats sedan mars 2019. Dessutom fungerar den äldre versionen av Shevery inte på nyare Android-system.<p>Be utvecklaren av <b>%1$s</b> att uppdatera appen.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s begär den äldre versionen av Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> har stöd för den moderna versionen av Shevery, men den begär den äldre versionen av Shevery. Detta kan bero på att Shevery inte körs; kontrollera detta i Shevery-appen.<p>Den äldre versionen av Shevery har varit föråldrad sedan mars 2019.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> har stöd för den moderna versionen av OmniShizuku, men den begär den äldre versionen av OmniShizuku. Detta kan bero på att OmniShizuku inte körs; kontrollera detta i OmniShizuku-appen.<p>Den äldre versionen av OmniShizuku har varit föråldrad sedan mars 2019.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Öppna Shevery]]></string>
     <string name="lab_features_title"><![CDATA[Laboratoriets egenskaper]]></string>
     <string name="lab_features_summary"><![CDATA[Experimentella funktioner]]></string>
@@ -301,7 +301,7 @@ har kopierats till urklipp.]]></string>
     <string name="watchdog_service_text"><![CDATA[Övervakning av Shevery-tjänsten för återställning vid keep-alive-avbrott]]></string>
     <string name="watchdog_action_turn_off"><![CDATA[Stäng av]]></string>
     <string name="watchdog_action_channel_settings"><![CDATA[Inaktivera varningar]]></string>
-    <string name="notification_control_channel_name">Shevery Control</string>
+    <string name="notification_control_channel_name">OmniShizuku Control</string>
     <string name="notification_startup_channel_name"><![CDATA[Shevery – ett nystartat företag]]></string>
     <string name="notification_startup_title"><![CDATA[Shevery startar]]></string>
     <string name="notification_startup_enabling_wifi"><![CDATA[Aktiverar felsökning via Wi-Fi…]]></string>
@@ -585,8 +585,8 @@ Redo för kommandon.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Styr Shevery med automatiseringsappar</string>
-    <string name="home_automation_description">Appar som Tasker och MacroDroid kan skicka intents för att starta, stoppa, starta om eller växla Shevery automatiskt.</string>
+    <string name="home_automation_title">Styr OmniShizuku med automatiseringsappar</string>
+    <string name="home_automation_description">Appar som Tasker och MacroDroid kan skicka intents för att starta, stoppa, starta om eller växla OmniShizuku automatiskt.</string>
     <string name="home_automation_button_view_intents">Visa intents</string>
     <string name="home_automation_bottom_sheet_intents">Automatiserings-intents</string>
     <string name="home_automation_bottom_sheet_description">Konfigurera intents i Tasker eller MacroDroid, eller kör kommandot direkt från Termux / ADB. Tryck för att kopiera.</string>
@@ -600,7 +600,7 @@ Redo för kommandon.]]></string>
     <string name="home_automation_regenerate_token">Återskapa token</string>
     <string name="home_automation_regenerate_token_confirm">Är du säker på att du vill återskapa tokenet? Alla konfigurerade intents måste uppdateras med det nya tokenet.</string>
     <string name="automation_security_group_title">Autentisering och säkerhet</string>
-    <string name="automation_security_description">Direkta broadcast-intents kräver att detta hemliga autentiseringstoken skickas som extra \'auth\' (-e auth &lt;token&gt;). Detta skyddar Shevery från obehöriga appar.</string>
+    <string name="automation_security_description">Direkta broadcast-intents kräver att detta hemliga autentiseringstoken skickas som extra \'auth\' (-e auth &lt;token&gt;). Detta skyddar OmniShizuku från obehöriga appar.</string>
     <string name="automation_regenerate_token_summary">Generera ett nytt hemligt token och ogiltigförklara det befintliga</string>
     <string name="automation_target_component_label">Mottagarkomponent</string>
     <string name="home_automation_connectors_disabled_status">Kopplingar inaktiverade (Intents inaktiva)</string>
@@ -613,7 +613,7 @@ Redo för kommandon.]]></string>
     <string name="notification_auth_missing_title">Autentiseringstoken krävs</string>
     <string name="notification_auth_missing_message">Lägg till extra “auth” till din intent. Du hittar din token under Inställningar → Automation.</string>
     <string name="notification_auth_invalid_title">Ogiltig autentiseringstoken</string>
-    <string name="notification_auth_invalid_message">Se till att token i din intent matchar den i Shevery-inställningarna.</string>
+    <string name="notification_auth_invalid_message">Se till att token i din intent matchar den i OmniShizuku-inställningarna.</string>
     <string name="notification_connectors_disabled_title">Automationsanslutningar inaktiverade</string>
-    <string name="notification_connectors_disabled_message">En automationsintent blockerades eftersom Shevery-anslutningar är inaktiverade i Inställningar. Tryck för att aktivera.</string>
+    <string name="notification_connectors_disabled_message">En automationsintent blockerades eftersom OmniShizuku-anslutningar är inaktiverade i Inställningar. Tryck för att aktivera.</string>
 </resources>

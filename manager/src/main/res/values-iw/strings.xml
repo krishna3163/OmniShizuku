@@ -228,7 +228,7 @@ has been copied to clipboard.]]></string>
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s אינו תומך ב-Severy המודרני]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Legacy Shevery הוצא משימוש מאז מרץ 2019. כמו כן, Shevery מדור קודם לא עובד במערכות אנדרואיד חדשות יותר.<p>אנא בקש מהמפתח של <b>%1$s</b> לעדכן.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s מבקש את Shevery מדור קודם]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[ל-<b>%1$s</b> יש תמיכה מודרנית של Shevery, אבל היא מבקשת את Shevery מדור קודם. ייתכן שהסיבה לכך היא ש-Severy לא פועלת, אנא בדוק באפליקציית Shevery.<p>Legacy Shevery הוצא משימוש מאז מרץ 2019.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[ל-<b>%1$s</b> יש תמיכה מודרנית של OmniShizuku, אבל היא מבקשת את OmniShizuku מדור קודם. ייתכן שהסיבה לכך היא ש-Severy לא פועלת, אנא בדוק באפליקציית OmniShizuku.<p>Legacy OmniShizuku הוצא משימוש מאז מרץ 2019.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[פתח את Shevery]]></string>
     <string name="lab_features_title"><![CDATA[תכונות ניסיוניות]]></string>
     <string name="lab_features_summary"><![CDATA[תכונות ניסיוניות]]></string>
@@ -585,8 +585,8 @@ has been copied to clipboard.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">שליטה ב-Shevery באמצעות יישומי אוטומציה</string>
-    <string name="home_automation_description">יישומים כמו Tasker ו-MacroDroid יכולים לשלוח כוונות (intents) כדי להפעיל, לעצור, להפעיל מחדש או להחליף מצב של Shevery באופן אוטומטי.</string>
+    <string name="home_automation_title">שליטה ב-OmniShizuku באמצעות יישומי אוטומציה</string>
+    <string name="home_automation_description">יישומים כמו Tasker ו-MacroDroid יכולים לשלוח כוונות (intents) כדי להפעיל, לעצור, להפעיל מחדש או להחליף מצב של OmniShizuku באופן אוטומטי.</string>
     <string name="home_automation_button_view_intents">הצג כוונות</string>
     <string name="home_automation_bottom_sheet_intents">כוונות אוטומציה</string>
     <string name="home_automation_bottom_sheet_description">הגדר כוונות ב-Tasker או MacroDroid, או הפעל את הפקודה ישירות מ-Termux / ADB. הקש להעתקה.</string>
@@ -600,7 +600,7 @@ has been copied to clipboard.]]></string>
     <string name="home_automation_regenerate_token">יצירה מחדש של טוקן</string>
     <string name="home_automation_regenerate_token_confirm">האם אתה בטוח שברצונך ליצור מחדש את הטוקן? יהיה צורך לעדכן כל כוונה מוגדרת ב-Tasker או MacroDroid בטוקן החדש.</string>
     <string name="automation_security_group_title">אימות ואבטחה</string>
-    <string name="automation_security_description">כוונות שידור ישירות דורשות טוקן אימות סודי זה שיועבר כתוספת \'auth\' (-e auth &lt;token&gt;). פעולה זו מגנה על Shevery מפני יישומים לא מורשים.</string>
+    <string name="automation_security_description">כוונות שידור ישירות דורשות טוקן אימות סודי זה שיועבר כתוספת \'auth\' (-e auth &lt;token&gt;). פעולה זו מגנה על OmniShizuku מפני יישומים לא מורשים.</string>
     <string name="automation_regenerate_token_summary">צור טוקן סודי חדש ובטל את תקפותו של הקיים</string>
     <string name="automation_target_component_label">רכיב מקלט</string>
     <string name="home_automation_connectors_disabled_status">מחברים מושבתים (כוונות אינן פעילות)</string>
@@ -613,7 +613,7 @@ has been copied to clipboard.]]></string>
     <string name="notification_auth_missing_title">נדרש אסימון אימות</string>
     <string name="notification_auth_missing_message">הוסף את תוספת ה-“auth” ל-intent שלך. תוכל למצוא את האסימון בהגדרות ← אוטומציה.</string>
     <string name="notification_auth_invalid_title">אסימון אימות לא תקין</string>
-    <string name="notification_auth_invalid_message">ודא שהאסימון ב-intent תואם לאסימון בהגדרות Shevery.</string>
+    <string name="notification_auth_invalid_message">ודא שהאסימון ב-intent תואם לאסימון בהגדרות OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">מחברי האוטומציה מושבתים</string>
-    <string name="notification_connectors_disabled_message">Intent של אוטומציה נחסם מכיוון שמחברי Shevery מושבתים בהגדרות. הקש להפעלה.</string>
+    <string name="notification_connectors_disabled_message">Intent של אוטומציה נחסם מכיוון שמחברי OmniShizuku מושבתים בהגדרות. הקש להפעלה.</string>
 </resources>

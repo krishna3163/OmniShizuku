@@ -590,8 +590,8 @@ Komutlara hazır.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Kayan kapsül yerine sabit alt çubuğu kullan]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Shevery\'i otomasyon uygulamalarıyla kontrol edin</string>
-    <string name="home_automation_description">Tasker ve MacroDroid gibi uygulamalar, Shevery\'i otomatik olarak başlatmak, durdurmak, yeniden başlatmak veya değiştirmek için intent gönderebilir.</string>
+    <string name="home_automation_title">OmniShizuku\'i otomasyon uygulamalarıyla kontrol edin</string>
+    <string name="home_automation_description">Tasker ve MacroDroid gibi uygulamalar, OmniShizuku\'i otomatik olarak başlatmak, durdurmak, yeniden başlatmak veya değiştirmek için intent gönderebilir.</string>
     <string name="home_automation_button_view_intents">Intent\'leri görüntüle</string>
     <string name="home_automation_bottom_sheet_intents">Otomasyon Intent\'leri</string>
     <string name="home_automation_bottom_sheet_description">Intent\'leri Tasker veya MacroDroid\'de yapılandırın veya komutu doğrudan Termux / ADB\'den çalıştırın. Kopyalamak için dokunun.</string>
@@ -605,7 +605,7 @@ Komutlara hazır.]]></string>
     <string name="home_automation_regenerate_token">Belirteci yeniden oluştur</string>
     <string name="home_automation_regenerate_token_confirm">Belirteci yeniden oluşturmak istediğinizden emin misiniz? Yapılandırılmış tüm intent\'lerin yeni belirteçle güncellenmesi gerekecektir.</string>
     <string name="automation_security_group_title">Kimlik Doğrulama ve Güvenlik</string>
-    <string name="automation_security_description">Doğrudan yayın intent\'leri, \'auth\' ekstrası (-e auth &lt;token&gt;) olarak iletilen bu gizli kimlik doğrulama belirtecini gerektirir. Bu, Shevery\'i yetkisiz uygulamalardan korur.</string>
+    <string name="automation_security_description">Doğrudan yayın intent\'leri, \'auth\' ekstrası (-e auth &lt;token&gt;) olarak iletilen bu gizli kimlik doğrulama belirtecini gerektirir. Bu, OmniShizuku\'i yetkisiz uygulamalardan korur.</string>
     <string name="automation_regenerate_token_summary">Yeni bir gizli belirteç oluşturun ve mevcut olanı geçersiz kılın</string>
     <string name="automation_target_component_label">Alıcı Bileşeni</string>
     <string name="home_automation_connectors_disabled_status">Bağlayıcılar Devre Dışı (Intent\'ler Etkin Değil)</string>
@@ -618,7 +618,7 @@ Komutlara hazır.]]></string>
     <string name="notification_auth_missing_title">Kimlik doğrulama belirteci gerekli</string>
     <string name="notification_auth_missing_message">Intent\'inize “auth” ekstrasını ekleyin. Belirtecinizi Ayarlar → Otomasyon altında bulabilirsiniz.</string>
     <string name="notification_auth_invalid_title">Geçersiz kimlik doğrulama belirteci</string>
-    <string name="notification_auth_invalid_message">Intent\'inizdeki belirtecin Shevery Ayarları\'ndakiyle eşleştiğinden emin olun.</string>
+    <string name="notification_auth_invalid_message">Intent\'inizdeki belirtecin OmniShizuku Ayarları\'ndakiyle eşleştiğinden emin olun.</string>
     <string name="notification_connectors_disabled_title">Otomasyon bağlayıcıları devre dışı</string>
-    <string name="notification_connectors_disabled_message">Shevery bağlayıcıları Ayarlar\'da devre dışı bırakıldığı için bir otomasyon intent\'i engellendi. Etkinleştirmek için dokunun.</string>
+    <string name="notification_connectors_disabled_message">OmniShizuku bağlayıcıları Ayarlar\'da devre dışı bırakıldığı için bir otomasyon intent\'i engellendi. Etkinleştirmek için dokunun.</string>
 </resources>

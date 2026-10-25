@@ -116,7 +116,15 @@ internal object ShizukuApps {
             val body = response.body?.string() ?: return emptyList()
             val parsed = json.decodeFromString<SearchResponse>(body)
             return parsed.items
-                .filter { !it.archived && !it.fork && it.html_url.isNotBlank() && it.name.isNotBlank() }
+                .filter {
+                    !it.archived && !it.fork &&
+                    it.html_url.isNotBlank() && it.name.isNotBlank() &&
+                    !it.name.contains("shevery", ignoreCase = true) &&
+                    !it.full_name.contains("shevery", ignoreCase = true) &&
+                    !it.html_url.contains("shevery", ignoreCase = true) &&
+                    !it.name.contains("omnishizuku", ignoreCase = true) &&
+                    !it.full_name.contains("omnishizuku", ignoreCase = true)
+                }
                 .map {
                     ShizukuApp(
                         name = it.name,

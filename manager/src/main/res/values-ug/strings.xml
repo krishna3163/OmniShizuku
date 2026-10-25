@@ -44,19 +44,19 @@ This may be because KeyStore mechanism of this device is broken.]]></string>
     <string name="development_settings">ئاچقۇچىلار تاللانمىلىرى</string>
     <string name="notification_settings">ئۇقتۇرۇش تاللانمىلىرى</string>
     <string name="adb_pairing_tutorial_title">ئۈسكۈنىڭىز بىلەن جۈپلەش</string>
-    <string name="adb_pairing_tutorial_content_notification">Shevery نىڭ ئۇقتۇرۇشى سىزنىڭ جۈپلىشىشنى تاماملىشىڭىزغا ياردەم بېرىدۇ.</string>
+    <string name="adb_pairing_tutorial_content_notification">OmniShizuku نىڭ ئۇقتۇرۇشى سىزنىڭ جۈپلىشىشنى تاماملىشىڭىزغا ياردەم بېرىدۇ.</string>
     <string name="adb_pairing_tutorial_content_enter_pairing_code">قوشۇشنى تاماملاش ئۈچۈن ئۇقتۇرۇشقا كود كىرگۈزۈڭ.</string>
-    <string name="adb_pairing_tutorial_content_notification_blocked">جۈپلىشىش جەريانى سىزنىڭ Shevery نىڭ ئۇقتۇرۇشى بىلەن ئۆز-ئارا پىكىر ئالماشتۇرۇشىڭىزغا موھتاج. Shevery نىڭ ئۇقتۇرۇش يوللىشىغا يول قويۇڭ.</string>
+    <string name="adb_pairing_tutorial_content_notification_blocked">جۈپلىشىش جەريانى سىزنىڭ OmniShizuku نىڭ ئۇقتۇرۇشى بىلەن ئۆز-ئارا پىكىر ئالماشتۇرۇشىڭىزغا موھتاج. OmniShizuku نىڭ ئۇقتۇرۇش يوللىشىغا يول قويۇڭ.</string>
     <string name="adb_pairing_tutorial_content_miui_2">بولمىسا ، ئۇقتۇرۇشتىن پاراشوك كودىنى كىرگۈزەلمەسلىكىڭىز مۇمكىن.</string>
-    <string name="adb_pairing_tutorial_content_finish">Shevery غا قايتىپ Shevery نى باشلاڭ.</string>
-    <string name="adb_pairing_tutorial_content_network">Shevery يەرلىك تورغا كىرىشى كېرەك. ئۇ تور ئىجازىتى ئارقىلىق كونترول قىلىنىدۇ.</string>
-    <string name="adb_pairing_tutorial_content_network_limation_not_foreground">بەزى سىستېمىلار (MIUI غا ئوخشاش) ئەپلەر كۆرۈنمىگەن ۋاقىتتا تورغا چىقىشنى چەكلەيدۇ ، گەرچە بۇ دېتال ئالدىنقى مۇلازىمەتنى ئۆلچەملىك ئىشلەتسىمۇ. بۇ خىل سىستېمىلاردىكى Shevery نىڭ باتارېيەنى ئەلالاشتۇرۇش ئىقتىدارىنى چەكلەڭ.</string>
+    <string name="adb_pairing_tutorial_content_finish">OmniShizuku غا قايتىپ OmniShizuku نى باشلاڭ.</string>
+    <string name="adb_pairing_tutorial_content_network">OmniShizuku يەرلىك تورغا كىرىشى كېرەك. ئۇ تور ئىجازىتى ئارقىلىق كونترول قىلىنىدۇ.</string>
+    <string name="adb_pairing_tutorial_content_network_limation_not_foreground">بەزى سىستېمىلار (MIUI غا ئوخشاش) ئەپلەر كۆرۈنمىگەن ۋاقىتتا تورغا چىقىشنى چەكلەيدۇ ، گەرچە بۇ دېتال ئالدىنقى مۇلازىمەتنى ئۆلچەملىك ئىشلەتسىمۇ. بۇ خىل سىستېمىلاردىكى OmniShizuku نىڭ باتارېيەنى ئەلالاشتۇرۇش ئىقتىدارىنى چەكلەڭ.</string>
     <string name="home_root_button_start"><![CDATA[Start]]></string>
     <string name="home_root_button_restart"><![CDATA[Restart]]></string>
     <string name="home_app_management_title">ئىلتىماس باشقۇرۇش</string>
-    <string name="home_app_management_empty">Shevery نى تەلەپ قىلغان ياكى ئېلان قىلغان ئەپلەر بۇ يەردە كۆرسىتىلىدۇ.</string>
-    <string name="home_learn_more_title">Shevery نى ئۆگىنىڭ</string>
-    <string name="home_learn_more_description">Shevery بىلەن قانداق تەرەققىي قىلىشنى ئۆگىنىۋېلىڭ</string>
+    <string name="home_app_management_empty">OmniShizuku نى تەلەپ قىلغان ياكى ئېلان قىلغان ئەپلەر بۇ يەردە كۆرسىتىلىدۇ.</string>
+    <string name="home_learn_more_title">OmniShizuku نى ئۆگىنىڭ</string>
+    <string name="home_learn_more_description">OmniShizuku بىلەن قانداق تەرەققىي قىلىشنى ئۆگىنىۋېلىڭ</string>
     <string name="home_quick_terminal"><![CDATA[Terminal]]></string>
     <string name="home_quick_wireless">سىمسىز ADB</string>
     <string name="home_quick_tcp">TCP 5555</string>
@@ -70,18 +70,18 @@ This may be because KeyStore mechanism of this device is broken.]]></string>
     <string name="app_management_select_all">ھەممىنى تاللاڭ</string>
     <string name="app_management_deselect_all">ھەممىنى تاللاڭ</string>
     <string name="app_management_dialog_adb_is_limited_title">Adb نىڭ رۇخسىتى چەكلىك</string>
-    <string name="app_management_item_summary_requires_root">* Shevery نى يىلتىز بىلەن ئىجرا قىلىشنى تەلەپ قىلىدۇ</string>
+    <string name="app_management_item_summary_requires_root">* OmniShizuku نى يىلتىز بىلەن ئىجرا قىلىشنى تەلەپ قىلىدۇ</string>
     <string name="app_management_loading">ئەپلەرنى يۈكلەۋاتىدۇ…</string>
-    <string name="home_terminal_title">تېرمىنال ئەپلىرىدە Shevery نى ئىشلىتىڭ</string>
-    <string name="home_terminal_description">ئۆزىڭىز ياقتۇرىدىغان تېرمىنال ئەپلىرىدە Shevery ئارقىلىق بۇيرۇقلارنى ئىجرا قىلىڭ</string>
+    <string name="home_terminal_title">تېرمىنال ئەپلىرىدە OmniShizuku نى ئىشلىتىڭ</string>
+    <string name="home_terminal_description">ئۆزىڭىز ياقتۇرىدىغان تېرمىنال ئەپلىرىدە OmniShizuku ئارقىلىق بۇيرۇقلارنى ئىجرا قىلىڭ</string>
     <string name="terminal_tutorial_1">بىرىنچى ، ھۆججەتلەرنى خالىغان ئورۇنغا چىقىرىڭ. % 1 $ s ۋە% 2 $ s دىن ئىبارەت ئىككى ھۆججەتنى تاپالايسىز.</string>
     <string name="terminal_tutorial_1_description"><![CDATA[If there are files with the same name in the selected folder, they will be deleted.
 
 The export function uses SAF (Storage Access Framework). It\'s reported that MIUI breaks the functions of SAF. If you are using MIUI, you may have to extract the file from Shevery\'s apk or download from GitHub.]]></string>
     <string name="terminal_export_files">ھۆججەتلەرنى چىقىرىش</string>
     <string name="terminal_tutorial_2">ئاندىن ھەر قانداق تېكىست تەھرىرلىگۈچنى ئىشلىتىپ% 1 $ s نى ئېچىڭ ۋە تەھرىرلەڭ.</string>
-    <string name="terminal_tutorial_2_description">مەسىلەن ، ئەگەر سىز Shevery نى% 1 $ s دە ئىشلەتمەكچى بولسىڭىز ،% 2 $ s نى% 3 $ s غا ئالماشتۇرۇشىڭىز كېرەك (% 4 $ s بولسا% 1 $ s نىڭ ئورالما ئىسمى).</string>
-    <string name="terminal_tutorial_3">ئاخىرىدا ، ھۆججەتلەرنى تېرمىنال دېتالى زىيارەت قىلالايدىغان يەرگە يۆتكەڭ ،% 1 $ s ئارقىلىق Shevery ئارقىلىق بۇيرۇق ئىجرا قىلالايسىز.</string>
+    <string name="terminal_tutorial_2_description">مەسىلەن ، ئەگەر سىز OmniShizuku نى% 1 $ s دە ئىشلەتمەكچى بولسىڭىز ،% 2 $ s نى% 3 $ s غا ئالماشتۇرۇشىڭىز كېرەك (% 4 $ s بولسا% 1 $ s نىڭ ئورالما ئىسمى).</string>
+    <string name="terminal_tutorial_3">ئاخىرىدا ، ھۆججەتلەرنى تېرمىنال دېتالى زىيارەت قىلالايدىغان يەرگە يۆتكەڭ ،% 1 $ s ئارقىلىق OmniShizuku ئارقىلىق بۇيرۇق ئىجرا قىلالايسىز.</string>
     <string name="terminal_tutorial_3_description">بەزى ئۇسۇللار:% 1 $ s نى ئىجرا قىلىشقا ئىجازەت بېرىڭ ھەمدە ئۇنى% 2 $ s غا قوشسىڭىز ،% 1 $ s نى بىۋاسىتە ئىشلىتەلەيسىز.</string>
     <string name="settings_title"><![CDATA[Settings]]></string>
     <string name="settings_language"><![CDATA[Language]]></string>
@@ -93,10 +93,10 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="settings_translation">تەرجىمىگە قاتنىشىڭ</string>
     <string name="settings_translation_summary">% S نى تىلىڭىزغا تەرجىمە قىلىشىمىزغا ياردەملىشىڭ</string>
     <string name="settings_start_on_boot">Root ئارقىلىق قوزغىتىشنى باشلاڭ</string>
-    <string name="settings_start_on_boot_summary">يىلتىز ئىمتىيازلىرىنى ئىشلىتىپ قوزغىتىشتا Shevery نى ئاپتوماتىك قوزغىتىڭ.</string>
+    <string name="settings_start_on_boot_summary">يىلتىز ئىمتىيازلىرىنى ئىشلىتىپ قوزغىتىشتا OmniShizuku نى ئاپتوماتىك قوزغىتىڭ.</string>
     <string name="settings_start_on_boot_adb">سىمسىز چاتاق ئارقىلىق قوزغىتىشنى باشلاڭ</string>
-    <string name="settings_start_on_boot_adb_summary">قوزغىتىشتا ، سىمسىز چاتاقنى قىسقىچە قوزغىتىپ ، ADB ئۈستىدىن Shevery نى قوزغىتىڭ (TCP ئېغىزى 5555). ھېچقانداق يىلتىز تەلەپ قىلىنمايدۇ ، Wi-Fi پەقەت بىر دەملا لازىم بولىدۇ.</string>
-    <string name="settings_start_on_boot_adb_summary_no_tcp">قوزغىتىشتا ، سىمسىز چاتاقنى قىسقىچە قوزغىتىپ ، ADB ئۈستىدىكى Shevery نى قوزغىتىڭ. ھېچقانداق يىلتىز تەلەپ قىلىنمايدۇ ، Wi-Fi پەقەت بىر دەملا لازىم بولىدۇ.</string>
+    <string name="settings_start_on_boot_adb_summary">قوزغىتىشتا ، سىمسىز چاتاقنى قىسقىچە قوزغىتىپ ، ADB ئۈستىدىن OmniShizuku نى قوزغىتىڭ (TCP ئېغىزى 5555). ھېچقانداق يىلتىز تەلەپ قىلىنمايدۇ ، Wi-Fi پەقەت بىر دەملا لازىم بولىدۇ.</string>
+    <string name="settings_start_on_boot_adb_summary_no_tcp">قوزغىتىشتا ، سىمسىز چاتاقنى قىسقىچە قوزغىتىپ ، ADB ئۈستىدىكى OmniShizuku نى قوزغىتىڭ. ھېچقانداق يىلتىز تەلەپ قىلىنمايدۇ ، Wi-Fi پەقەت بىر دەملا لازىم بولىدۇ.</string>
     <string name="settings_start_on_boot_adb_granted"><![CDATA[WRITE_SECURE_SETTINGS قوشۇلدى.]]></string>
     <string name="settings_start_on_boot_adb_warning_no_tcp"><![CDATA[TCP binding (5555 ئېغىز) ئېتىك: سىمسىز خاتالىق تۈزەش داۋاملىق ئىناۋەتلىك بولىدۇ.]]></string>
     <string name="settings_start_on_boot_adb_missing_permission_title"><![CDATA[ئىجازەت خاتا]]></string>
@@ -229,7 +229,7 @@ has been copied to clipboard.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[ئېچىۋېتىلگەن Shevery]]></string>
     <string name="lab_features_title"><![CDATA[تەجرىبىخانا ئالاھىدىلىكى]]></string>
     <string name="lab_features_summary"><![CDATA[تەجرىبە ئالاھىدىلىكى]]></string>
-    <string name="shizuku_connectors_title">Shevery Connectors</string>
+    <string name="shizuku_connectors_title">OmniShizuku Connectors</string>
     <string name="shizuku_connectors_summary"><![CDATA[قىستۇرمىلارنىڭ Shevery نى قوزغىتىشىغا رۇخسەت قىلىش]]></string>
     <string name="unsafe_warning_title"><![CDATA[ئاگاھلاندۇرۇش]]></string>
     <string name="unsafe_warning_message"><![CDATA[بۇ ئىقتىدارنى قوزغىتىش بىخەتەر ئەمەس. جەزىملەشتۇرالامسەن?]]></string>
@@ -264,7 +264,7 @@ has been copied to clipboard.]]></string>
     <string name="watchdog_service_text"><![CDATA[Shevery مۇلازىمىتىنى نازارەت قىلىپ ئەسلىگە كەلتۈرۈش]]></string>
     <string name="watchdog_action_turn_off"><![CDATA[تاقاش]]></string>
     <string name="watchdog_action_channel_settings"><![CDATA[ئاگاھلاندۇرۇشنى تاقاش]]></string>
-    <string name="notification_control_channel_name">Shevery Control</string>
+    <string name="notification_control_channel_name">OmniShizuku Control</string>
     <string name="notification_startup_channel_name"><![CDATA[Shevery ئىگىلىك تىكلەش]]></string>
     <string name="notification_startup_title"><![CDATA[Shevery نى باشلاش]]></string>
     <string name="notification_startup_enabling_wifi"><![CDATA[Wi-Fi خاتالىق تۈزىتىشنى قوزغىتىش...]]></string>
@@ -424,7 +424,7 @@ Ready for commands.]]></string>
     <string name="comput_use_command"><![CDATA[بۇيرۇق ئىشلىتىش]]></string>
     <string name="comput_copied_to_clipboard"><![CDATA[چاپلاش تاختىسىغا كۆچۈرۈلدى.]]></string>
     <string name="comput_copy_command"><![CDATA[كۆچۈرۈش بۇيرۇقى]]></string>
-    <string name="comput_hero_title">Shevery Console</string>
+    <string name="comput_hero_title">OmniShizuku Console</string>
     <string name="comput_hero_subtitle"><![CDATA[سىزنىڭ ئۈسكۈنىڭىزدىكى كۈچلۈك قېپى تېرمىنالى ، Shizuku ئارقىلىق قوزغىلىدۇ .]]></string>
     <string name="comput_status_ready"><![CDATA[تەييار]]></string>
     <string name="comput_status_running"><![CDATA[يۈگۈرۈۋاتىدۇ]]></string>
@@ -531,7 +531,7 @@ After the pairing process starts, you will able to input the pairing code.]]></s
         <string name="adb_pairing_tutorial_content_left_is_clickable">دىققەت قىلىڭ ، «سىمسىز چاتاق» تاللانمىسىنىڭ سول قىسمىنى چېكىشكە بولىدۇ ، چەكسىڭىز يېڭى بەت ئاچىدۇ. پەقەت ئوڭ تەرەپتىكى ۋىكليۇچاتېلنى توغرىلاش توغرا ئەمەس.</string>
     <string name="home_root_title">باشلاش (يىلتىز تارتقان ئۈسكۈنىلەر ئۈچۈن)</string>
     <string name="home_root_description"><![CDATA[In addition, Shevery can be started automatically on boot. If not, please check if your system or third-party tools have restricted Shevery.<br/>You can refer to %s.]]></string>
-    <string name="home_root_description_sui">ئەگەر Magisk نى ئىشلىتىۋاتقان بولسىڭىز ،% 1 $ s نى سىناپ باقسىڭىز بولىدۇ. يىلتىز ئىشلەتكۈچىلەر ئۈچۈن ئۇ ئاخىرىدا Shevery نىڭ ئورنىنى ئالىدۇ. دىققەت ، مەۋجۇت پروگراممىلار% 2 $ s نى ئىشلىتىش ئۈچۈن ئازراق ئۆزگەرتىش كېرەك.</string>
+    <string name="home_root_description_sui">ئەگەر Magisk نى ئىشلىتىۋاتقان بولسىڭىز ،% 1 $ s نى سىناپ باقسىڭىز بولىدۇ. يىلتىز ئىشلەتكۈچىلەر ئۈچۈن ئۇ ئاخىرىدا OmniShizuku نىڭ ئورنىنى ئالىدۇ. دىققەت ، مەۋجۇت پروگراممىلار% 2 $ s نى ئىشلىتىش ئۈچۈن ئازراق ئۆزگەرتىش كېرەك.</string>
     <string name="home_app_management_view_authorized_apps">ھوقۇق بېرىلگەن ئەپلەرنى باشقۇرۇش ئۈچۈن چېكىڭ</string>
     <string name="home_adb_is_limited_description"><![CDATA[Your device manufacturer has restricted adb permissions and apps using Shevery will not work properly.
 
@@ -548,7 +548,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="starting_root_shell"><![CDATA[يىلتىز قېپى باشلىنىدۇ...]]></string>
     <string name="toast_copied_to_clipboard_with_text"><![CDATA[<b>٪s</b> چاپلاش تاختىسىغا كۆچۈرۈلدى.]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Legacy Shevery 2019-يىلى مارتتىن باشلاپ ئەمەلدىن قالدۇرۇلدى. ئۇنىڭدىن باشقا، Legacy Shevery يېڭى ئاندىرويىد سىستېمىسىدا ئىشلىمەيدۇ. <p><b>٪1$s</b> ئاچقۇچىدىن يېڭىلىشىنى تەلەپ قىلىڭ.]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>٪1$s</b> ھازىرقى زامان Shevery نى قوللايدۇ، لېكىن ئۇ Shevery نى تەلەپ قىلىدۇ. بۇ Shevery ئىجرا قىلىنمىغاچقا، Shevery ئەپ دېتالىدىن تەكشۈرۈپ بېقىڭ. <p>Legacy Shevery 2019-يىلى مارتتىن باشلاپ ئەمەلدىن قالدۇرۇلدى.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>٪1$s</b> ھازىرقى زامان OmniShizuku نى قوللايدۇ، لېكىن ئۇ OmniShizuku نى تەلەپ قىلىدۇ. بۇ OmniShizuku ئىجرا قىلىنمىغاچقا، OmniShizuku ئەپ دېتالىدىن تەكشۈرۈپ بېقىڭ. <p>Legacy OmniShizuku 2019-يىلى مارتتىن باشلاپ ئەمەلدىن قالدۇرۇلدى.]]></string>
     <string name="home_dhizuku_title"><![CDATA[باشلاش (Dhizuku)]]></string>
     <string name="home_dhizuku_description"><![CDATA[Dhizuku باشقۇرىدىغان ئۈسكۈنىلەرگە قارىتا، ئۈسكۈنە ئىگىسى ھوقۇقىدىن پايدىلىنىپ Shevery نى بىۋاستە قوزغىتالايسىز.]]></string>
     <string name="comput_no_macros"><![CDATA[تېخىچە ساقلىۋېلىنغان ماكرو يوق. \'Record Macro\' نى چېكىپ، كونۇپكا بۇيرۇقىنى ئۈنگە ئېلىشنى باشلاڭ.]]></string>
@@ -585,8 +585,8 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -600,7 +600,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -613,7 +613,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="notification_auth_missing_title">Auth token required</string>
     <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under Settings → Automation.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
-    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery Settings.</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku Settings.</string>
     <string name="notification_connectors_disabled_title">Automation connectors disabled</string>
-    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in Settings. Tap to enable.</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because OmniShizuku connectors are disabled in Settings. Tap to enable.</string>
 </resources>

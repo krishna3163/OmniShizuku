@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!--
+    The theme the launch window is drawn in, before the app's own theme setting has been read.
+    Android TV leaves the system's night mode off while its whole interface is dark, so the light
+    theme was picked and every launch opened on a full screen of white in a dark room. A TV is
+    dark here whatever the system says; the app's own setting still applies once it is running.
+    -->
+    <style name="AppTheme" parent="Theme" />
+</resources>

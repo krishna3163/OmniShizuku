@@ -265,3 +265,56 @@ fun AdbPairDialog(
         shape = MaterialTheme.shapes.extraLarge
     )
 }
+
+@RequiresApi(Build.VERSION_CODES.R)
+class AdbPairDialogFragment : androidx.fragment.app.DialogFragment() {
+    private var binding: moe.shizuku.manager.databinding.AdbPairDialogBinding? = null
+
+    override fun onCreateDialog(savedInstanceState: android.os.Bundle?): android.app.Dialog {
+        val context = requireContext()
+        val inflater = android.view.LayoutInflater.from(context)
+        val b = moe.shizuku.manager.databinding.AdbPairDialogBinding.inflate(inflater)
+        binding = b
+
+        val builder = com.google.android.material.dialog.MaterialAlertDialogBuilder(context).apply {
+            setTitle(R.string.dialog_adb_pairing_title)
+            setView(b.root)
+            setNegativeButton(android.R.string.cancel, null)
+            setPositiveButton(android.R.string.ok, null)
+            setNeutralButton(R.string.development_settings, null)
+        }
+        val dialog = builder.create()
+        dialog.setCanceledOnTouchOutside(false)
+        dialog.setOnShowListener {
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEUTRAL).setOnClickListener {
+                moe.shizuku.manager.utils.SettingsHelper.launchOrHighlightWirelessDebugging(it.context)
+            }
+            dialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE).setOnClickListener {
+                val port = b.port.editText?.text?.toString()?.toIntOrNull() ?: -1
+                if (port !in 1..65535) {
+                    b.port.error = context.getString(R.string.dialog_adb_invalid_port)
+                    return@setOnClickListener
+                }
+                val password = b.pairingCode.editText?.text?.toString().orEmpty()
+                kotlinx.coroutines.CoroutineScope(Dispatchers.IO).launch {
+                    try {
+                        val key = AdbKey(PreferenceAdbKeyStore(ShizukuSettings.getPreferences()), "shizuku")
+                        AdbPairingClient("127.0.0.1", port, password, key).start()
+                        withContext(Dispatchers.Main) { dismissAllowingStateLoss() }
+                    } catch (e: Throwable) {
+                        withContext(Dispatchers.Main) {
+                            b.pairingCode.error = context.getString(R.string.paring_code_is_wrong)
+                        }
+                    }
+                }
+            }
+        }
+        return dialog
+    }
+
+    fun show(fragmentManager: androidx.fragment.app.FragmentManager) {
+        if (fragmentManager.isStateSaved) return
+        show(fragmentManager, javaClass.simpleName)
+    }
+}
+

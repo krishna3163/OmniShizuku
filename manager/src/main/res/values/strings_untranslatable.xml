@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="translation_url" translatable="false">https://rikka.app/contribute_translation/</string>
+    <string name="help_url" translatable="false">https://github.com/thedjchi/Shizuku/wiki</string>
+    <string name="diagnostics_write_secure" translatable="false">WRITE_SECURE_SETTINGS</string>
+    <string name="automation_apps_url" translatable="false">https://github.com/thedjchi/Shizuku/wiki#using-automation-apps-to-startstop-shizuku</string>
+    <string name="buymeacoffee_url" translatable="false">https://www.buymeacoffee.com/rushiranpise</string>
 </resources>

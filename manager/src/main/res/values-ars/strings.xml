@@ -95,10 +95,10 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="settings_translation"><![CDATA[المشاركة في الترجمة]]></string>
     <string name="settings_translation_summary">ساعدنا في ترجمة %s إلى لغتك</string>
     <string name="settings_start_on_boot">البدء في التمهيد عبر الجذر</string>
-    <string name="settings_start_on_boot_summary">قم بتشغيل Shevery تلقائيًا عند التمهيد باستخدام امتيازات الجذر.</string>
+    <string name="settings_start_on_boot_summary">قم بتشغيل OmniShizuku تلقائيًا عند التمهيد باستخدام امتيازات الجذر.</string>
     <string name="settings_start_on_boot_adb"><![CDATA[ابدأ عند التمهيد عبر تصحيح الأخطاء اللاسلكية]]></string>
     <string name="settings_start_on_boot_adb_summary"><![CDATA[عند التمهيد، قم بتمكين تصحيح الأخطاء اللاسلكية لفترة وجيزة وابدأ تشغيل Shevery عبر ADB (منفذ TCP 5555). لا يلزم وجود جذر، هناك حاجة إلى شبكة Wi-Fi للحظة واحدة فقط.]]></string>
-    <string name="settings_start_on_boot_adb_summary_no_tcp">عند التمهيد، قم بتمكين تصحيح الأخطاء اللاسلكية لفترة وجيزة وابدأ تشغيل Shevery عبر ADB. لا يلزم وجود جذر، هناك حاجة إلى شبكة Wi-Fi للحظة واحدة فقط.</string>
+    <string name="settings_start_on_boot_adb_summary_no_tcp">عند التمهيد، قم بتمكين تصحيح الأخطاء اللاسلكية لفترة وجيزة وابدأ تشغيل OmniShizuku عبر ADB. لا يلزم وجود جذر، هناك حاجة إلى شبكة Wi-Fi للحظة واحدة فقط.</string>
     <string name="settings_start_on_boot_adb_granted"><![CDATA[تم منح WRITE_SECURE_SETTINGS.]]></string>
     <string name="settings_start_on_boot_adb_warning_no_tcp">ربط TCP (المنفذ 5555) متوقف عن التشغيل: سيظل تصحيح الأخطاء اللاسلكي ممكنًا.</string>
     <string name="settings_start_on_boot_adb_missing_permission_title">إذن مفقود</string>
@@ -111,7 +111,7 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="settings_use_system_color">استخدم لون سمة النظام</string>
     <string name="modules_title">وحدات بنك التنمية الآسيوي</string>
     <string name="modules_settings_title"><![CDATA[Modules]]></string>
-    <string name="modules_settings_summary">قم بتثبيت وحدات ZIP وقم بتشغيل إجراءاتها من خلال خادم Shevery ADB/root النشط</string>
+    <string name="modules_settings_summary">قم بتثبيت وحدات ZIP وقم بتشغيل إجراءاتها من خلال خادم OmniShizuku ADB/root النشط</string>
     <string name="modules_header_summary">تم تثبيت %1$d، وتم تمكين %2$d</string>
     <string name="modules_version_label">الإصدار: %s</string>
     <string name="modules_author_label">المؤلف: %s</string>
@@ -129,7 +129,7 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="modules_permission_service">تشغيل الخدمة</string>
     <string name="modules_permission_service_summary">السماح بـservice.sh عند تمكين إجراءات الخلفية أيضًا.</string>
     <string name="modules_permission_web_bridge">جسر واجهة WebUI</string>
-    <string name="modules_permission_web_bridge_summary">يعرض window.Shevery فقط لواجهة WebUI المحلية وفقط عند إيقاف تشغيل WebView.</string>
+    <string name="modules_permission_web_bridge_summary">يعرض window.OmniShizuku فقط لواجهة WebUI المحلية وفقط عند إيقاف تشغيل WebView.</string>
     <string name="modules_permission_web_network">عرض ويب على الإنترنت</string>
     <string name="modules_permission_web_network_summary">السماح بالتنقل/الأصول عبر HTTPS. يؤدي هذا إلى تعطيل عرض جسر الصدفة لعرض الويب هذا.</string>
     <string name="modules_permission_web_download">تنزيل واجهة الويب ()</string>
@@ -157,7 +157,7 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="modules_webui">وحدة WebUI</string>
     <string name="modules_delete"><![CDATA[Delete]]></string>
     <string name="modules_delete_title">هل تريد حذف الوحدة؟</string>
-    <string name="modules_delete_message">ستتم إزالة %s من وحدة تخزين وحدة Shevery.</string>
+    <string name="modules_delete_message">ستتم إزالة %s من وحدة تخزين وحدة OmniShizuku.</string>
     <string name="modules_action_result">انتهى الإجراء: الخروج %d</string>
     <string name="modules_action_failed">فشل الإجراء</string>
     <string name="modules_service_result">انتهت الخدمة: الخروج %d</string>
@@ -197,13 +197,13 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="action_about"><![CDATA[About]]></string>
     <string name="about_source_code_button">كود المصدر</string>
     <string name="action_stop">وقف شيفيري</string>
-    <string name="dialog_stop_message">سيتم إيقاف خدمة Shevery.</string>
-    <string name="service_already_stopped">خدمة Shevery متوقفة بالفعل.</string>
-    <string name="service_stop_success">توقفت خدمة Shevery.</string>
+    <string name="dialog_stop_message">سيتم إيقاف خدمة OmniShizuku.</string>
+    <string name="service_already_stopped">خدمة OmniShizuku متوقفة بالفعل.</string>
+    <string name="service_stop_success">توقفت خدمة OmniShizuku.</string>
     <string name="service_stop_still_running">الخدمة لا تزال قيد التشغيل</string>
-    <string name="service_stop_failed">فشل في إيقاف Shevery: %1$s</string>
+    <string name="service_stop_failed">فشل في إيقاف OmniShizuku: %1$s</string>
     <string name="notification_channel_service_status">حالة بدء الخدمة</string>
-    <string name="notification_service_starting">بدأت خدمة Shevery…</string>
+    <string name="notification_service_starting">بدأت خدمة OmniShizuku…</string>
     <string name="notification_service_start_failed"><![CDATA[فشل تشغيل خدمة Shevery.]]></string>
     <string name="notification_service_start_no_root"><![CDATA[فشل في طلب إذن الجذر.]]></string>
     <string name="notification_working"><![CDATA[Working…]]></string>
@@ -218,7 +218,7 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="notification_adb_pairing_failed_title">فشل الاقتران</string>
     <string name="notification_adb_pairing_retry"><![CDATA[Retry]]></string>
     <string name="permission_label">الوصول إلى شيفيري</string>
-    <string name="permission_description">السماح للتطبيق باستخدام Shevery.</string>
+    <string name="permission_description">السماح للتطبيق باستخدام OmniShizuku.</string>
     <string name="grant_dialog_button_allow_always">السماح في كل وقت</string>
     <string name="grant_dialog_button_deny"><![CDATA["Deny"]]></string>
     <string name="starter"><![CDATA[Starter]]></string>
@@ -226,26 +226,26 @@ The export function uses SAF (Storage Access Framework). It\'s reported that MIU
     <string name="dialog_cannot_open_browser_title">لا يمكن بدء المتصفح</string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s
 has been copied to clipboard.]]></string>
-    <string name="dialog_legacy_not_support_title">%1$s لا يدعم Shevery الحديث</string>
-    <string name="dialog_requesting_legacy_title">%1$s يطلب Shevery القديم</string>
+    <string name="dialog_legacy_not_support_title">%1$s لا يدعم OmniShizuku الحديث</string>
+    <string name="dialog_requesting_legacy_title">%1$s يطلب OmniShizuku القديم</string>
     <string name="dialog_requesting_legacy_button_open_shizuku">افتح شيفيري</string>
     <string name="lab_features_title">مميزات المختبر</string>
     <string name="lab_features_summary">الميزات التجريبية</string>
     <string name="shizuku_connectors_title">موصلات شيفيري</string>
-    <string name="shizuku_connectors_summary">السماح للمكونات الإضافية بتفعيل Shevery</string>
+    <string name="shizuku_connectors_summary">السماح للمكونات الإضافية بتفعيل OmniShizuku</string>
     <string name="unsafe_warning_title"><![CDATA[تحذير]]></string>
     <string name="unsafe_warning_message">تمكين هذه الميزة غير آمن. هل أنت متأكد؟</string>
     <string name="dhizuku_mode_title">وضع ديزوكو</string>
-    <string name="dhizuku_mode_summary">اسمح لـ Shevery بالعمل عبر الارتباط بـ Dhizuku</string>
+    <string name="dhizuku_mode_summary">اسمح لـ OmniShizuku بالعمل عبر الارتباط بـ Dhizuku</string>
     <string name="dhizuku_warning_title">تحذير: وضع Dhizuku</string>
-    <string name="dhizuku_warning_message">تم تصميم Dhizuku لامتيازات مالك/مسؤول الجهاز. قد لا تعمل بعض الأوامر الخاصة بـ Shell والأوامر الخاصة بـ ADB بشكل صحيح أو قد تكون غير مدعومة تمامًا عند تشغيل Shevery عبر Dhizuku. هل أنت متأكد أنك تريد المتابعة؟</string>
+    <string name="dhizuku_warning_message">تم تصميم Dhizuku لامتيازات مالك/مسؤول الجهاز. قد لا تعمل بعض الأوامر الخاصة بـ Shell والأوامر الخاصة بـ ADB بشكل صحيح أو قد تكون غير مدعومة تمامًا عند تشغيل OmniShizuku عبر Dhizuku. هل أنت متأكد أنك تريد المتابعة؟</string>
     <string name="settings_tcp_mode">وضع TCP</string>
-    <string name="settings_tcp_mode_summary">أعد تشغيل بدء تشغيل ADB على منفذ TCP 5555 حتى يتمكن Shevery من إعادة الاتصال دون الاعتماد على منفذ تصحيح الأخطاء اللاسلكي المتغير.</string>
+    <string name="settings_tcp_mode_summary">أعد تشغيل بدء تشغيل ADB على منفذ TCP 5555 حتى يتمكن OmniShizuku من إعادة الاتصال دون الاعتماد على منفذ تصحيح الأخطاء اللاسلكي المتغير.</string>
     <string name="settings_restart_dialog_title">إعادة التشغيل مطلوبة</string>
     <string name="settings_restart_dialog_message"><![CDATA[يحتاج Shevery إلى إعادة التشغيل لتطبيق هذا التغيير في وضع TCP.]]></string>
-    <string name="settings_restart_dialog_message_wifi_required">مطلوب Wi-Fi لإعادة التشغيل لأول مرة لأنه يجب على Shevery الاتصال بمنفذ تصحيح الأخطاء اللاسلكي الحالي قبل تحويل ADB إلى 5555.</string>
+    <string name="settings_restart_dialog_message_wifi_required">مطلوب Wi-Fi لإعادة التشغيل لأول مرة لأنه يجب على OmniShizuku الاتصال بمنفذ تصحيح الأخطاء اللاسلكي الحالي قبل تحويل ADB إلى 5555.</string>
     <string name="settings_auto_disable_usb_debugging">تعطيل تصحيح أخطاء USB تلقائيًا</string>
-    <string name="settings_auto_disable_usb_debugging_summary">قم بإيقاف تشغيل تصحيح أخطاء USB بعد إعادة التشغيل عندما لا يتم تكوين Shevery لبدء التشغيل</string>
+    <string name="settings_auto_disable_usb_debugging_summary">قم بإيقاف تشغيل تصحيح أخطاء USB بعد إعادة التشغيل عندما لا يتم تكوين OmniShizuku لبدء التشغيل</string>
     <string name="settings_service_group">صيانة الخدمة</string>
     <string name="settings_application"><![CDATA[Application]]></string>
     <string name="settings_appearance"><![CDATA[Appearance]]></string>
@@ -318,11 +318,11 @@ has been copied to clipboard.]]></string>
     <string name="update_settings_github_pat_clear"><![CDATA[Clear]]></string>
     <string name="update_settings_github_pat_delete">حذف الرمز المميز</string>
     <string name="update_settings_github_pat_delete_summary">إزالة رمز GitHub المخزن</string>
-    <string name="shevery_update_check_title">تحقق من وجود تحديثات Shevery</string>
-    <string name="shevery_update_check_summary">تحقق من وجود إصدارات أحدث من مدير Shevery</string>
-    <string name="shevery_update_checking">جارٍ التحقق من تحديثات Shevery…</string>
-    <string name="shevery_update_up_to_date">Shevery محدث (%s)</string>
-    <string name="shevery_update_available_title">تحديث Shevery الجديد متاح!</string>
+    <string name="shevery_update_check_title">تحقق من وجود تحديثات OmniShizuku</string>
+    <string name="shevery_update_check_summary">تحقق من وجود إصدارات أحدث من مدير OmniShizuku</string>
+    <string name="shevery_update_checking">جارٍ التحقق من تحديثات OmniShizuku…</string>
+    <string name="shevery_update_up_to_date">OmniShizuku محدث (%s)</string>
+    <string name="shevery_update_available_title">تحديث OmniShizuku الجديد متاح!</string>
     <string name="shevery_update_available_msg">الإصدار %1$s متاح (الحالي: %2$s)</string>
     <string name="shevery_update_download_apk">تنزيل APK</string>
     <string name="shevery_update_view_release">عرض على جيثب</string>
@@ -377,7 +377,7 @@ has been copied to clipboard.]]></string>
     <string name="comput_recommand_title">ReCommand للحوسبة</string>
     <string name="comput_recommand_summary">إظهار مربع حوار التأكيد قبل تشغيل الأوامر في وحدة تحكم الكمبيوتر</string>
     <string name="comput_recommand_confirmation">هل أنت متأكد أنك تريد تنفيذ أمر ADB هذا في Comput؟</string>
-    <string name="comput_ai_api_key_empty">مفتاح Google AI Studio API فارغ! يرجى تكوينه في إعدادات Shevery (إعدادات وحدة التحكم بالكمبيوتر).</string>
+    <string name="comput_ai_api_key_empty">مفتاح Google AI Studio API فارغ! يرجى تكوينه في إعدادات OmniShizuku (إعدادات وحدة التحكم بالكمبيوتر).</string>
     <string name="comput_ai_api_key_title">جوجل AI ستوديو API مفتاح</string>
     <string name="comput_ai_api_key_not_configured">لم يتم تكوينه (لن يعمل Gemini AI)</string>
     <string name="comput_gemini_model_title">نموذج الجوزاء للذكاء الاصطناعي</string>
@@ -546,7 +546,7 @@ Ready for commands.]]></string>
     <string name="starting_root_shell"><![CDATA[بدء تشغيل شل الجذر…]]></string>
     <string name="toast_copied_to_clipboard_with_text"><![CDATA[<b>%s</b> تم نسخه إلى الحافظة.]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[تم إيقاف دعم الإصدار القديم من Shevery منذ مارس 2019. كما أن الإصدار القديم من Shevery لا يعمل على أنظمة أندرويد الأحدث.<p>يرجى مطالبة مطور <b>%1$s</b> بتحديث التطبيق.]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> يدعم الإصدار الحديث من Shevery، لكنه يطلب الإصدار القديم من Shevery. قد يكون السبب في ذلك أن Shevery غير قيد التشغيل، يرجى التحقق من ذلك في تطبيق Shevery.<p>تم إيقاف دعم الإصدار القديم من Shevery منذ مارس 2019.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> يدعم الإصدار الحديث من OmniShizuku، لكنه يطلب الإصدار القديم من OmniShizuku. قد يكون السبب في ذلك أن OmniShizuku غير قيد التشغيل، يرجى التحقق من ذلك في تطبيق OmniShizuku.<p>تم إيقاف دعم الإصدار القديم من OmniShizuku منذ مارس 2019.]]></string>
     <string name="home_dhizuku_title"><![CDATA[البدء (عبر Dhizuku)]]></string>
     <string name="home_dhizuku_description"><![CDATA[بالنسبة للأجهزة التي تديرها Dhizuku، يمكنك تشغيل Shevery مباشرةً باستخدام صلاحيات «مالك الجهاز».]]></string>
     <string name="adb_pairing_tutorial_content_miui">قد يحتاج مستخدمو MIUI إلى تبديل نمط الإشعارات إلى "Android" من "الإشعارات" - "مركز الإشعارات" في إعدادات النظام.</string>
@@ -583,8 +583,8 @@ Ready for commands.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">التحكم في Shevery عبر تطبيقات الأتمتة</string>
-    <string name="home_automation_description">يمكن لتطبيقات مثل Tasker و MacroDroid إرسال مقاصد (Intents) لبدء Shevery أو إيقافه أو إعادة تشغيله تلقائياً.</string>
+    <string name="home_automation_title">التحكم في OmniShizuku عبر تطبيقات الأتمتة</string>
+    <string name="home_automation_description">يمكن لتطبيقات مثل Tasker و MacroDroid إرسال مقاصد (Intents) لبدء OmniShizuku أو إيقافه أو إعادة تشغيله تلقائياً.</string>
     <string name="home_automation_button_view_intents">عرض المقاصد</string>
     <string name="home_automation_bottom_sheet_intents">مقاصد الأتمتة</string>
     <string name="home_automation_bottom_sheet_description">قم بتهيئة المقاصد في Tasker أو MacroDroid، أو قم بتشغيل الأمر مباشرة من Termux / ADB. انقر للنسخ.</string>
@@ -598,7 +598,7 @@ Ready for commands.]]></string>
     <string name="home_automation_regenerate_token">إعادة إنشاء الرمز</string>
     <string name="home_automation_regenerate_token_confirm">هل أنت متأكد من رغبتك في إعادة إنشاء الرمز؟ سيلزم تحديث أي مقاصد مسبقة في Tasker أو MacroDroid بالرمز الجديد.</string>
     <string name="automation_security_group_title">المصادقة والأمان</string>
-    <string name="automation_security_description">تتطلب مقاصد البث المباشر تمرير رمز المصادقة السري هذا كإضافة \'auth\' (-e auth &lt;token&gt;). هذا يحمي Shevery من التطبيقات غير المصرح لها.</string>
+    <string name="automation_security_description">تتطلب مقاصد البث المباشر تمرير رمز المصادقة السري هذا كإضافة \'auth\' (-e auth &lt;token&gt;). هذا يحمي OmniShizuku من التطبيقات غير المصرح لها.</string>
     <string name="automation_regenerate_token_summary">إنشاء رمز سري جديد وإبطال الرمز الحالي</string>
     <string name="automation_target_component_label">مكون المستقبل</string>
     <string name="home_automation_connectors_disabled_status">الموصلات معطلة (المقاصد غير نشطة)</string>
@@ -611,7 +611,7 @@ Ready for commands.]]></string>
     <string name="notification_auth_missing_title">رمز المصادقة مطلوب</string>
     <string name="notification_auth_missing_message">أضف “auth” الإضافي إلى قصدك. يمكنك العثور على رمزك ضمن الإعدادات ← الأتمتة.</string>
     <string name="notification_auth_invalid_title">رمز مصادقة غير صالح</string>
-    <string name="notification_auth_invalid_message">تأكد من مطابقة الرمز في قصدك للرمز الموجود في إعدادات Shevery.</string>
+    <string name="notification_auth_invalid_message">تأكد من مطابقة الرمز في قصدك للرمز الموجود في إعدادات OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">موصلات الأتمتة معطلة</string>
-    <string name="notification_connectors_disabled_message">تم حظر قصد الأتمتة لأن موصلات Shevery معطلة في الإعدادات. انقر للتمكين.</string>
+    <string name="notification_connectors_disabled_message">تم حظر قصد الأتمتة لأن موصلات OmniShizuku معطلة في الإعدادات. انقر للتمكين.</string>
 </resources>

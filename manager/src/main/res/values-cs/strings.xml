@@ -110,7 +110,7 @@
     <string name="shevery_update_auto_check">Zkontrolujte aktualizace na pozadí</string>
     <string name="shevery_update_auto_check_summary">Hledejte nové verze, i když je aplikace zavřená</string>
     <string name="update_settings_frequency_label">Zkontrolujte frekvenci</string>
-    <string name="home_update_available_title">Dostupná aktualizace Shevery: %s</string>
+    <string name="home_update_available_title">Dostupná aktualizace OmniShizuku: %s</string>
     <string name="home_update_available_body">Novější verze je připravena. Klepnutím stáhnete.</string>
     <string name="accessibility_navigate_up"><![CDATA[Přejít nahoru]]></string>
     <string name="accessibility_close"><![CDATA[Zavřít]]></string>
@@ -586,8 +586,8 @@ bylo zkopírováno do schránky.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Ovládejte Shevery pomocí automatizačních aplikací</string>
-    <string name="home_automation_description">Aplikace jako Tasker a MacroDroid mohou posílat intenty k automatickému spuštění, zastavení, restartování nebo přepnutí Shevery.</string>
+    <string name="home_automation_title">Ovládejte OmniShizuku pomocí automatizačních aplikací</string>
+    <string name="home_automation_description">Aplikace jako Tasker a MacroDroid mohou posílat intenty k automatickému spuštění, zastavení, restartování nebo přepnutí OmniShizuku.</string>
     <string name="home_automation_button_view_intents">Zobrazit intenty</string>
     <string name="home_automation_bottom_sheet_intents">Automatizační intenty</string>
     <string name="home_automation_bottom_sheet_description">Nakonfigurujte intenty v aplikaci Tasker nebo MacroDroid, nebo spusťte příkaz přímo z Termuxu / ADB. Klepnutím zkopírujte.</string>
@@ -601,7 +601,7 @@ bylo zkopírováno do schránky.]]></string>
     <string name="home_automation_regenerate_token">Znovu vygenerovat token</string>
     <string name="home_automation_regenerate_token_confirm">Opravdu chcete znovu vygenerovat token? Všechny nakonfigurované intenty bude nutné aktualizovat novým tokenem.</string>
     <string name="automation_security_group_title">Ověřování a zabezpečení</string>
-    <string name="automation_security_description">Přímé vysílané intenty vyžadují předání tohoto tajného ověřovacího tokenu jako extra \'auth\' (-e auth &lt;token&gt;). To chrání Shevery před neoprávněnými aplikacemi.</string>
+    <string name="automation_security_description">Přímé vysílané intenty vyžadují předání tohoto tajného ověřovacího tokenu jako extra \'auth\' (-e auth &lt;token&gt;). To chrání OmniShizuku před neoprávněnými aplikacemi.</string>
     <string name="automation_regenerate_token_summary">Vygenerovat nový tajný token a zneplatnit stávající</string>
     <string name="automation_target_component_label">Komponenta přijímače</string>
     <string name="home_automation_connectors_disabled_status">Konektory zakázány (Intenty neaktivní)</string>
@@ -614,7 +614,7 @@ bylo zkopírováno do schránky.]]></string>
     <string name="notification_auth_missing_title">Vyžadován ověřovací token</string>
     <string name="notification_auth_missing_message">Přidejte extra “auth” do svého záměru. Token naleznete v Nastavení → Automatizace.</string>
     <string name="notification_auth_invalid_title">Neplatný ověřovací token</string>
-    <string name="notification_auth_invalid_message">Ujistěte se, že token ve vašem záměru odpovídá tokenu v Nastavení Shevery.</string>
+    <string name="notification_auth_invalid_message">Ujistěte se, že token ve vašem záměru odpovídá tokenu v Nastavení OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Konektory automatizace zakázány</string>
-    <string name="notification_connectors_disabled_message">Záměr automatizace byl zablokován, protože konektory Shevery jsou v Nastavení zakázány. Klepnutím povolte.</string>
+    <string name="notification_connectors_disabled_message">Záměr automatizace byl zablokován, protože konektory OmniShizuku jsou v Nastavení zakázány. Klepnutím povolte.</string>
 </resources>

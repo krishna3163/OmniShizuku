@@ -28,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.graphics.drawable.toBitmap
 import kotlinx.coroutines.launch
+import moe.shizuku.manager.BuildConfig
 import moe.shizuku.manager.module.ModuleSettings
 import moe.shizuku.manager.module.update.SheveryAppUpdateDialog
 import moe.shizuku.manager.module.update.SheveryAppUpdateResult
@@ -48,8 +49,6 @@ class AboutActivity : AppActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val versionName = packageManager.getPackageInfo(packageName, 0).versionName ?: "Unknown"
-
         setContent {
             val scope = rememberCoroutineScope()
             var isCheckingUpdate by remember { mutableStateOf(false) }
@@ -61,7 +60,7 @@ class AboutActivity : AppActivity() {
                     onNavigateUp = { finish() }
                 ) {
                     item {
-                        AboutHeader(versionName)
+                        AboutHeader()
                     }
                     
                     item {
@@ -73,7 +72,15 @@ class AboutActivity : AppActivity() {
                     }
 
                     item {
-                        Spacer(modifier = Modifier.height(8.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
+                    }
+
+                    item {
+                        AboutDeveloperCard()
+                    }
+
+                    item {
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
 
                     item {
@@ -167,7 +174,7 @@ class AboutActivity : AppActivity() {
     }
 
     @Composable
-    private fun AboutHeader(versionName: String) {
+    private fun AboutHeader() {
         val context = androidx.compose.ui.platform.LocalContext.current
         var iconTaps by remember { mutableIntStateOf(0) }
         val appIcon = remember(context) {
@@ -222,7 +229,7 @@ class AboutActivity : AppActivity() {
                     modifier = Modifier.padding(top = 8.dp)
                 ) {
                     Text(
-                        text = "Version $versionName",
+                        text = "Version ${BuildConfig.VERSION_NAME}",
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
@@ -245,18 +252,60 @@ class AboutActivity : AppActivity() {
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
-                    text = "What is Shizuku?",
+                    text = "What is OmniShizuku?",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = "Shizuku is a powerful and secure service that bridges normal user-space applications with privileged system APIs directly through root or ADB bindings.",
+                    text = "OmniShizuku is the universal Android system evolution bridging normal applications with privileged APIs directly via Root, Wireless ADB, and Dhizuku Device Owner. Engineered for smartphones, Android TV, Wear OS smartwatches, and tablets.",
                     style = MaterialTheme.typography.bodyMedium,
                     lineHeight = 20.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
+            }
+        }
+    }
+
+    @Composable
+    private fun AboutDeveloperCard() {
+        val context = this@AboutActivity
+        Card(
+            shape = MaterialTheme.shapes.extraLarge,
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surfaceContainerLow
+            ),
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(modifier = Modifier.padding(24.dp)) {
+                Text(
+                    text = "Creator & Lead Architect",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = "Krishna (krishna3163)",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    color = MaterialTheme.colorScheme.onSurface
+                )
+                Text(
+                    text = "Lead Architect & Developer of OmniShizuku. Creator of Multi-Platform Android TV and Wear OS support, modern CI/CD automation, and unified privilege systems.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    lineHeight = 20.sp,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(top = 4.dp, bottom = 12.dp)
+                )
+                OutlinedButton(
+                    onClick = {
+                        CustomTabsHelper.launchUrlOrCopy(context, "https://github.com/krishna3163")
+                    }
+                ) {
+                    Text("Visit GitHub Profile")
+                }
             }
         }
     }
@@ -272,14 +321,14 @@ class AboutActivity : AppActivity() {
         ) {
             Column(modifier = Modifier.padding(24.dp)) {
                 Text(
-                    text = "Versioning",
+                    text = "Release v${BuildConfig.VERSION_NAME}",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.primary,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
                 Text(
-                    text = "Starting with 14.0, Shevery no longer uses the old \"14.0 rXX\" revision scheme. Releases advance as 14.0, 14.1, 14.2, … up to 14.9, then continue at 15.0–15.9, and so on. The internal git commit count used for versionCode is unchanged.",
+                    text = "OmniShizuku brings together Shizuku ADB, Dhizuku Device Owner, and universal multi-device support across smartphone, Android TV, and Wear OS platforms.",
                     style = MaterialTheme.typography.bodyMedium,
                     lineHeight = 20.sp,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
@@ -295,18 +344,27 @@ class AboutActivity : AppActivity() {
             SettingsRow(
                 icon = R.drawable.ic_baseline_link_24,
                 title = stringResource(R.string.about_source_code_button),
-                summary = "github.com/HmnDev-Tech/shevery",
+                summary = "github.com/krishna3163/OmniShizuku",
                 onClick = {
-                    CustomTabsHelper.launchUrlOrCopy(context, "https://github.com/HmnDev-Tech/shevery")
+                    CustomTabsHelper.launchUrlOrCopy(context, "https://github.com/krishna3163/OmniShizuku")
                }
             )
             GroupDivider()
             SettingsRow(
                 icon = R.drawable.ic_outline_info_24,
-                title = "Channel",
-                summary = "Join the community channel",
+                title = "Developer GitHub",
+                summary = "github.com/krishna3163",
                 onClick = {
-                    CustomTabsHelper.launchUrlOrCopy(context, "https://t.me/hmndevtech")
+                    CustomTabsHelper.launchUrlOrCopy(context, "https://github.com/krishna3163")
+                }
+            )
+            GroupDivider()
+            SettingsRow(
+                icon = R.drawable.ic_outline_notifications_active_24,
+                title = "Releases & Updates",
+                summary = "github.com/krishna3163/OmniShizuku/releases",
+                onClick = {
+                    CustomTabsHelper.launchUrlOrCopy(context, "https://github.com/krishna3163/OmniShizuku/releases")
                 }
             )
         }

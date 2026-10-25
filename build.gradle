@@ -35,6 +35,10 @@ try {
 } catch (Exception ignored) {}
 
 def gitCommitCount = 45
+try {
+    def count = 'git rev-list --count HEAD'.execute([], project.rootDir).text.trim()
+    if (!count.isEmpty()) gitCommitCount = count.toInteger()
+} catch (Exception ignored) {}
 
 def baseVersionName = "${api_version_name}"
 ext {

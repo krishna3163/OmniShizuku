@@ -301,7 +301,7 @@ a fost copiat în clipboard.]]></string>
     <string name="watchdog_service_text"><![CDATA[Monitorizarea serviciului Shevery pentru recuperarea prin keep-alive]]></string>
     <string name="watchdog_action_turn_off"><![CDATA[Oprire]]></string>
     <string name="watchdog_action_channel_settings"><![CDATA[Dezactivează alertele]]></string>
-    <string name="notification_control_channel_name">Shevery Control</string>
+    <string name="notification_control_channel_name">OmniShizuku Control</string>
     <string name="notification_startup_channel_name"><![CDATA[O companie start-up din Shevery]]></string>
     <string name="notification_startup_title"><![CDATA[Începutul lui Shevery]]></string>
     <string name="notification_startup_enabling_wifi"><![CDATA[Activarea depanării prin Wi-Fi…]]></string>
@@ -585,8 +585,8 @@ Gata să primească comenzi.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Controlează Shevery cu aplicații de automatizare</string>
-    <string name="home_automation_description">Aplicații precum Tasker și MacroDroid pot trimite intenții pentru a porni, opri, reporni sau comuta Shevery automat.</string>
+    <string name="home_automation_title">Controlează OmniShizuku cu aplicații de automatizare</string>
+    <string name="home_automation_description">Aplicații precum Tasker și MacroDroid pot trimite intenții pentru a porni, opri, reporni sau comuta OmniShizuku automat.</string>
     <string name="home_automation_button_view_intents">Vizualizare intenții</string>
     <string name="home_automation_bottom_sheet_intents">Intenții de automatizare</string>
     <string name="home_automation_bottom_sheet_description">Configurați intențiile în Tasker sau MacroDroid, sau rulați comanda direct din Termux / ADB. Atingeți pentru a copia.</string>
@@ -600,7 +600,7 @@ Gata să primească comenzi.]]></string>
     <string name="home_automation_regenerate_token">Regenerează token</string>
     <string name="home_automation_regenerate_token_confirm">Sigur doriți să regenerați tokenul? Toate intențiile configurate vor trebui actualizate cu noul token.</string>
     <string name="automation_security_group_title">Autentificare și securitate</string>
-    <string name="automation_security_description">Intențiile de difuzare directă necesită acest token secret de autentificare transmis ca extra \'auth\' (-e auth &lt;token&gt;). Aceasta protejează Shevery de aplicațiile neautorizate.</string>
+    <string name="automation_security_description">Intențiile de difuzare directă necesită acest token secret de autentificare transmis ca extra \'auth\' (-e auth &lt;token&gt;). Aceasta protejează OmniShizuku de aplicațiile neautorizate.</string>
     <string name="automation_regenerate_token_summary">Generați un nou token secret și invalidați-l pe cel existent</string>
     <string name="automation_target_component_label">Componentă receptor</string>
     <string name="home_automation_connectors_disabled_status">Conectori dezactivați (Intenții inactive)</string>
@@ -613,7 +613,7 @@ Gata să primească comenzi.]]></string>
     <string name="notification_auth_missing_title">Token de autentificare necesar</string>
     <string name="notification_auth_missing_message">Adăugați extra “auth” la intent. Puteți găsi tokenul în Setări → Automatizare.</string>
     <string name="notification_auth_invalid_title">Token de autentificare nevalid</string>
-    <string name="notification_auth_invalid_message">Asigurați-vă că tokenul din intent coincide cu cel din Setările Shevery.</string>
+    <string name="notification_auth_invalid_message">Asigurați-vă că tokenul din intent coincide cu cel din Setările OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Conectori de automatizare dezactivați</string>
-    <string name="notification_connectors_disabled_message">Un intent de automatizare a fost blocat deoarece conectorii Shevery sunt dezactivați în Setări. Atingeți pentru activare.</string>
+    <string name="notification_connectors_disabled_message">Un intent de automatizare a fost blocat deoarece conectorii OmniShizuku sunt dezactivați în Setări. Atingeți pentru activare.</string>
 </resources>

@@ -585,8 +585,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">التحكم في Shevery عبر تطبيقات الأتمتة</string>
-    <string name="home_automation_description">يمكن لتطبيقات مثل Tasker و MacroDroid إرسال مقاصد (Intents) لبدء Shevery أو إيقافه أو إعادة تشغيله تلقائياً.</string>
+    <string name="home_automation_title">التحكم في OmniShizuku عبر تطبيقات الأتمتة</string>
+    <string name="home_automation_description">يمكن لتطبيقات مثل Tasker و MacroDroid إرسال مقاصد (Intents) لبدء OmniShizuku أو إيقافه أو إعادة تشغيله تلقائياً.</string>
     <string name="home_automation_button_view_intents">عرض المقاصد</string>
     <string name="home_automation_bottom_sheet_intents">مقاصد الأتمتة</string>
     <string name="home_automation_bottom_sheet_description">قم بتهيئة المقاصد في Tasker أو MacroDroid، أو قم بتشغيل الأمر مباشرة من Termux / ADB. انقر للنسخ.</string>
@@ -600,7 +600,7 @@
     <string name="home_automation_regenerate_token">إعادة إنشاء الرمز</string>
     <string name="home_automation_regenerate_token_confirm">هل أنت متأكد من رغبتك في إعادة إنشاء الرمز؟ سيلزم تحديث أي مقاصد مسبقة في Tasker أو MacroDroid بالرمز الجديد.</string>
     <string name="automation_security_group_title">المصادقة والأمان</string>
-    <string name="automation_security_description">تتطلب مقاصد البث المباشر تمرير رمز المصادقة السري هذا كإضافة \'auth\' (-e auth &lt;token&gt;). هذا يحمي Shevery من التطبيقات غير المصرح لها.</string>
+    <string name="automation_security_description">تتطلب مقاصد البث المباشر تمرير رمز المصادقة السري هذا كإضافة \'auth\' (-e auth &lt;token&gt;). هذا يحمي OmniShizuku من التطبيقات غير المصرح لها.</string>
     <string name="automation_regenerate_token_summary">إنشاء رمز سري جديد وإبطال الرمز الحالي</string>
     <string name="automation_target_component_label">مكون المستقبل</string>
     <string name="home_automation_connectors_disabled_status">الموصلات معطلة (المقاصد غير نشطة)</string>
@@ -613,7 +613,7 @@
     <string name="notification_auth_missing_title">رمز المصادقة مطلوب</string>
     <string name="notification_auth_missing_message">أضف “auth” الإضافي إلى قصدك. يمكنك العثور على رمزك ضمن الإعدادات ← الأتمتة.</string>
     <string name="notification_auth_invalid_title">رمز مصادقة غير صالح</string>
-    <string name="notification_auth_invalid_message">تأكد من مطابقة الرمز في قصدك للرمز الموجود في إعدادات Shevery.</string>
+    <string name="notification_auth_invalid_message">تأكد من مطابقة الرمز في قصدك للرمز الموجود في إعدادات OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">موصلات الأتمتة معطلة</string>
-    <string name="notification_connectors_disabled_message">تم حظر قصد الأتمتة لأن موصلات Shevery معطلة في الإعدادات. انقر للتمكين.</string>
+    <string name="notification_connectors_disabled_message">تم حظر قصد الأتمتة لأن موصلات OmniShizuku معطلة في الإعدادات. انقر للتمكين.</string>
 </resources>

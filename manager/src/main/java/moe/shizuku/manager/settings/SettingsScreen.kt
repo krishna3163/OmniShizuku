@@ -824,7 +824,7 @@ fun SettingsScreen(
                         )
                         SettingsSection.BACKUPS -> backupsSectionContent(
                             onBackup = {
-                                backupLauncher.launch("shevery_backup_${System.currentTimeMillis()}.zip")
+                                backupLauncher.launch("omnishizuku_backup_${System.currentTimeMillis()}.zip")
                             },
                             onRestore = {
                                 restoreLauncher.launch(arrayOf("application/zip", "application/octet-stream"))
@@ -2071,14 +2071,14 @@ private fun LazyListScope.aboutSectionContent(
             SettingsRow(
                 icon = R.drawable.ic_action_about_24dp,
                 title = "Contributors and Credits",
-                summary = "The people behind Shevery and the projects it is built on",
+                summary = "The people behind OmniShizuku and the projects it is built on",
                 onClick = onOpenContributorsCredits
             )
             GroupDivider()
             SettingsRow(
                 icon = R.drawable.ic_learn_more_24dp,
                 title = "Recommendations",
-                summary = "Shizuku-powered apps picked for Shevery",
+                summary = "Shizuku-powered apps picked for OmniShizuku",
                 onClick = onOpenRecommendations
             )
         }
@@ -2093,13 +2093,18 @@ private data class Contributor(
 
 private val contributors = listOf(
     Contributor(
+        "Krishna (krishna3163)",
+        "Creator & Lead Architect — OmniShizuku, Multi-Platform TV & Wear UI, Build Systems, Automation & Maintenance",
+        "https://github.com/krishna3163"
+    ),
+    Contributor(
         "HmnDev-Tech",
-        "Project lead — releases, CI, settings hub, watchdog, self-update, docs and project direction",
+        "Upstream lead & Shevery base architecture",
         "https://github.com/HmnDev-Tech"
     ),
     Contributor(
         "Landon Moran",
-        "Core developer — AI providers and Commandium, Material 3 Expressive, ADB hardening, Compose migrations, i18n, code cleanup",
+        "AI providers and Commandium, Material 3 Expressive, ADB hardening, Compose migrations, i18n, code cleanup",
         "https://github.com/LandonMoran"
     ),
     Contributor(
@@ -2141,19 +2146,29 @@ private val contributors = listOf(
 
 private val credits = listOf(
     Contributor(
-        "Nightzuku (kerneldroid)",
-        "Parts of the app UI, the module catalog system and Android 17 support — adapted from Nightzuku",
-        "https://github.com/kerneldroid/Nightzuku"
+        "Krishna (krishna3163)",
+        "Creator & Lead Maintainer of OmniShizuku",
+        "https://github.com/krishna3163"
     ),
     Contributor(
         "Shizuku (RikkaApps)",
-        "The original Shizuku project, its API and main sources Shevery is built on",
+        "The original Shizuku project, its API and core architecture that OmniShizuku is built upon",
         "https://github.com/RikkaApps/Shizuku"
     ),
     Contributor(
         "Dhizuku (iamr0s)",
-        "Device Owner architecture, API sharing and management integrated into Shevery",
+        "Device Owner architecture, API sharing and management integrated into OmniShizuku",
         "https://github.com/iamr0s/Dhizuku"
+    ),
+    Contributor(
+        "Shevery (HmnDev-Tech)",
+        "Upstream base code, utilities, settings hub and modular extensions",
+        "https://github.com/HmnDev-Tech/shevery"
+    ),
+    Contributor(
+        "Nightzuku (kerneldroid)",
+        "Parts of the app UI, the module catalog system and Android 17 support — adapted from Nightzuku",
+        "https://github.com/kerneldroid/Nightzuku"
     ),
     Contributor(
         "aShellYou (DP-Hridayan)",

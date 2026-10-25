@@ -298,7 +298,7 @@ Az export funkció SAF-et használ (Storage Access Framework). A jelentések sze
     <string name="watchdog_action_turn_off"><![CDATA[Kikapcsolás]]></string>
     <string name="watchdog_action_channel_settings"><![CDATA[Értesítések kikapcsolása]]></string>
     <string name="notification_control_channel_name"><![CDATA[Shevery vezérlés]]></string>
-    <string name="notification_startup_channel_name">Shevery startup</string>
+    <string name="notification_startup_channel_name">OmniShizuku startup</string>
     <string name="notification_startup_title"><![CDATA[Shevery kezdése]]></string>
     <string name="notification_startup_enabling_wifi"><![CDATA[A Wi-Fi-hibakeresés engedélyezése…]]></string>
     <string name="notification_startup_connecting"><![CDATA[Csatlakozás az ADB-hez…]]></string>
@@ -586,8 +586,8 @@ Készen áll a parancsok fogadására.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Shevery vezérlése automatizálási alkalmazásokkal</string>
-    <string name="home_automation_description">Az olyan alkalmazások, mint a Tasker és a MacroDroid, intenteket küldhetnek a Shevery automatikus indításához, leállításához, újraindításához vagy átváltásához.</string>
+    <string name="home_automation_title">OmniShizuku vezérlése automatizálási alkalmazásokkal</string>
+    <string name="home_automation_description">Az olyan alkalmazások, mint a Tasker és a MacroDroid, intenteket küldhetnek a OmniShizuku automatikus indításához, leállításához, újraindításához vagy átváltásához.</string>
     <string name="home_automation_button_view_intents">Intentek megtekintése</string>
     <string name="home_automation_bottom_sheet_intents">Automatizálási intentek</string>
     <string name="home_automation_bottom_sheet_description">Konfigurálja az intenteket a Taskerben vagy a MacroDroidban, vagy futtassa a parancsot közvetlenül a Termux / ADB környezetből. Érintse meg a másoláshoz.</string>
@@ -601,7 +601,7 @@ Készen áll a parancsok fogadására.]]></string>
     <string name="home_automation_regenerate_token">Token újragenerálása</string>
     <string name="home_automation_regenerate_token_confirm">Biztosan újragenerálja a tokent? A beállított Tasker vagy MacroDroid intenteket frissíteni kell az új tokennel.</string>
     <string name="automation_security_group_title">Hitelesítés és biztonság</string>
-    <string name="automation_security_description">A közvetlen broadcast intentek megkövetelik ennek a titkos hitelesítési tokennek a megadását \'auth\' extraként (-e auth &lt;token&gt;). Ez megvédi a Sheveryt az illetéktelen alkalmazásoktól.</string>
+    <string name="automation_security_description">A közvetlen broadcast intentek megkövetelik ennek a titkos hitelesítési tokennek a megadását \'auth\' extraként (-e auth &lt;token&gt;). Ez megvédi a OmniShizukut az illetéktelen alkalmazásoktól.</string>
     <string name="automation_regenerate_token_summary">Új titkos token generálása és a meglévő érvénytelenítése</string>
     <string name="automation_target_component_label">Vevő komponens</string>
     <string name="home_automation_connectors_disabled_status">Csatlakozók letiltva (Intentek inaktívak)</string>
@@ -614,7 +614,7 @@ Készen áll a parancsok fogadására.]]></string>
     <string name="notification_auth_missing_title">Hitelesítési token szükséges</string>
     <string name="notification_auth_missing_message">Adja hozzá az “auth” extrát az intenthez. A tokent a Beállítások → Automatizálás menüpontban találja.</string>
     <string name="notification_auth_invalid_title">Érvénytelen hitelesítési token</string>
-    <string name="notification_auth_invalid_message">Győződjön meg arról, hogy az intentben lévő token megegyezik a Shevery beállításaiban szereplővel.</string>
+    <string name="notification_auth_invalid_message">Győződjön meg arról, hogy az intentben lévő token megegyezik a OmniShizuku beállításaiban szereplővel.</string>
     <string name="notification_connectors_disabled_title">Automatizálási összekötők letiltva</string>
-    <string name="notification_connectors_disabled_message">Egy automatizálási intent blokkolva lett, mert a Shevery összekötők le vannak tiltva a Beállításokban. Koppintson az engedélyezéshez.</string>
+    <string name="notification_connectors_disabled_message">Egy automatizálási intent blokkolva lett, mert a OmniShizuku összekötők le vannak tiltva a Beállításokban. Koppintson az engedélyezéshez.</string>
 </resources>

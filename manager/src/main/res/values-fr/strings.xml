@@ -235,7 +235,7 @@ a été copié dans le presse-papiers.]]></string>
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s ne prend pas en charge le Shevery moderne]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Le Shevery hérité est obsolète depuis mars 2019 et ne fonctionne pas sur les versions récentes d\'Android.<p>Veuillez demander au développeur de <b>%1$s</b> de mettre à jour son application.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s demande l\'ancien Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> prend en charge le Shevery moderne, mais demande l\'ancien Shevery. Cela peut arriver si Shevery n\'est pas en cours d\'exécution.<p>Le Shevery hérité est obsolète.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> prend en charge le OmniShizuku moderne, mais demande l\'ancien OmniShizuku. Cela peut arriver si OmniShizuku n\'est pas en cours d\'exécution.<p>Le OmniShizuku hérité est obsolète.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Ouvrir Shevery]]></string>
     <string name="lab_features_title"><![CDATA[Fonctionnalités du laboratoire]]></string>
     <string name="lab_features_summary"><![CDATA[Fonctionnalités expérimentales]]></string>
@@ -586,8 +586,8 @@ Prêt pour les commandes.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Utiliser une barre inférieure fixe au lieu de la pilule flottante]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Contrôler Shevery avec des applications d\'automatisation</string>
-    <string name="home_automation_description">Des applications comme Tasker et MacroDroid peuvent envoyer des intents pour démarrer, arrêter, redémarrer ou basculer Shevery automatiquement.</string>
+    <string name="home_automation_title">Contrôler OmniShizuku avec des applications d\'automatisation</string>
+    <string name="home_automation_description">Des applications comme Tasker et MacroDroid peuvent envoyer des intents pour démarrer, arrêter, redémarrer ou basculer OmniShizuku automatiquement.</string>
     <string name="home_automation_button_view_intents">Voir les intents</string>
     <string name="home_automation_bottom_sheet_intents">Intents d\'automatisation</string>
     <string name="home_automation_bottom_sheet_description">Configurez les intents dans Tasker ou MacroDroid, ou exécutez la commande directement depuis Termux / ADB. Touchez pour copier.</string>
@@ -601,7 +601,7 @@ Prêt pour les commandes.]]></string>
     <string name="home_automation_regenerate_token">Régénérer le jeton</string>
     <string name="home_automation_regenerate_token_confirm">Voulez-vous vraiment régénérer le jeton ? Tous les intents configurés devront être mis à jour avec le nouveau jeton.</string>
     <string name="automation_security_group_title">Authentification et sécurité</string>
-    <string name="automation_security_description">Les intents de diffusion directe nécessitent ce jeton d\'authentification secret transmis en tant qu\'extra \'auth\' (-e auth &lt;token&gt;). Cela protège Shevery des applications non autorisées.</string>
+    <string name="automation_security_description">Les intents de diffusion directe nécessitent ce jeton d\'authentification secret transmis en tant qu\'extra \'auth\' (-e auth &lt;token&gt;). Cela protège OmniShizuku des applications non autorisées.</string>
     <string name="automation_regenerate_token_summary">Générer un nouveau jeton secret et invalider l\'existant</string>
     <string name="automation_target_component_label">Composant récepteur</string>
     <string name="home_automation_connectors_disabled_status">Connecteurs désactivés (Intents inactifs)</string>
@@ -614,7 +614,7 @@ Prêt pour les commandes.]]></string>
     <string name="notification_auth_missing_title">Jeton d\'authentification requis</string>
     <string name="notification_auth_missing_message">Ajoutez l\'extra « auth » à votre intent. Vous trouverez votre jeton dans Paramètres → Automatisation.</string>
     <string name="notification_auth_invalid_title">Jeton d\'authentification invalide</string>
-    <string name="notification_auth_invalid_message">Assurez-vous que le jeton de votre intent correspond à celui des paramètres Shevery.</string>
+    <string name="notification_auth_invalid_message">Assurez-vous que le jeton de votre intent correspond à celui des paramètres OmniShizuku.</string>
     <string name="notification_connectors_disabled_title">Connecteurs d\'automatisation désactivés</string>
-    <string name="notification_connectors_disabled_message">Un intent d\'automatisation a été bloqué car les connecteurs Shevery sont désactivés dans les paramètres. Appuyez pour activer.</string>
+    <string name="notification_connectors_disabled_message">Un intent d\'automatisation a été bloqué car les connecteurs OmniShizuku sont désactivés dans les paramètres. Appuyez pour activer.</string>
 </resources>

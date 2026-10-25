@@ -223,7 +223,7 @@
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s заманбап Shevery колдобойт]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Эски Shevery 2019-жылдан бери колдоого алынбайт.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s эски Shevery сурап жатат]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> заманбап Shevery колдойт, бирок эскисин сурап жатат.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> заманбап OmniShizuku колдойт, бирок эскисин сурап жатат.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Shevery ачуу]]></string>
     <string name="lab_features_title"><![CDATA[Лабораториялык функциялар]]></string>
     <string name="lab_features_summary"><![CDATA[Эксперименталдык функциялар]]></string>
@@ -571,8 +571,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -586,7 +586,7 @@
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -599,7 +599,7 @@
     <string name="notification_auth_missing_title">Auth token required</string>
     <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under Жөндөөлөр → Автоматтандыру.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
-    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery Жөндөөлөр.</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku Жөндөөлөр.</string>
     <string name="notification_connectors_disabled_title">Автоматтандыру connectors disabled</string>
-    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in Жөндөөлөр. Tap to enable.</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because OmniShizuku connectors are disabled in Жөндөөлөр. Tap to enable.</string>
 </resources>

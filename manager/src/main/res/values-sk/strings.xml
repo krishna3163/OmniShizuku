@@ -260,7 +260,7 @@ bol skopírovaný do schránky.]]></string>
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s nepodporuje moderný Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[Staršia verzia aplikácie Shevery je od marca 2019 označená za zastaranú. Okrem toho staršia verzia aplikácie Shevery nefunguje na novších verziách systému Android.<p>Požiadajte vývojára aplikácie <b>%1$s</b> o aktualizáciu.]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s žiada o staršiu verziu Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> podporuje modernú verziu Shevery, ale vyžaduje staršiu verziu Shevery. Dôvodom môže byť to, že Shevery nie je spustená – skontrolujte to, prosím, v aplikácii Shevery.<p>Staršia verzia Shevery je od marca 2019 zastaraná.]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> podporuje modernú verziu OmniShizuku, ale vyžaduje staršiu verziu OmniShizuku. Dôvodom môže byť to, že OmniShizuku nie je spustená – skontrolujte to, prosím, v aplikácii OmniShizuku.<p>Staršia verzia OmniShizuku je od marca 2019 zastaraná.]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Otvor Shevery]]></string>
     <string name="lab_features_title"><![CDATA[Vlastnosti laboratória]]></string>
     <string name="lab_features_summary"><![CDATA[Experimentálne funkcie]]></string>
@@ -301,7 +301,7 @@ bol skopírovaný do schránky.]]></string>
     <string name="watchdog_service_text"><![CDATA[Monitorovanie služby Shevery na účely obnovy spojenia typu „keep-alive“]]></string>
     <string name="watchdog_action_turn_off"><![CDATA[Vypnúť]]></string>
     <string name="watchdog_action_channel_settings"><![CDATA[Vypnúť upozornenia]]></string>
-    <string name="notification_control_channel_name">Shevery Control</string>
+    <string name="notification_control_channel_name">OmniShizuku Control</string>
     <string name="notification_startup_channel_name"><![CDATA[Startup Shevery]]></string>
     <string name="notification_startup_title"><![CDATA[Začiatok Shevery]]></string>
     <string name="notification_startup_enabling_wifi"><![CDATA[Zapínam ladenie cez Wi-Fi…]]></string>
@@ -585,8 +585,8 @@ Sme pripravení prijímať príkazy.]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">Control Shevery with automation apps</string>
-    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle Shevery automatically.</string>
+    <string name="home_automation_title">Control OmniShizuku with automation apps</string>
+    <string name="home_automation_description">Apps like Tasker and MacroDroid can send intents to start, stop, restart, or toggle OmniShizuku automatically.</string>
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
@@ -600,7 +600,7 @@ Sme pripravení prijímať príkazy.]]></string>
     <string name="home_automation_regenerate_token">Regenerate token</string>
     <string name="home_automation_regenerate_token_confirm">Are you sure you want to regenerate the token? Any configured Tasker or MacroDroid intents will need to be updated with the new token.</string>
     <string name="automation_security_group_title">Authentication &amp; Security</string>
-    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects Shevery from unauthorized apps.</string>
+    <string name="automation_security_description">Direct broadcast intents require this secret authentication token passed as the \'auth\' extra (-e auth &lt;token&gt;). This protects OmniShizuku from unauthorized apps.</string>
     <string name="automation_regenerate_token_summary">Generate a new secret token and invalidate the existing one</string>
     <string name="automation_target_component_label">Receiver Component</string>
     <string name="home_automation_connectors_disabled_status">Connectors Disabled (Intents Inactive)</string>
@@ -613,7 +613,7 @@ Sme pripravení prijímať príkazy.]]></string>
     <string name="notification_auth_missing_title">Auth token required</string>
     <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under Nastavenia → Automatizácia.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
-    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in Shevery Nastavenia.</string>
+    <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku Nastavenia.</string>
     <string name="notification_connectors_disabled_title">Automatizácia connectors disabled</string>
-    <string name="notification_connectors_disabled_message">An automation intent was blocked because Shevery connectors are disabled in Nastavenia. Tap to enable.</string>
+    <string name="notification_connectors_disabled_message">An automation intent was blocked because OmniShizuku connectors are disabled in Nastavenia. Tap to enable.</string>
 </resources>

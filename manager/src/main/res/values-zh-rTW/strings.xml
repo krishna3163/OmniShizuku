@@ -237,7 +237,7 @@
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s 不支援現代 Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[舊版 Shevery 自 2019 年 3 月起已被棄用，無法在較新的 Android 系統上執行。<p>請聯絡 <b>%1$s</b> 的開發者進行更新。]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s 正在請求舊版 Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> 具備現代 Shevery 支援，但正在請求舊版 Shevery。這可能是由於 Shevery 未在執行引起的。]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> 具備現代 OmniShizuku 支援，但正在請求舊版 OmniShizuku。這可能是由於 OmniShizuku 未在執行引起的。]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[開啟 Shevery]]></string>
     <string name="lab_features_title"><![CDATA[實驗室功能]]></string>
     <string name="lab_features_summary"><![CDATA[實驗性功能]]></string>
@@ -590,8 +590,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[使用傳統固定底欄替代懸浮膠囊]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">使用自動化應用程式控制 Shevery</string>
-    <string name="home_automation_description">Tasker 和 MacroDroid 等應用程式可發送 Intent 自動啟動、停止、重新啟動或切換 Shevery。</string>
+    <string name="home_automation_title">使用自動化應用程式控制 OmniShizuku</string>
+    <string name="home_automation_description">Tasker 和 MacroDroid 等應用程式可發送 Intent 自動啟動、停止、重新啟動或切換 OmniShizuku。</string>
     <string name="home_automation_button_view_intents">查看 Intent</string>
     <string name="home_automation_bottom_sheet_intents">自動化 Intent</string>
     <string name="home_automation_bottom_sheet_description">在 Tasker 或 MacroDroid 中設定 Intent，或直接從 Termux / ADB 執行命令。輕觸任意欄位即可複製。</string>
@@ -605,7 +605,7 @@
     <string name="home_automation_regenerate_token">重新產生權杖</string>
     <string name="home_automation_regenerate_token_confirm">確定要重新產生權杖嗎？所有已設定的 Tasker 或 MacroDroid Intent 都需要更新為新權杖。</string>
     <string name="automation_security_group_title">驗證與安全性</string>
-    <string name="automation_security_description">直接廣播 Intent 需要透過 \'auth\' 參數 (-e auth &lt;token&gt;) 傳遞此秘密驗證權杖，以防止未經授權的應用程式控制 Shevery。</string>
+    <string name="automation_security_description">直接廣播 Intent 需要透過 \'auth\' 參數 (-e auth &lt;token&gt;) 傳遞此秘密驗證權杖，以防止未經授權的應用程式控制 OmniShizuku。</string>
     <string name="automation_regenerate_token_summary">產生新的秘密權杖並使現有權杖失效</string>
     <string name="automation_target_component_label">接收器元件</string>
     <string name="home_automation_connectors_disabled_status">連接器已停用 (Intent 未啟用)</string>
@@ -618,7 +618,7 @@
     <string name="notification_auth_missing_title">需要驗證權杖</string>
     <string name="notification_auth_missing_message">請在 Intent 中新增「auth」Extra。您可以在「設定 → 自動化」中找到您的權杖。</string>
     <string name="notification_auth_invalid_title">驗證權杖無效</string>
-    <string name="notification_auth_invalid_message">請確認 Intent 中的權杖與 Shevery 設定中的權杖相符。</string>
+    <string name="notification_auth_invalid_message">請確認 Intent 中的權杖與 OmniShizuku 設定中的權杖相符。</string>
     <string name="notification_connectors_disabled_title">自動化連接器已停用</string>
-    <string name="notification_connectors_disabled_message">自動化 Intent 已被封鎖，因為 Shevery 連接器在設定中已停用。輕觸以啟用。</string>
+    <string name="notification_connectors_disabled_message">自動化 Intent 已被封鎖，因為 OmniShizuku 連接器在設定中已停用。輕觸以啟用。</string>
 </resources>

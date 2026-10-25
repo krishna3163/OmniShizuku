@@ -6,8 +6,18 @@
 
     <queries>
         <package android:name="moe.shizuku.privileged.api" />
+        <intent>
+            <action android:name="android.net.VpnService" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+        </intent>
     </queries>
-
 
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
@@ -15,6 +25,12 @@
         android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"
         tools:targetApi="34" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+    <uses-permission
+        android:name="android.permission.DUMP"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission
         android:name="android.permission.NEARBY_WIFI_DEVICES"
         android:usesPermissionFlags="neverForLocation"
@@ -395,6 +411,45 @@
         <service
             android:name=".service.WatchdogService"
             android:enabled="true"
+            android:exported="false" />
+
+        <!-- Locked Boot Start Service (Shizuku-Next Direct-Boot) -->
+        <service
+            android:name=".service.LockedBootStartService"
+            android:directBootAware="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:targetApi="34">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Starts the Shizuku server at direct boot before first unlock when configured." />
+        </service>
+
+        <!-- ADB Wireless Pairing Accessibility Auto-Fill Service -->
+        <service
+            android:name=".adb.AdbPairingAccessibilityService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/accessibility_service_config" />
+        </service>
+
+        <receiver
+            android:name=".receiver.WatchdogAlarmReceiver"
+            android:enabled="true"
+            android:exported="false" />
+        <receiver android:name=".receiver.HidingRestoreReceiver" android:exported="false" />
+
+        <activity
+            android:name=".settings.BugReportDialogActivity"
+            android:theme="@style/Theme.App.DialogHost"
+            android:taskAffinity=""
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
             android:exported="false" />
 
         <!-- Lab Features -->

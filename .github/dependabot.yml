@@ -10,3 +10,4 @@ updates:
       interval: "weekly"
     ignore:
       - dependency-name: "androidx.tv:tv-foundation"
+      - dependency-name: "org.lsposed.libcxx:libcxx"

@@ -262,7 +262,7 @@
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s 不支持现代 Shevery]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[旧版 Shevery 自 2019 年 3 月起已被弃用，无法在较新的 Android 系统上运行。<p>请联系 <b>%1$s</b> 的开发者进行更新。]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s 正在请求旧版 Shevery]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> 具备现代 Shevery 支持，但正在请求旧版 Shevery。这可能是由于 Shevery 未在运行引起的，请在 Shevery 应用中检查。<p>旧版 Shevery 自 2019 年 3 月起已被弃用。]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> 具备现代 OmniShizuku 支持，但正在请求旧版 OmniShizuku。这可能是由于 OmniShizuku 未在运行引起的，请在 OmniShizuku 应用中检查。<p>旧版 OmniShizuku 自 2019 年 3 月起已被弃用。]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[打开 Shevery]]></string>
     <string name="lab_features_title"><![CDATA[实验室功能]]></string>
     <string name="lab_features_summary"><![CDATA[实验性功能]]></string>
@@ -714,8 +714,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[使用传统固定底栏替代悬浮胶囊]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">使用自动化应用控制 Shevery</string>
-    <string name="home_automation_description">Tasker 和 MacroDroid 等应用可以发送 Intent 自动启动、停止、重启或切换 Shevery。</string>
+    <string name="home_automation_title">使用自动化应用控制 OmniShizuku</string>
+    <string name="home_automation_description">Tasker 和 MacroDroid 等应用可以发送 Intent 自动启动、停止、重启或切换 OmniShizuku。</string>
     <string name="home_automation_button_view_intents">查看 Intent</string>
     <string name="home_automation_bottom_sheet_intents">自动化 Intent</string>
     <string name="home_automation_bottom_sheet_description">在 Tasker 或 MacroDroid 中配置 Intent，或直接从 Termux / ADB 运行命令。点击任意字段以复制。</string>
@@ -729,7 +729,7 @@
     <string name="home_automation_regenerate_token">重新生成令牌</string>
     <string name="home_automation_regenerate_token_confirm">确定要重新生成令牌吗？所有已配置的 Tasker 或 MacroDroid Intent 都需要更新为新令牌。</string>
     <string name="automation_security_group_title">身份验证与安全</string>
-    <string name="automation_security_description">直接广播 Intent 需要通过 \'auth\' 参数 (-e auth &lt;token&gt;) 传递此私密认证令牌，以防止未经授权的应用控制 Shevery。</string>
+    <string name="automation_security_description">直接广播 Intent 需要通过 \'auth\' 参数 (-e auth &lt;token&gt;) 传递此私密认证令牌，以防止未经授权的应用控制 OmniShizuku。</string>
     <string name="automation_regenerate_token_summary">生成新的私密令牌并使现有令牌失效</string>
     <string name="automation_target_component_label">接收器组件</string>
     <string name="home_automation_connectors_disabled_status">连接器已禁用（Intent 未生效）</string>
@@ -742,9 +742,9 @@
     <string name="notification_auth_missing_title">需要身份验证令牌</string>
     <string name="notification_auth_missing_message">请在 Intent 中添加“auth”额外数据。您可以在“设置 → 自动化”中找到您的令牌。</string>
     <string name="notification_auth_invalid_title">身份验证令牌无效</string>
-    <string name="notification_auth_invalid_message">请确保 Intent 中的令牌与 Shevery 设置中的令牌一致。</string>
+    <string name="notification_auth_invalid_message">请确保 Intent 中的令牌与 OmniShizuku 设置中的令牌一致。</string>
     <string name="notification_connectors_disabled_title">自动化连接器已禁用</string>
-    <string name="notification_connectors_disabled_message">自动化 Intent 已被拦截，因为 Shevery 连接器在设置中已禁用。点击以启用。</string>
+    <string name="notification_connectors_disabled_message">自动化 Intent 已被拦截，因为 OmniShizuku 连接器在设置中已禁用。点击以启用。</string>
 
     <!-- Home - Adb dialog -->
     <string name="home_adb_dialog_view_command_message"><![CDATA[<font face="monospace">%1$s</font><br/><br/>* 还有其他注意事项，请先确认您已阅读帮助文档。]]></string>

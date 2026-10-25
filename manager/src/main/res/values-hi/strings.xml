@@ -254,7 +254,7 @@
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s आधुनिक शेवरी का समर्थन नहीं करता है।]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[लेगेसी शेवरी को मार्च 2019 से अप्रचलित कर दिया गया है। साथ ही, लेगेसी शेवरी नए एंड्रॉइड सिस्टम पर काम नहीं करती है। कृपया <b>%1$s</b> के डेवलपर से इसे अपडेट करने के लिए कहें।]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s लेगेसी शेवरी का अनुरोध कर रहा है]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> में आधुनिक Shevery समर्थन है, लेकिन यह लेगेसी Shevery का अनुरोध कर रहा है। ऐसा इसलिए हो सकता है क्योंकि Shevery चल नहीं रहा है, कृपया Shevery ऐप में जांच करें।लेगेसी Shevery को मार्च 2019 से अप्रचलित कर दिया गया है।]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> में आधुनिक OmniShizuku समर्थन है, लेकिन यह लेगेसी OmniShizuku का अनुरोध कर रहा है। ऐसा इसलिए हो सकता है क्योंकि OmniShizuku चल नहीं रहा है, कृपया OmniShizuku ऐप में जांच करें।लेगेसी OmniShizuku को मार्च 2019 से अप्रचलित कर दिया गया है।]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[ओपन शेवरी]]></string>
     <string name="lab_features_title"><![CDATA[प्रयोगशाला की विशेषताएँ]]></string>
     <string name="lab_features_summary"><![CDATA[प्रयोगात्मक विशेषताएँ]]></string>
@@ -580,8 +580,8 @@
     <string name="settings_classic_nav_summary"><![CDATA[Use a fixed bottom bar instead of the floating pill]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">स्वचालन ऐप्स के साथ Shevery को नियंत्रित करें</string>
-    <string name="home_automation_description">Tasker और MacroDroid जैसे ऐप्स Shevery को स्वचालित रूप से शुरू, बंद, पुनरारंभ या टॉगल करने के लिए इंटेंट भेज सकते हैं।</string>
+    <string name="home_automation_title">स्वचालन ऐप्स के साथ OmniShizuku को नियंत्रित करें</string>
+    <string name="home_automation_description">Tasker और MacroDroid जैसे ऐप्स OmniShizuku को स्वचालित रूप से शुरू, बंद, पुनरारंभ या टॉगल करने के लिए इंटेंट भेज सकते हैं।</string>
     <string name="home_automation_button_view_intents">इंटेंट देखें</string>
     <string name="home_automation_bottom_sheet_intents">स्वचालन इंटेंट</string>
     <string name="home_automation_bottom_sheet_description">Tasker या MacroDroid में इंटेंट कॉन्फ़िगर करें, या Termux / ADB से सीधे कमांड चलाएं। कॉपी करने के लिए टैप करें।</string>
@@ -595,7 +595,7 @@
     <string name="home_automation_regenerate_token">टोकन पुन: उत्पन्न करें</string>
     <string name="home_automation_regenerate_token_confirm">क्या आप वाकई टोकन को फिर से जनरेट करना चाहते हैं? कॉन्फ़िगर किए गए किसी भी टास्क या मैक्रो इंटेंट को नए टोकन के साथ अपडेट करना होगा।</string>
     <string name="automation_security_group_title">प्रमाणीकरण और सुरक्षा</string>
-    <string name="automation_security_description">सीधे प्रसारण इंटेंट के लिए इस गुप्त प्रमाणीकरण टोकन को \'auth\' अतिरिक्त (-e auth &lt;token&gt;) के रूप में पास करना आवश्यक है। यह Shevery को अनधिकृत ऐप्स से बचाता है।</string>
+    <string name="automation_security_description">सीधे प्रसारण इंटेंट के लिए इस गुप्त प्रमाणीकरण टोकन को \'auth\' अतिरिक्त (-e auth &lt;token&gt;) के रूप में पास करना आवश्यक है। यह OmniShizuku को अनधिकृत ऐप्स से बचाता है।</string>
     <string name="automation_regenerate_token_summary">एक नया गुप्त टोकन जनरेट करें और मौजूदा को अमान्य करें</string>
     <string name="automation_target_component_label">रिसीवर घटक</string>
     <string name="home_automation_connectors_disabled_status">कनेक्टर्स अक्षम हैं (इंटेंट निष्क्रिय)</string>
@@ -608,7 +608,7 @@
     <string name="notification_auth_missing_title">प्रमाणीकरण टोकन आवश्यक है</string>
     <string name="notification_auth_missing_message">अपने इंटेंट में “auth” अतिरिक्त जोड़ें। आप सेटिंग्स → स्वचालन के तहत अपना टोकन पा सकते हैं।</string>
     <string name="notification_auth_invalid_title">अमान्य प्रमाणीकरण टोकन</string>
-    <string name="notification_auth_invalid_message">सुनिश्चित करें कि आपके इंटेंट का टोकन Shevery सेटिंग्स के टोकन से मेल खाता है।</string>
+    <string name="notification_auth_invalid_message">सुनिश्चित करें कि आपके इंटेंट का टोकन OmniShizuku सेटिंग्स के टोकन से मेल खाता है।</string>
     <string name="notification_connectors_disabled_title">स्वचालन कनेक्टर्स अक्षम हैं</string>
-    <string name="notification_connectors_disabled_message">एक स्वचालन इंटेंट को ब्लॉक कर दिया गया क्योंकि सेटिंग्स में Shevery कनेक्टर्स अक्षम हैं। सक्षम करने के लिए टैप करें।</string>
+    <string name="notification_connectors_disabled_message">एक स्वचालन इंटेंट को ब्लॉक कर दिया गया क्योंकि सेटिंग्स में OmniShizuku कनेक्टर्स अक्षम हैं। सक्षम करने के लिए टैप करें।</string>
 </resources>

@@ -52,6 +52,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.NearMe
+import androidx.compose.material.icons.rounded.Science
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Terminal
 import androidx.compose.material.icons.rounded.Wifi
@@ -366,15 +367,16 @@ abstract class HomeActivity : AppActivity() {
                 intent?.getStringExtra(PluginContract.EXTRA_TARGET_SECTION) ==
                     PluginContract.TARGET_SECTION_AUTOMATION
             }
-            var selectedTab by rememberSaveable { mutableIntStateOf(if (isTargetAutomation) 3 else 0) }
+            var selectedTab by rememberSaveable { mutableIntStateOf(if (isTargetAutomation) 4 else 0) }
             var settingsTargetSection by remember {
                 mutableStateOf(if (isTargetAutomation) SettingsSection.AUTOMATION else null)
             }
+            var activeDetail by rememberSaveable { mutableStateOf<moe.shizuku.manager.ui.Detail?>(null) }
 
             DisposableEffect(Unit) {
                 onNavigateAutomationSettings = {
                     settingsTargetSection = SettingsSection.AUTOMATION
-                    selectedTab = 3
+                    selectedTab = 4
                 }
                 onDispose {
                     onNavigateAutomationSettings = null
@@ -485,7 +487,7 @@ abstract class HomeActivity : AppActivity() {
             val floatingNavBarVisible = remember { mutableStateOf(true) }
 
             LaunchedEffect(selectedTab) {
-                if (selectedTab != 3) {
+                if (selectedTab != 4) {
                     floatingNavBarVisible.value = true
                 }
             }
@@ -513,6 +515,15 @@ abstract class HomeActivity : AppActivity() {
                                 )
                             }
                         )
+                    } else if (activeDetail != null) {
+                        BackHandler {
+                            activeDetail = null
+                        }
+                        DetailHost(
+                            detail = activeDetail!!,
+                            onBack = { activeDetail = null },
+                            onOpenDetail = { activeDetail = it }
+                        )
                     } else {
                         BackHandler(enabled = selectedTab != 0) {
                             selectedTab = 0
@@ -523,13 +534,13 @@ abstract class HomeActivity : AppActivity() {
                     ) { innerPadding ->
                     Box(modifier = Modifier.padding(innerPadding).fillMaxSize()) {
                         val pagerState = rememberPagerState(
-                            initialPage = selectedTab.coerceIn(0, 3),
-                            pageCount = { 4 }
+                            initialPage = selectedTab.coerceIn(0, 4),
+                            pageCount = { 5 }
                         )
                         LaunchedEffect(selectedTab, swipeBetweenTabs) {
                             if (swipeBetweenTabs && pagerState.currentPage != selectedTab) {
                                 try {
-                                    pagerState.animateScrollToPage(selectedTab.coerceIn(0, 3))
+                                    pagerState.animateScrollToPage(selectedTab.coerceIn(0, 4))
                                 } catch (_: Exception) {
                                 }
                             }
@@ -551,7 +562,7 @@ abstract class HomeActivity : AppActivity() {
                             // internally; pages 0 (Home) and 2 (Comput) use raw
                             // LazyColumns, so the blur is applied here instead.
                             // This keeps exactly one blur layer per page.
-                            val needsOuterBlur = targetTab == 0 || targetTab == 2
+                            val needsOuterBlur = targetTab == 0 || targetTab == 3
                             val verticalListState = when (targetTab) {
                                 0 -> homeListState
                                 else -> computListState
@@ -654,7 +665,7 @@ abstract class HomeActivity : AppActivity() {
                                     dhizukuEnabled = ModuleSettings.isDhizukuEnabled(),
                                     onOpenAutomationSettings = {
                                         settingsTargetSection = SettingsSection.AUTOMATION
-                                        selectedTab = 3
+                                        selectedTab = 4
                                     },
                                     listState = homeListState
                                 )
@@ -667,8 +678,12 @@ abstract class HomeActivity : AppActivity() {
                                     listState = modulesListState,
                                     modulesState = cachedModules
                                 )
-                                2 -> moe.shizuku.manager.logs.ComputScreen(listState = computListState)
-                                3 -> moe.shizuku.manager.settings.SettingsScreen(
+                                2 -> moe.shizuku.manager.ui.screen.LabsScreen(
+                                    bottomPadding = 80.dp,
+                                    onOpenDetail = { activeDetail = it }
+                                )
+                                3 -> moe.shizuku.manager.logs.ComputScreen(listState = computListState)
+                                4 -> moe.shizuku.manager.settings.SettingsScreen(
                                     listState = settingsListState,
                                     targetSection = settingsTargetSection,
                                     onTargetSectionConsumed = { settingsTargetSection = null }
@@ -720,6 +735,7 @@ abstract class HomeActivity : AppActivity() {
                 val navItems = listOf(
                     NavItem(stringResource(R.string.app_name), Icons.Rounded.Home),
                     NavItem(stringResource(R.string.modules_title), Icons.Rounded.Apps),
+                    NavItem(stringResource(R.string.tab_labs), Icons.Rounded.Science),
                     NavItem(stringResource(R.string.comput_title), Icons.Rounded.Terminal),
                     NavItem(stringResource(R.string.settings_title), Icons.Rounded.Settings)
                 )

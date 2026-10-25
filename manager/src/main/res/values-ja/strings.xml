@@ -234,7 +234,7 @@ Android 11未満ではパソコン接続が必要です。]]></string>
     <string name="dialog_legacy_not_support_title"><![CDATA[%1$s は最新のSheveryに対応していません]]></string>
     <string name="dialog_legacy_not_support_message"><![CDATA[旧バージョンのSheveryは2019年3月に非推奨となり、新しいAndroidでは動作しません。<p><b>%1$s</b> の開発者にアップデートを要請してください。]]></string>
     <string name="dialog_requesting_legacy_title"><![CDATA[%1$s が旧バージョンのSheveryを要求しています]]></string>
-    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> は最新のSheveryに対応していますが、旧バージョンを要求しています。Sheveryが実行されていない可能性があります。]]></string>
+    <string name="dialog_requesting_legacy_message"><![CDATA[<b>%1$s</b> は最新のOmniShizukuに対応していますが、旧バージョンを要求しています。OmniShizukuが実行されていない可能性があります。]]></string>
     <string name="dialog_requesting_legacy_button_open_shizuku"><![CDATA[Sheveryを開く]]></string>
     <string name="lab_features_title"><![CDATA[ラボ機能]]></string>
     <string name="lab_features_summary"><![CDATA[実験的な新機能]]></string>
@@ -585,8 +585,8 @@ Android 11未満ではパソコン接続が必要です。]]></string>
     <string name="settings_classic_nav_summary"><![CDATA[フローティングピルの代わりに固定ボトムバーを使用]]></string>
 
     <!-- Home - Automation -->
-    <string name="home_automation_title">自動化アプリで Shevery を制御</string>
-    <string name="home_automation_description">Tasker や MacroDroid などのアプリからインテントを送信して、Shevery を自動的に起動、停止、再起動、または切り替えることができます。</string>
+    <string name="home_automation_title">自動化アプリで OmniShizuku を制御</string>
+    <string name="home_automation_description">Tasker や MacroDroid などのアプリからインテントを送信して、OmniShizuku を自動的に起動、停止、再起動、または切り替えることができます。</string>
     <string name="home_automation_button_view_intents">インテントを表示</string>
     <string name="home_automation_bottom_sheet_intents">自動化インテント</string>
     <string name="home_automation_bottom_sheet_description">Tasker や MacroDroid でインテントを設定するか、Termux / ADB からコマンドを直接実行します。タップしてコピーできます。</string>
@@ -600,7 +600,7 @@ Android 11未満ではパソコン接続が必要です。]]></string>
     <string name="home_automation_regenerate_token">トークンを再生成</string>
     <string name="home_automation_regenerate_token_confirm">トークンを再生成してもよろしいですか？設定済みの Tasker や MacroDroid のインテントを新しいトークンで更新する必要があります。</string>
     <string name="automation_security_group_title">認証とセキュリティ</string>
-    <string name="automation_security_description">直接ブロードキャスト インテントには、\'auth\' エクストラ (-e auth &lt;token&gt;) としてこの秘密の認証トークンが必要です。これにより不正なアプリから Shevery を保護します。</string>
+    <string name="automation_security_description">直接ブロードキャスト インテントには、\'auth\' エクストラ (-e auth &lt;token&gt;) としてこの秘密の認証トークンが必要です。これにより不正なアプリから OmniShizuku を保護します。</string>
     <string name="automation_regenerate_token_summary">新しい秘密トークンを生成し、既存のトークンを無効化します</string>
     <string name="automation_target_component_label">レシーバー コンポーネント</string>
     <string name="home_automation_connectors_disabled_status">コネクタが無効です (インテント停止中)</string>
@@ -613,7 +613,7 @@ Android 11未満ではパソコン接続が必要です。]]></string>
     <string name="notification_auth_missing_title">認証トークンが必要です</string>
     <string name="notification_auth_missing_message">インテントに「auth」Extra を追加してください。トークンは「設定 → 自動化」で確認できます。</string>
     <string name="notification_auth_invalid_title">無効な認証トークン</string>
-    <string name="notification_auth_invalid_message">インテント内のトークンが Shevery の設定と一致していることを確認してください。</string>
+    <string name="notification_auth_invalid_message">インテント内のトークンが OmniShizuku の設定と一致していることを確認してください。</string>
     <string name="notification_connectors_disabled_title">自動化コネクタが無効です</string>
-    <string name="notification_connectors_disabled_message">Shevery の設定でコネクタが無効化されているため、自動化インテントがブロックされました。タップして有効化してください。</string>
+    <string name="notification_connectors_disabled_message">OmniShizuku の設定でコネクタが無効化されているため、自動化インテントがブロックされました。タップして有効化してください。</string>
 </resources>
