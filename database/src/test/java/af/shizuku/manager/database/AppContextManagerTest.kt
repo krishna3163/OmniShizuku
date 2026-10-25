@@ -18,13 +18,13 @@ class AppContextManagerTest {
     private lateinit var fakeSettings: FakeAppContextSettings
 
     class FakeAppContextSettings : AppContextSettings {
-        var remoteDbJson: String? = null
+        var storedRemoteDbJson: String? = null
         var lastDbUpdateTime: Long = 0
 
-        override fun getRemoteDbJson(): String? = remoteDbJson
+        override fun getRemoteDbJson(): String? = storedRemoteDbJson
 
         override fun setRemoteDbJson(json: String) {
-            remoteDbJson = json
+            storedRemoteDbJson = json
         }
 
         override fun setLastDbUpdate(time: Long) {
@@ -110,7 +110,7 @@ class AppContextManagerTest {
         AppContextManager.updateDatabase(json)
 
         // Check settings updated
-        fakeSettings.remoteDbJson shouldBe json
+        fakeSettings.storedRemoteDbJson shouldBe json
         fakeSettings.lastDbUpdateTime shouldNotBe 0L
 
         // Verify dynamic data takes precedence over static data
@@ -142,7 +142,7 @@ class AppContextManagerTest {
             }
         """.trimIndent()
 
-        fakeSettings.remoteDbJson = json
+        fakeSettings.storedRemoteDbJson = json
 
         // Clear and re-initialize
         val dynamicDatabaseField: Field = AppContextManager::class.java.getDeclaredField("dynamicDatabase")
