@@ -194,6 +194,12 @@ enum class Detail(
     OPTIMIZER,
     EDGE_LIGHTING,
     MEDIA_KEYS,
+    ISLAND,
+    BATTERY_CENTER,
+    SMART_PIXELS,
+    WATERMARK,
+    POCKET_MODE,
+    SHUT_UP,
     STEALTH,
     TERMINAL,
     INTENTS,
@@ -425,6 +431,12 @@ fun ShizukuApp() {
                             Detail.OPTIMIZER -> moe.shizuku.manager.optimizer.OptimizerScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.EDGE_LIGHTING -> moe.shizuku.manager.lighting.EdgeLightingScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.MEDIA_KEYS -> moe.shizuku.manager.media.MediaKeyScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.ISLAND -> moe.shizuku.manager.island.IslandScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.BATTERY_CENTER -> moe.shizuku.manager.battery.BatteryCenterScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SMART_PIXELS -> moe.shizuku.manager.display.smartpixels.SmartPixelsScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.WATERMARK -> moe.shizuku.manager.watermark.WatermarkScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.POCKET_MODE -> moe.shizuku.manager.hardware.pocket.PocketModeScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SHUT_UP -> moe.shizuku.manager.audio.shutup.ShutUpScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.TERMINAL -> TerminalScreen(onBack = { detail = null })
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })

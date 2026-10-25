@@ -40,7 +40,7 @@ try {
     if (!count.isEmpty()) gitCommitCount = count.toInteger()
 } catch (Exception ignored) {}
 
-def baseVersionName = "v0.0.1-dev"
+def baseVersionName = "v0.0.2"
 ext {
     versionCode = gitCommitCount
     versionName = "${baseVersionName}"
