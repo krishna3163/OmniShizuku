@@ -7,7 +7,7 @@ go 1.26
 // so the version is intentionally not pinned here — it resolves to
 // whatever is current when the Action runs, not when the code was written.
 
-require google.golang.org/genai v1.75.0
+require google.golang.org/genai v1.76.0
 
 require (
 	cloud.google.com/go v0.116.0 // indirect
