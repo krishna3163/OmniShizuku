@@ -45,6 +45,10 @@ class DhizukuProvider : ContentProvider() {
             if (!isCallerAuthorized()) throw SecurityException("Unauthorized UID ${Binder.getCallingUid()}")
         }
 
+        override fun unbindUserServiceByConnection(p0: IDhizukuUserServiceConnection?, p1: Bundle?) {
+            if (!isCallerAuthorized()) throw SecurityException("Unauthorized UID ${Binder.getCallingUid()}")
+        }
+
         override fun getDelegatedScopes(packageName: String?): Array<String> {
             val ctx = context ?: return emptyArray()
             if (packageName.isNullOrEmpty()) return emptyArray()
