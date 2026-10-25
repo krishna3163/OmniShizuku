@@ -2061,6 +2061,10 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="tab_systemui_tuner">SystemUI Tuner</string>
     <string name="tab_enforce_doze">Enforce Doze (Deep Sleep)</string>
     <string name="tab_private_dns">Private DNS Controller</string>
+    <string name="tab_freezer">App Freezer</string>
+    <string name="tab_audio_master">Audio Stream Master</string>
+    <string name="tab_carrier_tether">Carrier Tethering</string>
+    <string name="tab_screen_security">Screen Security &amp; DRM</string>
 <string name="install_no_file">No package chosen</string>
 <string name="install_choose">Choose</string>
 <string name="install_choose_hint">APK, APKS, or XAPK file</string>

@@ -186,6 +186,10 @@ enum class Detail(
     SYSTEMUI_TUNER,
     ENFORCE_DOZE,
     PRIVATE_DNS,
+    FREEZER,
+    AUDIO_MASTER,
+    TETHER,
+    SECURITY,
     STEALTH,
     TERMINAL,
     INTENTS,
@@ -409,6 +413,10 @@ fun ShizukuApp() {
                             Detail.SYSTEMUI_TUNER -> SystemUiTunerScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.ENFORCE_DOZE -> DozeScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.PRIVATE_DNS -> PrivateDnsScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.FREEZER -> moe.shizuku.manager.freeze.FreezerScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.AUDIO_MASTER -> moe.shizuku.manager.audio.AudioMasterScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.TETHER -> moe.shizuku.manager.tether.TetherScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SECURITY -> moe.shizuku.manager.security.ScreenSecurityScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.TERMINAL -> TerminalScreen(onBack = { detail = null })
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })

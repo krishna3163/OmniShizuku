@@ -126,9 +126,17 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         LabEntry(R.string.tab_files, Icons.Outlined.FolderOpen, Detail.FILES),
         LabEntry(R.string.tab_install, Icons.Outlined.Android, Detail.INSTALL),
         LabEntry(R.string.tab_debloater, Icons.Outlined.Delete, Detail.DEBLOATER),
+        LabEntry(R.string.tab_freezer, Icons.Outlined.AcUnit, Detail.FREEZER),
         LabEntry(R.string.tab_systemui_tuner, Icons.Outlined.Settings, Detail.SYSTEMUI_TUNER),
         LabEntry(R.string.tab_enforce_doze, Icons.Outlined.DarkMode, Detail.ENFORCE_DOZE),
         LabEntry(R.string.tab_private_dns, Icons.Outlined.Wifi, Detail.PRIVATE_DNS),
+        LabEntry(R.string.tab_audio_master, Icons.Outlined.VolumeUp, Detail.AUDIO_MASTER),
+        LabEntry(R.string.tab_carrier_tether, Icons.Outlined.WifiTethering, Detail.TETHER),
+        LabEntry(R.string.tab_screen_security, Icons.Outlined.Security, Detail.SECURITY),
+        LabEntry(R.string.tools_terminal, Icons.Outlined.Terminal, Detail.TERMINAL),
+        LabEntry(R.string.intents_title, Icons.Outlined.Bolt, Detail.INTENTS),
+        LabEntry(R.string.tools_stealth, Icons.Outlined.VisibilityOff, Detail.STEALTH),
+        LabEntry(R.string.settings_permissions, Icons.Outlined.VerifiedUser, Detail.PERMISSIONS),
         LabEntry(R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS)
     )
 

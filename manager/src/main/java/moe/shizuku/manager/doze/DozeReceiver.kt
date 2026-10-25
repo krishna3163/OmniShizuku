@@ -29,6 +29,11 @@ class DozeReceiver : BroadcastReceiver() {
                                 DozeManager.disableMotion()
                             }
                         }
+                        if (moe.shizuku.manager.freeze.FreezerManager.isAutoFreezeEnabled(context)) {
+                            val autoApps = moe.shizuku.manager.freeze.FreezerManager.loadApps(context)
+                                .filter { it.tags.isNotEmpty() && !it.isFrozen }
+                            moe.shizuku.manager.freeze.FreezerManager.freezeBatch(autoApps.map { it.packageName })
+                        }
                     }
                     Intent.ACTION_SCREEN_ON -> {
                         if (DozeManager.isAggressiveDozeEnabled(context)) {
