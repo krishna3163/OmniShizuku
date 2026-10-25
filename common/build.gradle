@@ -7,6 +7,8 @@ android {
     buildFeatures {
         buildConfig = false
     }
+    testOptions {
+        unitTests.returnDefaultValues = true
 
     testOptions {
         unitTests {
@@ -19,6 +21,7 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
     implementation libs.hidden.compat
     compileOnly libs.hidden.stub
+    testImplementation 'junit:junit:4.13.2'
 
     testImplementation 'junit:junit:4.13.2'
     testImplementation 'org.robolectric:robolectric:4.16.1'
