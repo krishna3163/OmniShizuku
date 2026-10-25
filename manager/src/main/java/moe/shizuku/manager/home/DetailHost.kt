@@ -37,6 +37,10 @@ import moe.shizuku.manager.ui.screen.ShellScreen
 import moe.shizuku.manager.ui.screen.StealthScreen
 import moe.shizuku.manager.ui.screen.TerminalScreen
 import moe.shizuku.manager.ui.screen.WifiPasswordsScreen
+import moe.shizuku.manager.debloater.DebloaterScreen
+import moe.shizuku.manager.tuner.SystemUiTunerScreen
+import moe.shizuku.manager.doze.DozeScreen
+import moe.shizuku.manager.dns.PrivateDnsScreen
 
 @Composable
 fun DetailHost(
@@ -131,6 +135,10 @@ fun DetailHost(
                         onInstalled = {}
                     )
                     Detail.STEALTH -> StealthScreen(onBack = onBack)
+                    Detail.DEBLOATER -> DebloaterScreen(bottomPadding = 0.dp, onBack = onBack)
+                    Detail.SYSTEMUI_TUNER -> SystemUiTunerScreen(bottomPadding = 0.dp, onBack = onBack)
+                    Detail.ENFORCE_DOZE -> DozeScreen(bottomPadding = 0.dp, onBack = onBack)
+                    Detail.PRIVATE_DNS -> PrivateDnsScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.TERMINAL -> TerminalScreen(onBack = onBack)
                     Detail.INTENTS -> IntentsScreen(onBack = onBack)
                     Detail.PERMISSIONS -> PermissionsScreen(onBack = onBack)

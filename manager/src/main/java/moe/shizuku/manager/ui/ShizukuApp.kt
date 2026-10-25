@@ -116,6 +116,10 @@ import moe.shizuku.manager.ui.screen.DisplayScreen
 import moe.shizuku.manager.ui.screen.LabsScreen
 import moe.shizuku.manager.ui.screen.LogScreen
 import moe.shizuku.manager.ui.screen.LabsToggleScreen
+import moe.shizuku.manager.debloater.DebloaterScreen
+import moe.shizuku.manager.tuner.SystemUiTunerScreen
+import moe.shizuku.manager.doze.DozeScreen
+import moe.shizuku.manager.dns.PrivateDnsScreen
 import moe.shizuku.manager.ui.screen.ManageScreen
 import moe.shizuku.manager.ui.screen.CatalogKind
 import moe.shizuku.manager.ui.screen.CatalogScreen
@@ -178,6 +182,10 @@ enum class Detail(
 
     /** Installing a package with the flags a terminal would need a cable for. */
     INSTALL,
+    DEBLOATER,
+    SYSTEMUI_TUNER,
+    ENFORCE_DOZE,
+    PRIVATE_DNS,
     STEALTH,
     TERMINAL,
     INTENTS,
@@ -397,6 +405,10 @@ fun ShizukuApp() {
                             )
 
                             Detail.STEALTH -> StealthScreen(onBack = { detail = null })
+                            Detail.DEBLOATER -> DebloaterScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SYSTEMUI_TUNER -> SystemUiTunerScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.ENFORCE_DOZE -> DozeScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.PRIVATE_DNS -> PrivateDnsScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.TERMINAL -> TerminalScreen(onBack = { detail = null })
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })

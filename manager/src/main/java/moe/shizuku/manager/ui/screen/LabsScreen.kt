@@ -19,19 +19,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
-import androidx.compose.material.icons.outlined.AdminPanelSettings
-import androidx.compose.material.icons.outlined.AspectRatio
-import androidx.compose.material.icons.outlined.Android
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.PowerSettingsNew
-import androidx.compose.material.icons.outlined.Extension
-import androidx.compose.material.icons.outlined.ShoppingBag
-import androidx.compose.material.icons.outlined.FolderOpen
-import androidx.compose.material.icons.outlined.PhoneAndroid
-import androidx.compose.material.icons.outlined.Terminal
-import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.outlined.Wifi
-import androidx.compose.material.icons.outlined.Widgets
+import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -137,6 +125,10 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         LabEntry(R.string.tab_wifi_passwords, Icons.Outlined.Wifi, Detail.WIFI_PASSWORDS),
         LabEntry(R.string.tab_files, Icons.Outlined.FolderOpen, Detail.FILES),
         LabEntry(R.string.tab_install, Icons.Outlined.Android, Detail.INSTALL),
+        LabEntry(R.string.tab_debloater, Icons.Outlined.Delete, Detail.DEBLOATER),
+        LabEntry(R.string.tab_systemui_tuner, Icons.Outlined.Settings, Detail.SYSTEMUI_TUNER),
+        LabEntry(R.string.tab_enforce_doze, Icons.Outlined.DarkMode, Detail.ENFORCE_DOZE),
+        LabEntry(R.string.tab_private_dns, Icons.Outlined.Wifi, Detail.PRIVATE_DNS),
         LabEntry(R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS)
     )
 

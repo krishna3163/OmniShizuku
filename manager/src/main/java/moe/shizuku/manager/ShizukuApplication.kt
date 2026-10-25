@@ -89,6 +89,12 @@ class ShizukuApplication : Application() {
         kotlin.concurrent.thread(name = "activities-assistant-restore") {
             moe.shizuku.manager.manage.Activities.restorePending()
         }
+
+        val dozeFilter = android.content.IntentFilter().apply {
+            addAction(android.content.Intent.ACTION_SCREEN_OFF)
+            addAction(android.content.Intent.ACTION_SCREEN_ON)
+        }
+        registerReceiver(moe.shizuku.manager.doze.DozeReceiver(), dozeFilter)
     }
 
 }
