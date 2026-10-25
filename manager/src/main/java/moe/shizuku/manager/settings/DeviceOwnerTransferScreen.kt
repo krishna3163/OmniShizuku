@@ -3,7 +3,6 @@
 package moe.shizuku.manager.settings
 
 import android.content.Intent
-import android.provider.Settings
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
