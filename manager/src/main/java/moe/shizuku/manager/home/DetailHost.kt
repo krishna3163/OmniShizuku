@@ -146,6 +146,7 @@ fun DetailHost(
                     Detail.AUTODND -> moe.shizuku.manager.dnd.AutoDndScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.OPTIMIZER -> moe.shizuku.manager.optimizer.OptimizerScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.EDGE_LIGHTING -> moe.shizuku.manager.essentials.EdgeLightingScreen(bottomPadding = 0.dp, onBack = onBack)
+                    Detail.CAFFEINATE -> moe.shizuku.manager.essentials.CaffeinateScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.MEDIA_KEYS -> moe.shizuku.manager.essentials.MediaKeyScreen(bottomPadding = 0.dp, onBack = onBack)
                     Detail.ESSENTIALS -> moe.shizuku.manager.essentials.EssentialsScreen(bottomPadding = 0.dp, onBack = onBack, onOpenDetail = onOpenDetail)
                     Detail.ISLAND -> moe.shizuku.manager.essentials.IslandScreen(bottomPadding = 0.dp, onBack = onBack)

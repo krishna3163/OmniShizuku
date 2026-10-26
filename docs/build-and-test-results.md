@@ -35,6 +35,8 @@ Added tests for `PackageNameValidator`, `DnsHostnameValidator` and the bundled D
 
 After adding the upstream Essentials battery/thermal/charging source slice, `./gradlew :manager:testDebugUnitTest --no-daemon` was attempted again. It still stops before project configuration with `Could not determine a usable wildcard IP for this machine`; the Essentials integration has not been compiled by Gradle.
 
+The upstream Essentials Watermark engine and EXIF metadata provider have since been added to the manager module with a MediaStore export adapter. `./gradlew :manager:assembleDebug --no-daemon --stacktrace` was attempted after this integration but Gradle stopped during startup with `Could not determine a usable wildcard IP for this machine`, before project configuration or compilation. This integration has not been compiled or run on a device. `git diff --check` completed without whitespace errors.
+
 ## GitHub Actions run: 2026-10-26
 
 The GitHub-hosted runner successfully installed Java, started Gradle, and executed Android resource/compile tasks. `:manager:testDebugUnitTest` failed before running tests at `:manager:processDebugMainManifest`:

@@ -214,6 +214,18 @@ fun EssentialsScreen(
                 )
             ),
             EssentialCategory(
+                title = "Power & Display",
+                icon = Icons.Outlined.PowerSettingsNew,
+                items = listOf(
+                    EssentialItem(
+                        title = "Caffeinate",
+                        summary = "Keep the display awake for a chosen duration, with a stop notification and Quick Settings tile",
+                        icon = Icons.Outlined.Coffee,
+                        detail = Detail.CAFFEINATE
+                    )
+                )
+            ),
+            EssentialCategory(
                 title = "Tools & Studio",
                 icon = Icons.Outlined.Build,
                 items = listOf(

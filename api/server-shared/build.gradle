@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    namespace 'rikka.shizuku.server'
+    namespace = 'rikka.shizuku.server'
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
         }
     }
     compileOptions {

@@ -4,10 +4,10 @@ plugins {
 }
 
 android {
-    namespace 'com.hamondev.shevery.tasker'
+    namespace = 'com.hamondev.shevery.tasker'
     buildFeatures {
-        buildConfig = false
-        compose = true
+        buildConfig = = false
+        compose = = true
     }
 }
 

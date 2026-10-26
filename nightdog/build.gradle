@@ -3,9 +3,9 @@ plugins {
 }
 
 android {
-    namespace 'rikka.shizuku.nightdog'
+    namespace = 'rikka.shizuku.nightdog'
     buildFeatures {
-        buildConfig false
+        buildConfig = false
     }
 }
 

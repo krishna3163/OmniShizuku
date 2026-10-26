@@ -387,10 +387,9 @@ runs:
   using: 'composite'
   steps:
     - name: Setup Go
-      uses: actions/setup-go@v5.0.2
       uses: actions/setup-go@v5.2.0
       with:
-        go-version: '1.23'
+        go-version: '1.27.2'
 
     - name: Resolve Go dependencies
       shell: bash

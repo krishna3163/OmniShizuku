@@ -4,7 +4,7 @@ plugins {
 }
 
 android {
-    namespace 'rikka.shizuku.demo'
+    namespace = 'rikka.shizuku.demo'
     defaultConfig {
         applicationId "rikka.shizuku.demo"
         versionCode 1
@@ -23,17 +23,17 @@ android {
         }
     }
     buildFeatures {
-        buildConfig = true
-        viewBinding = true
-        aidl true
+        buildConfig = = true
+        viewBinding = = true
+        aidl = true
     }
     signingConfigs {
         sign
     }
     buildTypes {
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled = true
+            shrinkResources = true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -43,7 +43,7 @@ android {
     }
     packaging {
         jniLibs {
-            useLegacyPackaging true
+            useLegacyPackaging = true
         }
     }
 }

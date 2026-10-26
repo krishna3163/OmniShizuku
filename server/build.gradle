@@ -4,9 +4,9 @@ plugins {
 }
 
 android {
-    namespace 'moe.shizuku.server'
+    namespace = 'moe.shizuku.server'
     buildFeatures {
-        buildConfig = false
+        buildConfig = = false
     }
 }
 

@@ -66,7 +66,7 @@ The source includes ZIP module install/enable/remove operations, bounded extract
 
 ### App and system tools
 
-The source includes package browsing and operations, a UAD-backed debloater, APK inspection and install options, Private DNS controls, network restrictions, display/system settings, logs, and power actions. Battery Center uses Essentials' battery/thermal utilities and exposes the upstream Pixel charging-mode setting on Google devices. These use privileged Android APIs or shell commands, so availability and results depend on the device build and granted backend; the Android app build and device behavior are still unverified in this audit.
+The source includes package browsing and operations, a UAD-backed debloater, APK inspection and install options, Private DNS controls, network restrictions, display/system settings, logs, and power actions. Battery Center uses Essentials' battery/thermal utilities and exposes the upstream Pixel charging-mode setting on Google devices. Photo Watermark uses Essentials' original frame/overlay rendering and EXIF engine, with export to `Pictures/OmniWatermark`; exported images may retain GPS metadata, so review the notice in the screen before sharing. Caffeinate reuses Essentials' timeout controller and foreground wake-lock service. These use privileged Android APIs or shell commands, so availability and results depend on the device build and granted backend; the latest Android app build and device behavior are still unverified in this audit.
 
 ### AI and automation
 
@@ -169,7 +169,7 @@ Thank you to the maintainers and contributors of these projects. We use them as 
 
 </details>
 
-Current examples of attributed reuse include the Essentials battery utilities, the ShizukuPlus package-name validation rule, and the ADNS DNS hostname parser/provider data. More details are in the [feature-to-source map](docs/feature-source-mapping.md); the audit is ongoing.
+Current examples of attributed reuse include the Essentials battery utilities, Watermark engine and Caffeinate controller/service, the ShizukuPlus package-name validation rule, and the ADNS DNS hostname parser/provider data. More details are in the [feature-to-source map](docs/feature-source-mapping.md); the audit is ongoing.
 
 ---
 

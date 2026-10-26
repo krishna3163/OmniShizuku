@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'rikka.rish'
+    namespace = 'rikka.rish'
     defaultConfig {
         externalNativeBuild {
             cmake {
@@ -12,11 +12,11 @@ android {
         }
     }
     buildFeatures {
-        prefab true
+        prefab = true
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
         }
     }
     compileOptions {

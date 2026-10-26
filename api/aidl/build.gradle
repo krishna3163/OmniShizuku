@@ -3,14 +3,14 @@ plugins {
 }
 
 android {
-    namespace 'rikka.shizuku.aidl'
+    namespace = 'rikka.shizuku.aidl'
     buildFeatures {
-        buildConfig false
-        aidl true
+        buildConfig = false
+        aidl = true
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
         }
     }
     compileOptions {

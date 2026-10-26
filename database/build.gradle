@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "af.shizuku.manager.database"
+    namespace = = "af.shizuku.manager.database"
     compileSdk = 37
 
     defaultConfig {
@@ -15,7 +15,7 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled = false
+            minifyEnabled = = false
             proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
         }
     }
