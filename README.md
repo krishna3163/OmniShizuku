@@ -33,12 +33,12 @@
 3. **Start Shizuku access:** Open OmniShizuku and follow its setup screen. Wireless debugging generally requires Android 11 or newer and Developer options. Root and Device Owner options only work when configured on your device.
 4. **Review actions:** Some tools can change system settings or run privileged commands. Read each confirmation and only run commands you understand.
 
-**Do not disable Google Play Store or Play Protect to install this APK.** If Android or Play Protect blocks it, stop and check the download and the warning. Disabling those protections is not a general APK installation fix. Android's supported sideload flow is to allow installs from the specific browser/file manager; Google recommends keeping Play Protect enabled. ([Android APK installation guide](https://support.google.com/pixelphone/answer/7391672?hl=en), [Play Protect guidance](https://support.google.com/android/answer/2812853?hl=en))
+**If Android blocks the APK install, you can try temporarily disabling the Google Play Store app if your device offers that option:** open **Settings → Apps → Google Play Store → Disable**, install the APK, then return to the same screen and tap **Enable**. The menu names vary by device, and this workaround may not clear every install block. On Android 8 and newer, also allow **Install unknown apps** for the browser or file manager opening the APK. This does not turn off Play Protect; if Play Protect warns that the APK may be harmful, check that the file came from this project's official release before deciding what to do. ([Android APK installation guide](https://support.google.com/pixelphone/answer/7391672?hl=en), [Play Protect guidance](https://support.google.com/android/answer/2812853?hl=en))
 
 ### If installation fails
 
 - Download again from the official GitHub Release and make sure the download completed.
-- Grant **Install unknown apps** to the app opening the APK (for example, Chrome or Files); this is separate from disabling Google Play Store.
+- Grant **Install unknown apps** to the app opening the APK (for example, Chrome or Files). If the device allows disabling the Play Store app, re-enable it immediately after the install attempt.
 - Check that the device meets the app's declared minimum of Android 7.1 / API 25. Device and OEM compatibility have not been verified across the Android range.
 - If Android reports a package/signature conflict while updating, the installed copy may have been signed with a different key. Do not uninstall it until you understand that removing an app can erase its local data.
 - If Play Protect reports the APK as harmful or blocks it, do not bypass the warning on the basis of this README. Review the release source and wait for a verified build or report a suspected false positive.
