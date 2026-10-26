@@ -49,7 +49,7 @@ The source includes ZIP module install/enable/remove operations, bounded extract
 
 ### App and system tools
 
-The source includes package browsing and operations, a UAD-backed debloater, APK inspection and install options, Private DNS controls, network restrictions, display/system settings, logs, and power actions. These use privileged Android APIs or shell commands, so availability and results depend on the device build and granted backend.
+The source includes package browsing and operations, a UAD-backed debloater, APK inspection and install options, Private DNS controls, network restrictions, display/system settings, logs, and power actions. Battery Center uses Essentials' battery/thermal utilities and exposes the upstream Pixel charging-mode setting on Google devices. These use privileged Android APIs or shell commands, so availability and results depend on the device build and granted backend; the Android app build and device behavior are still unverified in this audit.
 
 ### AI and automation
 

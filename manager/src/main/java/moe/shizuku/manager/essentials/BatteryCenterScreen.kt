@@ -1,11 +1,7 @@
 package moe.shizuku.manager.essentials
 
-import android.content.BroadcastReceiver
 import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.BatteryManager
-import android.os.Build
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -26,8 +22,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.io.File
+import com.sameerasw.essentials.utils.battery.BatteryInfoUtil
+import com.sameerasw.essentials.utils.DeviceUtils
+import com.sameerasw.essentials.utils.battery.ChargingMode
+import com.sameerasw.essentials.utils.battery.ChargingModeUtil
 
 data class RealBatteryStats(
     val level: Int = 0,
@@ -49,25 +49,12 @@ data class RealBatteryStats(
  */
 object BatteryCenterEngine {
     fun getBatteryStats(context: Context): RealBatteryStats {
-        val filter = IntentFilter(Intent.ACTION_BATTERY_CHANGED)
-        val batteryStatus: Intent? = context.registerReceiver(null, filter)
-
-        val level = batteryStatus?.getIntExtra(BatteryManager.EXTRA_LEVEL, -1) ?: -1
-        val scale = batteryStatus?.getIntExtra(BatteryManager.EXTRA_SCALE, -1) ?: -1
-        val batteryPct = if (level >= 0 && scale > 0) (level * 100 / scale) else 0
-
-        val status = batteryStatus?.getIntExtra(BatteryManager.EXTRA_STATUS, -1) ?: -1
-        val isCharging = status == BatteryManager.BATTERY_STATUS_CHARGING ||
-                status == BatteryManager.BATTERY_STATUS_FULL
-
-        val tempRaw = batteryStatus?.getIntExtra(BatteryManager.EXTRA_TEMPERATURE, 0) ?: 0
-        val tempCelsius = tempRaw / 10.0f
-
-        val voltageMv = batteryStatus?.getIntExtra(BatteryManager.EXTRA_VOLTAGE, 0) ?: 0
-        val technology = batteryStatus?.getStringExtra(BatteryManager.EXTRA_TECHNOLOGY) ?: "Li-ion"
-
-        val healthRaw = batteryStatus?.getIntExtra(BatteryManager.EXTRA_HEALTH, BatteryManager.BATTERY_HEALTH_UNKNOWN)
-        val health = when (healthRaw) {
+        val basic = BatteryInfoUtil.getBasicDetails(context)
+        val details = BatteryInfoUtil.fetchAdvancedDetails(context, basic)
+        val level = if (details.scale > 0) (details.level * 100 / details.scale).coerceAtLeast(0) else 0
+        val isCharging = details.status == BatteryManager.BATTERY_STATUS_CHARGING ||
+            details.status == BatteryManager.BATTERY_STATUS_FULL
+        val health = when (details.health) {
             BatteryManager.BATTERY_HEALTH_GOOD -> "Good"
             BatteryManager.BATTERY_HEALTH_OVERHEAT -> "Overheat"
             BatteryManager.BATTERY_HEALTH_DEAD -> "Dead"
@@ -76,41 +63,18 @@ object BatteryCenterEngine {
             BatteryManager.BATTERY_HEALTH_COLD -> "Cold"
             else -> "Normal"
         }
-
-        // Try reading cycle count from sysfs or BatteryManager on Android 14+
-        var cycleCount = -1
-        if (Build.VERSION.SDK_INT >= 34) {
-            val bm = context.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
-            try {
-                val cycleMethod = BatteryManager::class.java.getMethod("getIntProperty", Int::class.javaPrimitiveType)
-                val count = cycleMethod.invoke(bm, 7) as? Int ?: -1
-                if (count > 0) cycleCount = count
-            } catch (_: Exception) {}
-        }
-        if (cycleCount == -1) {
-            try {
-                val cycleFile = File("/sys/class/power_supply/battery/cycle_count")
-                if (cycleFile.canRead()) {
-                    cycleCount = cycleFile.readText().trim().toIntOrNull() ?: -1
-                }
-            } catch (_: Exception) {}
-        }
-
-        val bm = context.getSystemService(Context.BATTERY_SERVICE) as? BatteryManager
-        val currentMicroAmp = bm?.getIntProperty(BatteryManager.BATTERY_PROPERTY_CURRENT_NOW) ?: 0
-        val currentAmps = kotlin.math.abs(currentMicroAmp) / 1000000.0f
-        val volts = voltageMv / 1000.0f
-        val watts = if (isCharging) (currentAmps * volts) else 0f
+        val currentMa = details.currentNowMa ?: 0
+        val watts = if (isCharging) kotlin.math.abs(currentMa) * details.voltage / 1_000_000f else 0f
 
         return RealBatteryStats(
-            level = batteryPct,
+            level = level,
             isCharging = isCharging,
             chargingSpeedWatts = watts,
-            temperatureCelsius = tempCelsius,
-            voltageMv = voltageMv,
+            temperatureCelsius = details.temperature / 10f,
+            voltageMv = details.voltage,
             health = health,
-            technology = technology,
-            cycleCount = cycleCount
+            technology = details.technology,
+            cycleCount = details.cycleCount ?: -1
         )
     }
 }
@@ -122,11 +86,26 @@ fun BatteryCenterScreen(
     onBack: () -> Unit
 ) {
     val context = LocalContext.current
-    var stats by remember { mutableStateOf(BatteryCenterEngine.getBatteryStats(context)) }
+    val scope = rememberCoroutineScope()
+    var stats by remember { mutableStateOf(RealBatteryStats()) }
     var chargeLimitEnabled by remember { mutableStateOf(false) }
+    var chargeModeAllowed by remember { mutableStateOf(false) }
+    val supportsPixelChargingMode = remember { DeviceUtils.isGoogleDevice() }
+
+    fun refreshStats() {
+        scope.launch {
+            stats = withContext(Dispatchers.IO) { BatteryCenterEngine.getBatteryStats(context) }
+        }
+    }
 
     LaunchedEffect(Unit) {
-        stats = BatteryCenterEngine.getBatteryStats(context)
+        refreshStats()
+        val chargeModeState = withContext(Dispatchers.IO) {
+            ChargingModeUtil.hasPermission(context) to
+                (ChargingModeUtil.getMode(context) == ChargingMode.LIMITED)
+        }
+        chargeModeAllowed = chargeModeState.first
+        chargeLimitEnabled = chargeModeState.second
     }
 
     Scaffold(
@@ -144,7 +123,7 @@ fun BatteryCenterScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { stats = BatteryCenterEngine.getBatteryStats(context) }) {
+                    IconButton(onClick = { refreshStats() }) {
                         Icon(Icons.Outlined.Refresh, contentDescription = "Refresh")
                     }
                 }
@@ -244,32 +223,43 @@ fun BatteryCenterScreen(
                 }
             }
 
-            // Battery Longevity Guard
-            Card(
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(20.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+            if (supportsPixelChargingMode) {
+                Card(
+                    shape = RoundedCornerShape(20.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
-                    Column(modifier = Modifier.weight(1f)) {
-                        Text("80% Charge Longevity Guard", fontWeight = FontWeight.Bold, fontSize = 16.sp)
-                        Spacer(modifier = Modifier.height(4.dp))
-                        Text(
-                            "Notifies and prompts to unplug when battery reaches 80% to extend Li-ion lifespan",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(20.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(modifier = Modifier.weight(1f)) {
+                            Text("Pixel charging limit", fontWeight = FontWeight.Bold, fontSize = 16.sp)
+                            Spacer(modifier = Modifier.height(4.dp))
+                            Text(
+                                "Uses the device's system charging optimization setting. Requires Shizuku permission and a supported Pixel device.",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                        Switch(
+                            checked = chargeLimitEnabled,
+                            enabled = chargeModeAllowed,
+                            onCheckedChange = { enabled ->
+                                scope.launch {
+                                    val requestedMode = if (enabled) ChargingMode.LIMITED else ChargingMode.OFF
+                                    val isLimited = withContext(Dispatchers.IO) {
+                                        ChargingModeUtil.setMode(context, requestedMode)
+                                        ChargingModeUtil.getMode(context) == ChargingMode.LIMITED
+                                    }
+                                    chargeLimitEnabled = isLimited
+                                }
+                            }
                         )
                     }
-                    Switch(
-                        checked = chargeLimitEnabled,
-                        onCheckedChange = { chargeLimitEnabled = it }
-                    )
                 }
             }
 

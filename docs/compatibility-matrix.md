@@ -15,12 +15,10 @@ Status: pending source-by-source verification. Repository names and the existing
 | ShizuStore | compile/target 37.0, min 24 | Java 21; Kotlin version catalog pending | Compose, Room, Shizuku API, scheduled updates | Candidate catalog reference; GPL-3.0 and app architecture need review | Not built in this audit |
 | sing-box-for-android | compile 37.1, target 37, min 24 | Kotlin/JVM 17; plugin/dependency review pending | Native sing-box engine, VPN service | Candidate proxy backend; GPL-3.0 and project-name restriction, ABI/service integration not reviewed | Not built in this audit |
 | Canta | compile/target 37, min 28 | Kotlin Multiplatform 2.4.20; Gradle source present | Android/KMP source sets | Min SDK exceeds target's 25; architecture and LGPL-3.0 make whole-module adoption unsuitable | Source tests exist; not run in this audit |
-| ShizukuPlus | Pending | Pending | Pending | Pending | Pending |
-| Shizako | Pending | Pending | Pending | Pending | Pending |
+| essentials | compile 37.1, target 37, min 26 | Java/Kotlin JVM 21; AGP 9.3.2 | Full app has broad service/resource graph; selected battery utilities are Kotlin + platform APIs | Full app does not drop in as a library. Selected BatteryInfoUtil/ThermalUtil/DeviceUtils/ChargingModeUtil/ChargeLimitUtil source files are included with an adapter; API calls are guarded where needed, but target min SDK 25 compatibility/build is unverified | Upstream app not built here; target build blocked before configuration |
 | Xhizuku | Pending | Pending | Pending | Pending | Pending |
 | Stellar | Pending | Pending | Pending | Pending | Pending |
 | Shevery | Pending | Pending | Pending | Pending | Pending |
-| Porter | Pending | Pending | Pending | Pending | Pending |
-| Remaining 16 source projects | Pending | Pending | Pending | Pending | Pending |
+| Remaining 15 source projects | Pending | Pending | Pending | Pending | Pending |
 
 Target configuration now requests Android API 37.1 to match `island-sdk.aar` metadata; this change is not yet verified by Gradle because the sandbox blocks network-interface enumeration before project configuration. Target Java compatibility is 21 and min SDK is 25. The remaining source checkouts need exact Kotlin/AGP/dependency review. Values above come from checked-out Gradle files and are not claims of successful builds.
