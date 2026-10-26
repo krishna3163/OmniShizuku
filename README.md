@@ -10,23 +10,40 @@
 
 **Created & Maintained by [Krishna](https://github.com/krishna3163)**
 
-[![Version](https://img.shields.io/badge/Version-v0.0.1-blueviolet?style=for-the-badge)](https://github.com/krishna3163/OmniShizuku/releases)
+[![Latest Release](https://img.shields.io/github/v/release/krishna3163/OmniShizuku?style=for-the-badge&label=Latest%20release)](https://github.com/krishna3163/OmniShizuku/releases)
 [![Stars](https://img.shields.io/github/stars/krishna3163/OmniShizuku?style=for-the-badge&color=yellow)](https://github.com/krishna3163/OmniShizuku/stargazers)
 [![Forks](https://img.shields.io/github/forks/krishna3163/OmniShizuku?style=for-the-badge&color=orange)](https://github.com/krishna3163/OmniShizuku/network/members)
 [![Build Android APK](https://img.shields.io/github/actions/workflow/status/krishna3163/OmniShizuku/apk-build.yml?branch=main&style=for-the-badge&label=Build%20APK)](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml)
-[![Releases](https://img.shields.io/github/v/release/krishna3163/OmniShizuku?style=for-the-badge&color=blue)](https://github.com/krishna3163/OmniShizuku/releases)
+[![Downloads](https://img.shields.io/github/downloads/krishna3163/OmniShizuku/total?style=for-the-badge&label=Downloads)](https://github.com/krishna3163/OmniShizuku/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](LICENSE)
 [![Android Support](https://img.shields.io/badge/Android-min%20SDK%2025-informational?style=for-the-badge&logo=android)](https://developer.android.com)
 
 **Application Package:** `com.krishna.omnishizuku`
 
-[Current implementation](#current-implementation) • [Build instructions](#building-from-source) • [Technical docs](docs/)
+[⬇️ Download APK](https://github.com/krishna3163/OmniShizuku/releases/latest/download/omnishizuku.apk) • [Install guide](#install-and-get-started) • [Features](#what-you-can-do) • [Build](#building-from-source) • [Docs](docs/)
 
 </div>
 
 ---
 
-## Current implementation
+## 👋 Install and get started
+
+1. **Download:** [Get the latest APK](https://github.com/krishna3163/OmniShizuku/releases/latest/download/omnishizuku.apk). You can also [browse releases](https://github.com/krishna3163/OmniShizuku/releases). If the direct link has no file yet, check the [Actions build status](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml).
+2. **Install:** Open the APK. If Android asks, allow **Install unknown apps** for the browser or file manager you used, then return to the installer and tap **Install**. Turn that source permission off again when you are done.
+3. **Start Shizuku access:** Open OmniShizuku and follow its setup screen. Wireless debugging generally requires Android 11 or newer and Developer options. Root and Device Owner options only work when configured on your device.
+4. **Review actions:** Some tools can change system settings or run privileged commands. Read each confirmation and only run commands you understand.
+
+**Do not disable Google Play Store or Play Protect to install this APK.** If Android or Play Protect blocks it, stop and check the download and the warning. Disabling those protections is not a general APK installation fix. Android's supported sideload flow is to allow installs from the specific browser/file manager; Google recommends keeping Play Protect enabled. ([Android APK installation guide](https://support.google.com/pixelphone/answer/7391672?hl=en), [Play Protect guidance](https://support.google.com/android/answer/2812853?hl=en))
+
+### If installation fails
+
+- Download again from the official GitHub Release and make sure the download completed.
+- Grant **Install unknown apps** to the app opening the APK (for example, Chrome or Files); this is separate from disabling Google Play Store.
+- Check that the device meets the app's declared minimum of Android 7.1 / API 25. Device and OEM compatibility have not been verified across the Android range.
+- If Android reports a package/signature conflict while updating, the installed copy may have been signed with a different key. Do not uninstall it until you understand that removing an app can erase its local data.
+- If Play Protect reports the APK as harmful or blocks it, do not bypass the warning on the basis of this README. Review the release source and wait for a verified build or report a suspected false positive.
+
+## ✨ What you can do
 
 OmniShizuku is an Android application built around the Shizuku Binder service. The repository currently contains these code areas:
 
@@ -39,7 +56,7 @@ OmniShizuku is an Android application built around the Shizuku Binder service. T
 | Private DNS, per-app network controls and system labs | Yes | DNS-over-TLS presets include Cloudflare, AdGuard, Quad9, OpenDNS, DNSforge, HaGeZi, Google and CleanBrowsing; Android/OEM behavior is unverified |
 | Device Owner/Dhizuku, watchdog, biometric gate, Tasker and AI UI | Code is present | End-to-end compatibility is not verified |
 
-**These entries describe code in the repository, not a claim that every feature works on every device.** The repository-wide source audit and Android build are still in progress. See [`docs/integration-progress.md`](docs/integration-progress.md), [`docs/feature-source-mapping.md`](docs/feature-source-mapping.md), and [`docs/build-and-test-results.md`](docs/build-and-test-results.md) for evidence and limits. The manager declares a minimum Android SDK of 25; support on a given Android release is not established by that setting alone.
+> **Project status:** These entries describe code in the repository; they do not mean every feature works on every device. The full source audit and Android build verification are still in progress. The manager declares a minimum Android SDK of 25 (Android 7.1), but device/OEM compatibility is not established by that setting alone. See [integration progress](docs/integration-progress.md), [feature mapping](docs/feature-source-mapping.md), and [build results](docs/build-and-test-results.md).
 
 Privileged operations require a running Shizuku server or another supported backend. Some controls require root, Device Owner, specific Android APIs, or manufacturer support. Review each operation before using it; the app cannot bypass Android or OEM restrictions.
 
@@ -70,35 +87,6 @@ AI provider configuration, assistant screens, shell history and automation/plugi
 
 ---
 
-## 🚀 Instant Download & Quick Start
-
-Install a build from a trusted project release or build it locally. Package signing and upgrade compatibility depend on the build source and signing key; do not uninstall an existing Shizuku app unless you understand the impact on apps that depend on its service.
-
-### Step 1: Obtain a build
-- [Download the latest APK](https://github.com/krishna3163/OmniShizuku/releases/latest/download/omnishizuku.apk) directly, or browse [all GitHub Releases](https://github.com/krishna3163/OmniShizuku/releases). The direct link becomes available after a successful release workflow; anyone can download it while this repository is public.
-- Check the [APK build workflow](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml) for build status and logs.
-
-### Step 2: Launch with Your Favorite Method
-
-```mermaid
-graph LR
-    A[Start OmniShizuku] --> B[Wireless Debugging]
-    A --> C[PC / OTG Shell]
-    A --> D[Direct Root]
-    A --> E[Dhizuku Device Owner]
-    B --> F((⚡ Server Running))
-    C --> F
-    D --> F
-    E --> F
-```
-
-1. **Wireless Debugging (Android 11+):**
-   - Developer Options &rarr; Enable **Wireless Debugging** &rarr; Tap **Pair device with pairing code**.
-   - Enter the 6-digit code in OmniShizuku & tap **Start**.
-2. **Via PC or root:** Use the start flow shown in the installed app and follow its prompts. Exact options depend on the installed build and device.
-
----
-
 ## 📚 Deep Dive Documentation
 
 Read our comprehensive technical guides in the [`docs/`](docs/) directory:
@@ -126,10 +114,10 @@ Read our comprehensive technical guides in the [`docs/`](docs/) directory:
 git clone https://github.com/krishna3163/OmniShizuku.git
 cd OmniShizuku
 
-# 2. Build Debug Variant
+# Build a debug APK
 ./gradlew :manager:assembleDebug
 
-# 3. Build Release Variant
+# Build a release APK
 ./gradlew :manager:assembleRelease
 ```
 *Generated APKs will be in `manager/build/outputs/apk/{debug,release}/`.*
@@ -138,9 +126,50 @@ The Android build requires JDK 21, Android SDK platform 37.1, and the NDK versio
 
 ---
 
-## Upstream references reviewed
+## 🔐 Security and downloads
 
-The repository inventory and feature mapping track source projects and integration evidence. In this audit, the target's Shizuku engine was compared at a high level with upstream Shizuku, and two small input-validation helpers were adapted with attribution: the package-name rule from [ShizukuPlus](https://github.com/thejaustin/ShizukuPlus) and the DNS hostname parser from [ADNS](https://github.com/eyalm2000/adns). Other project relationships remain under audit; see [`docs/source-repository-inventory.md`](docs/source-repository-inventory.md).
+Download builds only from this repository's [GitHub Releases](https://github.com/krishna3163/OmniShizuku/releases). The direct APK link works when a successful public release contains the APK asset. Release signing and whether one build can update another depend on the signing key; GitHub build artifacts may not share a persistent signing key unless the maintainer configures one.
+
+OmniShizuku is open source, but **that alone is not a security certification**. This project's security review is preliminary, and the Android build and device behavior have not yet been fully verified. The app includes privileged operations, so inspect permissions and review commands before approving them. See [`docs/security-review.md`](docs/security-review.md) for current findings and gaps. Google Play Protect scans apps installed from outside Play as well as Play apps; keep it enabled and treat its warnings seriously. ([Google Play Protect](https://support.google.com/android/answer/2812853?hl=en))
+
+## 🙏 Upstream projects and thanks
+
+Thank you to the maintainers and contributors of these projects. We use them as implementation references and, where recorded, reuse or adapt compatible code. **Not every project below is integrated into OmniShizuku.** Each reuse has to respect that project's license and attribution requirements; see [`NOTICE`](NOTICE), [`licenses/`](licenses/), and the [source inventory](docs/source-repository-inventory.md).
+
+<details>
+<summary>Show all upstream projects (27)</summary>
+
+- [Shizuku](https://github.com/thedjchi/Shizuku)
+- [Shizuku-Next](https://github.com/rushiranpise/Shizuku-Next)
+- [ShizukuPlus](https://github.com/thejaustin/ShizukuPlus)
+- [Shizako](https://github.com/cr1437/Shizako)
+- [Xhizuku](https://github.com/xeonleonreal/Xhizuku)
+- [Stellar](https://github.com/roro2239/Stellar)
+- [Shevery](https://github.com/HmnDev-Tech/shevery)
+- [Porter](https://github.com/d4rken-org/porter)
+- [InstallerX-Revived](https://github.com/wxxsfxyzm/InstallerX-Revived)
+- [InstallWithOptions](https://github.com/zacharee/InstallWithOptions)
+- [ShizuStore](https://github.com/timschneeb/ShizuStore)
+- [Morphe Manager](https://github.com/MorpheApp/morphe-manager)
+- [Root-My-Galaxy](https://github.com/BuSung-dev/Root-My-Galaxy)
+- [Root-My-Pixel](https://github.com/alex193a/Root-My-Pixel)
+- [ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder)
+- [ShizuTools](https://github.com/legendsayantan/ShizuTools)
+- [SystemUI-Tuner](https://github.com/zacharee/Tweaker)
+- [ADNS](https://github.com/eyalm2000/adns)
+- [AutoDND](https://github.com/im030/android_AutoDND)
+- [ShizuWall](https://github.com/AhmetCanArslan/ShizuWall)
+- [shizzi](https://github.com/carlelieser/shizzi)
+- [sing-box-for-android](https://github.com/SagerNet/sing-box-for-android)
+- [EnforceDoze](https://github.com/Akylas/EnforceDoze)
+- [Quick-Tile-Settings](https://github.com/RBN-Apps/Quick-Tile-Settings)
+- [essentials](https://github.com/sameerasw/essentials)
+- [Canta](https://github.com/samolego/Canta)
+- [AxManager](https://github.com/fahrez182/AxManager)
+
+</details>
+
+Current examples of attributed reuse include the Essentials battery utilities, the ShizukuPlus package-name validation rule, and the ADNS DNS hostname parser/provider data. More details are in the [feature-to-source map](docs/feature-source-mapping.md); the audit is ongoing.
 
 ---
 
@@ -149,7 +178,7 @@ The repository inventory and feature mapping track source projects and integrati
 OmniShizuku's project license is the **[Apache License 2.0](LICENSE)**. Bundled dependencies and adapted upstream code may carry separate license and attribution terms; see [`NOTICE`](NOTICE), [`licenses/`](licenses/), and the inventory. The audit has not yet verified licensing for every file in the repository.
 
 > [!CAUTION]
-> **Free App Notice:** OmniShizuku is and always will be **100% free and open-source**. Never pay any third-party website, seller, or file host to download this app.
+> **Free app:** Download OmniShizuku from this repository's releases. Never pay a third-party seller or file host for the APK.
 
 <div align="center">
   <sub>Crafted with passion by <b>Krishna</b> & the Open-Source Android Community.</sub>
