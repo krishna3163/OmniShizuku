@@ -16,7 +16,7 @@
 [![Build Android APK](https://img.shields.io/github/actions/workflow/status/krishna3163/OmniShizuku/apk-build.yml?branch=main&style=for-the-badge&label=Build%20APK)](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml)
 [![Downloads](https://img.shields.io/github/downloads/krishna3163/OmniShizuku/total?style=for-the-badge&label=Downloads)](https://github.com/krishna3163/OmniShizuku/releases)
 [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](LICENSE)
-[![Android Support](https://img.shields.io/badge/Android-min%20SDK%2025-informational?style=for-the-badge&logo=android)](https://developer.android.com)
+[![Android Support](https://img.shields.io/badge/Android-min%20SDK%2026-informational?style=for-the-badge&logo=android)](https://developer.android.com)
 
 **Application Package:** `com.krishna.omnishizuku`
 
@@ -39,7 +39,7 @@
 
 - Download again from the official GitHub Release and make sure the download completed.
 - Grant **Install unknown apps** to the app opening the APK (for example, Chrome or Files). If the device allows disabling the Play Store app, re-enable it immediately after the install attempt.
-- Check that the device meets the app's declared minimum of Android 7.1 / API 25. Device and OEM compatibility have not been verified across the Android range.
+- Check that the device meets the app's declared minimum of Android 8.0 / API 26. Device and OEM compatibility have not been verified across the Android range.
 - If Android reports a package/signature conflict while updating, the installed copy may have been signed with a different key. Do not uninstall it until you understand that removing an app can erase its local data.
 - If Play Protect reports the APK as harmful or blocks it, do not bypass the warning on the basis of this README. Review the release source and wait for a verified build or report a suspected false positive.
 
@@ -56,7 +56,7 @@ OmniShizuku is an Android application built around the Shizuku Binder service. T
 | Private DNS, per-app network controls and system labs | Yes | DNS-over-TLS presets include Cloudflare, AdGuard, Quad9, OpenDNS, DNSforge, HaGeZi, Google and CleanBrowsing; Android/OEM behavior is unverified |
 | Device Owner/Dhizuku, watchdog, biometric gate, Tasker and AI UI | Code is present | End-to-end compatibility is not verified |
 
-> **Project status:** These entries describe code in the repository; they do not mean every feature works on every device. The full source audit and Android build verification are still in progress. The manager declares a minimum Android SDK of 25 (Android 7.1), but device/OEM compatibility is not established by that setting alone. See [integration progress](docs/integration-progress.md), [feature mapping](docs/feature-source-mapping.md), and [build results](docs/build-and-test-results.md).
+> **Project status:** These entries describe code in the repository; they do not mean every feature works on every device. The full source audit and Android build verification are still in progress. The manager declares a minimum Android SDK of 26 (Android 8.0), but device/OEM compatibility is not established by that setting alone. See [integration progress](docs/integration-progress.md), [feature mapping](docs/feature-source-mapping.md), and [build results](docs/build-and-test-results.md).
 
 Privileged operations require a running Shizuku server or another supported backend. Some controls require root, Device Owner, specific Android APIs, or manufacturer support. Review each operation before using it; the app cannot bypass Android or OEM restrictions.
 

@@ -27,10 +27,22 @@ The baseline unit tests, lint and device checks were not run at this stage. The 
 
 ## GitHub Actions handoff
 
-The existing `.github/workflows/apk-build.yml` supports `workflow_dispatch`, but the sandbox cannot contact GitHub: `git ls-remote origin HEAD` failed because `github.com` did not resolve, and `gh` is not installed. A local `~/.ssh/id_ed25519` private key file and matching public key exist, but `ssh-add -l` could not contact the SSH agent, so registration or remote authentication could not be confirmed. No private key contents were read. The APK build workflow installs `platforms;android-37.1` and runs `:manager:testDebugUnitTest` before building APKs. The manual release workflow now also installs the required Android platform, build tools, and NDK before testing/building. Both publishing workflows fail if the release APK is missing and upload a stable `omnishizuku.apk` asset for the latest-release download link. These workflow changes have not been pushed or run remotely.
+The `.github/workflows/apk-build.yml` workflow installs `platforms;android-37.1` and runs `:manager:testDebugUnitTest` before building APKs. The manual release workflow installs the required Android platform, build tools, and NDK. Both publishing workflows fail if the release APK is missing and upload a stable `omnishizuku.apk` asset for the latest-release download link. A GitHub Actions run against commit `a9a88ba` is recorded below.
 
 ## Security-validation change verification
 
 Added tests for `PackageNameValidator`, `DnsHostnameValidator` and the bundled DNS preset catalog, and `ShellArguments` under `manager/src/test`. Both `./gradlew :manager:testDebugUnitTest --no-daemon` and `./gradlew assembleDebug --no-daemon` were attempted after the change and stopped at Gradle startup with the same network-interface `SocketException: Operation not permitted`. The six focused Kotlin tests were compiled with the cached project Kotlin compiler and executed directly with JUnit 4.13.2: **6 tests passed**. `git diff --check` completed with no whitespace errors. These tests do not compile or verify the newly integrated Android Essentials battery/thermal source; Android app compilation and Gradle task wiring remain unverified.
 
 After adding the upstream Essentials battery/thermal/charging source slice, `./gradlew :manager:testDebugUnitTest --no-daemon` was attempted again. It still stops before project configuration with `Could not determine a usable wildcard IP for this machine`; the Essentials integration has not been compiled by Gradle.
+
+## GitHub Actions run: 2026-10-26
+
+The GitHub-hosted runner successfully installed Java, started Gradle, and executed Android resource/compile tasks. `:manager:testDebugUnitTest` failed before running tests at `:manager:processDebugMainManifest`:
+
+```text
+uses-sdk:minSdkVersion 25 cannot be smaller than version 26 declared in library island-sdk.aar
+```
+
+The root Android configuration set minSdk 25, while the bundled `manager/libs/island-sdk.aar` requires minSdk 26. Root `build.gradle` now sets minSdk 26; the README and compatibility matrix are updated. This fixes the reported manifest mismatch but still needs a new GitHub Actions run to verify the remaining compilation and test tasks.
+
+Other log messages were non-fatal in this run: sdkmanager could not find the redundant package `platforms;android-37`, `yes` reported a broken pipe after sdkmanager closed its license-input pipe, and Android resource processing emitted Uzbek string formatting warnings. The run produced no manager APK; only shell/stub APKs were present, and the artifact step therefore had no manager APK to upload. Because unit tests did not complete, this run does not verify test results.

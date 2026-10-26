@@ -14,7 +14,7 @@ subprojects {
             buildToolsVersion = "37.0.0"
             ndkVersion = "29.0.14206865"
             defaultConfig {
-                minSdk = 25
+                minSdk = 26
                 targetSdk = 37
             }
             compileOptions {
