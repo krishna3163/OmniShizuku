@@ -17,8 +17,8 @@ Audit date: 2026-10-26.
 - 27/27 explicitly named source projects discovered locally.
 - 27/27 configured source remotes fetched; no source clone failures.
 - 4 fast-forwards: AxManager, ShizuCallRecorder, essentials, and morphe-manager.
-- The target repository's local edits are preserved. No commit, push, or release was made.
+- The target repository's local edits are preserved. The Essentials battery integration is committed locally as `fa02054`; the attempted push failed because this environment could not resolve `github.com`.
 
 ## Next action
 
-Restore outbound DNS/GitHub access, then push the reviewed workspace changes and manually dispatch `apk-build.yml` to run manager tests plus debug/release APK builds. After remote results are available, continue source review for the remaining 14 repositories and complete the target Binder/security comparison.
+Restore outbound DNS/GitHub access, push the local commits and workflow fixes, then check the Actions run and public latest-APK URL. After remote results are available, continue source review for the remaining 14 repositories and complete the target Binder/security comparison.

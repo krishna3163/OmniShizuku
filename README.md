@@ -75,7 +75,8 @@ AI provider configuration, assistant screens, shell history and automation/plugi
 Install a build from a trusted project release or build it locally. Package signing and upgrade compatibility depend on the build source and signing key; do not uninstall an existing Shizuku app unless you understand the impact on apps that depend on its service.
 
 ### Step 1: Obtain a build
-- [GitHub Actions](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml) and [Releases](https://github.com/krishna3163/OmniShizuku/releases) are project links. Availability and build status are determined by the linked pages.
+- [Download the latest APK](https://github.com/krishna3163/OmniShizuku/releases/latest/download/omnishizuku.apk) directly, or browse [all GitHub Releases](https://github.com/krishna3163/OmniShizuku/releases). The direct link becomes available after a successful release workflow; anyone can download it while this repository is public.
+- Check the [APK build workflow](https://github.com/krishna3163/OmniShizuku/actions/workflows/apk-build.yml) for build status and logs.
 
 ### Step 2: Launch with Your Favorite Method
 

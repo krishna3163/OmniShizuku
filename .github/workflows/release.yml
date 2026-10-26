@@ -87,8 +87,12 @@ jobs:
 
       - name: Setup Android SDK
         run: |
-          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
-          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 --licenses > /dev/null 2>&1 || true
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --channel=3 --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" --channel=3 \
+            "platforms;android-37.1" \
+            "build-tools;37.0.0" \
+            "ndk;29.0.14206865"
           echo 'android.sdk.channel=3' >> gradle.properties
           echo 'org.gradle.caching=true' >> gradle.properties
           echo 'org.gradle.parallel=true' >> gradle.properties
@@ -117,20 +121,26 @@ jobs:
             cp -f ~/.android/debug.keystore ~/.config/.android/debug.keystore 2>/dev/null || true
           fi
 
+      - name: Run manager unit tests
+        run: ./gradlew :manager:testDebugUnitTest --stacktrace --no-daemon
+
       - name: Build APKs
         run: |
           chmod +x gradlew 2>/dev/null || true
-          ./gradlew :manager:assembleRelease :manager:assembleDebug --stacktrace
+          ./gradlew :manager:assembleRelease :manager:assembleDebug --stacktrace --no-daemon
 
       - name: Rename APKs for Release
+        env:
+          RELEASE_TAG: ${{ inputs.tag }}
         run: |
           mkdir -p release-assets
-          for f in manager/build/outputs/apk/release/*.apk; do
-            [ -e "$f" ] && cp "$f" "release-assets/omnishizuku-${{ inputs.tag }}-release.apk"
-          done
-          for f in manager/build/outputs/apk/debug/*.apk; do
-            [ -e "$f" ] && cp "$f" "release-assets/omnishizuku-${{ inputs.tag }}-debug.apk"
-          done
+          RELEASE_APK=$(find manager/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' -print -quit)
+          if [ -z "$RELEASE_APK" ]; then
+            echo "::error::Release APK was not generated."
+            exit 1
+          fi
+          cp "$RELEASE_APK" "release-assets/omnishizuku-${RELEASE_TAG}.apk"
+          cp "$RELEASE_APK" "release-assets/omnishizuku.apk"
 
       - name: Create release and upload APKs
         env:
@@ -157,4 +167,13 @@ jobs:
           else
             args+=( --latest )
           fi
-          gh release create "${args[@]}" release-assets/*.apk
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            if [ "$PRERELEASE" = "true" ]; then
+              gh release edit "$TAG" --title "${TITLE:-$TAG}" --prerelease --latest=false
+            else
+              gh release edit "$TAG" --title "${TITLE:-$TAG}" --prerelease=false --latest
+            fi
+            gh release upload "$TAG" release-assets/*.apk --clobber
+          else
+            gh release create "${args[@]}" release-assets/*.apk
+          fi

@@ -27,7 +27,7 @@ The baseline unit tests, lint and device checks were not run at this stage. The 
 
 ## GitHub Actions handoff
 
-The existing `.github/workflows/apk-build.yml` supports `workflow_dispatch`, but the sandbox cannot contact GitHub: `git ls-remote origin HEAD` failed because `github.com` did not resolve, and `gh` is not installed. A local `~/.ssh/id_ed25519` private key file and matching public key exist, but `ssh-add -l` could not contact the SSH agent, so registration or remote authentication could not be confirmed. No private key contents were read. The workflow now explicitly installs `platforms;android-37.1` and runs `:manager:testDebugUnitTest` before building APKs. It has not been pushed or run remotely.
+The existing `.github/workflows/apk-build.yml` supports `workflow_dispatch`, but the sandbox cannot contact GitHub: `git ls-remote origin HEAD` failed because `github.com` did not resolve, and `gh` is not installed. A local `~/.ssh/id_ed25519` private key file and matching public key exist, but `ssh-add -l` could not contact the SSH agent, so registration or remote authentication could not be confirmed. No private key contents were read. The APK build workflow installs `platforms;android-37.1` and runs `:manager:testDebugUnitTest` before building APKs. The manual release workflow now also installs the required Android platform, build tools, and NDK before testing/building. Both publishing workflows fail if the release APK is missing and upload a stable `omnishizuku.apk` asset for the latest-release download link. These workflow changes have not been pushed or run remotely.
 
 ## Security-validation change verification
 

@@ -140,32 +140,40 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          APK_FILES=$(find out/apk manager/build/outputs/apk -name "*.apk" 2>/dev/null | sort -u | tr '\n' ' ')
-          echo "Discovered APK files: $APK_FILES"
-          if [ -z "$APK_FILES" ]; then
-            echo "::error::No APK files found to publish!"
+          mkdir -p release-assets
+          RELEASE_APK=$(find manager/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' -print -quit)
+          if [ -z "$RELEASE_APK" ]; then
+            RELEASE_APK=$(find out/apk -maxdepth 1 -type f -name '*release*.apk' -print -quit)
+          fi
+          if [ -z "$RELEASE_APK" ]; then
+            echo "::error::Release APK was not generated; refusing to publish an empty release."
             exit 1
           fi
 
           if [[ "${{ github.ref }}" == refs/tags/v* ]]; then
             RELEASE_TAG="${{ github.ref_name }}"
             RELEASE_TITLE="OmniShizuku ${RELEASE_TAG}"
-            EXTRA_FLAGS=""
           else
             RELEASE_TAG="latest"
             RELEASE_TITLE="OmniShizuku Latest Release"
-            EXTRA_FLAGS=""
+          fi
+
+          cp "$RELEASE_APK" "release-assets/omnishizuku-${RELEASE_TAG}-release.apk"
+          cp "$RELEASE_APK" "release-assets/omnishizuku.apk"
+          DEBUG_APK=$(find manager/build/outputs/apk/debug -maxdepth 1 -type f -name '*.apk' -print -quit)
+          if [ -n "$DEBUG_APK" ]; then
+            cp "$DEBUG_APK" "release-assets/omnishizuku-${RELEASE_TAG}-debug.apk"
           fi
 
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             echo "Release '$RELEASE_TAG' exists. Updating release details and APK assets..."
-            gh release edit "$RELEASE_TAG" --title "$RELEASE_TITLE" --prerelease=false || true
-            gh release upload "$RELEASE_TAG" $APK_FILES --clobber
+            gh release edit "$RELEASE_TAG" --title "$RELEASE_TITLE" --latest
+            gh release upload "$RELEASE_TAG" release-assets/*.apk --clobber
           else
             echo "Creating release '$RELEASE_TAG'..."
-            gh release create "$RELEASE_TAG" $APK_FILES \
+            gh release create "$RELEASE_TAG" release-assets/*.apk \
               --title "$RELEASE_TITLE" \
-              $EXTRA_FLAGS \
+              --latest \
               --generate-notes
           fi
 
