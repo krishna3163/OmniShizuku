@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.utils.runShellCommand
+import moe.shizuku.manager.utils.PackageNameValidator
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -94,10 +95,12 @@ object FreezerManager {
     }
 
     suspend fun freezeApp(packageName: String): Boolean = withContext(Dispatchers.IO) {
+        if (!PackageNameValidator.isValid(packageName)) return@withContext false
         runShellCommand("pm disable-user --user 0 $packageName") != null
     }
 
     suspend fun unfreezeApp(packageName: String): Boolean = withContext(Dispatchers.IO) {
+        if (!PackageNameValidator.isValid(packageName)) return@withContext false
         runShellCommand("pm enable --user 0 $packageName") != null
     }
 

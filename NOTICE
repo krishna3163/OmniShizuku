@@ -1,0 +1,16 @@
+Third-party code notices
+
+Package-name validation in
+manager/src/main/java/moe/shizuku/manager/utils/PackageNameValidator.kt is
+adapted from ShizukuPlus `InputValidationUtils.isValidPackageName`.
+Copyright 2026 thejaustin. Licensed under Apache License 2.0; see LICENSE.
+
+Private DNS hostname normalization in
+manager/src/main/java/moe/shizuku/manager/utils/DnsHostnameValidator.kt is
+adapted from ADNS `PrivateDnsHostname`.
+Copyright (c) 2026 Eyal Meirom. Licensed under MIT; see licenses/ADNS-MIT.txt.
+
+Private DNS provider profile hostnames and filtering categories in
+manager/src/main/java/moe/shizuku/manager/dns/PrivateDnsManager.kt are adapted
+from the ADNS `DnsProviderCatalog` data. Copyright (c) 2026 Eyal Meirom.
+Licensed under MIT; see licenses/ADNS-MIT.txt.

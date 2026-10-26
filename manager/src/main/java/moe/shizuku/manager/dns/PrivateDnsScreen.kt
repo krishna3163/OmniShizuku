@@ -134,14 +134,14 @@ fun PrivateDnsScreen(
 
                     item {
                         Text(
-                            text = "Popular Zero-Log & Ad-Blocking Presets:",
+                        text = "DNS-over-TLS provider profiles:",
                             style = MaterialTheme.typography.titleSmall,
                             fontWeight = FontWeight.Bold,
                             modifier = Modifier.padding(top = 4.dp)
                         )
                     }
 
-                    items(PrivateDnsManager.PRESETS) { preset ->
+                    items(DnsPresetCatalog.presets) { preset ->
                         val isCurrent = customInput.trim() == preset.hostname
                         Card(
                             modifier = Modifier

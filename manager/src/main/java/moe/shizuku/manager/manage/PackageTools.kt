@@ -15,6 +15,7 @@ import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.ShizukuSystemApis
 import moe.shizuku.manager.utils.UserHandleCompat
 import moe.shizuku.manager.utils.runShellCommand
+import moe.shizuku.manager.utils.PackageNameValidator
 
 private const val TAG = "PackageTools"
 
@@ -216,6 +217,7 @@ object PackageTools {
      * can read (ops, bucket, battery exemption) come back empty when it is.
      */
     fun loadDetail(context: Context, packageName: String): AppDetail? {
+        if (!PackageNameValidator.isValid(packageName)) return null
         val pm = context.packageManager
         // The signing and signature flags have to be asked for explicitly: without them
         // `signingInfo` comes back null and the signature fact reads as missing rather
@@ -461,6 +463,7 @@ object PackageTools {
      * opinion before giving up.
      */
     fun setPermission(context: Context, packageName: String, permission: String, grant: Boolean): Boolean {
+        if (!PackageNameValidator.isValid(packageName) || !PackageNameValidator.isValid(permission)) return false
         if (!ShizukuStateMachine.isRunning()) return false
         val userId = UserHandleCompat.myUserId()
 
@@ -483,6 +486,7 @@ object PackageTools {
      * between a switch that works and one that lies.
      */
     fun setOp(context: Context, packageName: String, op: String, mode: OpMode): Boolean {
+        if (!PackageNameValidator.isValid(packageName) || OPS.none { it.first == op }) return false
         shellOk("cmd appops set $packageName $op ${mode.id}")
         return readOp(packageName, op) == mode
     }
@@ -496,11 +500,13 @@ object PackageTools {
     ): Boolean = setOp(context, packageName, op, if (blocked) OpMode.DENY else OpMode.ALLOW)
 
     fun setBucket(context: Context, packageName: String, bucket: StandbyBucket): Boolean {
+        if (!PackageNameValidator.isValid(packageName)) return false
         shellOk("am set-standby-bucket $packageName ${bucket.id}")
         return readBucket(context, packageName) == bucket
     }
 
     fun setBatteryUnrestricted(context: Context, packageName: String, unrestricted: Boolean): Boolean {
+        if (!PackageNameValidator.isValid(packageName)) return false
         val sign = if (unrestricted) "+" else "-"
         // The two entry points that exist across the range we support; the second is the
         // newer one and is where the first goes missing.
@@ -518,6 +524,7 @@ object PackageTools {
      * `package:allow` on stdout.
      */
     fun readNetworkBlocked(context: Context, packageName: String): Boolean? {
+        if (!PackageNameValidator.isValid(packageName)) return null
         val answer = runShellCommand("cmd connectivity get-package-networking-enabled $packageName")
         when {
             answer?.endsWith(":deny") == true -> return true
@@ -570,6 +577,7 @@ object PackageTools {
      * why the row says what it is rather than pretending it is a documented feature.
      */
     fun setNetworkBlocked(context: Context, packageName: String, blocked: Boolean): Boolean {
+        if (!PackageNameValidator.isValid(packageName)) return false
         if (chainEnabled() != true) {
             setChainEnabled(true)
         }
@@ -723,12 +731,14 @@ object PackageTools {
     }
 
     fun forceStop(context: Context, packageName: String): Boolean =
-        shellOk("am force-stop $packageName")
+        PackageNameValidator.isValid(packageName) && shellOk("am force-stop $packageName")
 
     fun clearData(context: Context, packageName: String): Boolean =
-        shellOk("pm clear --user ${UserHandleCompat.myUserId()} $packageName")
+        PackageNameValidator.isValid(packageName) &&
+            shellOk("pm clear --user ${UserHandleCompat.myUserId()} $packageName")
 
     fun setSuspended(context: Context, packageName: String, suspended: Boolean): Boolean {
+        if (!PackageNameValidator.isValid(packageName)) return false
         val verb = if (suspended) "suspend" else "unsuspend"
         return shellOk("pm $verb --user ${UserHandleCompat.myUserId()} $packageName")
     }
@@ -738,6 +748,7 @@ object PackageTools {
      * check it landed instead of trusting the command's exit code alone.
      */
     fun setDisabled(context: Context, packageName: String, disabled: Boolean): Boolean {
+        if (!PackageNameValidator.isValid(packageName)) return false
         val userId = UserHandleCompat.myUserId()
         val verb = if (disabled) "disable-user" else "enable"
         shellOk("pm $verb --user $userId $packageName")
@@ -748,6 +759,7 @@ object PackageTools {
     }
 
     fun uninstallForUser(context: Context, packageName: String): Boolean {
+        if (!PackageNameValidator.isValid(packageName)) return false
         val userId = UserHandleCompat.myUserId()
         shellOk("pm uninstall --user $userId $packageName")
         return runCatching {
@@ -757,6 +769,7 @@ object PackageTools {
     }
 
     fun restoreSystemApp(context: Context, packageName: String): Boolean {
+        if (!PackageNameValidator.isValid(packageName)) return false
         val userId = UserHandleCompat.myUserId()
         shellOk("pm install-existing --user $userId $packageName")
         return runCatching {

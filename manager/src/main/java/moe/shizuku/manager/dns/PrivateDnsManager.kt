@@ -2,6 +2,7 @@ package moe.shizuku.manager.dns
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import moe.shizuku.manager.utils.DnsHostnameValidator
 import moe.shizuku.manager.utils.runShellCommand
 
 object PrivateDnsManager {
@@ -11,22 +12,6 @@ object PrivateDnsManager {
         AUTOMATIC("opportunistic", "Automatic"),
         CUSTOM("hostname", "Private DNS Provider Hostname")
     }
-
-    data class DnsPreset(
-        val name: String,
-        val hostname: String,
-        val description: String
-    )
-
-    val PRESETS = listOf(
-        DnsPreset("Cloudflare (1.1.1.1)", "one.one.one.one", "Fast, private DNS with no logs"),
-        DnsPreset("Cloudflare Family", "family.cloudflare-dns.com", "Blocks malware and adult content"),
-        DnsPreset("AdGuard DNS", "dns.adguard.com", "Blocks ads, trackers, and malicious domains"),
-        DnsPreset("AdGuard Non-Filtering", "unfiltered.adguard-dns.com", "Unfiltered AdGuard DNS servers"),
-        DnsPreset("Quad9 DNS", "dns.quad9.net", "Blocks malware and phishing with threat intelligence"),
-        DnsPreset("Google DNS", "dns.google", "High availability public DNS"),
-        DnsPreset("CleanBrowsing Family", "family-filter-dns.cleanbrowsing.org", "Safe search and family filtering")
-    )
 
     suspend fun getCurrentMode(): DnsMode = withContext(Dispatchers.IO) {
         val out = runShellCommand("settings get global private_dns_mode")?.trim()
@@ -44,11 +29,16 @@ object PrivateDnsManager {
     }
 
     suspend fun applyDns(mode: DnsMode, hostname: String? = null): Boolean = withContext(Dispatchers.IO) {
-        var success = runShellCommand("settings put global private_dns_mode ${mode.modeKey}") != null
-        if (mode == DnsMode.CUSTOM && !hostname.isNullOrBlank()) {
-            success = success && (runShellCommand("settings put global private_dns_specifier ${hostname.trim()}") != null)
+        val normalizedHost = if (mode == DnsMode.CUSTOM) {
+            hostname?.let(DnsHostnameValidator::normalize) ?: return@withContext false
+        } else {
+            null
         }
-        success
+
+        val modeApplied = runShellCommand("settings put global private_dns_mode ${mode.modeKey}") != null
+        if (!modeApplied) return@withContext false
+        normalizedHost == null ||
+            runShellCommand("settings put global private_dns_specifier $normalizedHost") != null
     }
 
     suspend fun cycleNextDns(): String = withContext(Dispatchers.IO) {
@@ -65,10 +55,10 @@ object PrivateDnsManager {
                 "Cloudflare"
             }
             current == DnsMode.CUSTOM && currentHost == "one.one.one.one" -> {
-                applyDns(DnsMode.CUSTOM, "dns.adguard.com")
+                applyDns(DnsMode.CUSTOM, "dns.adguard-dns.com")
                 "AdGuard"
             }
-            current == DnsMode.CUSTOM && currentHost == "dns.adguard.com" -> {
+            current == DnsMode.CUSTOM && currentHost in setOf("dns.adguard-dns.com", "dns.adguard.com") -> {
                 applyDns(DnsMode.OFF)
                 "Off"
             }

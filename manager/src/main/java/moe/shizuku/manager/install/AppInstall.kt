@@ -8,6 +8,8 @@ import kotlinx.coroutines.withContext
 import moe.shizuku.manager.files.FileOperations
 import moe.shizuku.manager.files.PrivilegedFiles
 import moe.shizuku.manager.utils.Diag
+import moe.shizuku.manager.utils.shellQuote
+import moe.shizuku.manager.utils.shellQuoteArguments
 
 /**
  * Installing an app, as a command line.
@@ -184,7 +186,7 @@ object AppInstall {
         val probe = runCatching {
             PrivilegedFiles.exec(
                 "if command -v unzip >/dev/null 2>&1; then " +
-                    "unzip -v ${quoted(path)} >/dev/null 2>&1; echo code=\$?; else echo code=none; fi"
+                    "unzip -v ${shellQuote(path)} >/dev/null 2>&1; echo code=\$?; else echo code=none; fi"
             )
         }.getOrNull()
             ?.lineSequence()
@@ -198,7 +200,7 @@ object AppInstall {
         // The listing again, this time keeping the complaint: its own output goes to /dev/null, so
         // what comes back is the line unzip wrote to stderr.
         val detail = runCatching {
-            PrivilegedFiles.exec("unzip -v ${quoted(path)} >/dev/null; exit 0")
+            PrivilegedFiles.exec("unzip -v ${shellQuote(path)} >/dev/null; exit 0")
         }.getOrNull()
             ?.lineSequence()
             ?.firstOrNull { it.startsWith("unzip:") || it.contains("Invalid", ignoreCase = true) }
@@ -226,13 +228,13 @@ object AppInstall {
         val source = if (staged) apk else "$work/${name(apk)}"
 
         return buildString {
-            appendLine("W=${quoted(work)}")
+            appendLine("W=${shellQuote(work)}")
             appendLine("rm -rf \"\$W\"")
             appendLine("mkdir -p \"\$W\" || { echo 'Failure: no working directory under $ShellWorkspace'; exit 1; }")
             if (!staged) {
-                appendLine("cp ${quoted(apk)} \"\$W\"/ || { echo 'Failure: could not copy the package'; rm -rf \"\$W\"; exit 1; }")
+                appendLine("cp ${shellQuote(apk)} \"\$W\"/ || { echo 'Failure: could not copy the package'; rm -rf \"\$W\"; exit 1; }")
             }
-            appendLine("pm install ${flags(options).joinToString(" ")} ${quoted(source)}")
+            appendLine("pm install ${shellQuoteArguments(flags(options))} ${shellQuote(source)}")
             appendLine("rc=\$?")
             appendLine("rm -rf \"\$W\"")
             appendLine("exit \$rc")
@@ -254,14 +256,14 @@ object AppInstall {
     ): String {
         val sizes = apks.map { it to sizeOf(it) }
         val total = sizes.sumOf { it.second }
-        val flagLine = flags(options).joinToString(" ")
+        val flagLine = shellQuoteArguments(flags(options))
 
         return buildString {
-            appendLine("W=${quoted(work)}")
+            appendLine("W=${shellQuote(work)}")
             appendLine("S=\$(pm install-create $flagLine -S $total | sed -n 's/.*\\[\\([0-9]*\\)\\].*/\\1/p')")
             appendLine("if [ -z \"\$S\" ]; then echo 'Failure: could not open an install session'; rm -rf \"\$W\"; exit 1; fi")
             sizes.forEach { (path, size) ->
-                appendLine("pm install-write -S $size \$S ${quoted(name(path))} ${quoted(path)}")
+                appendLine("pm install-write -S $size \$S ${shellQuote(name(path))} ${shellQuote(path)}")
             }
             appendLine("pm install-commit \$S")
             appendLine("rc=\$?")
@@ -369,9 +371,6 @@ object AppInstall {
             PrivilegedFiles.list(parent).firstOrNull { it.name == name(path) }?.size ?: 0L
         }.getOrDefault(0L)
     }
-
-    /** Single-quoted, with a quote inside closed and reopened, which is what a shell needs. */
-    private fun quoted(value: String): String = "'" + value.replace("'", "'\\''") + "'"
 
     private fun name(path: String): String = path.substringAfterLast('/')
 }

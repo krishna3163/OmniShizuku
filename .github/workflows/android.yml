@@ -24,5 +24,9 @@ jobs:
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
-    - name: Build with Gradle
-      run: ./gradlew assembleDebug
+    - name: Install Android SDK 37.1
+      run: |
+        yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 --licenses > /dev/null 2>&1 || true
+        yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 "platforms;android-37.1" "build-tools;37.0.0" "ndk;29.0.14206865"
+    - name: Test and build with Gradle
+      run: ./gradlew :manager:testDebugUnitTest :manager:assembleDebug --stacktrace --no-daemon

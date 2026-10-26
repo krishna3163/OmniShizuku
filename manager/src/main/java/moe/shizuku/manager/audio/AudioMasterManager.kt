@@ -5,6 +5,7 @@ import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import moe.shizuku.manager.utils.PackageNameValidator
 import moe.shizuku.manager.utils.runShellCommand
 
 data class AudioStreamInfo(
@@ -78,6 +79,7 @@ object AudioMasterManager {
     }
 
     suspend fun grantCallRecordingAppOps(packageName: String): Boolean = withContext(Dispatchers.IO) {
+        if (!PackageNameValidator.isValid(packageName)) return@withContext false
         val cmd1 = runShellCommand("cmd appops set $packageName RECORD_AUDIO allow") != null
         val cmd2 = runShellCommand("cmd appops set $packageName READ_PHONE_STATE allow") != null
         runShellCommand("pm grant $packageName android.permission.RECORD_AUDIO")

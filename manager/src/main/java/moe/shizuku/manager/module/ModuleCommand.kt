@@ -1,6 +1,7 @@
 package moe.shizuku.manager.module
 
 import java.io.File
+import moe.shizuku.manager.utils.shellQuote
 
 /** How much a module is allowed to do, as the user set it. */
 enum class ModuleAccessMode(val value: String) {
@@ -15,9 +16,6 @@ enum class ModuleAccessMode(val value: String) {
             entries.firstOrNull { it.value == value } ?: SAFE
     }
 }
-
-/** A single quote for the shell, so a path or a value with a space in it survives intact. */
-fun shellQuote(value: String): String = "'" + value.replace("'", "'\\''") + "'"
 
 /**
  * The command a module's script is run as.

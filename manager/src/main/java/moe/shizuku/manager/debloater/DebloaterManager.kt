@@ -8,6 +8,7 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.utils.runShellCommand
+import moe.shizuku.manager.utils.PackageNameValidator
 
 object DebloaterManager {
     private const val TAG = "DebloaterManager"
@@ -124,6 +125,7 @@ object DebloaterManager {
 
     suspend fun uninstallUser0(packageName: String): Result<String> = withContext(Dispatchers.IO) {
         runCatching {
+            require(PackageNameValidator.isValid(packageName)) { "Invalid package name" }
             val cmd = "pm uninstall -k --user 0 $packageName"
             val output = runShellCommand(cmd) ?: throw IllegalStateException("Failed to run shell command")
             if (output.contains("Success", ignoreCase = true)) {
@@ -136,6 +138,7 @@ object DebloaterManager {
 
     suspend fun restoreUser0(packageName: String): Result<String> = withContext(Dispatchers.IO) {
         runCatching {
+            require(PackageNameValidator.isValid(packageName)) { "Invalid package name" }
             val cmd = "pm install-existing --user 0 $packageName"
             val output = runShellCommand(cmd) ?: throw IllegalStateException("Failed to run shell command")
             if (output.contains("installed", ignoreCase = true) || output.contains("Package", ignoreCase = true)) {
@@ -148,6 +151,7 @@ object DebloaterManager {
 
     suspend fun disablePackage(packageName: String): Result<String> = withContext(Dispatchers.IO) {
         runCatching {
+            require(PackageNameValidator.isValid(packageName)) { "Invalid package name" }
             val cmd = "pm disable-user --user 0 $packageName"
             val output = runShellCommand(cmd) ?: throw IllegalStateException("Failed to run shell command")
             if (output.contains("new state", ignoreCase = true) || output.contains("disabled", ignoreCase = true)) {
@@ -160,6 +164,7 @@ object DebloaterManager {
 
     suspend fun enablePackage(packageName: String): Result<String> = withContext(Dispatchers.IO) {
         runCatching {
+            require(PackageNameValidator.isValid(packageName)) { "Invalid package name" }
             val cmd = "pm enable --user 0 $packageName"
             val output = runShellCommand(cmd) ?: throw IllegalStateException("Failed to run shell command")
             if (output.contains("new state", ignoreCase = true) || output.contains("enabled", ignoreCase = true)) {
@@ -172,6 +177,7 @@ object DebloaterManager {
 
     suspend fun clearData(packageName: String): Result<String> = withContext(Dispatchers.IO) {
         runCatching {
+            require(PackageNameValidator.isValid(packageName)) { "Invalid package name" }
             val cmd = "pm clear --user 0 $packageName"
             val output = runShellCommand(cmd) ?: throw IllegalStateException("Failed to run shell command")
             if (output.contains("Success", ignoreCase = true)) {

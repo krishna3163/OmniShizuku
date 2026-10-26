@@ -3,6 +3,7 @@ package moe.shizuku.manager.manage
 import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.utils.Diag
 import moe.shizuku.manager.utils.runShellCommand
+import moe.shizuku.manager.utils.PackageNameValidator
 
 /**
  * Dark for the apps that never got around to it, one app at a time.
@@ -206,7 +207,7 @@ object ForceDark {
      * without anything visible happening.
      */
     fun restart(packageName: String) {
-        if (packageName.isBlank()) return
+        if (!PackageNameValidator.isValid(packageName)) return
         runShellCommand("am force-stop $packageName")
         Diag.info(TAG, "restarted $packageName so it picks the switches up")
     }
