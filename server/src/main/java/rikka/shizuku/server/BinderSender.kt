@@ -22,7 +22,7 @@ object BinderSender {
 
     private val logger = Logger("BinderSender")
 
-    private const val PERMISSION_MANAGER = "moe.shizuku.manager.permission.MANAGER"
+    private const val PERMISSION_MANAGER = "com.krishna.omnishizuku.permission.MANAGER"
     private const val PERMISSION = "moe.shizuku.manager.permission.API_V23"
 
     private var shizukuService: ShizukuService? = null

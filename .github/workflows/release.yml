@@ -122,12 +122,16 @@ jobs:
           fi
 
       - name: Run manager unit tests
-        run: ./gradlew :manager:testDebugUnitTest --stacktrace --no-daemon
+        env:
+          OMNI_VERSION_NAME: ${{ inputs.tag }}
+        run: ./gradlew :manager:testDebugUnitTest "-PomniVersionName=${OMNI_VERSION_NAME}" --stacktrace --no-daemon
 
       - name: Build APKs
+        env:
+          OMNI_VERSION_NAME: ${{ inputs.tag }}
         run: |
           chmod +x gradlew 2>/dev/null || true
-          ./gradlew :manager:assembleRelease :manager:assembleDebug --stacktrace --no-daemon
+          ./gradlew :manager:assembleRelease :manager:assembleDebug "-PomniVersionName=${OMNI_VERSION_NAME}" --stacktrace --no-daemon
 
       - name: Rename APKs for Release
         env:

@@ -78,19 +78,19 @@
         android:label="@string/permission_group_label" />
 
     <permission
-        android:name="moe.shizuku.manager.permission.MANAGER"
+        android:name="com.krishna.omnishizuku.permission.MANAGER"
         android:protectionLevel="signature" />
-    <uses-permission android:name="moe.shizuku.manager.permission.MANAGER" />
+    <uses-permission android:name="com.krishna.omnishizuku.permission.MANAGER" />
 
     <permission
-        android:name="moe.shizuku.manager.permission.API_V23"
+        android:name="com.krishna.omnishizuku.permission.API_V23"
         android:description="@string/permission_description"
         android:icon="@drawable/ic_system_icon"
         android:label="@string/permission_label"
         android:permissionGroup="com.krishna.omnishizuku.permission-group.API"
         android:protectionLevel="dangerous" />
     <uses-permission
-        android:name="moe.shizuku.manager.permission.API_V23" />
+        android:name="com.krishna.omnishizuku.permission.API_V23" />
 
     <permission
         android:name="${applicationId}.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
@@ -274,7 +274,7 @@
             android:name=".dhizuku.DhizukuService"
             android:enabled="true"
             android:exported="true"
-            android:permission="moe.shizuku.manager.permission.API_V23" />
+            android:permission="com.krishna.omnishizuku.permission.API_V23" />
 
         <service
             android:name=".settings.UsbDebuggingHideService"
