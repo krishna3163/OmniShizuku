@@ -10,6 +10,8 @@
     <string name="accessibility_close">Close</string>
     <string name="accessibility_more_options">More options</string>
     <string name="accessibility_open_on_github">Open on GitHub</string>
+    <string name="developer_essentials_hub_unlocked">Essentials Hub is unlocked. Return to Labs to open it.</string>
+    <string name="device_info_load_failed">Couldn\'t load device information. Try refreshing.</string>
 
     
     <string name="home_status_service_is_running">%1$s is running</string>

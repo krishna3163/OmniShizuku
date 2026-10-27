@@ -2,8 +2,16 @@ package moe.shizuku.manager.utils
 
 import android.util.Log
 import rikka.shizuku.Shizuku
+import java.util.concurrent.ExecutionException
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
+import java.util.concurrent.TimeoutException
 
 private const val TAG = "ShizukuShell"
+private const val SHELL_COMMAND_TIMEOUT_SECONDS = 15L
+private val shellOutputExecutor = Executors.newCachedThreadPool { task ->
+    Thread(task, "ShizukuShellOutput").apply { isDaemon = true }
+}
 
 /**
  * Runs [cmd] as shell through Shizuku and returns its output, or null when it couldn't
@@ -14,14 +22,26 @@ private const val TAG = "ShizukuShell"
  */
 fun runShellCommand(cmd: String): String? {
     val process = newShellProcess(cmd) ?: return null
+    val output = shellOutputExecutor.submit<String> {
+        process.inputStream.bufferedReader().use { it.readText() }
+    }
 
     return try {
-        process.inputStream.bufferedReader().use { it.readText() }.trim().ifEmpty { null }
-    } catch (e: Throwable) {
+        output.get(SHELL_COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS).trim().ifEmpty { null }
+    } catch (e: TimeoutException) {
+        Log.w(TAG, "Timed out waiting for shell command: $cmd")
+        null
+    } catch (e: ExecutionException) {
+        Log.w(TAG, "Shell command via Shizuku failed: $cmd", e.cause ?: e)
+        null
+    } catch (e: InterruptedException) {
+        Thread.currentThread().interrupt()
         Log.w(TAG, "Shell command via Shizuku failed: $cmd", e)
         null
     } finally {
-        runCatching { process.destroy() }
+        output.cancel(true)
+        process.destroy()
+        process.destroyForcibly()
     }
 }
 

@@ -1,12 +1,17 @@
-@file:OptIn(androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class)
+@file:OptIn(
+    androidx.compose.foundation.ExperimentalFoundationApi::class,
+    androidx.compose.material3.ExperimentalMaterial3ExpressiveApi::class
+)
 
 package moe.shizuku.manager.about
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
@@ -35,6 +40,7 @@ import moe.shizuku.manager.module.update.SheveryAppUpdateResult
 import moe.shizuku.manager.module.update.SheveryUpdateChecker
 import moe.shizuku.manager.R
 import moe.shizuku.manager.app.AppActivity
+import moe.shizuku.manager.settings.DeveloperFeatures
 import moe.shizuku.manager.ui.compose.ShizukuExpressiveTheme
 import moe.shizuku.manager.ui.compose.ShizukuLazyScaffold
 import moe.shizuku.manager.ui.compose.SettingsGroup
@@ -233,7 +239,19 @@ class AboutActivity : AppActivity() {
                         style = MaterialTheme.typography.bodyMedium,
                         fontWeight = FontWeight.Bold,
                         color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 6.dp)
+                        modifier = Modifier
+                            .combinedClickable(
+                                onClick = {},
+                                onLongClick = {
+                                    DeveloperFeatures.unlockEssentialsHub(context)
+                                    Toast.makeText(
+                                        context,
+                                        R.string.developer_essentials_hub_unlocked,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            )
+                            .padding(horizontal = 16.dp, vertical = 6.dp)
                     )
                 }
 

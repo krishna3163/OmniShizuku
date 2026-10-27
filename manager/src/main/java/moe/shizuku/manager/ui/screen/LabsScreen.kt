@@ -48,6 +48,7 @@ import moe.shizuku.manager.R
 import moe.shizuku.manager.manage.ForceDark
 import moe.shizuku.manager.manage.Hiding
 import moe.shizuku.manager.manage.PackageTools
+import moe.shizuku.manager.settings.DeveloperFeatures
 import moe.shizuku.manager.ui.Detail
 import moe.shizuku.manager.ui.component.FeaturePlateIcon
 import moe.shizuku.manager.ui.component.ScrollToTopButton
@@ -95,7 +96,13 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     // is about to be looked at.
     var refresh by remember { mutableIntStateOf(0) }
     var active by remember { mutableStateOf<Set<Detail>>(emptySet()) }
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { refresh++ }
+    var essentialsHubUnlocked by remember {
+        mutableStateOf(DeveloperFeatures.isEssentialsHubUnlocked(context))
+    }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        refresh++
+        essentialsHubUnlocked = DeveloperFeatures.isEssentialsHubUnlocked(context)
+    }
     LaunchedEffect(refresh) {
         active = withContext(Dispatchers.IO) { activeFeatures(context) }
     }
@@ -149,6 +156,7 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     // order above, so a row added later cannot land in the wrong place - it goes wherever its name
     // goes.
     val rows = entries
+        .filterNot { it.detail == Detail.ESSENTIALS && !essentialsHubUnlocked }
         .map { entry -> entry to stringResource(entry.labelRes) }
         .sortedBy { (_, label) -> label.lowercase() }
 
