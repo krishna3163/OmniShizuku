@@ -1101,6 +1101,10 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="tab_shell">Shell</string>
     <string name="tab_labs">Labs</string>
     <string name="lab_more_apps">Shizuku Store</string>
+    <string name="lab_companion_call_recorder">Call recording (ShizuCallRecorder)</string>
+    <string name="lab_companion_quick_tiles">Quick Settings tiles</string>
+    <string name="lab_companion_shizuwall">ShizuWall firewall</string>
+    <string name="lab_companion_open_failed">Could not open the companion app or its release page.</string>
     <string name="tab_firewall">Firewall</string>
     <string name="tab_autostart">Autostart</string>
     <string name="labs_filter_allowed">Allowed</string>

@@ -1,6 +1,10 @@
 package moe.shizuku.manager.ui.screen
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -147,7 +151,25 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         LabEntry(R.string.intents_title, Icons.Outlined.Bolt, Detail.INTENTS),
         LabEntry(R.string.tools_stealth, Icons.Outlined.VisibilityOff, Detail.STEALTH),
         LabEntry(R.string.settings_permissions, Icons.Outlined.VerifiedUser, Detail.PERMISSIONS),
-        LabEntry(R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS)
+        LabEntry(R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS),
+        LabEntry(
+            R.string.lab_companion_call_recorder,
+            Icons.Outlined.Call,
+            packageName = "com.kitsumed.shizucallrecorder",
+            releaseUrl = "https://github.com/kitsumed/ShizuCallRecorder/releases/latest"
+        ),
+        LabEntry(
+            R.string.lab_companion_quick_tiles,
+            Icons.Outlined.Widgets,
+            packageName = "com.rbn.qtsettings",
+            releaseUrl = "https://github.com/RBN-Apps/Quick-Tile-Settings/releases/latest"
+        ),
+        LabEntry(
+            R.string.lab_companion_shizuwall,
+            Icons.Outlined.Security,
+            packageName = "com.arslan.shizuwall",
+            releaseUrl = "https://github.com/AhmetCanArslan/ShizuWall/releases/latest"
+        )
     )
 
     // By name, not by the order these features arrived in. A list is read by looking something up:
@@ -183,12 +205,12 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 ),
                 verticalArrangement = Arrangement.spacedBy(13.dp)
             ) {
-            items(rows, key = { (entry, _) -> entry.detail.name }) { (entry, label) ->
+            items(rows, key = { (entry, _) -> "${entry.labelRes}:${entry.packageName.orEmpty()}" }) { (entry, label) ->
                 SegmentedCard {
                     SegmentedListItem(
                         // The item that opened a detail takes the focus back when it closes, on a
                         // TV; off one this is nothing.
-                        modifier = Modifier.televisionReturnFocus(entry.detail),
+                        modifier = entry.detail?.let { Modifier.televisionReturnFocus(it) } ?: Modifier,
                         centerSlots = true,
                         // The icon keeps the tinted plate it had on the tiles. It is what makes
                         // the list scannable the way a launcher's icons are: at this size the
@@ -202,7 +224,7 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                                 // that is on with apps listed looks exactly like one that is off
                                 // from here, and this is the one thing about a row that changes on
                                 // its own.
-                                if (entry.detail in active) {
+                                if (entry.detail?.let { it in active } == true) {
                                     Box(
                                         modifier = Modifier
                                             .align(Alignment.BottomEnd)
@@ -220,7 +242,13 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                                 contentDescription = null
                             )
                         },
-                        onClick = { onOpenDetail(entry.detail) }
+                        onClick = {
+                            if (entry.packageName != null && entry.releaseUrl != null) {
+                                openCompanionTool(context, entry.packageName, entry.releaseUrl)
+                            } else {
+                                entry.detail?.let(onOpenDetail)
+                            }
+                        }
                     )
                 }
             }
@@ -288,5 +316,17 @@ private fun activeFeatures(context: Context): Set<Detail> = buildSet {
 private data class LabEntry(
     @StringRes val labelRes: Int,
     val icon: ImageVector,
-    val detail: Detail
+    val detail: Detail? = null,
+    val packageName: String? = null,
+    val releaseUrl: String? = null
 )
+
+private fun openCompanionTool(context: Context, packageName: String, releaseUrl: String) {
+    val intent = context.packageManager.getLaunchIntentForPackage(packageName)
+        ?: Intent(Intent.ACTION_VIEW, Uri.parse(releaseUrl))
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, R.string.lab_companion_open_failed, Toast.LENGTH_LONG).show()
+    }
+}

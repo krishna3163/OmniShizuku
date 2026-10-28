@@ -54,15 +54,15 @@ jobs:
           fi
           echo "Repository owner verified: $ACTOR"
 
-  release:
-    name: Build & publish release
+  build:
+    name: Build release APKs
     needs: owner-gate
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - name: Check out ${{ inputs.ref }}
-        uses: actions/checkout@v4 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ inputs.ref }}
           fetch-depth: 0
@@ -133,18 +133,44 @@ jobs:
           chmod +x gradlew 2>/dev/null || true
           ./gradlew :manager:assembleRelease :manager:assembleDebug "-PomniVersionName=${OMNI_VERSION_NAME}" --stacktrace --no-daemon
 
-      - name: Rename APKs for Release
-        env:
-          RELEASE_TAG: ${{ inputs.tag }}
-        run: |
-          mkdir -p release-assets
-          RELEASE_APK=$(find manager/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' -print -quit)
-          if [ -z "$RELEASE_APK" ]; then
-            echo "::error::Release APK was not generated."
-            exit 1
-          fi
-          cp "$RELEASE_APK" "release-assets/omnishizuku-${RELEASE_TAG}.apk"
-          cp "$RELEASE_APK" "release-assets/omnishizuku.apk"
+      - name: Upload release APK
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: manager-release-apk
+          path: manager/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: manager-debug-apk
+          path: manager/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+  publish:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out ${{ inputs.ref }}
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Download release APK
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: manager-release-apk
+          path: release-apk
+
+      - name: Download debug APK
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: manager-debug-apk
+          path: debug-apk
 
       - name: Create release and upload APKs
         env:
@@ -155,6 +181,19 @@ jobs:
           REF: ${{ inputs.ref }}
           PRERELEASE: ${{ inputs.prerelease }}
         run: |
+          mkdir -p release-assets
+          RELEASE_APK=$(find release-apk -maxdepth 1 -type f -name '*.apk' -print -quit)
+          DEBUG_APK=$(find debug-apk -maxdepth 1 -type f -name '*.apk' -print -quit)
+          if [ -z "$RELEASE_APK" ]; then
+            echo "::error::Release APK was not generated."
+            exit 1
+          fi
+          cp "$RELEASE_APK" "release-assets/omnishizuku-${TAG}.apk"
+          cp "$RELEASE_APK" "release-assets/omnishizuku.apk"
+          if [ -n "$DEBUG_APK" ]; then
+            cp "$DEBUG_APK" "release-assets/omnishizuku-${TAG}-debug.apk"
+          fi
+
           args=( "$TAG" --target "$REF" )
           if [ -n "$TITLE" ]; then
             args+=( --title "$TITLE" )

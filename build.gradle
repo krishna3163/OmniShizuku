@@ -1,4 +1,7 @@
 buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle-api:9.5.0-rc01'
+    }
     configurations.classpath.resolutionStrategy.force(
         'org.bouncycastle:bcprov-jdk18on:1.86',
         'org.bouncycastle:bcpkix-jdk18on:1.86',
@@ -13,6 +16,8 @@ buildscript {
 
 plugins {
     id("idea")
+    id("com.google.gms.google-services") version "4.5.0" apply false
+    id("com.google.firebase.crashlytics") version "3.0.8" apply false
 }
 
 idea.module {

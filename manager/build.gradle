@@ -1,8 +1,9 @@
-import java.nio.file.Paths
 import com.android.build.gradle.internal.tasks.CompileArtProfileTask
 
 plugins {
     id('com.android.application')
+    id('com.google.gms.google-services')
+    id('com.google.firebase.crashlytics')
     id('org.jetbrains.kotlin.plugin.compose')
     id('org.jetbrains.kotlin.plugin.serialization')
     id('dev.rikka.tools.refine')
@@ -74,63 +75,7 @@ android {
     }
 }
 
-def androidSdkDirectory = {
-    def sdkPath = System.getenv('ANDROID_HOME') ?: System.getenv('ANDROID_SDK_ROOT')
-    if (sdkPath != null && !sdkPath.isBlank()) {
-        return file(sdkPath)
-    }
-
-    def localProperties = rootProject.file('local.properties')
-    if (localProperties.canRead()) {
-        def props = new Properties()
-        props.load(new InputStreamReader(new FileInputStream(localProperties), "UTF-8"))
-        sdkPath = props['sdk.dir']
-        if (sdkPath != null && !sdkPath.isBlank()) {
-            return file(sdkPath)
-        }
-    }
-
-    throw new GradleException('Android SDK directory was not found')
-}
-
-def collapseReleaseResourceNames = task('collapseReleaseResourceNames').doLast {
-    def aapt2 = Paths.get(androidSdkDirectory().path, 'build-tools', project.android.buildToolsVersion, 'aapt2')
-    def zip = Paths.get(project.buildDir.path, 'intermediates',
-            'optimized_processed_res', 'release', 'optimizeReleaseResources', 'resources-release-optimize.ap_')
-    if (!zip.toFile().exists()) {
-        return
-    }
-    def optimized = new File("${zip}.opt")
-    def cmd = [
-            aapt2.toString(),
-            'optimize',
-            '--collapse-resource-names',
-            '--resources-config-path',
-            'aapt2-resources.cfg',
-            '-o',
-            optimized.toString(),
-            zip.toString()
-    ]
-    def process = new ProcessBuilder(cmd)
-            .directory(projectDir)
-            .redirectErrorStream(true)
-            .start()
-    def output = process.inputStream.text
-    def exitValue = process.waitFor()
-    if (exitValue != 0) {
-        throw new GradleException("aapt2 optimize failed (${exitValue}):\n${output}")
-    }
-    if (exitValue == 0) {
-        project.delete(zip)
-        optimized.renameTo("$zip")
-    }
-}
-
 afterEvaluate {
-    if (tasks.findByName('optimizeReleaseResources') != null) {
-        tasks.getByName('optimizeReleaseResources').finalizedBy(collapseReleaseResourceNames)
-    }
-
     ['debug', 'release'].each { buildType ->
         def buildTypeCapitalized = buildType.capitalize()
         tasks.getByName("pre${buildTypeCapitalized}Build").dependsOn(":shell:copy${buildTypeCapitalized}ShellDex")
@@ -176,10 +121,16 @@ configurations.configureEach {
     exclude group: 'androidx.appcompat', module: 'appcompat'
     exclude group: 'androidx.profileinstaller', module: 'profileinstaller'
 }
+configurations.named('composeMappingProducerClasspath') {
+    resolutionStrategy.force 'org.jetbrains.kotlin:compose-group-mapping:2.4.21'
+}
 
 dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0-rc02'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0-rc02'
+    implementation platform('com.google.firebase:firebase-bom:34.19.0')
+    implementation 'com.google.firebase:firebase-crashlytics'
+    implementation 'com.google.firebase:firebase-analytics'
 
     implementation project(':server')
     implementation project(':rish')
@@ -261,7 +212,7 @@ dependencies {
     implementation "dev.rikka.rikkax.recyclerview:recyclerview-adapter:1.3.0"
     implementation "dev.rikka.rikkax.recyclerview:recyclerview-ktx:1.3.2"
     implementation 'androidx.recyclerview:recyclerview:1.4.0'
-    implementation files('libs/island-sdk.aar')
+    runtimeOnly files('libs/island-sdk.aar')
     implementation 'com.google.code.gson:gson:2.11.0'
     implementation 'androidx.exifinterface:exifinterface:1.3.7'
 

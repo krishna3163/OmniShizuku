@@ -6,6 +6,9 @@
 
     <queries>
         <package android:name="moe.shizuku.privileged.api" />
+        <package android:name="com.kitsumed.shizucallrecorder" />
+        <package android:name="com.rbn.qtsettings" />
+        <package android:name="com.arslan.shizuwall" />
         <intent>
             <action android:name="android.net.VpnService" />
         </intent>

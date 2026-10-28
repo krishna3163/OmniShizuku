@@ -18,14 +18,16 @@ jobs:
   build:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     env:
       HAS_KEYSTORE: ${{ secrets.KEYSTORE_BASE64 != '' }}
       TRUSTED_CONTEXT: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4 # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           submodules: 'recursive'
           fetch-depth: 0
@@ -184,17 +186,53 @@ jobs:
             manager/build/outputs/apk/**/*.apk
           if-no-files-found: warn
 
+      - name: Upload release APK for publishing
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: manager-release-apk
+          path: manager/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload debug APK for publishing
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: manager-debug-apk
+          path: manager/build/outputs/apk/debug/*.apk
+          if-no-files-found: warn
+
+  publish:
+    needs: build
+    if: (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main') && github.event_name != 'pull_request' && !contains(github.ref_name, '-dev')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+
+      - name: Download release APK
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: manager-release-apk
+          path: release-apk
+
+      - name: Download debug APK
+        id: debug-apk
+        continue-on-error: true
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
+        with:
+          name: manager-debug-apk
+          path: debug-apk
+
       - name: Publish to GitHub Releases
-        if: (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main') && github.event_name != 'pull_request' && !contains(github.ref_name, '-dev')
         env:
           GH_TOKEN: ${{ github.token }}
-          OMNI_VERSION_NAME: ${{ steps.version.outputs.version }}
+          OMNI_VERSION_NAME: ${{ needs.build.outputs.version }}
         run: |
           mkdir -p release-assets
-          RELEASE_APK=$(find manager/build/outputs/apk/release -maxdepth 1 -type f -name '*.apk' -print -quit)
-          if [ -z "$RELEASE_APK" ]; then
-            RELEASE_APK=$(find out/apk -maxdepth 1 -type f -name '*release*.apk' -print -quit)
-          fi
+          RELEASE_APK=$(find release-apk -maxdepth 1 -type f -name '*.apk' -print -quit)
           if [ -z "$RELEASE_APK" ]; then
             echo "::error::Release APK was not generated; refusing to publish an empty release."
             exit 1
@@ -202,15 +240,14 @@ jobs:
 
           if [[ "$GITHUB_REF" == refs/heads/main ]]; then
             RELEASE_TAG="$OMNI_VERSION_NAME"
-            RELEASE_TITLE="OmniShizuku ${RELEASE_TAG}"
           else
             RELEASE_TAG="$GITHUB_REF_NAME"
-            RELEASE_TITLE="OmniShizuku ${RELEASE_TAG}"
           fi
+          RELEASE_TITLE="OmniShizuku ${RELEASE_TAG}"
 
           cp "$RELEASE_APK" "release-assets/omnishizuku-${RELEASE_TAG}-release.apk"
           cp "$RELEASE_APK" "release-assets/omnishizuku.apk"
-          DEBUG_APK=$(find manager/build/outputs/apk/debug -maxdepth 1 -type f -name '*.apk' -print -quit)
+          DEBUG_APK=$(find debug-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)
           if [ -n "$DEBUG_APK" ]; then
             cp "$DEBUG_APK" "release-assets/omnishizuku-${RELEASE_TAG}-debug.apk"
           fi

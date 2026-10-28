@@ -60,6 +60,7 @@ import androidx.compose.material.icons.automirrored.rounded.HelpOutline
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.automirrored.rounded.Shortcut
 import androidx.compose.material.icons.rounded.AdminPanelSettings
+import androidx.compose.material.icons.rounded.ArrowUpward
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Backup
 import androidx.compose.material.icons.rounded.Cancel
@@ -1086,6 +1087,7 @@ fun ShizukuIcon(
 private fun roundedIconFor(@DrawableRes icon: Int): ImageVector? {
     return when (icon) {
         R.drawable.ic_arrow_back_24 -> Icons.AutoMirrored.Rounded.ArrowBack
+        R.drawable.ic_outline_arrow_upward_24 -> Icons.Rounded.ArrowUpward
         R.drawable.ic_action_settings_24dp,
         R.drawable.ic_settings_outline_24dp -> Icons.Rounded.Settings
         R.drawable.ic_server_restart -> Icons.Rounded.Refresh
@@ -1099,6 +1101,8 @@ private fun roundedIconFor(@DrawableRes icon: Int): ImageVector? {
         R.drawable.ic_outline_translate_24 -> Icons.Rounded.Translate
         R.drawable.ic_baseline_link_24 -> Icons.Rounded.Link
         R.drawable.ic_outline_dark_mode_24 -> Icons.Rounded.DarkMode
+        R.drawable.ic_security_24dp -> Icons.Rounded.AdminPanelSettings
+        R.drawable.ic_device_owner_24dp -> Icons.Rounded.AdminPanelSettings
         R.drawable.ic_outline_light_mode_24 -> Icons.Rounded.LightMode
         R.drawable.ic_outline_notifications_active_24 -> Icons.Rounded.NotificationsActive
         R.drawable.ic_outline_open_in_new_24 -> Icons.AutoMirrored.Rounded.OpenInNew

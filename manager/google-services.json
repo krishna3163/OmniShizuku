@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "69254674643",
+    "project_id": "omnishiziku",
+    "storage_bucket": "omnishiziku.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:69254674643:android:66c139eb1574471b17bc26",
+        "android_client_info": {
+          "package_name": "com.krishna.omnishizuku"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAv3balnF_Z5IQDBAGsvIQEcIhHs-wfbcg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
