@@ -1,7 +1,9 @@
 package moe.shizuku.manager.adb
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
+import android.provider.Settings
 import moe.shizuku.manager.ShizukuSettings
 
 /**
@@ -14,6 +16,9 @@ import moe.shizuku.manager.ShizukuSettings
  *
  * The user must opt in: nothing is wired up until they switch it on in settings, and they can
  * switch it off again at any time.
+ *
+ * Automatic mode requires the accessibility service to be enabled. If it is not enabled,
+ * selecting Automatic will open the system Accessibility settings so the user can grant it.
  */
 enum class WirelessAdbPinMode {
     Off, Manual, Automatic
@@ -48,4 +53,25 @@ object WirelessAdbPinManager {
 
     /** Whether an accessibility service should be listening for the pairing dialog. */
     fun isAutomatic(context: Context): Boolean = mode(context) == WirelessAdbPinMode.Automatic
+
+    /**
+     * Whether the WirelessAdbPinService accessibility service is currently enabled.
+     */
+    fun isAccessibilityEnabled(context: Context): Boolean {
+        val serviceName = "${context.packageName}/.adb.WirelessAdbPinService"
+        return Settings.Secure.getString(
+            context.contentResolver,
+            Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES
+        )?.contains(serviceName) == true
+    }
+
+    /**
+     * Opens the system Accessibility settings page so the user can enable the
+     * WirelessAdbPinService.
+     */
+    fun openAccessibilitySettings(context: Context) {
+        val intent = Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        context.startActivity(intent)
+    }
 }

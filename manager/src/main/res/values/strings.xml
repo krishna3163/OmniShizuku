@@ -2183,6 +2183,10 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="settings_wireless_adb_pin">Pairing PIN</string>
     <string name="settings_wireless_adb_pin_summary">The 6-digit PIN the accessibility service enters when automatic mode is on.</string>
     <string name="settings_wireless_adb_auto_pin_enabled">Automatic pairing PIN entry is on. Open the “Pair with device” dialog in settings and the PIN will be filled in for you.</string>
+    <string name="settings_wireless_adb_auto_pin_summary_accessibility_on">Accessibility service is enabled. PIN will be entered automatically when the pairing dialog appears.</string>
+    <string name="settings_wireless_adb_auto_pin_summary_accessibility_off">Accessibility service is not enabled. Automatic mode will not work until you enable it in Accessibility settings.</string>
+    <string name="settings_wireless_adb_auto_pin_accessibility_needed">Accessibility permission is required for automatic PIN entry. Please enable it in Accessibility settings.</string>
+    <string name="settings_wireless_adb_auto_pin_manual_enabled">Manual mode is on. You will be notified when the pairing dialog appears.</string>
     <string name="wireless_adb_pin_entered">Pairing PIN entered automatically.</string>
     <string name="wireless_adb_pin_not_found">Could not find the pairing PIN field.</string>
 

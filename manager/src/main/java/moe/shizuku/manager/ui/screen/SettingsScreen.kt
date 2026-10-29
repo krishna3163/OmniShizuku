@@ -157,6 +157,7 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
 
     var legacyPairing by remember { mutableStateOf(ShizukuSettings.getLegacyPairing()) }
     var pinMode by remember { mutableStateOf(WirelessAdbPinManager.mode(context)) }
+    var accessibilityEnabled by remember { mutableStateOf(WirelessAdbPinManager.isAccessibilityEnabled(context)) }
     var adbWithoutDeveloperOptions by remember {
         mutableStateOf(ShizukuSettings.getAdbWithoutDeveloperOptions())
     }
@@ -224,6 +225,7 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     var systemStartDialog by remember { mutableStateOf(false) }
     var updateDialog by remember { mutableStateOf(false) }
     var pinModeDialog by remember { mutableStateOf(false) }
+    var openAccessibilitySettings by remember { mutableStateOf(false) }
     var selectedContributor by remember { mutableStateOf<Contributor?>(null) }
     // The wall is folded away until somebody asks for it. It is a credit rather than a setting, and
     // it is heavier than everything else on this screen put together - a hundred and forty faces,
@@ -683,11 +685,23 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                             centerSlots = true,
                             leadingContent = { SettingsIcon(Icons.Outlined.AutoMode) },
                             headlineContent = { Text(stringResource(R.string.settings_wireless_adb_auto_pin)) },
-                            supportingContent = { Text(stringResource(R.string.settings_wireless_adb_auto_pin_summary)) },
+                            supportingContent = {
+                                val summary = when (pinMode) {
+                                    WirelessAdbPinMode.Automatic -> {
+                                        if (accessibilityEnabled) {
+                                            stringResource(R.string.settings_wireless_adb_auto_pin_summary_accessibility_on)
+                                        } else {
+                                            stringResource(R.string.settings_wireless_adb_auto_pin_summary_accessibility_off)
+                                        }
+                                    }
+                                    else -> stringResource(R.string.settings_wireless_adb_auto_pin_summary)
+                                }
+                                Text(summary)
+                            },
                             trailingContent = {
                                 ExpressiveSwitch(
                                     checked = pinMode == WirelessAdbPinMode.Automatic,
-                                    enabled = pinMode != WirelessAdbPinMode.Off,
+                                    enabled = pinMode != WirelessAdbPinMode.Off && accessibilityEnabled,
                                     onCheckedChange = null
                                 )
                             },
@@ -1214,6 +1228,8 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
 
     if (pinModeDialog) {
         val autoPinEnabled = stringResource(R.string.settings_wireless_adb_auto_pin_enabled)
+        val accessibilityNeeded = stringResource(R.string.settings_wireless_adb_auto_pin_accessibility_needed)
+        val manualEnabled = stringResource(R.string.settings_wireless_adb_auto_pin_manual_enabled)
         ChoiceDialog(
             title = stringResource(R.string.settings_wireless_adb_auto_pin),
             options = buildList {
@@ -1228,11 +1244,32 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 val selected = WirelessAdbPinMode.valueOf(name)
                 WirelessAdbPinManager.setMode(context, selected)
                 pinMode = selected
-                if (selected == WirelessAdbPinMode.Automatic) {
-                    Toast.makeText(context, autoPinEnabled, Toast.LENGTH_LONG).show()
+                accessibilityEnabled = WirelessAdbPinManager.isAccessibilityEnabled(context)
+                when (selected) {
+                    WirelessAdbPinMode.Automatic -> {
+                        if (accessibilityEnabled) {
+                            Toast.makeText(context, autoPinEnabled, Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(context, accessibilityNeeded, Toast.LENGTH_LONG).show()
+                            openAccessibilitySettings = true
+                        }
+                    }
+                    WirelessAdbPinMode.Manual -> {
+                        Toast.makeText(context, manualEnabled, Toast.LENGTH_LONG).show()
+                    }
+                    WirelessAdbPinMode.Off -> {
+                        // No message needed
+                    }
                 }
             }
         )
+    }
+
+    LaunchedEffect(openAccessibilitySettings) {
+        if (openAccessibilitySettings) {
+            WirelessAdbPinManager.openAccessibilitySettings(context)
+            openAccessibilitySettings = false
+        }
     }
 
     if (startMethodDialog) {

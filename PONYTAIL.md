@@ -111,7 +111,7 @@ Tab screens (index → file):
 | Transitions not smooth | `home/HomeActivity.kt` | Tab `AnimatedContent` uses `fadeIn`/`fadeOut` tween(300) |
 | Auto-close / crash | `manager/ShizukuApplication.kt` | Firebase Crashlytics init + `Thread.setDefaultUncaughtExceptionHandler` safety net |
 | DeviceInfo infinite loading | `manage/DeviceInfo.kt`, `ui/screen/DeviceInfoScreen.kt` | `snapshot()` is now `suspend` with 20s `withTimeoutOrNull`; screen shows partial data instead of stuck spinner |
-| Wireless ADB PIN typing | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `ui/screen/SettingsScreen.kt` | New opt-in accessibility service: Off / Manual / Automatic modes in Settings |
+| Wireless ADB PIN typing | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `ui/screen/SettingsScreen.kt` | New opt-in accessibility service: Off / Manual / Automatic modes. Automatic requires accessibility permission - user is prompted to enable it in system settings if not granted. |
 | First launch / onboarding | `FirstLaunchActivity.kt`, `MainActivity.kt` | 6-screen disclaimer, 5s agreement timer, language/theme/activation setup |
 
 ---
@@ -138,11 +138,18 @@ Tab screens (index → file):
 | `manager/ShizukuApplication.kt` | Crashlytics init + uncaught exception handler |
 | `manage/DeviceInfo.kt` | `snapshot()` → `suspend` with 20s timeout |
 | `ui/screen/DeviceInfoScreen.kt` | Handles nullable/timeout snapshot, shows partial data |
-| `ui/screen/SettingsScreen.kt` | Added auto-PIN mode row + ChoiceDialog + strings |
+| `ui/screen/SettingsScreen.kt` | Added auto-PIN mode row + ChoiceDialog + accessibility permission check + strings |
 | `manager/AndroidManifest.xml` | Registered `WirelessAdbPinService` + `FirstLaunchActivity` |
 | `manager/ShizukuSettings.java` | Added `KEY_FIRST_LAUNCH`, `KEY_ACTIVATION_METHOD`, `ACTIVATION_*` constants, `isFirstLaunch/setFirstLaunch/getActivationMethod/setActivationMethod/setNightMode` |
 | `manager/MainActivity.kt` | Routes to `FirstLaunchActivity` on first launch |
-| `res/values/strings.xml` | Added onboarding + auto-PIN strings |
+| `res/values/strings.xml` | Added onboarding + auto-PIN + accessibility strings |
+| `README.md` | English documentation |
+| `README.hi.md` | Hindi documentation |
+| `README.es.md` | Spanish documentation |
+| `README.fr.md` | French documentation |
+| `README.zh.md` | Simplified Chinese documentation |
+| `README.zh_tw.md` | Traditional Chinese documentation |
+| `README.ru.md` | Russian documentation |
 
 ---
 
