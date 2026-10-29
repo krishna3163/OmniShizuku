@@ -2267,4 +2267,17 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="onboarding_activation_computer">Connect to a Computer</string>
     <string name="onboarding_activation_computer_summary">Start Shizuku via ADB from a computer</string>
     <string name="onboarding_finish">Finish Setup</string>
+
+    <!-- Onboarding step labels -->
+    <string name="onboarding_step_disclaimer_1">What OmniShizuku Provides</string>
+    <string name="onboarding_step_disclaimer_2">Real Privileges Granted</string>
+    <string name="onboarding_step_disclaimer_3">Device Owner Side Effects</string>
+    <string name="onboarding_step_disclaimer_4">Root Risks</string>
+    <string name="onboarding_step_disclaimer_5">Third-Party Behavior</string>
+    <string name="onboarding_step_disclaimer_6">License</string>
+    <string name="onboarding_step_agreement">Terms and Agreement</string>
+    <string name="onboarding_step_language">Choose Your Language</string>
+    <string name="onboarding_step_theme">Pick Your Look</string>
+    <string name="onboarding_step_activation">Activation Method</string>
+    <string name="onboarding_step_done">Setup Complete</string>
 </resources>

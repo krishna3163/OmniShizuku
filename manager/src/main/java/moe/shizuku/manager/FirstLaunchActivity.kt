@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -18,15 +19,18 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PowerSettingsNew
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -100,6 +104,29 @@ private data class DisclaimerPage(
     val iconRes: Int
 )
 
+private data class ThemeOption(
+    val mode: Int,
+    val titleRes: Int,
+    val summaryRes: Int,
+    val iconRes: Int
+)
+
+private data class ActivationOption(
+    val mode: Int,
+    val titleRes: Int,
+    val summaryRes: Int,
+    val iconRes: Int
+)
+
+private val DisclaimerIcons = listOf(
+    R.drawable.ic_shield_24dp,
+    R.drawable.ic_device_owner_24dp,
+    R.drawable.ic_root_24dp,
+    R.drawable.ic_warning_24,
+    R.drawable.ic_wadb_24,
+    R.drawable.ic_agreement
+)
+
 @Composable
 private fun FirstLaunchOnboarding(onFinish: () -> Unit) {
     val context = LocalContext.current
@@ -107,23 +134,24 @@ private fun FirstLaunchOnboarding(onFinish: () -> Unit) {
     var step by remember { mutableIntStateOf(OnboardingStep.DISCLAIMER_1.ordinal) }
     var agreed by remember { mutableStateOf(false) }
     var timerSeconds by remember { mutableIntStateOf(5) }
-    var timerRunning by remember { mutableStateOf(false) }
 
     val current = OnboardingStep.values()[step]
 
     val pages = listOf(
-        DisclaimerPage(R.string.onboarding_title_1, R.string.onboarding_body_1, R.drawable.ic_info),
-        DisclaimerPage(R.string.onboarding_title_2, R.string.onboarding_body_2, R.drawable.ic_info),
-        DisclaimerPage(R.string.onboarding_title_3, R.string.onboarding_body_3, R.drawable.ic_info),
-        DisclaimerPage(R.string.onboarding_title_4, R.string.onboarding_body_4, R.drawable.ic_info),
-        DisclaimerPage(R.string.onboarding_title_5, R.string.onboarding_body_5, R.drawable.ic_info),
-        DisclaimerPage(R.string.onboarding_title_6, R.string.onboarding_body_6, R.drawable.ic_info)
+        DisclaimerPage(R.string.onboarding_title_1, R.string.onboarding_body_1, DisclaimerIcons[0]),
+        DisclaimerPage(R.string.onboarding_title_2, R.string.onboarding_body_2, DisclaimerIcons[1]),
+        DisclaimerPage(R.string.onboarding_title_3, R.string.onboarding_body_3, DisclaimerIcons[2]),
+        DisclaimerPage(R.string.onboarding_title_4, R.string.onboarding_body_4, DisclaimerIcons[3]),
+        DisclaimerPage(R.string.onboarding_title_5, R.string.onboarding_body_5, DisclaimerIcons[4]),
+        DisclaimerPage(R.string.onboarding_title_6, R.string.onboarding_body_6, DisclaimerIcons[5])
     )
 
-    LaunchedEffect(current == OnboardingStep.AGREEMENT) {
-        if (current == OnboardingStep.AGREEMENT && !timerRunning) {
-            timerRunning = true
+    val showTimer = current == OnboardingStep.AGREEMENT || current.ordinal < 6
+
+    LaunchedEffect(current) {
+        if (showTimer) {
             timerSeconds = 5
+            agreed = false
             scope.launch {
                 while (timerSeconds > 0) {
                     delay(1000)
@@ -150,41 +178,138 @@ private fun FirstLaunchOnboarding(onFinish: () -> Unit) {
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
         ) {
+            val progress = (step + 1) / 11f
+
+            LinearProgressIndicator(
+                modifier = Modifier.fillMaxWidth(),
+                progress = progress
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Text(
+                    text = "${step + 1}/11",
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+                Text(
+                    text = when (current) {
+                        OnboardingStep.DISCLAIMER_1 -> stringResource(R.string.onboarding_step_disclaimer_1)
+                        OnboardingStep.DISCLAIMER_2 -> stringResource(R.string.onboarding_step_disclaimer_2)
+                        OnboardingStep.DISCLAIMER_3 -> stringResource(R.string.onboarding_step_disclaimer_3)
+                        OnboardingStep.DISCLAIMER_4 -> stringResource(R.string.onboarding_step_disclaimer_4)
+                        OnboardingStep.DISCLAIMER_5 -> stringResource(R.string.onboarding_step_disclaimer_5)
+                        OnboardingStep.DISCLAIMER_6 -> stringResource(R.string.onboarding_step_disclaimer_6)
+                        OnboardingStep.AGREEMENT -> stringResource(R.string.onboarding_step_agreement)
+                        OnboardingStep.LANGUAGE -> stringResource(R.string.onboarding_step_language)
+                        OnboardingStep.THEME -> stringResource(R.string.onboarding_step_theme)
+                        OnboardingStep.ACTIVATION -> stringResource(R.string.onboarding_step_activation)
+                        OnboardingStep.DONE -> stringResource(R.string.onboarding_step_done)
+                    },
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Spacer(modifier = Modifier.height(24.dp))
+
             when (current) {
                 OnboardingStep.DISCLAIMER_1, OnboardingStep.DISCLAIMER_2, OnboardingStep.DISCLAIMER_3,
                 OnboardingStep.DISCLAIMER_4, OnboardingStep.DISCLAIMER_5, OnboardingStep.DISCLAIMER_6 -> {
                     val page = pages[current.ordinal]
+                    val accentColor = MaterialTheme.colorScheme.primary
                     Column(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
+                        Card(
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                            shape = RoundedCornerShape(20.dp),
+                            colors = CardDefaults.cardColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceVariant
+                            )
+                        ) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(24.dp)
+                            ) {
+                                Icon(
+                                    imageVector = ImageVector.vectorResource(id = page.iconRes),
+                                    contentDescription = null,
+                                    modifier = Modifier.size(48.dp),
+                                    tint = accentColor
+                                )
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Text(
+                                    text = stringResource(page.title),
+                                    style = MaterialTheme.typography.headlineSmall,
+                                    fontWeight = FontWeight.Bold,
+                                    color = accentColor
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = stringResource(page.body),
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
                         Spacer(modifier = Modifier.height(32.dp))
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = page.iconRes),
-                            contentDescription = null,
-                            modifier = Modifier.size(64.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Checkbox(
+                                checked = agreed,
+                                onCheckedChange = { agreed = it },
+                                colors = CheckboxDefaults.colors(
+                                    checkedColor = accentColor,
+                                    uncheckedColor = MaterialTheme.colorScheme.onSurface
+                                )
+                            )
+                            Text(
+                                text = stringResource(R.string.onboarding_i_have_read_and_agree),
+                                style = MaterialTheme.typography.bodyMedium
+                            )
+                        }
                         Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            text = stringResource(page.title),
-                            style = MaterialTheme.typography.headlineMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
-                        Text(
-                            text = stringResource(page.body),
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.height(32.dp))
-                        val isLast = current == OnboardingStep.DISCLAIMER_6
+                        if (showTimer) {
+                            LinearProgressIndicator(
+                                modifier = Modifier.fillMaxWidth(),
+                                progress = (5 - timerSeconds).coerceAtLeast(0) / 5f
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Text(
+                                text = if (timerSeconds > 0) {
+                                    context.getString(R.string.onboarding_wait_seconds, timerSeconds)
+                                } else {
+                                    stringResource(R.string.onboarding_can_proceed)
+                                },
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Spacer(modifier = Modifier.height(32.dp))
+                        }
                         Row(
                             horizontalArrangement = Arrangement.SpaceBetween,
-                            modifier = Modifier.fillMaxWidth()
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)
                         ) {
-                            TextButton(onClick = { step = step + 1 }) {
-                                Text(if (isLast) stringResource(R.string.onboarding_i_agree_proceed) else stringResource(R.string.onboarding_next))
+                            TextButton(onClick = { if (step > 0) step = step - 1 }) {
+                                Text(stringResource(R.string.onboarding_back))
+                            }
+                            Button(
+                                onClick = {
+                                    if (agreed && (!showTimer || timerSeconds <= 0)) {
+                                        step = step + 1
+                                    }
+                                },
+                                enabled = agreed && (!showTimer || timerSeconds <= 0),
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(stringResource(if (current == OnboardingStep.DISCLAIMER_6) R.string.onboarding_i_agree_proceed else R.string.onboarding_next))
                             }
                         }
                     }
@@ -214,7 +339,7 @@ private fun FirstLaunchOnboarding(onFinish: () -> Unit) {
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
-                        Spacer(modifier = Modifier.height(24.dp))
+                        Spacer(modifier = Modifier.height(32.dp))
                         Row(
                             verticalAlignment = Alignment.CenterVertically
                         ) {
@@ -318,43 +443,40 @@ private fun LanguageSelectionScreen(
         )
         Spacer(modifier = Modifier.height(32.dp))
 
-        Column(
-            modifier = Modifier.fillMaxWidth(),
+        LazyColumn(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            val languageList = listOf(
-                Pair("SYSTEM", stringResource(R.string.onboarding_language_system)),
-                Pair("en", stringResource(R.string.onboarding_language_english)),
-                Pair("hi", stringResource(R.string.onboarding_language_hindi)),
-                Pair("es", stringResource(R.string.onboarding_language_spanish)),
-                Pair("fr", stringResource(R.string.onboarding_language_french)),
-                Pair("de", stringResource(R.string.onboarding_language_german)),
-                Pair("zh", stringResource(R.string.onboarding_language_chinese)),
-                Pair("ja", stringResource(R.string.onboarding_language_japanese)),
-                Pair("ar", stringResource(R.string.onboarding_language_arabic)),
-                Pair("ru", stringResource(R.string.onboarding_language_russian)),
-                Pair("pt", stringResource(R.string.onboarding_language_portuguese)),
-                Pair("id", stringResource(R.string.onboarding_language_indonesian))
-            )
-            languageList.forEach { (code, name) ->
-                Row(
+            items(
+                items = languageList,
+                key = { it.code }
+            ) { option ->
+                val isSelected = selected == option.code
+                Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
-                        .clickable { selected = code },
-                    verticalAlignment = Alignment.CenterVertically
+                        .clickable { selected = option.code },
+                    shape = RoundedCornerShape(12.dp),
+                    colors = CardDefaults.cardColors(
+                        containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                    )
                 ) {
-                    val tintColor = if (selected == code) MaterialTheme.colorScheme.primary else Color.Unspecified
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = null,
-                        tint = tintColor
-                    )
-                    Spacer(modifier = Modifier.width(12.dp))
-                    Text(
-                        text = name,
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            tint = if (isSelected) MaterialTheme.colorScheme.primary else androidx.compose.ui.graphics.Color.Unspecified
+                        )
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Text(
+                            text = stringResource(option.nameRes),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                        )
+                    }
                 }
             }
         }
@@ -379,6 +501,23 @@ private fun LanguageSelectionScreen(
         }
     }
 }
+
+private val languageList = listOf(
+    LanguageOption("SYSTEM", R.string.onboarding_language_system),
+    LanguageOption("en", R.string.onboarding_language_english),
+    LanguageOption("hi", R.string.onboarding_language_hindi),
+    LanguageOption("es", R.string.onboarding_language_spanish),
+    LanguageOption("fr", R.string.onboarding_language_french),
+    LanguageOption("de", R.string.onboarding_language_german),
+    LanguageOption("zh", R.string.onboarding_language_chinese),
+    LanguageOption("ja", R.string.onboarding_language_japanese),
+    LanguageOption("ar", R.string.onboarding_language_arabic),
+    LanguageOption("ru", R.string.onboarding_language_russian),
+    LanguageOption("pt", R.string.onboarding_language_portuguese),
+    LanguageOption("id", R.string.onboarding_language_indonesian)
+)
+
+private data class LanguageOption(val code: String, val nameRes: Int)
 
 @Composable
 private fun ThemeSelectionScreen(
@@ -418,74 +557,104 @@ private fun ThemeSelectionScreen(
         )
         Spacer(modifier = Modifier.height(32.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = nightMode == androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM,
-                onClick = { nightMode = androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM }
-            )
-            Column {
-                Text(text = stringResource(R.string.onboarding_theme_follow_system), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_theme_follow_system_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        val themeOptions = listOf(
+            ThemeOption(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM, R.string.onboarding_theme_follow_system, R.string.onboarding_theme_follow_system_summary, R.drawable.ic_system_icon),
+            ThemeOption(AppCompatDelegate.MODE_NIGHT_YES, R.string.onboarding_theme_dark, R.string.onboarding_theme_dark_summary, R.drawable.ic_outline_dark_mode_24),
+            ThemeOption(AppCompatDelegate.MODE_NIGHT_NO, R.string.onboarding_theme_light, R.string.onboarding_theme_light_summary, R.drawable.ic_outline_light_mode_24),
+            ThemeOption(-1, R.string.onboarding_theme_black_night, R.string.onboarding_theme_black_night_summary, R.drawable.ic_outline_dark_mode_24)
+        )
+
+        themeOptions.forEach { option ->
+            val isSelected = when {
+                option.mode == -1 -> blackNight
+                else -> nightMode == option.mode
             }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = nightMode == androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES,
-                onClick = { nightMode = androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES }
-            )
-            Column {
-                Text(text = stringResource(R.string.onboarding_theme_dark), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_theme_dark_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = nightMode == androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO,
-                onClick = { nightMode = androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO }
-            )
-            Column {
-                Text(text = stringResource(R.string.onboarding_theme_light), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_theme_light_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = blackNight,
-                onClick = { blackNight = true; nightMode = androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES }
-            )
-            Column {
-                Text(text = stringResource(R.string.onboarding_theme_black_night), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_theme_black_night_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clickable {
+                        if (option.mode == -1) {
+                            blackNight = true
+                            nightMode = AppCompatDelegate.MODE_NIGHT_YES
+                        } else {
+                            nightMode = option.mode
+                            blackNight = false
+                        }
+                    },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                )
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = option.iconRes),
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp),
+                        tint = MaterialTheme.colorScheme.primary
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = stringResource(option.titleRes),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal
+                        )
+                        Text(
+                            text = stringResource(option.summaryRes),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    RadioButton(
+                        selected = isSelected,
+                        onClick = {
+                            if (option.mode == -1) {
+                                blackNight = true
+                                nightMode = AppCompatDelegate.MODE_NIGHT_YES
+                            } else {
+                                nightMode = option.mode
+                                blackNight = false
+                            }
+                        }
+                    )
+                }
             }
         }
 
         Spacer(modifier = Modifier.height(24.dp))
-        Row(
+        Card(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Switch(
-                checked = useSystemColor,
-                onCheckedChange = { useSystemColor = it }
+            shape = RoundedCornerShape(12.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.surface
             )
-            Column {
-                Text(text = stringResource(R.string.onboarding_theme_use_system_color), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_theme_use_system_color_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        ) {
+            Row(
+                modifier = Modifier.padding(16.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Switch(
+                    checked = useSystemColor,
+                    onCheckedChange = { useSystemColor = it }
+                )
+                Column {
+                    Text(
+                        text = stringResource(R.string.onboarding_theme_use_system_color),
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = FontWeight.Bold
+                    )
+                    Text(
+                        text = stringResource(R.string.onboarding_theme_use_system_color_summary),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             }
         }
 
@@ -548,48 +717,59 @@ private fun ActivationMethodScreen(
         )
         Spacer(modifier = Modifier.height(32.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = method == ShizukuSettings.ACTIVATION_WIRELESS,
-                onClick = { method = ShizukuSettings.ACTIVATION_WIRELESS }
-            )
-            Column {
-                Text(text = stringResource(R.string.onboarding_activation_wireless), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_activation_wireless_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        val activationOptions = listOf(
+            ActivationOption(0, R.string.onboarding_activation_wireless, R.string.onboarding_activation_wireless_summary, R.drawable.ic_wadb_24),
+            ActivationOption(1, R.string.onboarding_activation_root, R.string.onboarding_activation_root_summary, R.drawable.ic_root_24dp),
+            ActivationOption(2, R.string.onboarding_activation_computer, R.string.onboarding_activation_computer_summary, R.drawable.ic_adb_24dp)
+        )
+
+        activationOptions.forEach { option ->
+            val isSelected = method == option.mode
+            val accentColor = when (option.mode) {
+                0 -> Color(59, 130, 246, 255)
+                1 -> Color(245, 158, 11, 255)
+                else -> Color(16, 185, 129, 255)
             }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = method == ShizukuSettings.ACTIVATION_ROOT,
-                onClick = { method = ShizukuSettings.ACTIVATION_ROOT }
-            )
-            Column {
-                Text(text = stringResource(R.string.onboarding_activation_root), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_activation_root_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            RadioButton(
-                selected = method == ShizukuSettings.ACTIVATION_COMPUTER,
-                onClick = { method = ShizukuSettings.ACTIVATION_COMPUTER }
-            )
-            Column {
-                Text(text = stringResource(R.string.onboarding_activation_computer), style = MaterialTheme.typography.bodyMedium)
-                Text(text = stringResource(R.string.onboarding_activation_computer_summary), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            IconButton(onClick = {}) {
-                Icon(imageVector = Icons.Default.Info, contentDescription = null)
+            Card(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp)
+                    .clickable { method = option.mode },
+                shape = RoundedCornerShape(12.dp),
+                colors = CardDefaults.cardColors(
+                    containerColor = if (isSelected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface
+                )
+            ) {
+                Row(
+                    modifier = Modifier.padding(16.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = option.iconRes),
+                        contentDescription = null,
+                        modifier = Modifier.size(32.dp),
+                        tint = accentColor
+                    )
+                    Spacer(modifier = Modifier.width(12.dp))
+                    Column {
+                        Text(
+                            text = stringResource(option.titleRes),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                            color = if (isSelected) accentColor else MaterialTheme.colorScheme.onSurface
+                        )
+                        Text(
+                            text = stringResource(option.summaryRes),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                    RadioButton(
+                        selected = isSelected,
+                        onClick = { method = option.mode }
+                    )
+                }
             }
         }
 
@@ -606,9 +786,9 @@ private fun ActivationMethodScreen(
                     ShizukuSettings.setActivationMethod(method)
                     ShizukuSettings.setStartMethod(
                         when (method) {
-                            ShizukuSettings.ACTIVATION_ROOT -> ShizukuSettings.StartMethod.ROOT
-                            ShizukuSettings.ACTIVATION_COMPUTER -> ShizukuSettings.StartMethod.USB
-                            else -> ShizukuSettings.StartMethod.WIRELESS
+                            1 -> ShizukuSettings.StartMethod.ROOT.toInt()
+                            2 -> ShizukuSettings.StartMethod.USB.toInt()
+                            else -> ShizukuSettings.StartMethod.WIRELESS.toInt()
                         }
                     )
                     onNext()
