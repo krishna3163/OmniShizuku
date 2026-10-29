@@ -24,6 +24,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.outlined.AutoMode
 import androidx.compose.material.icons.outlined.AdminPanelSettings
 import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material.icons.outlined.BugReport
@@ -90,6 +91,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import moe.shizuku.manager.adb.WirelessAdbPinManager
+import moe.shizuku.manager.adb.WirelessAdbPinMode
 import moe.shizuku.manager.BuildConfig
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ShizukuSettings
@@ -153,6 +156,7 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     }
 
     var legacyPairing by remember { mutableStateOf(ShizukuSettings.getLegacyPairing()) }
+    var pinMode by remember { mutableStateOf(WirelessAdbPinManager.mode(context)) }
     var adbWithoutDeveloperOptions by remember {
         mutableStateOf(ShizukuSettings.getAdbWithoutDeveloperOptions())
     }
@@ -219,6 +223,7 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     var tcpPortDialog by remember { mutableStateOf(false) }
     var systemStartDialog by remember { mutableStateOf(false) }
     var updateDialog by remember { mutableStateOf(false) }
+    var pinModeDialog by remember { mutableStateOf(false) }
     var selectedContributor by remember { mutableStateOf<Contributor?>(null) }
     // The wall is folded away until somebody asks for it. It is a credit rather than a setting, and
     // it is heavier than everything else on this screen put together - a hundred and forty faces,
@@ -669,6 +674,26 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                                         .putBoolean(ShizukuSettings.Keys.KEY_LEGACY_PAIRING, it).apply()
                                     legacyPairing = it
                                 }
+                        )
+                    }
+                    // Auto-enter the wireless ADB pairing PIN through an accessibility service,
+                    // only after the user switches it on here.
+                    item {
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.AutoMode) },
+                            headlineContent = { Text(stringResource(R.string.settings_wireless_adb_auto_pin)) },
+                            supportingContent = { Text(stringResource(R.string.settings_wireless_adb_auto_pin_summary)) },
+                            trailingContent = {
+                                ExpressiveSwitch(
+                                    checked = pinMode == WirelessAdbPinMode.Automatic,
+                                    enabled = pinMode != WirelessAdbPinMode.Off,
+                                    onCheckedChange = null
+                                )
+                            },
+                            onClick = {
+                                pinModeDialog = true
+                            }
                         )
                     }
                 }
@@ -1183,6 +1208,29 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
             },
             dismissButton = {
                 PillButtonQuiet(onClick = { tcpPortDialog = false }) { Text(stringResource(android.R.string.cancel)) }
+            }
+        )
+    }
+
+    if (pinModeDialog) {
+        val autoPinEnabled = stringResource(R.string.settings_wireless_adb_auto_pin_enabled)
+        ChoiceDialog(
+            title = stringResource(R.string.settings_wireless_adb_auto_pin),
+            options = buildList {
+                add(WirelessAdbPinMode.Off.name to stringResource(R.string.settings_wireless_adb_auto_pin_off))
+                add(WirelessAdbPinMode.Manual.name to stringResource(R.string.settings_wireless_adb_auto_pin_manual))
+                add(WirelessAdbPinMode.Automatic.name to stringResource(R.string.settings_wireless_adb_auto_pin_automatic))
+            },
+            selected = pinMode.name,
+            onDismiss = { pinModeDialog = false },
+            onSelect = { name ->
+                pinModeDialog = false
+                val selected = WirelessAdbPinMode.valueOf(name)
+                WirelessAdbPinManager.setMode(context, selected)
+                pinMode = selected
+                if (selected == WirelessAdbPinMode.Automatic) {
+                    Toast.makeText(context, autoPinEnabled, Toast.LENGTH_LONG).show()
+                }
             }
         )
     }

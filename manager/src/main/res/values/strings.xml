@@ -2172,4 +2172,17 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="nightdog_title">NightDog Beta</string>
     <string name="nightdog_summary">Lightweight system monitor with zero energy consumption</string>
     <string name="nightdog_description">NightDog monitors server health using inotify (zero polling). Runs as shell process.</string>
+
+    <string name="wireless_adb_pin_service_description">Enters the wireless ADB pairing PIN into the system’s “Pair with device” dialog through an accessibility service.\n\nOnly the settings apps that host that dialog are read, and only after you switch automatic entry on in settings.</string>
+
+    <string name="settings_wireless_adb_auto_pin">Auto-enter wireless ADB pairing PIN</string>
+    <string name="settings_wireless_adb_auto_pin_summary">Let an accessibility service enter the pairing PIN into the “Pair with device” dialog. Off: you type it yourself. Manual: the manager tells you when the dialog is up. Automatic: the PIN is entered for you.</string>
+    <string name="settings_wireless_adb_auto_pin_off">Off</string>
+    <string name="settings_wireless_adb_auto_pin_manual">Manual</string>
+    <string name="settings_wireless_adb_auto_pin_automatic">Automatic</string>
+    <string name="settings_wireless_adb_pin">Pairing PIN</string>
+    <string name="settings_wireless_adb_pin_summary">The 6-digit PIN the accessibility service enters when automatic mode is on.</string>
+    <string name="settings_wireless_adb_auto_pin_enabled">Automatic pairing PIN entry is on. Open the “Pair with device” dialog in settings and the PIN will be filled in for you.</string>
+    <string name="wireless_adb_pin_entered">Pairing PIN entered automatically.</string>
+    <string name="wireless_adb_pin_not_found">Could not find the pairing PIN field.</string>
 </resources>

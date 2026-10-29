@@ -3,6 +3,7 @@ package moe.shizuku.manager.ui.component
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -31,7 +32,7 @@ import moe.shizuku.manager.ui.theme.LocalAmoledTheme
 @Composable
 fun PillButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     enabled: Boolean = true,
     content: @Composable RowScope.() -> Unit
 ) {
@@ -62,7 +63,7 @@ fun PillButton(
 @Composable
 fun PillButtonQuiet(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
+    modifier: Modifier = Modifier.fillMaxWidth(),
     enabled: Boolean = true,
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,

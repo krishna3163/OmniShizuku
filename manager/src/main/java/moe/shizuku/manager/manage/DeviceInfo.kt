@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Environment
 import android.os.StatFs
 import android.os.SystemClock
+import kotlinx.coroutines.withTimeoutOrNull
 import moe.shizuku.manager.ShizukuApplication
 import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.utils.EnvironmentUtils
@@ -237,14 +238,14 @@ object DeviceInfo {
         val shizuku: ShizukuState
     )
 
-    fun snapshot(): Snapshot {
+    suspend fun snapshot(): Snapshot? = withTimeoutOrNull(SNAPSHOT_TIMEOUT_MS) {
         val batteryDump = runShellCommand("dumpsys battery")
         val statsDump = runShellCommand("dumpsys batterystats")
         val chargedDump = runShellCommand("dumpsys batterystats --charged")
         val cpuDump = runShellCommand("dumpsys cpuinfo")
         val thermalDump = runShellCommand(THERMAL_COMMAND)
 
-        return Snapshot(
+        Snapshot(
             battery = battery(batteryDump),
             samsung = samsung(batteryDump),
             capacity = capacity(statsDump),
@@ -257,6 +258,9 @@ object DeviceInfo {
             shizuku = shizuku()
         )
     }
+
+    /** The longest the whole snapshot may take before the screen stops waiting. */
+    const val SNAPSHOT_TIMEOUT_MS = 20_000L
 
     /**
      * The live figures.

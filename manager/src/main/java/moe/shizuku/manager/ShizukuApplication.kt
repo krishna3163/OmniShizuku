@@ -3,7 +3,9 @@ package moe.shizuku.manager
 import android.app.Application
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.topjohnwu.superuser.Shell
 import moe.shizuku.manager.ktx.logd
 import moe.shizuku.manager.ktx.isUserUnlockedCompat
@@ -63,6 +65,26 @@ class ShizukuApplication : Application() {
         application = this
         appContext = applicationContext
         init(this)
+
+        // Crash reporting: Firebase Crashlytics is wired up in the build. Initialize safely so
+        // crashes are recorded instead of silently closing the app ("auto close") with no trace if unconfigured.
+        try {
+            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        } catch (e: Throwable) {
+            Log.w("ShizukuCrash", "Crashlytics init failed", e)
+        }
+
+        // Last-resort safety net: catch any uncaught throwable that escapes the UI thread so the
+        // process is reported or logged rather than dying silently.
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            Log.e("ShizukuCrash", "Uncaught exception", throwable)
+            try {
+                FirebaseCrashlytics.getInstance().recordException(throwable)
+            } catch (e: Throwable) {
+                // Ignore if Crashlytics is unavailable
+            }
+        }
+
         moe.shizuku.manager.service.WatchdogManager.init(this)
         moe.shizuku.manager.service.WatchdogManager.reconcileService(this)
         moe.shizuku.manager.service.SheveryNotificationManager.setup(this)

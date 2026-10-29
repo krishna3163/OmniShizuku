@@ -723,7 +723,8 @@ abstract class HomeActivity : AppActivity() {
                             androidx.compose.animation.AnimatedContent(
                                 targetState = selectedTab,
                                 transitionSpec = {
-                                    fadeIn(animationSpec = tween(300)) togetherWith fadeOut(animationSpec = tween(300))
+                                    fadeIn(animationSpec = tween(300)) togetherWith
+                                        fadeOut(animationSpec = tween(300))
                                 },
                                 label = "tab_transition"
                             ) { targetTab ->

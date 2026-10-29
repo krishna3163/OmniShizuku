@@ -507,6 +507,19 @@
                 android:resource="@xml/accessibility_service_config" />
         </service>
 
+        <!-- Wireless ADB auto-pin entry accessibility service (opt-in) -->
+        <service
+            android:name=".adb.WirelessAdbPinService"
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.accessibilityservice.AccessibilityService" />
+            </intent-filter>
+            <meta-data
+                android:name="android.accessibilityservice"
+                android:resource="@xml/wireless_adb_pin_service_config" />
+        </service>
+
         <receiver
             android:name=".receiver.WatchdogAlarmReceiver"
             android:enabled="true"

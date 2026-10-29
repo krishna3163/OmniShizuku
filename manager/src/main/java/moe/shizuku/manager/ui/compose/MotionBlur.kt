@@ -11,14 +11,20 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.isActive
-import androidx.compose.runtime.withFrameNanos
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.delay
 import org.intellij.lang.annotations.Language
 import kotlin.math.abs
 import kotlin.math.min
@@ -32,6 +38,11 @@ import kotlin.math.min
 // follows the scroll direction (horizontal for tab swipes, vertical for
 // up/down list scrolls) and scales with fling speed. Below API 33 a
 // velocity-driven uniform blur is used as a fallback.
+//
+// PERF: the per-frame velocity sampler now runs only while a scroll is actually
+// in progress. It used to spin a `withFrameNanos` loop for the lifetime of the
+// composition, burning CPU on every frame even when the list was idle - that was
+// the main source of UI lag.
 
 @Language("AGSL")
 private const val DIRECTIONAL_BLUR_AGSL = """
@@ -79,85 +90,97 @@ internal fun motionBlurScale(intensity: Int, strength: Int): Float {
     return base * sensitivity * 2f
 }
 
+/**
+ * Tracks scroll velocity of a [LazyListState] only while a scroll is in progress.
+ *
+ * The frame sampler is started when scrolling begins and stopped (with a decay to
+ * zero) when scrolling ends, instead of running `withFrameNanos` for the whole
+ * composition lifetime.
+ */
 @Composable
 private fun rememberLazyVelocity(listState: LazyListState): Animatable<Float, *> {
     val animatedVelocity = remember { Animatable(0f) }
-    LaunchedEffect(listState) {
+    val scope: CoroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(listState.isScrollInProgress) {
+        if (!listState.isScrollInProgress) {
+            animatedVelocity.animateTo(0f, animationSpec = tween(60))
+            return@LaunchedEffect
+        }
         var prevIndex = listState.firstVisibleItemIndex
         var prevOffset = listState.firstVisibleItemScrollOffset
-        var prevTimeNanos = 0L
-        while (isActive) {
-            var next = animatedVelocity.value
-            withFrameNanos { frameTimeNanos ->
+        var prevTimeNanos = System.nanoTime()
+        scope.launch {
+            while (isActive && listState.isScrollInProgress) {
+                val frameStart = System.nanoTime()
+                delay(16)
+                val frameEnd = System.nanoTime()
+                if (!listState.isScrollInProgress) break
                 val currentIndex = listState.firstVisibleItemIndex
                 val currentOffset = listState.firstVisibleItemScrollOffset
-                if (prevTimeNanos != 0L) {
-                    val dtMs = (frameTimeNanos - prevTimeNanos) / 1_000_000.0f
-                    if (dtMs in 1f..100f) {
-                        val totalDelta =
-                            ((currentIndex - prevIndex) * 80f) + (currentOffset - prevOffset)
-                        val target = (totalDelta / dtMs).coerceIn(-3f, 3f)
-                        next = if (abs(totalDelta) > 0.1f && listState.isScrollInProgress) {
-                            animatedVelocity.value * 0.35f + target * 0.65f
-                        } else {
-                            val decayed = animatedVelocity.value * 0.45f
-                            if (abs(decayed) < 0.01f) 0f else decayed
-                        }
+                val dtMs = (frameEnd - prevTimeNanos) / 1_000_000.0f
+                if (dtMs in 1f..100f) {
+                    val totalDelta =
+                        ((currentIndex - prevIndex) * 80f) + (currentOffset - prevOffset)
+                    val target = (totalDelta / dtMs).coerceIn(-3f, 3f)
+                    val next = if (abs(totalDelta) > 0.1f) {
+                        animatedVelocity.value * 0.35f + target * 0.65f
                     } else {
-                        next = 0f
+                        val decayed = animatedVelocity.value * 0.45f
+                        if (abs(decayed) < 0.01f) 0f else decayed
                     }
+                    animatedVelocity.snapTo(next)
                 }
                 prevIndex = currentIndex
                 prevOffset = currentOffset
-                prevTimeNanos = frameTimeNanos
+                prevTimeNanos = frameEnd
             }
-            animatedVelocity.snapTo(next)
-        }
-    }
-    LaunchedEffect(listState.isScrollInProgress) {
-        if (!listState.isScrollInProgress) {
             animatedVelocity.animateTo(0f, animationSpec = tween(60))
         }
     }
     return animatedVelocity
 }
 
+/**
+ * Tracks pager velocity only while a page swipe is in progress.
+ */
 @Composable
 private fun rememberPagerVelocity(pagerState: PagerState): Animatable<Float, *> {
     val animatedVelocity = remember { Animatable(0f) }
-    LaunchedEffect(pagerState) {
+    val scope: CoroutineScope = rememberCoroutineScope()
+
+    LaunchedEffect(pagerState.isScrollInProgress) {
+        if (!pagerState.isScrollInProgress) {
+            animatedVelocity.animateTo(0f, animationSpec = tween(60))
+            return@LaunchedEffect
+        }
         var prevPage = pagerState.currentPage
         var prevFraction = pagerState.currentPageOffsetFraction
-        var prevTimeNanos = 0L
-        while (isActive) {
-            var next = animatedVelocity.value
-            withFrameNanos { frameTimeNanos ->
+        var prevTimeNanos = System.nanoTime()
+        scope.launch {
+            while (isActive && pagerState.isScrollInProgress) {
+                val frameStart = System.nanoTime()
+                delay(16)
+                val frameEnd = System.nanoTime()
+                if (!pagerState.isScrollInProgress) break
                 val currentPage = pagerState.currentPage
                 val currentFraction = pagerState.currentPageOffsetFraction
-                if (prevTimeNanos != 0L) {
-                    val dtMs = (frameTimeNanos - prevTimeNanos) / 1_000_000.0f
-                    if (dtMs in 1f..100f) {
-                        val delta = ((currentPage + currentFraction) - (prevPage + prevFraction)) * 400f
-                        val target = (delta / dtMs).coerceIn(-3f, 3f)
-                        next = if (abs(delta) > 0.1f && pagerState.isScrollInProgress) {
-                            animatedVelocity.value * 0.35f + target * 0.65f
-                        } else {
-                            val decayed = animatedVelocity.value * 0.45f
-                            if (abs(decayed) < 0.01f) 0f else decayed
-                        }
+                val dtMs = (frameEnd - prevTimeNanos) / 1_000_000.0f
+                if (dtMs in 1f..100f) {
+                    val delta = ((currentPage + currentFraction) - (prevPage + prevFraction)) * 400f
+                    val target = (delta / dtMs).coerceIn(-3f, 3f)
+                    val next = if (abs(delta) > 0.1f) {
+                        animatedVelocity.value * 0.35f + target * 0.65f
                     } else {
-                        next = 0f
+                        val decayed = animatedVelocity.value * 0.45f
+                        if (abs(decayed) < 0.01f) 0f else decayed
                     }
+                    animatedVelocity.snapTo(next)
                 }
                 prevPage = currentPage
                 prevFraction = currentFraction
-                prevTimeNanos = frameTimeNanos
+                prevTimeNanos = frameEnd
             }
-            animatedVelocity.snapTo(next)
-        }
-    }
-    LaunchedEffect(pagerState.isScrollInProgress) {
-        if (!pagerState.isScrollInProgress) {
             animatedVelocity.animateTo(0f, animationSpec = tween(60))
         }
     }

@@ -1,0 +1,16 @@
+<!--
+    The wireless ADB pairing dialog, only when the user has opted into automatic PIN entry.
+
+    Declares only the settings apps that host "Pair with device", so this service is never handed
+    events from any other app. Kept in step with WirelessAdbPinService, which applies the same
+    rule to the windows it walks.
+-->
+<accessibility-service xmlns:android="http://schemas.android.com/apk/res/android"
+    android:description="@string/wireless_adb_pin_service_description"
+    android:packageNames="com.android.settings,com.android.tv.settings"
+    android:accessibilityFlags="flagDefault|flagRetrieveInteractiveWindows"
+    android:accessibilityEventTypes="typeWindowStateChanged|typeWindowContentChanged|typeViewFocused|typeViewTextChanged"
+    android:accessibilityFeedbackType="feedbackGeneric"
+    android:canRetrieveWindowContent="true"
+    android:canPerformGestures="true"
+/>

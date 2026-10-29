@@ -93,20 +93,24 @@ fun DeviceInfoScreen(bottomPadding: Dp, onBack: () -> Unit) {
         loading = true
         loadFailed = false
         try {
-            // One pass: the three dumps this screen reads are fetched once and parsed by
-            // everything that wants them. Reading them per section turned a second of shell into
-            // five.
+            // One pass: the dumps this screen reads are fetched once and parsed by everything
+            // that wants them. Bounded by an overall deadline so the spinner can never stick
+            // forever - sections that answered are shown, the rest is left absent.
             val all = withContext(Dispatchers.IO) { DeviceInfo.snapshot() }
-            battery = all.battery
-            samsung = all.samsung
-            capacity = all.capacity
-            history = all.history
-            drain = all.drain
-            usage = all.usage
-            system = all.system
-            thermal = all.thermal
-            cpu = all.cpu
-            shizuku = all.shizuku
+            if (all != null) {
+                battery = all.battery
+                samsung = all.samsung
+                capacity = all.capacity
+                history = all.history
+                drain = all.drain
+                usage = all.usage
+                system = all.system
+                thermal = all.thermal
+                cpu = all.cpu
+                shizuku = all.shizuku
+            } else {
+                loadFailed = true
+            }
         } catch (e: CancellationException) {
             throw e
         } catch (e: Exception) {
