@@ -39,7 +39,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /** Settings surface for Essentials' Caffeinate controller and foreground service. */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,10 +57,6 @@ fun CaffeinateScreen(bottomPadding: Dp, onBack: () -> Unit) {
 
     LaunchedEffect(Unit) {
         CaffeinateController.check(context)
-        while (true) {
-            CaffeinateController.check(context)
-            delay(1000)
-        }
     }
 
     Scaffold(topBar = {

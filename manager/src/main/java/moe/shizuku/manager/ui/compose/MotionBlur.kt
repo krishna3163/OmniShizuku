@@ -5,10 +5,21 @@ import android.graphics.RuntimeShader
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.pager.PagerState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.mutableStateOf
@@ -18,6 +29,7 @@ import androidx.compose.ui.composed
 import androidx.compose.ui.draw.blur
 import androidx.compose.ui.graphics.asComposeRenderEffect
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -269,3 +281,91 @@ fun Modifier.scrollMotionBlur(
         this
     }
 }
+
+/**
+ * Glassmorphism surface with backdrop blur. Falls back to a translucent surface on older APIs.
+ */
+@Composable
+fun glassSurface(
+    modifier: Modifier = Modifier,
+    shape: RoundedCornerShape = RoundedCornerShape(16.dp),
+    content: @Composable () -> Unit
+) {
+    val blurMod = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        modifier.blur(12.dp)
+    } else {
+        modifier
+    }
+    Surface(
+        modifier = blurMod,
+        shape = shape,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.6f),
+        content = content
+    )
+}
+
+/**
+ * Glass card with blur backdrop and subtle border. Use for premium UI sections.
+ */
+@Composable
+fun glassCard(
+    modifier: Modifier = Modifier,
+    shape: RoundedCornerShape = RoundedCornerShape(20.dp),
+    borderDp: Dp = 1.dp,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    val borderColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f)
+    Card(
+        modifier = modifier
+            .blur(8.dp)
+            .border(borderDp, borderColor, shape),
+        shape = shape,
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.5f)
+        ),
+        content = content
+    )
+}
+
+/**
+ * Entrance animation: fades in and slides up slightly. Use for screen content entry.
+ */
+@Composable
+fun entranceAnimation(
+    content: @Composable () -> Unit,
+    delayMillis: Int = 0
+) {
+    val alpha by animateFloatAsState(
+        targetValue = 1f,
+        animationSpec = tween(durationMillis = 400, delayMillis = delayMillis),
+        label = "EntranceAlpha"
+    )
+    val offset by animateFloatAsState(
+        targetValue = 0f,
+        animationSpec = tween(durationMillis = 500, delayMillis = delayMillis),
+        label = "EntranceOffset"
+    )
+    Box(
+        modifier = Modifier
+            .graphicsLayer {
+                this.alpha = alpha
+                this.translationY = offset
+            }
+    ) {
+        content()
+    }
+}
+
+/**
+ * Staggered entrance for lists: each item fades in with increasing delay.
+ */
+@Composable
+fun staggeredItem(
+    index: Int,
+    baseDelay: Int = 50,
+    content: @Composable () -> Unit
+) {
+    val delayMillis = index * baseDelay
+    entranceAnimation(content = content, delayMillis = delayMillis)
+}
+
