@@ -73,6 +73,12 @@ Tab screens (index → file):
 | Wireless ADB auto-PIN (accessibility) | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `res/xml/wireless_adb_pin_service_config.xml` |
 | First-launch onboarding | `FirstLaunchActivity.kt`, `ShizukuSettings.java` (KEY_FIRST_LAUNCH, KEY_ACTIVATION_METHOD) |
 | App management / freeze / debloat | `management/ApplicationManagementActivity.kt`, `freeze/FreezerScreen.kt`, `debloater/DebloaterScreen.kt`, `manage/PackageTools.kt` |
+| Audio Mix / Mixed Audio | `audio/MixedAudioScreen.kt` | Audio stream mixing and routing |
+| Sound Master | `audio/SoundMasterScreen.kt` | Independent volume stream sliders |
+| Theme Patcher | `themepatcher/ThemePatcherScreen.kt` | System theme color overrides |
+| LookBack | `lookback/LookBackScreen.kt` | Screen recording bitrate and enable toggle |
+| Universal PiP | `pip/UniversalPiPScreen.kt` | Force picture-in-picture for any app |
+| Local Shell | `shell/LocalShellScreen.kt` | Local shell commands without Shizuku |
 | Modules (ADB/ZIP) | `module/AdbModuleManager.kt`, `module/ModulesScreen.kt`, `module/ModulePackage.kt`, `module/update/ModuleInstaller.kt` |
 | Settings | `ui/screen/SettingsScreen.kt`, `settings/` |
 | Security / auth / app lock | `security/AuthManager.kt`, `security/SecuritySettings.kt`, `authorization/AuthorizationManager.kt` |
@@ -126,7 +132,12 @@ Tab screens (index → file):
 | `res/xml/wireless_adb_pin_service_config.xml` | Accessibility service config (settings apps only) |
 | `res/drawable/ic_info.xml` | Info icon vector |
 | `res/drawable/ic_agreement.xml` | Agreement icon vector |
-| `PONYTAIL.md` | This index |
+| `audio/MixedAudioScreen.kt` | Mixed audio stream mixing and routing |
+| `audio/SoundMasterScreen.kt` | Sound Master volume stream sliders |
+| `lookback/LookBackScreen.kt` | LookBack screen recording settings |
+| `pip/UniversalPiPScreen.kt` | Universal PiP force enable |
+| `shell/LocalShellScreen.kt` | Local shell commands without Shizuku |
+| `themepatcher/ThemePatcherScreen.kt` | Theme color override patcher |
 
 ---
 

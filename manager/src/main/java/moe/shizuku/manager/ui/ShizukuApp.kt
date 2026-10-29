@@ -207,6 +207,19 @@ enum class Detail(
     INTENTS,
     PERMISSIONS,
 
+    /** System theme customization and patching. */
+    THEME_PATCHER,
+    /** System-wide audio mixing and routing. */
+    MIXED_AUDIO,
+    /** Sound Master - independent audio stream control. */
+    SOUND_MASTER,
+    /** Screen recording and playback. */
+    LOOKBACK,
+    /** Picture-in-picture for any app. */
+    UNIVERSAL_PIP,
+    /** Local shell session without Shizuku. */
+    LOCAL_SHELL;
+
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
 
@@ -444,6 +457,12 @@ fun ShizukuApp() {
                             Detail.TERMINAL -> TerminalScreen(onBack = { detail = null })
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })
+                            Detail.THEME_PATCHER -> ThemePatcherScreen(onBack = { detail = null })
+                            Detail.MIXED_AUDIO -> MixedAudioScreen(onBack = { detail = null })
+                            Detail.SOUND_MASTER -> SoundMasterScreen(onBack = { detail = null })
+                            Detail.LOOKBACK -> LookBackScreen(onBack = { detail = null })
+                            Detail.UNIVERSAL_PIP -> UniversalPiPScreen(onBack = { detail = null })
+                            Detail.LOCAL_SHELL -> LocalShellScreen(onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {
