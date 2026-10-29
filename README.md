@@ -6,6 +6,8 @@ OmniShizuku is an open-source Android utility for Shizuku, ADB, and Dhizuku work
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android)](https://developer.android.com)
 
+🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md)
+
 ---
 
 ## Features
@@ -38,6 +40,15 @@ OmniShizuku is an open-source Android utility for Shizuku, ADB, and Dhizuku work
 - **Privileged File Explorer** — Browse protected system paths
 - **Package Installer Pro** — Installs split APKs, APKS, XAPK
 
+### Additional Integrated Modules
+- **Theme Patcher** — System theme customization
+- **Sound Master** — Advanced audio control
+- **Mixed Audio** — Audio mixing and routing
+- **LookBack** — Screen recording and playback
+- **Universal PiP** — Picture-in-picture for any app
+- **Intent Shell** — Shell commands via intents
+- **Local Shell** — Built-in terminal emulator
+
 ### Wireless ADB Auto-PIN (Accessibility)
 - **Off** — Type the pairing PIN yourself
 - **Manual** — Manager tells you when the dialog is up
@@ -56,6 +67,22 @@ OmniShizuku is an open-source Android utility for Shizuku, ADB, and Dhizuku work
 - Language selection (system + 12 languages)
 - Theme selection (follow system / dark / light / black night AMOLED / use system color)
 - Activation method (wireless debugging / root / connect to computer)
+
+---
+
+## Comparison with Other Shizuku Forks
+
+| Project | Autostart | TCP Mode | Dhizuku | Module Support | Stealth | Terminal | AI Integration | Expressive UI | Onboarding | License |
+|---------|-----------|----------|---------|----------------|---------|----------|----------------|---------------|------------|---------|
+| **OmniShizuku** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Apache-2.0 |
+| Porter | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
+| shevery | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | Material 3 | ❌ | Apache-2.0 |
+| Shizako | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
+| Shizuku (thedjchi's fork) | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
+| Shizuku Next | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | Material 3 | ❌ | Apache-2.0 |
+| ShizukuPlus | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
+| Stellar | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | MPL-2.0 |
+| Xhizuku | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | Material 3 Expressive | ✅ | Apache-2.0 |
 
 ---
 
@@ -85,6 +112,42 @@ cd OmniShizuku
 ```
 
 The debug APK will be at `manager/build/outputs/apk/debug/manager-debug.apk`.
+
+---
+
+## Contributors & Credits
+
+Thanks to everyone who has contributed to OmniShizuku on GitHub:
+
+- **krishna3163** — Maintainer & Lead Developer
+
+We also thank the following open-source projects whose code, ideas, and APIs inspired or were integrated into OmniShizuku:
+
+- **Shizuku** (rikkaw) — Core Shizuku framework and Binder API
+- **Dhizuku** — Dhizuku service integration
+- **shevery** — Material 3 design, autostart, TCP mode, module support, terminal, AI integration
+- **Shizuku Next** — Automated pairing, start method selection, watchdog, app-ops/firewall manager
+- **Essentials (sameerasw)** — Essential feature modules (Dynamic Island, Smart Pixels, Caffeinate, etc.)
+- **App Ops** — Permission management patterns
+- **Active Launcher** — Automation shortcuts
+- **EnforceDoze** — Doze mode automation patterns
+- **Xhizuku** — Material 3 Expressive UI, onboarding wizard, server monitor
+- **Stellar** — Simple terminal implementation
+- **ShizukuPlus** — Extended API surface for developers
+- **Porter** — Minimal Shizuku fork reference
+- **Shizako** — Drop-in replacement manager reference
+
+---
+
+## Quick Settings Tiles
+
+OmniShizuku includes Quick Settings tiles for:
+- Caffeinate (keep screen awake)
+- Wireless ADB toggle
+- Shizuku server start/stop
+- Stealth mode toggle
+
+Add them by pulling down your notification shade and tapping the edit pencil.
 
 ---
 

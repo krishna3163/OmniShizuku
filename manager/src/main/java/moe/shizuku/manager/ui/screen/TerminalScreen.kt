@@ -136,7 +136,7 @@ fun TerminalScreen(onBack: () -> Unit) {
                 }
             }
 
-            if (runCatching { DeviceCompatibility.isMiui() }.getOrDefault(false)) {
+            if (runCatching { DeviceCompatibility.isMiui() }.getOrNull() == true) {
                 item {
                     Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                         Text(
