@@ -41,7 +41,7 @@ object UniversalPiPManager {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UniversalPiPScreen(
-    bottomPadding: Dp,
+    bottomPadding: Dp = 0.dp,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current

@@ -1,6 +1,9 @@
 package moe.shizuku.manager.audio
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
@@ -17,7 +20,7 @@ import androidx.compose.ui.unit.sp
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SoundMasterScreen(
-    bottomPadding: Dp,
+    bottomPadding: Dp = 0.dp,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current

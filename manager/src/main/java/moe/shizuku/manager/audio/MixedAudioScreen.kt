@@ -41,7 +41,7 @@ object MixedAudioManager {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MixedAudioScreen(
-    bottomPadding: Dp,
+    bottomPadding: Dp = 0.dp,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current

@@ -2,7 +2,10 @@ package moe.shizuku.manager.shell
 
 import android.content.Context
 import android.content.SharedPreferences
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
@@ -14,6 +17,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+
+import moe.shizuku.manager.ui.component.SegmentedListItem
 import androidx.compose.ui.unit.sp
 
 private const val PREFS = "local_shell"
@@ -33,7 +38,7 @@ object LocalShellManager {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LocalShellScreen(
-    bottomPadding: Dp,
+    bottomPadding: Dp = 0.dp,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current

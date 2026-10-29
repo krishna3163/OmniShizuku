@@ -22,9 +22,9 @@ private const val PREFS = "theme_patcher"
 
 /** Simple theme patcher that records user-selected overrides and exposes them via preferences. */
 object ThemePatcherManager {
-    private const val KEY_ACCENT = "theme_accent"
-    private const val KEY_SURFACE = "theme_surface"
-    private const val KEY_ERROR = "theme_error"
+    const val KEY_ACCENT = "theme_accent"
+    const val KEY_SURFACE = "theme_surface"
+    const val KEY_ERROR = "theme_error"
 
     fun getPref(context: Context, key: String): String? =
         context.getSharedPreferences(PREFS, Context.MODE_PRIVATE).getString(key, null)
@@ -37,7 +37,7 @@ object ThemePatcherManager {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ThemePatcherScreen(
-    bottomPadding: Dp,
+    bottomPadding: Dp = 0.dp,
     onBack: () -> Unit
 ) {
     val context = LocalContext.current

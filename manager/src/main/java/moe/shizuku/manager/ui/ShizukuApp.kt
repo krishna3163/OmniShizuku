@@ -130,6 +130,12 @@ import moe.shizuku.manager.module.ModulesScreen
 import moe.shizuku.manager.ui.screen.StealthScreen
 import moe.shizuku.manager.ui.screen.TerminalScreen
 import moe.shizuku.manager.ui.screen.WifiPasswordsScreen
+import moe.shizuku.manager.audio.MixedAudioScreen
+import moe.shizuku.manager.audio.SoundMasterScreen
+import moe.shizuku.manager.lookback.LookBackScreen
+import moe.shizuku.manager.pip.UniversalPiPScreen
+import moe.shizuku.manager.shell.LocalShellScreen
+import moe.shizuku.manager.themepatcher.ThemePatcherScreen
 import moe.shizuku.manager.ui.theme.LocalAmoledTheme
 import moe.shizuku.manager.ui.theme.LocalTelevision
 import moe.shizuku.manager.ui.theme.ShizukuTheme
@@ -218,7 +224,7 @@ enum class Detail(
     /** Picture-in-picture for any app. */
     UNIVERSAL_PIP,
     /** Local shell session without Shizuku. */
-    LOCAL_SHELL;
+    LOCAL_SHELL,
 
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
