@@ -226,6 +226,9 @@ enum class Detail(
     /** Local shell session without Shizuku. */
     LOCAL_SHELL,
 
+    /** Call recording via Shizuku shell service. */
+    CALL_RECORDING,
+
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
 
@@ -469,6 +472,7 @@ fun ShizukuApp() {
                             Detail.LOOKBACK -> LookBackScreen(onBack = { detail = null })
                             Detail.UNIVERSAL_PIP -> UniversalPiPScreen(onBack = { detail = null })
                             Detail.LOCAL_SHELL -> LocalShellScreen(onBack = { detail = null })
+                            Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {
