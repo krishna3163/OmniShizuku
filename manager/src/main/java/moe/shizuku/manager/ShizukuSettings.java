@@ -105,6 +105,10 @@ public class ShizukuSettings {
         return getPreferences().getInt(NIGHT_MODE, defValue);
     }
 
+    public static void setNightMode(@AppCompatDelegate.NightMode int mode) {
+        getPreferences().edit().putInt(NIGHT_MODE, mode).apply();
+    }
+
     public static Locale getLocale() {
         String tag = getPreferences().getString(LANGUAGE, null);
         if (TextUtils.isEmpty(tag) || "SYSTEM".equals(tag)) {
@@ -294,8 +298,31 @@ public class ShizukuSettings {
         public static final String KEY_BLACK_NIGHT_THEME = "black_night_theme";
         public static final String KEY_USE_SYSTEM_COLOR = "use_system_color";
         public static final String KEY_UPDATE_MODE = "update_mode";
-        public static final String KEY_HELP = "help";
-        public static final String KEY_REPORT_BUG = "report_bug";
+    }
+
+    public static final String KEY_HELP = "help";
+    public static final String KEY_REPORT_BUG = "report_bug";
+    public static final String KEY_FIRST_LAUNCH = "first_launch";
+    public static final String KEY_ACTIVATION_METHOD = "activation_method";
+
+    public static final int ACTIVATION_WIRELESS = 0;
+    public static final int ACTIVATION_ROOT = 1;
+    public static final int ACTIVATION_COMPUTER = 2;
+
+    public static int getActivationMethod() {
+        return getPreferences().getInt(KEY_ACTIVATION_METHOD, ACTIVATION_WIRELESS);
+    }
+
+    public static void setActivationMethod(int method) {
+        getPreferences().edit().putInt(KEY_ACTIVATION_METHOD, method).apply();
+    }
+
+    public static boolean isFirstLaunch() {
+        return getPreferences().getBoolean(KEY_FIRST_LAUNCH, true);
+    }
+
+    public static void setFirstLaunch(boolean first) {
+        getPreferences().edit().putBoolean(KEY_FIRST_LAUNCH, first).apply();
     }
 
     public static class UpdateMode {

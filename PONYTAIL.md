@@ -36,8 +36,9 @@ Build: `./gradlew :manager:assembleDebug` | Release: `./gradlew :manager:assembl
 ### Entry / App shell
 | File | What it does |
 |------|-------------|
-| `MainActivity.kt` | Launcher activity, extends `HomeActivity` |
-| `ShizukuApplication.kt` | Application class, Crashlytics + uncaught handler (see §4) |
+| `MainActivity.kt` | Launcher activity — checks first launch, routes to `FirstLaunchActivity` or `HomeActivity` |
+| `FirstLaunchActivity.kt` | **First-time onboarding**: 6 disclaimers, agreement with 5s timer, language, theme, activation method |
+| `ShizukuApplication.kt` | Application class, Crashlytics + uncaught handler |
 | `app/AppActivity.kt` | Base activity (edge-to-edge, theme, system bars) |
 | `app/AppBarActivity.kt` | AppBar host |
 | `ui/ShizukuApp.kt` | Compose app root |
@@ -57,7 +58,7 @@ Build: `./gradlew :manager:assembleDebug` | Release: `./gradlew :manager:assembl
 
 Tab screens (index → file):
 - 0 Home → `ui/screen/HomeScreen.kt`
-- 1 Modules → `module/ModulesScreen.kt` **(already in nav bar — index 2)**
+- 1 Modules → `module/ModulesScreen.kt`
 - 2 Labs → `ui/screen/LabsScreen.kt`
 - 3 Comput → `logs/ComputScreen.kt`
 - 4 Settings → `ui/screen/SettingsScreen.kt`
@@ -70,6 +71,7 @@ Tab screens (index → file):
 | Start ADB / root / Dhizuku | `starter/Starter.kt`, `start/AdbStartRun.kt`, `start/StartTransport.kt`, `dhizuku/DhizukuService.kt` |
 | Wireless ADB / pairing | `adb/AdbStarter.kt`, `adb/AdbPairingClient.kt`, `adb/AdbPairingService.kt`, `adb/WirelessPortHunt.kt` |
 | Wireless ADB auto-PIN (accessibility) | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `res/xml/wireless_adb_pin_service_config.xml` |
+| First-launch onboarding | `FirstLaunchActivity.kt`, `ShizukuSettings.java` (KEY_FIRST_LAUNCH, KEY_ACTIVATION_METHOD) |
 | App management / freeze / debloat | `management/ApplicationManagementActivity.kt`, `freeze/FreezerScreen.kt`, `debloater/DebloaterScreen.kt`, `manage/PackageTools.kt` |
 | Modules (ADB/ZIP) | `module/AdbModuleManager.kt`, `module/ModulesScreen.kt`, `module/ModulePackage.kt`, `module/update/ModuleInstaller.kt` |
 | Settings | `ui/screen/SettingsScreen.kt`, `settings/` |
@@ -105,11 +107,12 @@ Tab screens (index → file):
 
 | Symptom | Likely location | Fix applied |
 |---------|----------------|-------------|
-| Laggy / janky UI | `ui/compose/MotionBlur.kt` | Frame-sampler loops now run **only while scrolling** (`rememberLazyVelocity`, `rememberPagerVelocity`, `delay(16)` tick) instead of `while(isActive)` forever |
-| Transitions not smooth | `home/HomeActivity.kt` | Tab `AnimatedContent` uses `fadeIn`/`fadeOut` tween(300); blur is now lazy so transitions are not choked by per-frame blur |
-| Auto-close / crash | `manager/ShizukuApplication.kt` | Added `FirebaseCrashlytics.init()` + `Thread.setDefaultUncaughtExceptionHandler` safety net |
+| Laggy / janky UI | `ui/compose/MotionBlur.kt` | Frame-sampler loops now run **only while scrolling** (`delay(16)` tick) instead of `while(isActive)` forever |
+| Transitions not smooth | `home/HomeActivity.kt` | Tab `AnimatedContent` uses `fadeIn`/`fadeOut` tween(300) |
+| Auto-close / crash | `manager/ShizukuApplication.kt` | Firebase Crashlytics init + `Thread.setDefaultUncaughtExceptionHandler` safety net |
 | DeviceInfo infinite loading | `manage/DeviceInfo.kt`, `ui/screen/DeviceInfoScreen.kt` | `snapshot()` is now `suspend` with 20s `withTimeoutOrNull`; screen shows partial data instead of stuck spinner |
-| Wireless ADB PIN typing | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `ui/screen/SettingsScreen.kt` | New opt-in accessibility service: Off / Manual / Automatic modes in Settings → Wireless section |
+| Wireless ADB PIN typing | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `ui/screen/SettingsScreen.kt` | New opt-in accessibility service: Off / Manual / Automatic modes in Settings |
+| First launch / onboarding | `FirstLaunchActivity.kt`, `MainActivity.kt` | 6-screen disclaimer, 5s agreement timer, language/theme/activation setup |
 
 ---
 
@@ -117,9 +120,12 @@ Tab screens (index → file):
 
 | File | What it does |
 |------|-------------|
-| `adb/WirelessAdbPinManager.kt` | Mode persistence (Off/Manual/Automatic) + stored PIN in SharedPreferences |
-| `adb/WirelessAdbPinService.kt` | Accessibility service that reads pairing dialog PIN field and auto-enters stored PIN |
-| `res/xml/wireless_adb_pin_service_config.xml` | Service config — limited to `com.android.settings` / `com.android.tv.settings` only |
+| `FirstLaunchActivity.kt` | First-launch onboarding activity (disclaimers, agreement, language, theme, activation) |
+| `adb/WirelessAdbPinManager.kt` | Auto-PIN mode persistence (Off/Manual/Automatic) + stored PIN |
+| `adb/WirelessAdbPinService.kt` | Accessibility service that auto-enters pairing PIN into dialog |
+| `res/xml/wireless_adb_pin_service_config.xml` | Accessibility service config (settings apps only) |
+| `res/drawable/ic_info.xml` | Info icon vector |
+| `res/drawable/ic_agreement.xml` | Agreement icon vector |
 | `PONYTAIL.md` | This index |
 
 ---
@@ -130,11 +136,13 @@ Tab screens (index → file):
 |------|--------|
 | `ui/compose/MotionBlur.kt` | Lazy velocity tracking — frame loop only during `isScrollInProgress` |
 | `manager/ShizukuApplication.kt` | Crashlytics init + uncaught exception handler |
-| `manage/DeviceInfo.kt` | `snapshot()` → `suspend` with 20s timeout; `SNAPSHOT_TIMEOUT_MS` const |
-| `ui/screen/DeviceInfoScreen.kt` | Handles nullable/timeout snapshot, shows partial data on failure |
-| `ui/screen/SettingsScreen.kt` | Added auto-PIN mode row + ChoiceDialog + string resources |
-| `manager/AndroidManifest.xml` | Registered `WirelessAdbPinService` accessibility service |
-| `res/values/strings.xml` | Added auto-PIN settings strings |
+| `manage/DeviceInfo.kt` | `snapshot()` → `suspend` with 20s timeout |
+| `ui/screen/DeviceInfoScreen.kt` | Handles nullable/timeout snapshot, shows partial data |
+| `ui/screen/SettingsScreen.kt` | Added auto-PIN mode row + ChoiceDialog + strings |
+| `manager/AndroidManifest.xml` | Registered `WirelessAdbPinService` + `FirstLaunchActivity` |
+| `manager/ShizukuSettings.java` | Added `KEY_FIRST_LAUNCH`, `KEY_ACTIVATION_METHOD`, `ACTIVATION_*` constants, `isFirstLaunch/setFirstLaunch/getActivationMethod/setActivationMethod/setNightMode` |
+| `manager/MainActivity.kt` | Routes to `FirstLaunchActivity` on first launch |
+| `res/values/strings.xml` | Added onboarding + auto-PIN strings |
 
 ---
 
@@ -149,5 +157,6 @@ Tab screens (index → file):
 - Looking for **crash handling**? → `manager/ShizukuApplication.kt`
 - Looking for **device info loading**? → `manage/DeviceInfo.kt` + `ui/screen/DeviceInfoScreen.kt`
 - Looking for **auto wireless ADB PIN**? → `adb/WirelessAdbPin*` + `SettingsScreen.kt` wireless section
+- Looking for **first launch / onboarding**? → `FirstLaunchActivity.kt` + `MainActivity.kt`
 
 Docs: `docs/` (build results, security review, feature mapping, architecture).
