@@ -145,6 +145,8 @@ dependencies {
     implementation project(':common')
     implementation project(':tasker')
     implementation project(':database')
+    implementation project(':wallpaper-apis')
+    implementation 'io.coil-kt:coil-compose:2.6.0'
     compileOnly project(':nightdog')
 
     implementation libs.hidden.compat

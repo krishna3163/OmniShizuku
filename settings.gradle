@@ -55,6 +55,7 @@ include ':nightdog'
 include ':tasker'
 include ':database'
 include ':app-process'
+include ':wallpaper-apis'
 
 def root = "api"
 

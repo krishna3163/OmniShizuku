@@ -232,6 +232,9 @@ enum class Detail(
     /** DFRoot built-in exploit integration (DirtyFrag CVE-2026-43284). */
     DFROOT,
 
+    /** WallYou wallpaper browser and setter. */
+    WALLYOU,
+
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
 
@@ -477,6 +480,7 @@ fun ShizukuApp() {
                             Detail.LOCAL_SHELL -> LocalShellScreen(onBack = { detail = null })
                             Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })
                             Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = { detail = null })
+                            Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {
