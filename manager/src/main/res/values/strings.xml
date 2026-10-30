@@ -1102,6 +1102,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="tab_labs">Labs</string>
     <string name="lab_more_apps">Shizuku Store</string>
     <string name="lab_companion_call_recorder">Call recording (ShizuCallRecorder)</string>
+    <string name="dfroot_title">DFRoot (CVE-2026-43284)</string>
     <string name="lab_companion_quick_tiles">Quick Settings tiles</string>
     <string name="lab_companion_shizuwall">ShizuWall firewall</string>
     <string name="lab_companion_open_failed">Could not open the companion app or its release page.</string>
@@ -2298,5 +2299,26 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="call_recorder_unknown">Unknown</string>
     <string name="call_recorder_legal">Recording calls may require consent. Check your local laws.</string>
     <string name="call_recorder_license">GPL-3.0 - Based on ShizuCallRecorder by kitsumed</string>
+
+    <!-- Unified first-launch disclaimer. All six legal sections are shown on a single
+         scrollable screen; a 5-second countdown gates the consent checkbox. -->
+    <string name="onboarding_disclaimer_title">Before You Continue</string>
+    <string name="onboarding_disclaimer_intro">Please read the following sections carefully. OmniShizuku grants system-level privileges, which can change how your device behaves and what third parties can do with it. By continuing, you acknowledge these risks and accept full responsibility.</string>
+    <string name="onboarding_disclaimer_section_1_title">1. What OmniShizuku Provides</string>
+    <string name="onboarding_disclaimer_section_1_body">OmniShizuku provides access to system-level APIs through the Shizuku framework. It is provided as-is, without warranty of any kind, express or implied.</string>
+    <string name="onboarding_disclaimer_section_2_title">2. Real Privileges Granted</string>
+    <string name="onboarding_disclaimer_section_2_body">Using OmniShizuku grants real system privileges to applications. These privileges allow apps to perform actions that are normally restricted, including modifying system settings, accessing protected data, and controlling device behavior.</string>
+    <string name="onboarding_disclaimer_section_3_title">3. Device Owner Side Effects</string>
+    <string name="onboarding_disclaimer_section_3_body">Enabling device owner or profile owner mode may have side effects, including the inability to uninstall certain apps, restrictions on factory reset, and additional management controls enforced by the device.</string>
+    <string name="onboarding_disclaimer_section_4_title">4. Root Access Risks</string>
+    <string name="onboarding_disclaimer_section_4_body">Using root access bypasses Android\'s security model. Root access can expose your device to malware, compromise sensitive data, and may void your device warranty. Proceed with caution.</string>
+    <string name="onboarding_disclaimer_section_5_title">5. Third-Party Behavior</string>
+    <string name="onboarding_disclaimer_section_5_body">OmniShizuku may interact with third-party applications and services. We are not responsible for the behavior, data collection, or security practices of third-party apps you choose to grant privileges to.</string>
+    <string name="onboarding_disclaimer_section_6_title">6. License and Legal</string>
+    <string name="onboarding_disclaimer_section_6_body">OmniShizuku is distributed under the Apache License 2.0. Use of this software is at your own risk. See LICENSE for full terms.</string>
+    <string name="onboarding_disclaimer_section_7_title">7. Banking, Financial and Security Warning</string>
+    <string name="onboarding_disclaimer_section_7_body">OmniShizuku can bypass screen-security protections (such as FLAG_SECURE) that banking, financial and other security-sensitive apps rely on. Granting system privileges may allow apps to observe sensitive screens, capture input, or interfere with security mechanisms. Do not grant privileges to apps you do not trust, and avoid using privileged apps while performing banking, payments or other sensitive operations.</string>
+    <string name="onboarding_disclaimer_agree_button">I Agree and Proceed</string>
+    <string name="onboarding_disclaimer_agree_label">I have read and agree to the above</string>
 
 </resources>

@@ -229,6 +229,9 @@ enum class Detail(
     /** Call recording via Shizuku shell service. */
     CALL_RECORDING,
 
+    /** DFRoot built-in exploit integration (DirtyFrag CVE-2026-43284). */
+    DFROOT,
+
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
 
@@ -473,6 +476,7 @@ fun ShizukuApp() {
                             Detail.UNIVERSAL_PIP -> UniversalPiPScreen(onBack = { detail = null })
                             Detail.LOCAL_SHELL -> LocalShellScreen(onBack = { detail = null })
                             Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })
+                            Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {

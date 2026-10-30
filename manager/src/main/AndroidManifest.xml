@@ -458,6 +458,17 @@
         </service>
 
         <service
+            android:name=".essentials.IslandService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse" />
+
+        <service
+            android:name=".essentials.PocketModeService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <service
             android:name=".tile.DozeTileService"
             android:icon="@drawable/ic_system_icon"
             android:label="Deep Sleep"

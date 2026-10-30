@@ -165,6 +165,8 @@ fun DetailHost(
                     Detail.UNIVERSAL_PIP -> moe.shizuku.manager.pip.UniversalPiPScreen(onBack = onBack)
                     Detail.LOCAL_SHELL -> moe.shizuku.manager.shell.LocalShellScreen(onBack = onBack)
                     Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = onBack)
+                    Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = onBack)
+                    Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = onBack)
                 }
             }
         }

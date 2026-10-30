@@ -136,6 +136,7 @@ We also thank the following open-source projects whose code, ideas, and APIs ins
 - **ShizukuPlus** — Extended API surface for developers
 - **Porter** — Minimal Shizuku fork reference
 - **Shizako** — Drop-in replacement manager reference
+- **DFRoot (diabl0w)** — DirtyFrag (CVE-2026-43284) kernel exploit integration (GPL-2.0) as built-in feature
 
 ---
 

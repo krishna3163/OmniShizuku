@@ -279,6 +279,13 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 searchTerms = "wallpaper security",
                 packageName = "com.arslan.shizuwall",
                 releaseUrl = "https://github.com/AhmetCanArslan/ShizuWall/releases/latest"
+            ),
+            LabEntry(
+                R.string.dfroot_title,
+                Icons.Outlined.Security,
+                Detail.DFROOT,
+                LabCategory.SYSTEM_CONTROLS,
+                "dfroot kernel exploit dirtyfrag root cve kernel module"
             )
         )
     }
