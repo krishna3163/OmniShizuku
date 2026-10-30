@@ -292,6 +292,10 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 "Theme Patcher", Icons.Outlined.ColorLens, Detail.THEME_PATCHER,
                 LabCategory.SYSTEM_CONTROLS, "theme patcher customization"
             ),
+            LabEntry(
+                "WallYou Wallpapers", Icons.Outlined.Wallpaper, Detail.WALLYOU,
+                LabCategory.UTILITIES, "wallpaper wall you"
+            ),
         )
     }
 
