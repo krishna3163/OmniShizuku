@@ -225,6 +225,14 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 LabCategory.SYSTEM_CONTROLS, "hotspot tethering"
             ),
             LabEntry(
+                "Mixed Audio", Icons.Outlined.GraphicEq, Detail.MIXED_AUDIO,
+                LabCategory.SYSTEM_CONTROLS, "mixed audio appops focus"
+            ),
+            LabEntry(
+                "SoundMaster", Icons.Outlined.Tune, Detail.SOUND_MASTER,
+                LabCategory.SYSTEM_CONTROLS, "per app volume soundmaster"
+            ),
+            LabEntry(
                 R.string.tab_screen_security, Icons.Outlined.Security, Detail.SECURITY,
                 LabCategory.SYSTEM_CONTROLS, "screen capture protection secure"
             ),
@@ -281,12 +289,9 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 releaseUrl = "https://github.com/AhmetCanArslan/ShizuWall/releases/latest"
             ),
             LabEntry(
-                R.string.dfroot_title,
-                Icons.Outlined.Security,
-                Detail.DFROOT,
-                LabCategory.SYSTEM_CONTROLS,
-                "dfroot kernel exploit dirtyfrag root cve kernel module"
-            )
+                "Theme Patcher", Icons.Outlined.ColorLens, Detail.THEME_PATCHER,
+                LabCategory.SYSTEM_CONTROLS, "theme patcher customization"
+            ),
         )
     }
 
