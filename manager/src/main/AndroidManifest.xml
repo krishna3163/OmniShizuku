@@ -153,7 +153,8 @@
         <activity
             android:name=".FirstLaunchActivity"
             android:exported="false"
-            android:enabled="false" />
+            android:enabled="false"
+            tools:node="remove" />
         <activity
             android:name=".management.ApplicationManagementActivity"
             android:label="@string/home_app_management_title" />
