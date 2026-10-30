@@ -308,6 +308,7 @@ private val tabs = listOf(
 
 @Composable
 fun ShizukuApp() {
+    val context = LocalContext.current
     ShizukuTheme {
         // Detail screens are shown outside the Scaffold, so wrap everything in a
         // Surface otherwise LocalContentColor falls back to black and plain
@@ -761,7 +762,18 @@ private fun MainTabs(
                                     // composes what it scrolls past, so going from Settings to Home
                                     // started loading the Manage tab's six hundred apps on the way.
                                     // Swiping still animates, because that is the gesture.
-                                    if (!selected) scope.launch { pagerState.scrollToPage(index) }
+                                    if (!selected) {
+                                        try {
+                                            val view = context.findViewById<android.view.View>(android.R.id.content)
+                                                ?: it
+                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                                                view.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM)
+                                            } else {
+                                                view.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+                                            }
+                                        } catch (_: Exception) {}
+                                        scope.launch { pagerState.scrollToPage(index) }
+                                    }
                                 },
                                     shapes = ToggleButtonShapes(
                                         shape = CircleShape,
