@@ -167,6 +167,7 @@ fun DetailHost(
                     Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = onBack)
                     Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = onBack)
                     Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = onBack)
+                    Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = onBack)
                     Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = onBack)
                 }
             }

@@ -30,10 +30,11 @@ import net.youapps.wallpaper_apis.ps.PicsumApi
 import net.youapps.wallpaper_apis.re.RedditApi
 import net.youapps.wallpaper_apis.wh.WallhavenApi
 import net.youapps.wallpaper_apis.wi.WikimediaApi
+import moe.shizuku.manager.ui.Detail
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WallYouScreen(onBack: () -> Unit) {
+fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var selectedEngine by remember { mutableStateOf("Wallhaven") }
@@ -80,6 +81,11 @@ fun WallYouScreen(onBack: () -> Unit) {
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
+                    }
+                },
+                actions = {
+                    IconButton(onClick = { onOpenDetail(Detail.WALLYOU_SETTINGS) }) {
+                        Icon(Icons.Outlined.Settings, contentDescription = "Settings")
                     }
                 }
             )

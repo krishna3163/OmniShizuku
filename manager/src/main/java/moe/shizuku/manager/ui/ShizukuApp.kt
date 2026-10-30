@@ -235,6 +235,9 @@ enum class Detail(
     /** WallYou wallpaper browser and setter. */
     WALLYOU,
 
+    /** WallYou wallpaper changer settings. */
+    WALLYOU_SETTINGS,
+
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
 
@@ -481,6 +484,7 @@ fun ShizukuApp() {
                             Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })
                             Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = { detail = null })
                             Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = { detail = null })
+                            Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {
