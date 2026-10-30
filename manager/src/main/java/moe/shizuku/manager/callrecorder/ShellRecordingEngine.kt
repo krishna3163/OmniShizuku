@@ -36,6 +36,7 @@ internal class ShellRecordingEngine {
     private var encoderThread: Thread? = null
     private var muxer: MediaMuxer? = null
     private var encoder: MediaCodec? = null
+    private var muxerStarted = false
 
     private val emptyQueue = ArrayBlockingQueue<AudioFrame>(16)
     private val readyQueue = ArrayBlockingQueue<AudioFrame>(16)
@@ -80,13 +81,18 @@ internal class ShellRecordingEngine {
     }
 
     private fun createAudioRecord(plan: CapturePlan): AudioRecord {
+        val channelConfig = if (plan.channelCount > 1) {
+            AudioFormat.CHANNEL_IN_STEREO
+        } else {
+            AudioFormat.CHANNEL_IN_MONO
+        }
         val bufferSize = AudioRecord.getMinBufferSize(plan.sampleRate,
-            AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT)
+            channelConfig, AudioFormat.ENCODING_PCM_16BIT)
         val minBufferSize = if (bufferSize > 0) bufferSize else 4096
         return AudioRecord(
-            AudioSource.VOICE_COMMUNICATION.value,
+            plan.source.value,
             plan.sampleRate,
-            AudioFormat.CHANNEL_IN_MONO,
+            channelConfig,
             AudioFormat.ENCODING_PCM_16BIT,
             minBufferSize
         )
@@ -105,6 +111,7 @@ internal class ShellRecordingEngine {
 
         val mux = MediaMuxer(outputFile!!.fileDescriptor, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4)
         this.muxer = mux
+        muxerStarted = false
     }
 
     private fun captureLoop() {
@@ -164,6 +171,7 @@ internal class ShellRecordingEngine {
                     if (trackIndex < 0) {
                         trackIndex = mux.addTrack(enc.getOutputFormat())
                         mux.start()
+                        muxerStarted = true
                     }
                     val outBuf = enc.getOutputBuffer(outputBufIndex)
                     if (outBuf != null) {
@@ -207,8 +215,13 @@ internal class ShellRecordingEngine {
             captureThread?.join(2000); captureThread = null
             encoderThread?.join(4000); encoderThread = null
 
-            encoder?.stop(); encoder?.release(); encoder = null
-            muxer?.stop(); muxer?.release(); muxer = null
+            encoder?.let { runCatching { it.stop() } }
+            encoder?.release()
+            encoder = null
+            if (muxerStarted) muxer?.let { runCatching { it.stop() } }
+            muxer?.release()
+            muxer = null
+            muxerStarted = false
 
             outputFile?.close(); outputFile = null
             currentPlan = null

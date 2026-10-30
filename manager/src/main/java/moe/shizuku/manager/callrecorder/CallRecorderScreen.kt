@@ -43,6 +43,7 @@ import kotlinx.coroutines.launch
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ui.theme.ShizukuTheme
 import kotlinx.coroutines.delay
+import androidx.compose.ui.platform.LocalContext
 
 @OptIn(ExperimentalMaterial3Api::class)
 class CallRecorderActivity : ComponentActivity() {
@@ -77,6 +78,7 @@ fun CallRecorderScreen(onBack: () -> Unit = {}) {
 
 @Composable
 fun RecordingControlsScreen() {
+    val context = LocalContext.current
     var isRecording by remember { mutableStateOf(false) }
     var durationSeconds by remember { mutableIntStateOf(0) }
     var scope = rememberCoroutineScope()
@@ -135,7 +137,21 @@ fun RecordingControlsScreen() {
         )
         Spacer(modifier = Modifier.height(32.dp))
         Button(
-            onClick = { isRecording = !isRecording },
+            onClick = {
+                val action = if (isRecording) {
+                    "com.krishna.omnishizuku.action.STOP_RECORDING"
+                } else {
+                    "com.krishna.omnishizuku.action.START_RECORDING"
+                }
+                val intent = android.content.Intent(context, RecordingForegroundService::class.java)
+                    .setAction(action)
+                if (isRecording) {
+                    context.startService(intent)
+                } else {
+                    context.startForegroundService(intent)
+                }
+                isRecording = !isRecording
+            },
             enabled = true,
             modifier = Modifier.fillMaxWidth(),
             colors = androidx.compose.material3.ButtonDefaults.buttonColors(

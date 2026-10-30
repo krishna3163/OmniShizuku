@@ -6,11 +6,14 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.app.Service
 import android.content.Intent
+import android.content.ComponentName
+import android.content.ServiceConnection
 import android.os.IBinder
 import android.os.ParcelFileDescriptor
 import androidx.core.app.NotificationCompat
+import moe.shizuku.manager.BuildConfig
 import moe.shizuku.manager.R
-import moe.shizuku.manager.callrecorder.IShellService.Stub as ShellServiceStub
+import rikka.shizuku.Shizuku
 import java.io.File
 
 class RecordingForegroundService : Service() {
@@ -21,6 +24,20 @@ class RecordingForegroundService : Service() {
 
     private var shellService: IShellService? = null
     private var outputFile: ParcelFileDescriptor? = null
+    private var bound = false
+
+    private val serviceConnection = object : ServiceConnection {
+        override fun onServiceConnected(name: ComponentName, service: IBinder) {
+            shellService = IShellService.Stub.asInterface(service)
+            startShellRecording()
+        }
+
+        override fun onServiceDisconnected(name: ComponentName) {
+            shellService = null
+            bound = false
+            stopRecordingSession()
+        }
+    }
 
     override fun onBind(intent: Intent?): IBinder? = null
 
@@ -34,41 +51,70 @@ class RecordingForegroundService : Service() {
     }
 
     private fun startRecordingSession() {
+        if (outputFile != null) return
         createNotificationChannel()
         val notification = buildNotification("Recording call...")
         startForeground(NOTIFICATION_ID, notification)
 
-        bindToShellService { service ->
-            shellService = service
-            val recordingDir = getExternalFilesDir(null) ?: filesDir
-            val file = File(recordingDir, "call_${System.currentTimeMillis()}.ogg")
-            val mode = ParcelFileDescriptor.MODE_READ_WRITE or ParcelFileDescriptor.MODE_CREATE
-            outputFile = ParcelFileDescriptor.open(file, mode)
-
-            service.startRecording(
-                outputFile,
-                0, // VOICE_COMMUNICATION
-                -1,
-                false,
-                0, // OPUS
-                16000
-            )
-        }
+        val recordingDir = getExternalFilesDir(null) ?: filesDir
+        val file = File(recordingDir, "call_${System.currentTimeMillis()}.m4a")
+        val mode = ParcelFileDescriptor.MODE_READ_WRITE or
+            ParcelFileDescriptor.MODE_CREATE or ParcelFileDescriptor.MODE_TRUNCATE
+        outputFile = ParcelFileDescriptor.open(file, mode)
+        bindToShellService()
     }
 
     private fun stopRecordingSession() {
-        shellService?.stopRecording()
+        runCatching { shellService?.stopRecording() }
         shellService = null
+        if (bound) {
+            runCatching { Shizuku.unbindUserService(userServiceArgs, serviceConnection, false) }
+            bound = false
+        }
         outputFile?.close()
         outputFile = null
         stopForeground(true)
         stopSelf()
     }
 
-    private fun bindToShellService(callback: (IShellService) -> Unit) {
-        // Placeholder - actual Shizuku binding happens via the app's existing Shizuku client
-        // when the shell service is available. This ensures the app compiles without
-        // depending on nonexistent wrapper classes.
+    private val userServiceArgs by lazy {
+        Shizuku.UserServiceArgs(
+            ComponentName(packageName, ShellService::class.java.name)
+        )
+            .daemon(false)
+            .processNameSuffix("callrecorder")
+            .debuggable(BuildConfig.DEBUG)
+            .version(BuildConfig.VERSION_CODE)
+            .tag("omnishizuku-call-recorder")
+    }
+
+    private fun bindToShellService() {
+        if (!Shizuku.pingBinder()) {
+            stopRecordingSession()
+            return
+        }
+        if (runCatching { Shizuku.bindUserService(userServiceArgs, serviceConnection) }.isFailure) {
+            stopRecordingSession()
+            return
+        }
+        bound = true
+    }
+
+    private fun startShellRecording() {
+        val service = shellService ?: return
+        val output = outputFile ?: return
+        runCatching {
+            service.startRecording(
+                output,
+                AudioSource.VOICE_COMMUNICATION.ordinal,
+                -1,
+                false,
+                RecordingCodec.AAC.ordinal,
+                RecordingCodec.AAC.defaultBitrate
+            )
+        }.onFailure {
+            stopRecordingSession()
+        }
     }
 
     private fun createNotificationChannel() {

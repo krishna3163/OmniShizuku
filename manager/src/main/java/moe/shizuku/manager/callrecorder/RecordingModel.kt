@@ -4,8 +4,8 @@ package moe.shizuku.manager.callrecorder
  * Audio source for capture. Mirrors MediaRecorder.AudioSource values.
  */
 enum class AudioSource(val value: Int) {
-    VOICE_COMMUNICATION(0),
-    VOICE_CALL(1),
+    VOICE_COMMUNICATION(7),
+    VOICE_CALL(4),
     MIC(1),
     CAMCORDER(5),
     VOICE_RECOGNITION(6),
@@ -44,8 +44,8 @@ data class RecordingPlan(
     val primary: CapturePlan = CapturePlan(),
     val secondary: CapturePlan? = null,
     val isAudioChannelSplitEnabled: Boolean = false,
-    val codec: RecordingCodec = RecordingCodec.OPUS,
-    val bitrate: Int = RecordingCodec.OPUS.defaultBitrate
+    val codec: RecordingCodec = RecordingCodec.AAC,
+    val bitrate: Int = RecordingCodec.AAC.defaultBitrate
 )
 
 /**
