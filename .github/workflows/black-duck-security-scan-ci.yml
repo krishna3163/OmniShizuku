@@ -30,7 +30,11 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - name: Black Duck scan not configured
+        if: ${{ vars.BLACKDUCKSCA_URL == '' && vars.COVERITY_URL == '' && vars.POLARIS_SERVER_URL == '' && vars.SRM_URL == '' }}
+        run: echo "::notice::Skipping Black Duck scan because no scan service URL variables are configured."
       - name: Black Duck SCA scan
+        if: ${{ vars.BLACKDUCKSCA_URL != '' || vars.COVERITY_URL != '' || vars.POLARIS_SERVER_URL != '' || vars.SRM_URL != '' }}
         uses: blackduck-inc/black-duck-security-scan@805cbd09e806b01907bbea0f990723c2bb85abe9
         with:
           ### ---------- BLACKDUCK SCA SCANNING: REQUIRED FIELDS ----------
