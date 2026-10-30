@@ -164,9 +164,12 @@ jobs:
   neuralegion_scan:
     runs-on: ubuntu-latest
     name: A job to run a Nexploit scan
+    env:
+      NEURALEGION_CONFIGURED: ${{ secrets.NEURALEGION_TOKEN != '' }}
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Start Nexploit Scan 🏁
+        if: env.NEURALEGION_CONFIGURED == 'true'
         id: start
         uses: NeuraLegion/run-scan@29ebd17b4fd6292ce7a238a59401668953b37fbe
         with:
@@ -175,4 +178,8 @@ jobs:
           discovery_types: |
             [ "crawler" ]
           crawler_urls: |
-            [ "https://brokencrystals.com" ] # ✏️ Update this to the url you wish to scan
+            [ "https://brokencrystals.com" ]
+
+      - name: Report missing NeuraLegion configuration
+        if: env.NEURALEGION_CONFIGURED != 'true'
+        run: echo "::warning::Set NEURALEGION_TOKEN to enable this scan."
