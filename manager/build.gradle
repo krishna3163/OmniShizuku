@@ -61,7 +61,12 @@ android {
             useLegacyPackaging = true
         }
         resources {
-            excludes += ['**']
+            excludes += [
+                '/META-INF/*.kotlin_module',
+                '/META-INF/LICENSE.md',
+                '/META-INF/NOTICE.md',
+                '/META-INF/LICENCE.md'
+            ]
         }
     }
     androidResources {

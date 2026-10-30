@@ -667,6 +667,10 @@ abstract class HomeActivity : AppActivity() {
                                         settingsTargetSection = SettingsSection.AUTOMATION
                                         selectedTab = 4
                                     },
+                                    isVisible = targetTab == 0 && selectedTab == 0,
+                                    onOpenDeviceInfo = {
+                                        activeDetail = moe.shizuku.manager.ui.Detail.DEVICE_INFO
+                                    },
                                     listState = homeListState
                                 )
                                 1 -> moe.shizuku.manager.module.ModulesScreen(onOpenWebUi = {
@@ -1273,6 +1277,8 @@ private fun HomeScreen(
     onRequestLocalNetworkPermission: () -> Unit,
     onStartDhizuku: () -> Unit,
     dhizukuEnabled: Boolean,
+    isVisible: Boolean,
+    onOpenDeviceInfo: () -> Unit,
     onOpenAutomationSettings: () -> Unit = {},
     listState: LazyListState = rememberLazyListState()
 ) {
@@ -1515,10 +1521,18 @@ private fun HomeScreen(
             }
 
             item {
+                HomeCurrentUsageCard(isVisible = isVisible)
+            }
+
+            item {
                 DiagnosticsCard(
                     diagnostics = diagnostics,
                     onCopyDiagnostics = onCopyDiagnostics
                 )
+            }
+
+            item {
+                HomeDeviceInfoCard(onClick = onOpenDeviceInfo)
             }
         }
     }

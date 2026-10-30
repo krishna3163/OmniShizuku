@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -23,11 +24,15 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.*
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +40,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -72,6 +78,13 @@ private val ActiveDotSize = 10.dp
  */
 private val ActiveGreen = Color(0xFF34C759)
 
+private enum class LabCategory(@StringRes val titleRes: Int) {
+    APP_MANAGEMENT(R.string.labs_category_app_management),
+    SYSTEM_CONTROLS(R.string.labs_category_system_controls),
+    UTILITIES(R.string.labs_category_utilities),
+    COMPANION_APPS(R.string.labs_category_companion_apps)
+}
+
 /**
  * The things that are gone to rather than lived in.
  *
@@ -91,6 +104,7 @@ private val ActiveGreen = Color(0xFF34C759)
 @Composable
 fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     val context = LocalContext.current
+    var query by rememberSaveable { mutableStateOf("") }
 
     // What each feature is doing, so the list can be read without opening eight screens to find
     // out. It is the only place every one of them is in sight at once, and a hiding mode that is
@@ -110,82 +124,220 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     LaunchedEffect(refresh) {
         active = withContext(Dispatchers.IO) { activeFeatures(context) }
     }
-    // Every feature there is, in no particular order. The order is worked out below.
-    val entries = listOf(
-        LabEntry(R.string.tab_manage, Icons.Outlined.AdminPanelSettings, Detail.APP_OPS),
-        LabEntry(R.string.tab_essentials, Icons.Outlined.AutoAwesome, Detail.ESSENTIALS),
-        LabEntry(R.string.tab_shell, Icons.Outlined.Terminal, Detail.SHELL),
-        LabEntry(
-            AppToggleFeature.FIREWALL.titleRes,
-            AppToggleFeature.FIREWALL.icon,
-            Detail.FIREWALL
-        ),
-        LabEntry(
-            AppToggleFeature.AUTOSTART.titleRes,
-            AppToggleFeature.AUTOSTART.icon,
-            Detail.AUTOSTART
-        ),
-        // The six hiding modes are one row rather than six: they are the same list with a
-        // different setting behind it, and six rows of the same shape was most of the list.
-        LabEntry(R.string.tab_hiding, Icons.Outlined.VisibilityOff, Detail.HIDING),
-        LabEntry(R.string.tab_log, Icons.AutoMirrored.Outlined.ReceiptLong, Detail.LOG),
-        LabEntry(R.string.tab_device_info, Icons.Outlined.PhoneAndroid, Detail.DEVICE_INFO),
-        LabEntry(R.string.tab_force_dark, Icons.Outlined.DarkMode, Detail.FORCE_DARK),
-        LabEntry(R.string.tab_activities, Icons.Outlined.Widgets, Detail.ACTIVITIES),
-        LabEntry(R.string.tab_power, Icons.Outlined.PowerSettingsNew, Detail.POWER),
-        LabEntry(R.string.tab_display, Icons.Outlined.AspectRatio, Detail.DISPLAY),
-        LabEntry(R.string.tab_wifi_passwords, Icons.Outlined.Wifi, Detail.WIFI_PASSWORDS),
-        LabEntry(R.string.tab_files, Icons.Outlined.FolderOpen, Detail.FILES),
-        LabEntry(R.string.tab_install, Icons.Outlined.Android, Detail.INSTALL),
-        LabEntry(R.string.tab_debloater, Icons.Outlined.Delete, Detail.DEBLOATER),
-        LabEntry(R.string.tab_freezer, Icons.Outlined.AcUnit, Detail.FREEZER),
-        LabEntry(R.string.tab_systemui_tuner, Icons.Outlined.Settings, Detail.SYSTEMUI_TUNER),
-        LabEntry(R.string.tab_enforce_doze, Icons.Outlined.DarkMode, Detail.ENFORCE_DOZE),
-        LabEntry(R.string.tab_private_dns, Icons.Outlined.Wifi, Detail.PRIVATE_DNS),
-        LabEntry(R.string.tab_audio_master, Icons.Outlined.VolumeUp, Detail.AUDIO_MASTER),
-        LabEntry(R.string.tab_carrier_tether, Icons.Outlined.WifiTethering, Detail.TETHER),
-        LabEntry(R.string.tab_screen_security, Icons.Outlined.Security, Detail.SECURITY),
-        LabEntry(R.string.tab_autodnd, Icons.Outlined.DoNotDisturbOn, Detail.AUTODND),
-        LabEntry(R.string.tab_optimizer, Icons.Outlined.Speed, Detail.OPTIMIZER),
-        LabEntry(R.string.tools_terminal, Icons.Outlined.Terminal, Detail.TERMINAL),
-        LabEntry(R.string.intents_title, Icons.Outlined.Bolt, Detail.INTENTS),
-        LabEntry(R.string.tools_stealth, Icons.Outlined.VisibilityOff, Detail.STEALTH),
-        LabEntry(R.string.settings_permissions, Icons.Outlined.VerifiedUser, Detail.PERMISSIONS),
-        LabEntry(R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS),
-        LabEntry(
-            R.string.lab_companion_call_recorder,
-            Icons.Outlined.Call,
-            packageName = "com.kitsumed.shizucallrecorder",
-            releaseUrl = "https://github.com/kitsumed/ShizuCallRecorder/releases/latest"
-        ),
-        LabEntry(
-            R.string.lab_companion_quick_tiles,
-            Icons.Outlined.Widgets,
-            packageName = "com.rbn.qtsettings",
-            releaseUrl = "https://github.com/RBN-Apps/Quick-Tile-Settings/releases/latest"
-        ),
-        LabEntry(
-            R.string.lab_companion_shizuwall,
-            Icons.Outlined.Security,
-            packageName = "com.arslan.shizuwall",
-            releaseUrl = "https://github.com/AhmetCanArslan/ShizuWall/releases/latest"
+    // The full Labs catalogue. Descriptive terms are indexed alongside the visible names so a
+    // search can find common alternate names without adding duplicate entries to the list.
+    val entries = remember {
+        listOf(
+            LabEntry(
+                R.string.tab_manage, Icons.Outlined.AdminPanelSettings, Detail.APP_OPS,
+                LabCategory.APP_MANAGEMENT, "app permissions app ops"
+            ),
+            LabEntry(
+                R.string.tab_essentials, Icons.Outlined.AutoAwesome, Detail.ESSENTIALS,
+                LabCategory.UTILITIES, "essentials hub"
+            ),
+            LabEntry(
+                R.string.tab_shell, Icons.Outlined.Terminal, Detail.SHELL,
+                LabCategory.UTILITIES, "command line shell"
+            ),
+            LabEntry(
+                AppToggleFeature.FIREWALL.titleRes,
+                AppToggleFeature.FIREWALL.icon,
+                Detail.FIREWALL,
+                LabCategory.APP_MANAGEMENT,
+                "network block internet deny"
+            ),
+            LabEntry(
+                AppToggleFeature.AUTOSTART.titleRes,
+                AppToggleFeature.AUTOSTART.icon,
+                Detail.AUTOSTART,
+                LabCategory.APP_MANAGEMENT,
+                "auto start startup launch at boot"
+            ),
+            // The six hiding modes are one row rather than six: they are the same list with a
+            // different setting behind it, and six rows of the same shape was most of the list.
+            LabEntry(
+                R.string.tab_hiding, Icons.Outlined.VisibilityOff, Detail.HIDING,
+                LabCategory.APP_MANAGEMENT, "hide apps packages"
+            ),
+            LabEntry(
+                R.string.tab_log, Icons.AutoMirrored.Outlined.ReceiptLong, Detail.LOG,
+                LabCategory.UTILITIES, "logs diagnostics"
+            ),
+            LabEntry(
+                R.string.tab_device_info, Icons.Outlined.PhoneAndroid, Detail.DEVICE_INFO,
+                LabCategory.UTILITIES, "device details phone hardware"
+            ),
+            LabEntry(
+                R.string.tab_force_dark, Icons.Outlined.DarkMode, Detail.FORCE_DARK,
+                LabCategory.APP_MANAGEMENT, "dark mode applications"
+            ),
+            LabEntry(
+                R.string.tab_activities, Icons.Outlined.Widgets, Detail.ACTIVITIES,
+                LabCategory.UTILITIES, "launch activities"
+            ),
+            LabEntry(
+                R.string.tab_power, Icons.Outlined.PowerSettingsNew, Detail.POWER,
+                LabCategory.SYSTEM_CONTROLS, "power menu reboot"
+            ),
+            LabEntry(
+                R.string.tab_display, Icons.Outlined.AspectRatio, Detail.DISPLAY,
+                LabCategory.SYSTEM_CONTROLS, "screen resolution density"
+            ),
+            LabEntry(
+                R.string.tab_wifi_passwords, Icons.Outlined.Wifi, Detail.WIFI_PASSWORDS,
+                LabCategory.SYSTEM_CONTROLS, "wireless network credentials"
+            ),
+            LabEntry(
+                R.string.tab_files, Icons.Outlined.FolderOpen, Detail.FILES,
+                LabCategory.UTILITIES, "file manager browse"
+            ),
+            LabEntry(
+                R.string.tab_install, Icons.Outlined.Android, Detail.INSTALL,
+                LabCategory.UTILITIES, "install apk package"
+            ),
+            LabEntry(
+                R.string.tab_debloater, Icons.Outlined.Delete, Detail.DEBLOATER,
+                LabCategory.APP_MANAGEMENT, "debloat remove uninstall apps"
+            ),
+            LabEntry(
+                R.string.tab_freezer, Icons.Outlined.AcUnit, Detail.FREEZER,
+                LabCategory.APP_MANAGEMENT, "freeze suspend applications"
+            ),
+            LabEntry(
+                R.string.tab_systemui_tuner, Icons.Outlined.Settings, Detail.SYSTEMUI_TUNER,
+                LabCategory.SYSTEM_CONTROLS, "system ui settings status bar"
+            ),
+            LabEntry(
+                R.string.tab_enforce_doze, Icons.Outlined.DarkMode, Detail.ENFORCE_DOZE,
+                LabCategory.SYSTEM_CONTROLS, "doze battery idle"
+            ),
+            LabEntry(
+                R.string.tab_private_dns, Icons.Outlined.Wifi, Detail.PRIVATE_DNS,
+                LabCategory.SYSTEM_CONTROLS, "dns domain name server"
+            ),
+            LabEntry(
+                R.string.tab_audio_master, Icons.Outlined.VolumeUp, Detail.AUDIO_MASTER,
+                LabCategory.SYSTEM_CONTROLS, "volume sound audio"
+            ),
+            LabEntry(
+                R.string.tab_carrier_tether, Icons.Outlined.WifiTethering, Detail.TETHER,
+                LabCategory.SYSTEM_CONTROLS, "hotspot tethering"
+            ),
+            LabEntry(
+                R.string.tab_screen_security, Icons.Outlined.Security, Detail.SECURITY,
+                LabCategory.SYSTEM_CONTROLS, "screen capture protection secure"
+            ),
+            LabEntry(
+                R.string.tab_autodnd, Icons.Outlined.DoNotDisturbOn, Detail.AUTODND,
+                LabCategory.SYSTEM_CONTROLS, "do not disturb notifications"
+            ),
+            LabEntry(
+                R.string.tab_optimizer, Icons.Outlined.Speed, Detail.OPTIMIZER,
+                LabCategory.APP_MANAGEMENT, "app optimization performance"
+            ),
+            LabEntry(
+                R.string.tools_terminal, Icons.Outlined.Terminal, Detail.TERMINAL,
+                LabCategory.UTILITIES, "terminal command prompt"
+            ),
+            LabEntry(
+                R.string.intents_title, Icons.Outlined.Bolt, Detail.INTENTS,
+                LabCategory.UTILITIES, "intent activity broadcast"
+            ),
+            LabEntry(
+                R.string.tools_stealth, Icons.Outlined.VisibilityOff, Detail.STEALTH,
+                LabCategory.UTILITIES, "hide shizuku root detection"
+            ),
+            LabEntry(
+                R.string.settings_permissions, Icons.Outlined.VerifiedUser, Detail.PERMISSIONS,
+                LabCategory.UTILITIES, "permission access grant"
+            ),
+            LabEntry(
+                R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS,
+                LabCategory.UTILITIES, "more applications discover"
+            ),
+            LabEntry(
+                R.string.lab_companion_call_recorder,
+                Icons.Outlined.Call,
+                category = LabCategory.COMPANION_APPS,
+                searchTerms = "phone calls recording recorder",
+                packageName = "com.kitsumed.shizucallrecorder",
+                releaseUrl = "https://github.com/kitsumed/ShizuCallRecorder/releases/latest"
+            ),
+            LabEntry(
+                R.string.lab_companion_quick_tiles,
+                Icons.Outlined.Widgets,
+                category = LabCategory.COMPANION_APPS,
+                searchTerms = "quick settings tiles",
+                packageName = "com.rbn.qtsettings",
+                releaseUrl = "https://github.com/RBN-Apps/Quick-Tile-Settings/releases/latest"
+            ),
+            LabEntry(
+                R.string.lab_companion_shizuwall,
+                Icons.Outlined.Security,
+                category = LabCategory.COMPANION_APPS,
+                searchTerms = "wallpaper security",
+                packageName = "com.arslan.shizuwall",
+                releaseUrl = "https://github.com/AhmetCanArslan/ShizuWall/releases/latest"
+            )
         )
-    )
+    }
 
-    // By name, not by the order these features arrived in. A list is read by looking something up:
-    // the order they were built in put the six hiding lists after the two that need a running
-    // server, so finding one meant reading the whole list. Sorted here rather than written out in
-    // order above, so a row added later cannot land in the wrong place - it goes wherever its name
-    // goes.
-    val rows = entries
-        .filterNot { it.detail == Detail.ESSENTIALS && !essentialsHubUnlocked }
-        .map { entry -> entry to stringResource(entry.labelRes) }
-        .sortedBy { (_, label) -> label.lowercase() }
+    val visibleEntries = entries.filterNot {
+        it.detail == Detail.ESSENTIALS && !essentialsHubUnlocked
+    }
+    val displayEntries = visibleEntries.map { entry ->
+        LabDisplayEntry(
+            entry = entry,
+            label = stringResource(entry.labelRes),
+            categoryLabel = stringResource(entry.category.titleRes)
+        )
+    }
+    val searchItems = remember(displayEntries) {
+        displayEntries.map { row ->
+            LabsSearchItem(
+                value = row,
+                name = row.label,
+                description = row.entry.searchTerms,
+                aliases = row.entry.searchTerms,
+                category = row.categoryLabel
+            )
+        }
+    }
+    val filteredEntries = filterLabsSearchItems(searchItems, query).map { it.value }
+    val groupedEntries = filteredEntries
+        .groupBy { it.entry.category }
+        .toSortedMap(compareBy { it.ordinal })
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text(stringResource(R.string.tab_labs)) },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
+        )
+
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 8.dp),
+            singleLine = true,
+            placeholder = { Text(stringResource(R.string.labs_search_hint)) },
+            leadingIcon = {
+                Icon(Icons.Outlined.Search, contentDescription = null)
+            },
+            trailingIcon = if (query.isNotEmpty()) {
+                {
+                    IconButton(onClick = { query = "" }) {
+                        Icon(
+                            Icons.Filled.Clear,
+                            contentDescription = stringResource(R.string.labs_clear_search)
+                        )
+                    }
+                }
+            } else {
+                null
+            }
         )
 
         Box(
@@ -194,6 +346,9 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 .weight(1f)
         ) {
             val listState = rememberLazyListState()
+            LaunchedEffect(query) {
+                listState.scrollToItem(0)
+            }
             LazyColumn(
                 state = listState,
                 modifier = Modifier.fillMaxSize(),
@@ -205,53 +360,93 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 ),
                 verticalArrangement = Arrangement.spacedBy(13.dp)
             ) {
-            items(rows, key = { (entry, _) -> "${entry.labelRes}:${entry.packageName.orEmpty()}" }) { (entry, label) ->
-                SegmentedCard {
-                    SegmentedListItem(
-                        // The item that opened a detail takes the focus back when it closes, on a
-                        // TV; off one this is nothing.
-                        modifier = entry.detail?.let { Modifier.televisionReturnFocus(it) } ?: Modifier,
-                        centerSlots = true,
-                        // The icon keeps the tinted plate it had on the tiles. It is what makes
-                        // the list scannable the way a launcher's icons are: at this size the
-                        // outline of the icon alone is not enough to tell one row from another at
-                        // a glance, and the colour is what the eye lands on first.
-                        leadingContent = {
-                            Box {
-                                FeaturePlateIcon(entry.icon)
-
-                                // On the plate's corner, the same mark the tiles carried: a mode
-                                // that is on with apps listed looks exactly like one that is off
-                                // from here, and this is the one thing about a row that changes on
-                                // its own.
-                                if (entry.detail?.let { it in active } == true) {
-                                    Box(
-                                        modifier = Modifier
-                                            .align(Alignment.BottomEnd)
-                                            .offset(x = 2.dp, y = 2.dp)
-                                            .size(ActiveDotSize)
-                                            .background(ActiveGreen, CircleShape)
-                                    )
-                                }
-                            }
-                        },
-                        headlineContent = { Text(label) },
-                        trailingContent = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                contentDescription = null
+                if (groupedEntries.isEmpty()) {
+                    item(key = "empty-search") {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(vertical = 48.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = stringResource(R.string.labs_search_empty_title),
+                                style = MaterialTheme.typography.titleMedium
                             )
-                        },
-                        onClick = {
-                            if (entry.packageName != null && entry.releaseUrl != null) {
-                                openCompanionTool(context, entry.packageName, entry.releaseUrl)
-                            } else {
-                                entry.detail?.let(onOpenDetail)
+                            Text(
+                                text = stringResource(R.string.labs_search_empty_message),
+                                modifier = Modifier.padding(top = 6.dp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            TextButton(
+                                onClick = { query = "" },
+                                modifier = Modifier.padding(top = 4.dp)
+                            ) {
+                                Text(stringResource(R.string.labs_clear_search))
                             }
                         }
-                    )
+                    }
+                } else {
+                    groupedEntries.forEach { (category, rows) ->
+                        item(key = "category-${category.name}") {
+                            Text(
+                                text = rows.first().categoryLabel,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(start = 4.dp, top = 8.dp, bottom = 1.dp),
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.primary
+                            )
+                        }
+                        items(
+                            items = rows,
+                            key = { row ->
+                                "${row.entry.labelRes}:${row.entry.packageName.orEmpty()}"
+                            }
+                        ) { row ->
+                            val entry = row.entry
+                            SegmentedCard {
+                                SegmentedListItem(
+                                    modifier = entry.detail?.let {
+                                        Modifier.televisionReturnFocus(it)
+                                    } ?: Modifier,
+                                    centerSlots = true,
+                                    leadingContent = {
+                                        Box {
+                                            FeaturePlateIcon(entry.icon)
+                                            if (entry.detail?.let { it in active } == true) {
+                                                Box(
+                                                    modifier = Modifier
+                                                        .align(Alignment.BottomEnd)
+                                                        .offset(x = 2.dp, y = 2.dp)
+                                                        .size(ActiveDotSize)
+                                                        .background(ActiveGreen, CircleShape)
+                                                )
+                                            }
+                                        }
+                                    },
+                                    headlineContent = { Text(row.label) },
+                                    trailingContent = {
+                                        Icon(
+                                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                            contentDescription = null
+                                        )
+                                    },
+                                    onClick = {
+                                        if (entry.packageName != null && entry.releaseUrl != null) {
+                                            openCompanionTool(
+                                                context,
+                                                entry.packageName,
+                                                entry.releaseUrl
+                                            )
+                                        } else {
+                                            entry.detail?.let(onOpenDetail)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
                 }
-            }
             }
 
             ScrollToTopButton(
@@ -317,8 +512,16 @@ private data class LabEntry(
     @StringRes val labelRes: Int,
     val icon: ImageVector,
     val detail: Detail? = null,
+    val category: LabCategory,
+    val searchTerms: String,
     val packageName: String? = null,
     val releaseUrl: String? = null
+)
+
+private data class LabDisplayEntry(
+    val entry: LabEntry,
+    val label: String,
+    val categoryLabel: String
 )
 
 private fun openCompanionTool(context: Context, packageName: String, releaseUrl: String) {
