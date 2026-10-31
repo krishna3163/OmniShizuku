@@ -3,6 +3,7 @@ package moe.shizuku.privileged.api;
 import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 public class ForwardActivity extends Activity {
