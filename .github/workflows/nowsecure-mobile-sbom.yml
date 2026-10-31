@@ -51,7 +51,7 @@ jobs:
 
       - name: NowSecure upload app
         if: env.NOWSECURE_CONFIGURED == 'true'
-        uses: nowsecure/nowsecure-sbom-action@ecb731b6f17a83fa53f756f9dae2ec7034c5ed7c
+        uses: nowsecure/nowsecure-sbom-action@e64cb6d8d39d4cb6c58b4491fa4817b7a8ef3c14
         with:
           token: ${{ secrets.NS_TOKEN }}
           app_file: manager/build/outputs/apk/debug/manager-debug.apk
