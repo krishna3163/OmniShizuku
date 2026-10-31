@@ -10,6 +10,8 @@ pluginManagement {
         id("com.android.application") version "9.5.0-rc01"
         id("com.android.library") version "9.6.0-alpha01"
         id("com.google.devtools.ksp") version "2.3.6"
+        id("com.android.library") version "9.5.0-rc01"
+        id("com.google.devtools.ksp") version "2.3.12"
         id("org.jetbrains.kotlin.plugin.compose") version "2.4.21"
         id("org.jetbrains.kotlin.plugin.serialization") version "2.4.21"
         id("dev.rikka.tools.autoresconfig") version "1.2.2"
