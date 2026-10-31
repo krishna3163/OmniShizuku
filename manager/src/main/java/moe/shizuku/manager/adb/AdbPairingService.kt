@@ -58,7 +58,7 @@ class AdbPairingService : Service() {
         // we need to put the port into Intent
         val notification = createInputNotification(port)
 
-        getSystemService(NotificationManager::class.java).notify(notificationId, notification)
+        getSystemService(NotificationManager::class.java)?.notify(notificationId, notification)
     }
 
     private var started = false
@@ -66,7 +66,7 @@ class AdbPairingService : Service() {
     override fun onCreate() {
         super.onCreate()
 
-        getSystemService(NotificationManager::class.java).createNotificationChannel(
+        getSystemService(NotificationManager::class.java)?.createNotificationChannel(
             NotificationChannel(
                 notificationChannel,
                 getString(R.string.notification_channel_adb_pairing),
@@ -113,7 +113,7 @@ class AdbPairingService : Service() {
 
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
                     && e is ForegroundServiceStartNotAllowedException) {
-                    getSystemService(NotificationManager::class.java).notify(notificationId, notification)
+                    getSystemService(NotificationManager::class.java)?.notify(notificationId, notification)
                 }
             }
         }
