@@ -125,7 +125,14 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         context.getSharedPreferences("labs_preferences", Context.MODE_PRIVATE)
     }
     var isGridView by rememberSaveable {
-        mutableStateOf(prefs.getBoolean("is_grid_view", false))
+        mutableStateOf(
+            if (prefs.contains("is_grid_view_v2")) {
+                prefs.getBoolean("is_grid_view_v2", true)
+            } else {
+                prefs.edit().putBoolean("is_grid_view_v2", true).apply()
+                true
+            }
+        )
     }
     var query by rememberSaveable { mutableStateOf("") }
 
@@ -369,7 +376,7 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 IconButton(
                     onClick = {
                         isGridView = !isGridView
-                        prefs.edit().putBoolean("is_grid_view", isGridView).apply()
+                        prefs.edit().putBoolean("is_grid_view_v2", isGridView).apply()
                     }
                 ) {
                     Icon(
