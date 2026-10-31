@@ -106,3 +106,41 @@ fun ScrollToTopButton(
         }
     }
 }
+
+/**
+ * The same button for a screen built on `LazyVerticalGrid`.
+ */
+@Composable
+fun ScrollToTopButton(
+    gridState: androidx.compose.foundation.lazy.grid.LazyGridState,
+    bottomPadding: Dp,
+    modifier: Modifier = Modifier,
+    extraBottom: Dp = 0.dp
+) {
+    val scrolled by remember {
+        derivedStateOf {
+            gridState.firstVisibleItemIndex > 0 || gridState.firstVisibleItemScrollOffset > 0
+        }
+    }
+    val scope = rememberCoroutineScope()
+
+    AnimatedVisibility(
+        visible = scrolled,
+        enter = fadeIn() + scaleIn(),
+        exit = fadeOut() + scaleOut(),
+        modifier = modifier
+    ) {
+        SmallFloatingActionButton(
+            onClick = { scope.launch { gridState.animateScrollToItem(0) } },
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer,
+            modifier = Modifier.padding(end = 16.dp, bottom = bottomPadding + 16.dp + extraBottom)
+        ) {
+            Icon(
+                Icons.Filled.ArrowUpward,
+                contentDescription = stringResource(R.string.scroll_to_top)
+            )
+        }
+    }
+}
+
