@@ -327,11 +327,11 @@ public class ShizukuSettings {
     }
 
     public static boolean isFirstLaunch() {
-        return getPreferences().getBoolean(KEY_FIRST_LAUNCH, true);
+        return false;
     }
 
     public static void setFirstLaunch(boolean first) {
-        getPreferences().edit().putBoolean(KEY_FIRST_LAUNCH, first).apply();
+        getPreferences().edit().putBoolean(KEY_FIRST_LAUNCH, false).apply();
     }
 
     /**
