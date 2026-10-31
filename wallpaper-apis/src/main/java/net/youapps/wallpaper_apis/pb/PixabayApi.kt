@@ -26,13 +26,16 @@ class PixabayApi: WallpaperApi() {
             orientation = selectedFilters["orientation"].takeIf { it != "all" },
             contentType = selectedFilters["content_type"].takeIf { it != "all" },
             colors = selectedFilters["colors"].takeIf { it != "all" },
-        ).page.results.map { result ->
+        ).page.results.mapNotNull { result ->
+            val imgSrc = result.sources.entries.lastOrNull { it.key != "downloadUrl" }?.value
+                ?: result.sources.values.lastOrNull()
+                ?: return@mapNotNull null
             Wallpaper(
                 url = baseUrl + result.href,
-                imgSrc = result.sources.entries.last { it.key != "downloadUrl" }.value,
-                thumb = result.sources.values.first(),
-                title = result.alt,
-                author = result.user.username,
+                imgSrc = imgSrc,
+                thumb = result.sources.values.firstOrNull() ?: imgSrc,
+                title = result.alt.ifBlank { result.name },
+                author = result.user?.username ?: "Pixabay",
                 description = result.description,
                 category = result.name,
                 resolution = "${result.width}x${result.height}",
