@@ -3,7 +3,9 @@ package moe.shizuku.manager
 import android.app.Application
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.appcompat.app.AppCompatDelegate
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.topjohnwu.superuser.Shell
 import moe.shizuku.manager.ktx.logd
 import moe.shizuku.manager.ktx.isUserUnlockedCompat
@@ -11,9 +13,16 @@ import org.lsposed.hiddenapibypass.HiddenApiBypass
 import rikka.core.util.BuildUtils.atLeast30
 import rikka.material.app.LocaleDelegate
 
-lateinit var application: ShizukuApplication
+val application: ShizukuApplication
+    get() = ShizukuApplication.application
 
 class ShizukuApplication : Application() {
+
+    override fun attachBaseContext(base: Context?) {
+        super.attachBaseContext(base)
+        Companion.application = this
+        Companion.appContext = this
+    }
 
     companion object {
 
@@ -56,6 +65,26 @@ class ShizukuApplication : Application() {
         application = this
         appContext = applicationContext
         init(this)
+
+        // Crash reporting: Firebase Crashlytics is wired up in the build. Initialize safely so
+        // crashes are recorded instead of silently closing the app ("auto close") with no trace if unconfigured.
+        try {
+            FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true)
+        } catch (e: Throwable) {
+            Log.w("ShizukuCrash", "Crashlytics init failed", e)
+        }
+
+        // Last-resort safety net: catch any uncaught throwable that escapes the UI thread so the
+        // process is reported or logged rather than dying silently.
+        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+            Log.e("ShizukuCrash", "Uncaught exception", throwable)
+            try {
+                FirebaseCrashlytics.getInstance().recordException(throwable)
+            } catch (e: Throwable) {
+                // Ignore if Crashlytics is unavailable
+            }
+        }
+
         moe.shizuku.manager.service.WatchdogManager.init(this)
         moe.shizuku.manager.service.WatchdogManager.reconcileService(this)
         moe.shizuku.manager.service.SheveryNotificationManager.setup(this)
@@ -82,6 +111,12 @@ class ShizukuApplication : Application() {
         kotlin.concurrent.thread(name = "activities-assistant-restore") {
             moe.shizuku.manager.manage.Activities.restorePending()
         }
+
+        val dozeFilter = android.content.IntentFilter().apply {
+            addAction(android.content.Intent.ACTION_SCREEN_OFF)
+            addAction(android.content.Intent.ACTION_SCREEN_ON)
+        }
+        registerReceiver(moe.shizuku.manager.doze.DozeReceiver(), dozeFilter)
     }
 
 }

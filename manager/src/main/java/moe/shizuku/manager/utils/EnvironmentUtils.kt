@@ -36,7 +36,7 @@ object EnvironmentUtils {
 
     @JvmStatic
     fun isTelevision(): Boolean {
-        return isTV(application)
+        return runCatching { isTV(application) }.getOrDefault(false)
     }
 
     fun isTlsSupported(): Boolean {

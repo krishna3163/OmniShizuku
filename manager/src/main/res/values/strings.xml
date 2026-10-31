@@ -10,6 +10,8 @@
     <string name="accessibility_close">Close</string>
     <string name="accessibility_more_options">More options</string>
     <string name="accessibility_open_on_github">Open on GitHub</string>
+    <string name="developer_essentials_hub_unlocked">Essentials Hub is unlocked. Return to Labs to open it.</string>
+    <string name="device_info_load_failed">Couldn\'t load device information. Try refreshing.</string>
 
     
     <string name="home_status_service_is_running">%1$s is running</string>
@@ -1099,6 +1101,11 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="tab_shell">Shell</string>
     <string name="tab_labs">Labs</string>
     <string name="lab_more_apps">Shizuku Store</string>
+    <string name="lab_companion_call_recorder">Call recording (ShizuCallRecorder)</string>
+    <string name="dfroot_title">DFRoot (CVE-2026-43284)</string>
+    <string name="lab_companion_quick_tiles">Quick Settings tiles</string>
+    <string name="lab_companion_shizuwall">ShizuWall firewall</string>
+    <string name="lab_companion_open_failed">Could not open the companion app or its release page.</string>
     <string name="tab_firewall">Firewall</string>
     <string name="tab_autostart">Autostart</string>
     <string name="labs_filter_allowed">Allowed</string>
@@ -2057,6 +2064,25 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="files_working_extracting">Extracting</string>
 
 <string name="tab_install">App installer</string>
+    <string name="tab_debloater">Universal Debloater (UAD)</string>
+    <string name="tab_systemui_tuner">SystemUI Tuner</string>
+    <string name="tab_enforce_doze">Enforce Doze (Deep Sleep)</string>
+    <string name="tab_private_dns">Private DNS Controller</string>
+    <string name="tab_freezer">App Freezer</string>
+    <string name="tab_audio_master">Audio Stream Master</string>
+    <string name="tab_carrier_tether">Carrier Tethering</string>
+    <string name="tab_screen_security">Screen Security &amp; DRM</string>
+    <string name="tab_autodnd">Auto DND (Zen Mode)</string>
+    <string name="tab_optimizer">Axeron Gaming Optimizer</string>
+    <string name="tab_edge_lighting">Notification Edge Lighting</string>
+    <string name="tab_media_keys">Volume Key Track Skipper</string>
+    <string name="tab_essentials">Essentials Hub</string>
+    <string name="tab_dynamic_island">Dynamic Island</string>
+    <string name="tab_battery_center">Battery Center &amp; Guard</string>
+    <string name="tab_smart_pixels">Smart Pixels (AMOLED Saver)</string>
+    <string name="tab_watermark">Photo Watermark &amp; EXIF</string>
+    <string name="tab_pocket_mode">Pocket Mode Guard</string>
+    <string name="tab_shut_up">Shut Up (Media Muter)</string>
 <string name="install_no_file">No package chosen</string>
 <string name="install_choose">Choose</string>
 <string name="install_choose_hint">APK, APKS, or XAPK file</string>
@@ -2147,4 +2173,62 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="nightdog_title">NightDog Beta</string>
     <string name="nightdog_summary">Lightweight system monitor with zero energy consumption</string>
     <string name="nightdog_description">NightDog monitors server health using inotify (zero polling). Runs as shell process.</string>
+
+    <string name="wireless_adb_pin_service_description">Enters the wireless ADB pairing PIN into the system’s “Pair with device” dialog through an accessibility service.\n\nOnly the settings apps that host that dialog are read, and only after you switch automatic entry on in settings.</string>
+
+    <string name="settings_wireless_adb_auto_pin">Auto-enter wireless ADB pairing PIN</string>
+    <string name="settings_wireless_adb_auto_pin_summary">Let an accessibility service enter the pairing PIN into the “Pair with device” dialog. Off: you type it yourself. Manual: the manager tells you when the dialog is up. Automatic: the PIN is entered for you.</string>
+    <string name="settings_wireless_adb_auto_pin_off">Off</string>
+    <string name="settings_wireless_adb_auto_pin_manual">Manual</string>
+    <string name="settings_wireless_adb_auto_pin_automatic">Automatic</string>
+    <string name="settings_wireless_adb_pin">Pairing PIN</string>
+    <string name="settings_wireless_adb_pin_summary">The 6-digit PIN the accessibility service enters when automatic mode is on.</string>
+    <string name="settings_wireless_adb_auto_pin_enabled">Automatic pairing PIN entry is on. Open the “Pair with device” dialog in settings and the PIN will be filled in for you.</string>
+    <string name="settings_wireless_adb_auto_pin_summary_accessibility_on">Accessibility service is enabled. PIN will be entered automatically when the pairing dialog appears.</string>
+    <string name="settings_wireless_adb_auto_pin_summary_accessibility_off">Accessibility service is not enabled. Automatic mode will not work until you enable it in Accessibility settings.</string>
+    <string name="settings_wireless_adb_auto_pin_accessibility_needed">Accessibility permission is required for automatic PIN entry. Please enable it in Accessibility settings.</string>
+    <string name="settings_wireless_adb_auto_pin_manual_enabled">Manual mode is on. You will be notified when the pairing dialog appears.</string>
+    <string name="wireless_adb_pin_entered">Pairing PIN entered automatically.</string>
+    <string name="wireless_adb_pin_not_found">Could not find the pairing PIN field.</string>
+
+
+    <!-- Call Recorder (ShizuCallRecorder integration) -->
+    <string name="call_recorder_title">Call Recorder</string>
+    <string name="call_recorder_notification_title">Call Recording Active</string>
+    <string name="call_recorder_start">Start Recording</string>
+    <string name="call_recorder_stop">Stop Recording</string>
+    <string name="call_recorder_recordings">Recordings</string>
+    <string name="call_recorder_settings">Settings</string>
+    <string name="call_recorder_about">About</string>
+    <string name="call_recorder_auto_record">Auto-Record Calls</string>
+    <string name="call_recorder_record_incoming">Record Incoming</string>
+    <string name="call_recorder_record_outgoing">Record Outgoing</string>
+    <string name="call_recorder_ignore_anonymous">Ignore Anonymous</string>
+    <string name="call_recorder_ignore_contacts">Ignore Contacts</string>
+    <string name="call_recorder_no_recordings">No recordings yet</string>
+    <string name="call_recorder_unknown">Unknown</string>
+    <string name="call_recorder_legal">Recording calls may require consent. Check your local laws.</string>
+    <string name="call_recorder_license">GPL-3.0 - Based on ShizuCallRecorder by kitsumed</string>
+
+    <!-- Unified first-launch disclaimer. All six legal sections are shown on a single
+         scrollable screen; a 5-second countdown gates the consent checkbox. -->
+    <string name="onboarding_disclaimer_title">Before You Continue</string>
+    <string name="onboarding_disclaimer_intro">Please read the following sections carefully. OmniShizuku grants system-level privileges, which can change how your device behaves and what third parties can do with it. By continuing, you acknowledge these risks and accept full responsibility.</string>
+    <string name="onboarding_disclaimer_section_1_title">1. What OmniShizuku Provides</string>
+    <string name="onboarding_disclaimer_section_1_body">OmniShizuku provides access to system-level APIs through the Shizuku framework. It is provided as-is, without warranty of any kind, express or implied.</string>
+    <string name="onboarding_disclaimer_section_2_title">2. Real Privileges Granted</string>
+    <string name="onboarding_disclaimer_section_2_body">Using OmniShizuku grants real system privileges to applications. These privileges allow apps to perform actions that are normally restricted, including modifying system settings, accessing protected data, and controlling device behavior.</string>
+    <string name="onboarding_disclaimer_section_3_title">3. Device Owner Side Effects</string>
+    <string name="onboarding_disclaimer_section_3_body">Enabling device owner or profile owner mode may have side effects, including the inability to uninstall certain apps, restrictions on factory reset, and additional management controls enforced by the device.</string>
+    <string name="onboarding_disclaimer_section_4_title">4. Root Access Risks</string>
+    <string name="onboarding_disclaimer_section_4_body">Using root access bypasses Android\'s security model. Root access can expose your device to malware, compromise sensitive data, and may void your device warranty. Proceed with caution.</string>
+    <string name="onboarding_disclaimer_section_5_title">5. Third-Party Behavior</string>
+    <string name="onboarding_disclaimer_section_5_body">OmniShizuku may interact with third-party applications and services. We are not responsible for the behavior, data collection, or security practices of third-party apps you choose to grant privileges to.</string>
+    <string name="onboarding_disclaimer_section_6_title">6. License and Legal</string>
+    <string name="onboarding_disclaimer_section_6_body">OmniShizuku is distributed under the Apache License 2.0. Use of this software is at your own risk. See LICENSE for full terms.</string>
+    <string name="onboarding_disclaimer_section_7_title">7. Banking, Financial and Security Warning</string>
+    <string name="onboarding_disclaimer_section_7_body">OmniShizuku can bypass screen-security protections (such as FLAG_SECURE) that banking, financial and other security-sensitive apps rely on. Granting system privileges may allow apps to observe sensitive screens, capture input, or interfere with security mechanisms. Do not grant privileges to apps you do not trust, and avoid using privileged apps while performing banking, payments or other sensitive operations.</string>
+    <string name="onboarding_disclaimer_agree_button">I Agree and Proceed</string>
+    <string name="onboarding_disclaimer_agree_label">I have read and agree to the above</string>
+
 </resources>

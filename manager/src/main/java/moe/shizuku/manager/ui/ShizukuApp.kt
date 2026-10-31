@@ -94,6 +94,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -116,6 +117,10 @@ import moe.shizuku.manager.ui.screen.DisplayScreen
 import moe.shizuku.manager.ui.screen.LabsScreen
 import moe.shizuku.manager.ui.screen.LogScreen
 import moe.shizuku.manager.ui.screen.LabsToggleScreen
+import moe.shizuku.manager.debloater.DebloaterScreen
+import moe.shizuku.manager.tuner.SystemUiTunerScreen
+import moe.shizuku.manager.doze.DozeScreen
+import moe.shizuku.manager.dns.PrivateDnsScreen
 import moe.shizuku.manager.ui.screen.ManageScreen
 import moe.shizuku.manager.ui.screen.CatalogKind
 import moe.shizuku.manager.ui.screen.CatalogScreen
@@ -126,6 +131,12 @@ import moe.shizuku.manager.module.ModulesScreen
 import moe.shizuku.manager.ui.screen.StealthScreen
 import moe.shizuku.manager.ui.screen.TerminalScreen
 import moe.shizuku.manager.ui.screen.WifiPasswordsScreen
+import moe.shizuku.manager.audio.MixedAudioScreen
+import moe.shizuku.manager.audio.SoundMasterScreen
+import moe.shizuku.manager.lookback.LookBackScreen
+import moe.shizuku.manager.pip.UniversalPiPScreen
+import moe.shizuku.manager.shell.LocalShellScreen
+import moe.shizuku.manager.themepatcher.ThemePatcherScreen
 import moe.shizuku.manager.ui.theme.LocalAmoledTheme
 import moe.shizuku.manager.ui.theme.LocalTelevision
 import moe.shizuku.manager.ui.theme.ShizukuTheme
@@ -178,10 +189,55 @@ enum class Detail(
 
     /** Installing a package with the flags a terminal would need a cable for. */
     INSTALL,
+    DEBLOATER,
+    SYSTEMUI_TUNER,
+    ENFORCE_DOZE,
+    PRIVATE_DNS,
+    FREEZER,
+    AUDIO_MASTER,
+    TETHER,
+    SECURITY,
+    AUTODND,
+    OPTIMIZER,
+    EDGE_LIGHTING,
+    CAFFEINATE,
+    MEDIA_KEYS,
+    ESSENTIALS,
+    ISLAND,
+    BATTERY_CENTER,
+    SMART_PIXELS,
+    WATERMARK,
+    POCKET_MODE,
+    SHUT_UP,
     STEALTH,
     TERMINAL,
     INTENTS,
     PERMISSIONS,
+
+    /** System theme customization and patching. */
+    THEME_PATCHER,
+    /** System-wide audio mixing and routing. */
+    MIXED_AUDIO,
+    /** Sound Master - independent audio stream control. */
+    SOUND_MASTER,
+    /** Screen recording and playback. */
+    LOOKBACK,
+    /** Picture-in-picture for any app. */
+    UNIVERSAL_PIP,
+    /** Local shell session without Shizuku. */
+    LOCAL_SHELL,
+
+    /** Call recording via Shizuku shell service. */
+    CALL_RECORDING,
+
+    /** DFRoot built-in exploit integration (DirtyFrag CVE-2026-43284). */
+    DFROOT,
+
+    /** WallYou wallpaper browser and setter. */
+    WALLYOU,
+
+    /** WallYou wallpaper changer settings. */
+    WALLYOU_SETTINGS,
 
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
@@ -397,9 +453,39 @@ fun ShizukuApp() {
                             )
 
                             Detail.STEALTH -> StealthScreen(onBack = { detail = null })
+                            Detail.DEBLOATER -> DebloaterScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SYSTEMUI_TUNER -> SystemUiTunerScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.ENFORCE_DOZE -> DozeScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.PRIVATE_DNS -> PrivateDnsScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.FREEZER -> moe.shizuku.manager.freeze.FreezerScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.AUDIO_MASTER -> moe.shizuku.manager.audio.AudioMasterScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.TETHER -> moe.shizuku.manager.tether.TetherScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SECURITY -> moe.shizuku.manager.security.ScreenSecurityScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.AUTODND -> moe.shizuku.manager.dnd.AutoDndScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.OPTIMIZER -> moe.shizuku.manager.optimizer.OptimizerScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.EDGE_LIGHTING -> moe.shizuku.manager.essentials.EdgeLightingScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.CAFFEINATE -> moe.shizuku.manager.essentials.CaffeinateScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.MEDIA_KEYS -> moe.shizuku.manager.essentials.MediaKeyScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.ESSENTIALS -> moe.shizuku.manager.essentials.EssentialsScreen(bottomPadding = 0.dp, onBack = { detail = null }, onOpenDetail = { detail = it })
+                            Detail.ISLAND -> moe.shizuku.manager.essentials.IslandScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.BATTERY_CENTER -> moe.shizuku.manager.essentials.BatteryCenterScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SMART_PIXELS -> moe.shizuku.manager.essentials.SmartPixelsScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.WATERMARK -> moe.shizuku.manager.essentials.WatermarkScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.POCKET_MODE -> moe.shizuku.manager.essentials.PocketModeScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.SHUT_UP -> moe.shizuku.manager.essentials.ShutUpScreen(bottomPadding = 0.dp, onBack = { detail = null })
                             Detail.TERMINAL -> TerminalScreen(onBack = { detail = null })
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })
+                            Detail.THEME_PATCHER -> ThemePatcherScreen(onBack = { detail = null })
+                            Detail.MIXED_AUDIO -> MixedAudioScreen(onBack = { detail = null })
+                            Detail.SOUND_MASTER -> SoundMasterScreen(onBack = { detail = null })
+                            Detail.LOOKBACK -> LookBackScreen(onBack = { detail = null })
+                            Detail.UNIVERSAL_PIP -> UniversalPiPScreen(onBack = { detail = null })
+                            Detail.LOCAL_SHELL -> LocalShellScreen(onBack = { detail = null })
+                            Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })
+                            Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = { detail = null })
+                            Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = { detail = null })
+                            Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {
@@ -459,6 +545,7 @@ private fun MainTabs(
     onOpenDetail: (Detail) -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val view = LocalView.current
 
     // Whether the app has settled enough to read the lists nobody is looking at yet. Both app
     // lists are expensive to read - six hundred packages each - and a pager composes the page
@@ -676,7 +763,16 @@ private fun MainTabs(
                                     // composes what it scrolls past, so going from Settings to Home
                                     // started loading the Manage tab's six hundred apps on the way.
                                     // Swiping still animates, because that is the gesture.
-                                    if (!selected) scope.launch { pagerState.scrollToPage(index) }
+                                    if (!selected) {
+                                        try {
+                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                                                view.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM)
+                                            } else {
+                                                view.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+                                            }
+                                        } catch (_: Exception) {}
+                                        scope.launch { pagerState.scrollToPage(index) }
+                                    }
                                 },
                                     shapes = ToggleButtonShapes(
                                         shape = CircleShape,

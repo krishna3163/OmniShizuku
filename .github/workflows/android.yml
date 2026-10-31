@@ -1,0 +1,36 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      with:
+        submodules: 'recursive'
+    - name: Validate Gradle Wrapper JARs
+      uses: gradle/actions/wrapper-validation@3f5f9adaf7d9fecd50b5935e54106014257a94e6 # v6.4.0
+    - name: set up JDK 21
+      uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+    - name: Install Android SDK 37.1
+      run: |
+        yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 --licenses > /dev/null 2>&1 || true
+        yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 "platforms;android-37.1" "build-tools;37.0.0" "ndk;29.0.14206865"
+    - name: Test and build with Gradle
+      run: ./gradlew :manager:testDebugUnitTest :manager:assembleDebug --stacktrace --no-daemon

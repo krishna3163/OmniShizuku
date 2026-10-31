@@ -1,0 +1,74 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+#
+# NowSecure: The Mobile Security Experts <https://www.nowsecure.com/>.
+#
+# To use this workflow, you must be an existing NowSecure customer with GitHub Advanced Security (GHAS) enabled for your
+# repository.
+#
+# If you *are not* an existing customer, click here to contact us for licensing and pricing details:
+# <https://info.nowsecure.com/github-request>.
+#
+# Instructions:
+#
+# 1. In the settings for your repository, click "Secrets" then "New repository secret". Name the secret "NS_TOKEN" and
+#    paste in your Platform token. If you do not have a Platform token, or wish to create a new one for GitHub, visit
+#    NowSecure Platform and go to "Profile & Preferences" then create a token labelled "GitHub".
+#
+# 2. Follow the annotated workflow below and make any necessary modifications then save the workflow to your repository
+#    and review the "Security" tab once the action has run.
+
+name: "NowSecure"
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  nowsecure:
+    name: NowSecure
+    runs-on: ubuntu-latest
+    env:
+      NOWSECURE_CONFIGURED: ${{ secrets.NS_TOKEN != '' && vars.NOWSECURE_GROUP_ID != '' }}
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          java-version: "21"
+          distribution: "temurin"
+          cache: gradle
+
+      - name: Build your application
+        run: ./gradlew assembleDebug              # Update this to build your Android or iOS application
+
+      - name: Run NowSecure
+        if: env.NOWSECURE_CONFIGURED == 'true'
+        uses: nowsecure/nowsecure-action@3b439db31b6dce857b09f5222fd13ffc3159ad26
+        with:
+          token: ${{ secrets.NS_TOKEN }}
+          app_file: manager/build/outputs/apk/debug/manager-debug.apk
+          group_id: ${{ vars.NOWSECURE_GROUP_ID }}
+
+      - name: Upload SARIF file
+        if: env.NOWSECURE_CONFIGURED == 'true'
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: NowSecure.sarif
+
+      - name: Report missing NowSecure configuration
+        if: env.NOWSECURE_CONFIGURED != 'true'
+        run: echo "::warning::Set NS_TOKEN and the NOWSECURE_GROUP_ID repository variable to enable this scan."

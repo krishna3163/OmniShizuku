@@ -11,6 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.files.PrivilegedFiles
 import moe.shizuku.manager.utils.Diag
+import moe.shizuku.manager.utils.shellQuote
 
 /**
  * What a package says about itself, before any of it is installed.
@@ -61,7 +62,7 @@ object PackageInspect {
 
         val output = runCatching {
             PrivilegedFiles.exec(
-                "dumpsys package ${quoted(packageName)} 2>/dev/null | " +
+                "dumpsys package ${shellQuote(packageName)} 2>/dev/null | " +
                     "grep -E 'versionName=|versionCode=' | head -2"
             )
         }.getOrNull() ?: return@withContext null
@@ -70,9 +71,6 @@ object PackageInspect {
         val name = Regex("versionName=(\\S+)").find(output)?.groupValues?.get(1)
         if (code == null && name == null) null else Installed(name, code)
     }
-
-    /** Single-quoted, with a quote inside closed and reopened, which is what a shell needs. */
-    private fun quoted(value: String): String = "'" + value.replace("'", "'\\''") + "'"
 
     /** Reads [path], or null when it cannot be read as a package at all. */
     suspend fun read(context: Context, path: String): Details? = withContext(Dispatchers.IO) {

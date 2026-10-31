@@ -74,9 +74,9 @@ import android.content.Context
 import rikka.shizuku.ShizukuProvider
 
 private fun Context.shizukuPermission() =
-    runCatching {
-        packageManager.getPermissionInfo(ShizukuProvider.PERMISSION, 0)
-    }.getOrNull()
+    sequenceOf("com.krishna.omnishizuku.permission.API_V23", ShizukuProvider.PERMISSION)
+        .mapNotNull { permission -> runCatching { packageManager.getPermissionInfo(permission, 0) }.getOrNull() }
+        .firstOrNull()
 
 fun Context.isShizukuInstalled() =
     shizukuPermission() != null

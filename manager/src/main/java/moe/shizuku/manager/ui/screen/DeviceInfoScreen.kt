@@ -1,5 +1,6 @@
 package moe.shizuku.manager.ui.screen
 
+import android.util.Log
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -26,6 +27,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.LoadingIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -45,6 +47,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.R
 import moe.shizuku.manager.manage.DeviceInfo
@@ -83,27 +86,39 @@ fun DeviceInfoScreen(bottomPadding: Dp, onBack: () -> Unit) {
     var cpu by remember { mutableStateOf<DeviceInfo.Cpu?>(null) }
     var shizuku by remember { mutableStateOf<DeviceInfo.ShizukuState?>(null) }
     var loading by remember { mutableStateOf(true) }
+    var loadFailed by remember { mutableStateOf(false) }
     var version by remember { mutableIntStateOf(0) }
 
     LaunchedEffect(version) {
         loading = true
-        withContext(Dispatchers.IO) {
-            // One pass: the three dumps this screen reads are fetched once and parsed by
-            // everything that wants them. Reading them per section turned a second of shell into
-            // five.
-            val all = DeviceInfo.snapshot()
-            battery = all.battery
-            samsung = all.samsung
-            capacity = all.capacity
-            history = all.history
-            drain = all.drain
-            usage = all.usage
-            system = all.system
-            thermal = all.thermal
-            cpu = all.cpu
-            shizuku = all.shizuku
+        loadFailed = false
+        try {
+            // One pass: the dumps this screen reads are fetched once and parsed by everything
+            // that wants them. Bounded by an overall deadline so the spinner can never stick
+            // forever - sections that answered are shown, the rest is left absent.
+            val all = withContext(Dispatchers.IO) { DeviceInfo.snapshot() }
+            if (all != null) {
+                battery = all.battery
+                samsung = all.samsung
+                capacity = all.capacity
+                history = all.history
+                drain = all.drain
+                usage = all.usage
+                system = all.system
+                thermal = all.thermal
+                cpu = all.cpu
+                shizuku = all.shizuku
+            } else {
+                loadFailed = true
+            }
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            Log.e("DeviceInfoScreen", "Unable to load device information", e)
+            loadFailed = true
+        } finally {
+            loading = false
         }
-        loading = false
     }
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -124,6 +139,18 @@ fun DeviceInfoScreen(bottomPadding: Dp, onBack: () -> Unit) {
 
         if (loading) {
             CenteredMessage { LoadingIndicator() }
+            return@Column
+        }
+
+        if (loadFailed) {
+            CenteredMessage {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Text(stringResource(R.string.device_info_load_failed))
+                    TextButton(onClick = { version++ }) {
+                        Text(stringResource(R.string.device_refresh))
+                    }
+                }
+            }
             return@Column
         }
 

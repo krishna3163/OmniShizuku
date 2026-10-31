@@ -51,6 +51,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.Lifecycle
 import kotlinx.coroutines.Dispatchers
@@ -415,13 +416,19 @@ private fun PermissionRow(
             Spacer(modifier = Modifier.width(16.dp))
 
             Column(modifier = Modifier.weight(1f)) {
-                Text(headline, style = MaterialTheme.typography.bodyLarge)
+                Text(
+                    headline,
+                    style = MaterialTheme.typography.bodyLarge,
+                    maxLines = 2,
+                    softWrap = true
+                )
                 Text(
                     reason,
-                    // A step down from the headline and no more: these are one-line
-                    // reminders, and at body size they read as paragraphs to work through.
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    maxLines = 3,
+                    softWrap = true,
+                    lineHeight = 18.sp
                 )
             }
 

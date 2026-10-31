@@ -54,12 +54,12 @@ jobs:
           fi
           echo "Repository owner verified: $ACTOR"
 
-  release:
-    name: Build & publish release
+  build:
+    name: Build release APKs
     needs: owner-gate
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - name: Check out ${{ inputs.ref }}
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -87,8 +87,12 @@ jobs:
 
       - name: Setup Android SDK
         run: |
-          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null 2>&1 || true
-          yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 --licenses > /dev/null 2>&1 || true
+          SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          yes | "$SDKMANAGER" --channel=3 --licenses > /dev/null 2>&1 || true
+          "$SDKMANAGER" --channel=3 \
+            "platforms;android-37.1" \
+            "build-tools;37.0.0" \
+            "ndk;29.0.14206865"
           echo 'android.sdk.channel=3' >> gradle.properties
           echo 'org.gradle.caching=true' >> gradle.properties
           echo 'org.gradle.parallel=true' >> gradle.properties
@@ -117,20 +121,56 @@ jobs:
             cp -f ~/.android/debug.keystore ~/.config/.android/debug.keystore 2>/dev/null || true
           fi
 
+      - name: Run manager unit tests
+        env:
+          OMNI_VERSION_NAME: ${{ inputs.tag }}
+        run: ./gradlew :manager:testDebugUnitTest "-PomniVersionName=${OMNI_VERSION_NAME}" --stacktrace --no-daemon
+
       - name: Build APKs
+        env:
+          OMNI_VERSION_NAME: ${{ inputs.tag }}
         run: |
           chmod +x gradlew 2>/dev/null || true
-          ./gradlew :manager:assembleRelease :manager:assembleDebug --stacktrace
+          ./gradlew :manager:assembleRelease :manager:assembleDebug "-PomniVersionName=${OMNI_VERSION_NAME}" --stacktrace --no-daemon
 
-      - name: Rename APKs for Release
-        run: |
-          mkdir -p release-assets
-          for f in manager/build/outputs/apk/release/*.apk; do
-            [ -e "$f" ] && cp "$f" "release-assets/omnishizuku-${{ inputs.tag }}-release.apk"
-          done
-          for f in manager/build/outputs/apk/debug/*.apk; do
-            [ -e "$f" ] && cp "$f" "release-assets/omnishizuku-${{ inputs.tag }}-debug.apk"
-          done
+      - name: Upload release APK
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: manager-release-apk
+          path: manager/build/outputs/apk/release/*.apk
+          if-no-files-found: error
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+        with:
+          name: manager-debug-apk
+          path: manager/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+
+  publish:
+    name: Publish release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Check out ${{ inputs.ref }}
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ inputs.ref }}
+          fetch-depth: 0
+
+      - name: Download release APK
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: manager-release-apk
+          path: release-apk
+
+      - name: Download debug APK
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: manager-debug-apk
+          path: debug-apk
 
       - name: Create release and upload APKs
         env:
@@ -141,6 +181,19 @@ jobs:
           REF: ${{ inputs.ref }}
           PRERELEASE: ${{ inputs.prerelease }}
         run: |
+          mkdir -p release-assets
+          RELEASE_APK=$(find release-apk -maxdepth 1 -type f -name '*.apk' -print -quit)
+          DEBUG_APK=$(find debug-apk -maxdepth 1 -type f -name '*.apk' -print -quit)
+          if [ -z "$RELEASE_APK" ]; then
+            echo "::error::Release APK was not generated."
+            exit 1
+          fi
+          cp "$RELEASE_APK" "release-assets/omnishizuku-${TAG}.apk"
+          cp "$RELEASE_APK" "release-assets/omnishizuku.apk"
+          if [ -n "$DEBUG_APK" ]; then
+            cp "$DEBUG_APK" "release-assets/omnishizuku-${TAG}-debug.apk"
+          fi
+
           args=( "$TAG" --target "$REF" )
           if [ -n "$TITLE" ]; then
             args+=( --title "$TITLE" )
@@ -157,4 +210,13 @@ jobs:
           else
             args+=( --latest )
           fi
-          gh release create "${args[@]}" release-assets/*.apk
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            if [ "$PRERELEASE" = "true" ]; then
+              gh release edit "$TAG" --title "${TITLE:-$TAG}" --prerelease --latest=false
+            else
+              gh release edit "$TAG" --title "${TITLE:-$TAG}" --prerelease=false --latest
+            fi
+            gh release upload "$TAG" release-assets/*.apk --clobber
+          else
+            gh release create "${args[@]}" release-assets/*.apk
+          fi

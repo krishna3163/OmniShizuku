@@ -36,7 +36,6 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -45,6 +44,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import moe.shizuku.manager.R
+import androidx.compose.material3.MaterialTheme
 
 /**
  * YouTube-style opening splash animation customized for OmniShizuku's mascot logo.
@@ -137,8 +137,8 @@ fun AppOpeningSplashScreen(
             .background(
                 Brush.radialGradient(
                     colors = listOf(
-                        Color(0xFF0F172A),
-                        Color(0xFF060913),
+                        MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                        MaterialTheme.colorScheme.background.copy(alpha = 0.9f),
                     )
                 )
             )
@@ -161,7 +161,7 @@ fun AppOpeningSplashScreen(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.size(240.dp)
             ) {
-                // Cosmic aura glow
+                // Dynamic color cosmic aura glow based on wallpaper
                 Box(
                     modifier = Modifier
                         .size(190.dp)
@@ -170,9 +170,9 @@ fun AppOpeningSplashScreen(
                         .background(
                             Brush.radialGradient(
                                 colors = listOf(
-                                    Color(0xFF38BDF8).copy(alpha = 0.6f),
-                                    Color(0xFF6366F1).copy(alpha = 0.3f),
-                                    Color.Transparent
+                                    MaterialTheme.colorScheme.primary.copy(alpha = 0.6f),
+                                    MaterialTheme.colorScheme.secondary.copy(alpha = 0.3f),
+                                    MaterialTheme.colorScheme.surface.copy(alpha = 0f)
                                 )
                             ),
                             shape = CircleShape
@@ -197,7 +197,7 @@ fun AppOpeningSplashScreen(
             ) {
                 Text(
                     text = "OmniShizuku",
-                    color = Color(0xFFF8FAFC),
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontSize = 26.sp,
                     fontWeight = FontWeight.ExtraBold,
                     letterSpacing = 1.2.sp
@@ -207,7 +207,7 @@ fun AppOpeningSplashScreen(
 
                 Text(
                     text = ">_ privileged binder engine" + if (cursorVisible) "_" else " ",
-                    color = Color(0xFF38BDF8),
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = 13.sp,
                     fontFamily = FontFamily.Monospace,
                     fontWeight = FontWeight.Medium,

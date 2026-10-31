@@ -43,7 +43,7 @@ object PrivilegedFiles {
      * replace the service an earlier one started, and the process suffix is what makes the
      * process recognisable in a process list.
      */
-    private const val SERVICE_TAG = "shizuku-next-files"
+    private const val SERVICE_TAG = "shizuku_next_files"
     private const val PROCESS_SUFFIX = "files"
 
     /** How long a bind is given before the caller is told there is no service. */

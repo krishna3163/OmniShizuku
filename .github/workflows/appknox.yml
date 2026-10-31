@@ -1,0 +1,69 @@
+# This workflow uses actions that are not certified by GitHub. They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support documentation.
+#
+# Appknox: Leader in Mobile Application Security Testing Solutions <https://www.appknox.com/>
+#
+# To use this workflow, you must be an existing Appknox customer with GitHub Advanced Security (GHAS) enabled for your
+# repository.
+#
+# If you *are not* an existing customer, click here to contact us for licensing and pricing details:
+# <https://www.appknox.com/free-trial>.
+#
+# Instructions:
+#
+# 1. In your repository settings, navigate to 'Secrets' and click on 'New repository secret.' Name the
+#    secret APPKNOX_ACCESS_TOKEN and paste your appknox user token into the value field. If you don't have a appknox token
+#    or need to generate a new one for GitHub, visit the Appknox Platform, go to Account Settings->Developer Settings
+#    and create a token labeled GitHub
+#
+# 2. Refer to the detailed workflow below, make any required adjustments, and then save it to your repository. After the
+#    action executes, check the 'Security' tab for results
+
+name: Appknox
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: read
+
+jobs:
+  appknox:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Grant execute permission for gradlew
+        run: chmod +x gradlew
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Build the app
+        run: ./gradlew build                                         # Update this to build your Android or iOS application
+
+      - name: Appknox GitHub action
+        uses: appknox/appknox-github-action@13f49a986fc0f12e103650ab36a35334f02969af
+        with:
+          appknox_access_token: ${{ secrets.APPKNOX_ACCESS_TOKEN }}
+          file_path: manager/build/outputs/apk/debug/manager-debug.apk
+          risk_threshold: MEDIUM                                      # Update this to desired risk threshold [LOW, MEDIUM, HIGH, CRITICAL]
+          sarif: Enable
+
+      - name: Upload SARIF to GHAS
+        if: always()
+        uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
+        with:
+          sarif_file: report.sarif

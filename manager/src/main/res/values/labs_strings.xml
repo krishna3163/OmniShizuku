@@ -1,0 +1,10 @@
+<resources>
+    <string name="labs_category_app_management">App management</string>
+    <string name="labs_category_system_controls">System controls</string>
+    <string name="labs_category_utilities">Utilities</string>
+    <string name="labs_category_companion_apps">Companion apps</string>
+    <string name="labs_search_hint">Search Labs</string>
+    <string name="labs_clear_search">Clear search</string>
+    <string name="labs_search_empty_title">No matching features</string>
+    <string name="labs_search_empty_message">Try a different name, feature, or category.</string>
+</resources>

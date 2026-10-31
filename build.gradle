@@ -1,5 +1,23 @@
+buildscript {
+    dependencies {
+        classpath 'com.android.tools.build:gradle-api:9.5.0-rc01'
+    }
+    configurations.classpath.resolutionStrategy.force(
+        'org.bouncycastle:bcprov-jdk18on:1.86',
+        'org.bouncycastle:bcpkix-jdk18on:1.86',
+        'org.bouncycastle:bcutil-jdk18on:1.86',
+        'org.jdom:jdom2:2.0.6.1',
+        'org.bitbucket.b_c:jose4j:0.9.7',
+        'org.apache.commons:commons-lang3:3.21.0',
+        'org.apache.httpcomponents:httpclient:4.5.14',
+        'com.google.guava:guava:33.7.2-jre'
+    )
+}
+
 plugins {
     id("idea")
+    id("com.google.gms.google-services") version "4.4.2" apply false
+    id("com.google.firebase.crashlytics") version "3.0.8" apply false
 }
 
 idea.module {
@@ -7,13 +25,36 @@ idea.module {
 }
 
 subprojects {
+    buildscript.configurations.classpath.resolutionStrategy.force(
+        'org.bouncycastle:bcprov-jdk18on:1.86',
+        'org.bouncycastle:bcpkix-jdk18on:1.86',
+        'org.bouncycastle:bcutil-jdk18on:1.86',
+        'org.jdom:jdom2:2.0.6.1',
+        'org.bitbucket.b_c:jose4j:0.9.7',
+        'org.apache.commons:commons-lang3:3.21.0',
+        'org.apache.httpcomponents:httpclient:4.5.14',
+        'com.google.guava:guava:33.7.2-jre'
+    )
+    configurations.configureEach {
+        resolutionStrategy.force(
+            'org.bouncycastle:bcprov-jdk18on:1.86',
+            'org.bouncycastle:bcpkix-jdk18on:1.86',
+            'org.bouncycastle:bcutil-jdk18on:1.86',
+            'org.jdom:jdom2:2.0.6.1',
+            'org.bitbucket.b_c:jose4j:0.9.7',
+            'org.apache.commons:commons-lang3:3.21.0',
+            'org.apache.httpcomponents:httpclient:4.5.14',
+            'com.google.guava:guava:33.7.2-jre'
+        )
+    }
     plugins.withId("com.android.base") {
         android {
             compileSdk = 37
+            compileSdkMinor = 1
             buildToolsVersion = "37.0.0"
             ndkVersion = "29.0.14206865"
             defaultConfig {
-                minSdk = 25
+                minSdk = 26
                 targetSdk = 37
             }
             compileOptions {
@@ -29,18 +70,23 @@ subprojects {
 
 apply from: 'api/manifest.gradle'
 def gitCommitId = "dev"
-try {
-    def commit = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
-    if (!commit.isEmpty()) gitCommitId = commit
-} catch (Exception ignored) {}
+def gitOutput = { List<String> arguments, String fallback ->
+    try {
+        def output = providers.exec {
+            commandLine(['git'] + arguments)
+            workingDir rootDir
+        }.standardOutput.asText.get().trim()
+        output ?: fallback
+    } catch (Exception ignored) {
+        fallback
+    }
+}
+gitCommitId = gitOutput(['rev-parse', '--short', 'HEAD'], gitCommitId)
 
-def gitCommitCount = 45
-try {
-    def count = 'git rev-list --count HEAD'.execute([], project.rootDir).text.trim()
-    if (!count.isEmpty()) gitCommitCount = count.toInteger()
-} catch (Exception ignored) {}
+def gitCommitCount = gitOutput(['rev-list', '--count', 'HEAD'], '45').toInteger()
 
-def baseVersionName = "${api_version_name}"
+def defaultVersionName = "v0.0.2"
+def baseVersionName = providers.gradleProperty("omniVersionName").getOrElse(defaultVersionName)
 ext {
     versionCode = gitCommitCount
     versionName = "${baseVersionName}"

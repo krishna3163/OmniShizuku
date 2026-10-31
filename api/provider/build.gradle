@@ -3,16 +3,16 @@ plugins {
 }
 
 android {
-    namespace 'rikka.shizuku.provider'
+    namespace = 'rikka.shizuku.provider'
     defaultConfig {
         consumerProguardFiles "consumer-rules.pro"
     }
     buildFeatures {
-        buildConfig false
+        buildConfig = false
     }
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled = false
         }
     }
     compileOptions {

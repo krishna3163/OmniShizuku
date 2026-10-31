@@ -10,6 +10,7 @@ import moe.shizuku.manager.utils.ShizukuSystemApis
 import rikka.shizuku.server.ServerConstants
 import rikka.parcelablelist.ParcelableListSlice
 import rikka.shizuku.Shizuku
+import rikka.shizuku.ShizukuProvider
 import java.util.*
 
 object AuthorizationManager {
@@ -52,7 +53,9 @@ object AuthorizationManager {
             for (pi in allPackages) {
                 if (pi.packageName in exclude || BuildConfig.APPLICATION_ID == pi.packageName) continue
                 if (pi.applicationInfo?.metaData?.getBoolean("moe.shizuku.client.V3_SUPPORT") != true) continue
-                if (pi.requestedPermissions?.contains(Manifest.permission.API_V23) != true) continue
+                if (pi.requestedPermissions?.contains(Manifest.permission.API_V23) != true
+                    && pi.requestedPermissions?.contains(ShizukuProvider.PERMISSION) != true
+                ) continue
 
                 packages.add(pi)
             }
@@ -80,7 +83,7 @@ object AuthorizationManager {
     fun granted(packageName: String, uid: Int): Boolean {
         if (sessionGrantedUids.contains(uid)) return true
         return if (Shizuku.isPreV11()) {
-            ShizukuSystemApis.checkPermission(Manifest.permission.API_V23, packageName, uid / 100000) == PackageManager.PERMISSION_GRANTED
+            ShizukuSystemApis.checkPermission(ShizukuProvider.PERMISSION, packageName, uid / 100000) == PackageManager.PERMISSION_GRANTED
         } else {
             (Shizuku.getFlagsForUid(uid, MASK_PERMISSION) and FLAG_ALLOWED) == FLAG_ALLOWED
         }
@@ -89,7 +92,7 @@ object AuthorizationManager {
     fun grant(packageName: String, uid: Int) {
         sessionGrantedUids.remove(uid)
         if (Shizuku.isPreV11()) {
-            ShizukuSystemApis.grantRuntimePermission(packageName, Manifest.permission.API_V23, uid / 100000)
+            ShizukuSystemApis.grantRuntimePermission(packageName, ShizukuProvider.PERMISSION, uid / 100000)
         } else {
             Shizuku.updateFlagsForUid(uid, MASK_PERMISSION, FLAG_ALLOWED)
         }
@@ -98,7 +101,7 @@ object AuthorizationManager {
     fun revoke(packageName: String, uid: Int) {
         sessionGrantedUids.remove(uid)
         if (Shizuku.isPreV11()) {
-            ShizukuSystemApis.revokeRuntimePermission(packageName, Manifest.permission.API_V23, uid / 100000)
+            ShizukuSystemApis.revokeRuntimePermission(packageName, ShizukuProvider.PERMISSION, uid / 100000)
         } else {
             Shizuku.updateFlagsForUid(uid, MASK_PERMISSION, 0)
         }

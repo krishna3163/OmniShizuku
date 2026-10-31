@@ -61,6 +61,7 @@
 
 -allowaccessmodification
 -repackageclasses rikka.shizuku
+-keep interface android.util.AttributeSet { *; }
 -keepattributes SourceFile,LineNumberTable
 -renamesourcefileattribute SourceFile
 
@@ -77,4 +78,8 @@
 -dontwarn androidx.work.impl.**
 -keep class * extends androidx.startup.Initializer { *; }
 -keep class androidx.work.WorkManagerInitializer { *; }
+
+# Jetpack Compose runtime, foundation, and UI
+-keep class androidx.compose.** { *; }
+-dontwarn androidx.compose.**
 

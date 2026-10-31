@@ -39,3 +39,8 @@ if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
     add_custom_command(TARGET adb POST_BUILD
             COMMAND ${CMAKE_STRIP} --remove-section=.comment "${CMAKE_LIBRARY_OUTPUT_DIRECTORY}/libadb.so")
 endif ()
+
+# DFRoot integration (CVE-2026-43284) - GPL-2.0 licensed
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/dfroot/ko")
+    add_subdirectory(dfroot)
+endif ()

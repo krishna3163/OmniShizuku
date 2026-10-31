@@ -105,6 +105,10 @@ public class ShizukuSettings {
         return getPreferences().getInt(NIGHT_MODE, defValue);
     }
 
+    public static void setNightMode(@AppCompatDelegate.NightMode int mode) {
+        getPreferences().edit().putInt(NIGHT_MODE, mode).apply();
+    }
+
     public static Locale getLocale() {
         String tag = getPreferences().getString(LANGUAGE, null);
         if (TextUtils.isEmpty(tag) || "SYSTEM".equals(tag)) {
@@ -294,8 +298,15 @@ public class ShizukuSettings {
         public static final String KEY_BLACK_NIGHT_THEME = "black_night_theme";
         public static final String KEY_USE_SYSTEM_COLOR = "use_system_color";
         public static final String KEY_UPDATE_MODE = "update_mode";
-        public static final String KEY_HELP = "help";
-        public static final String KEY_REPORT_BUG = "report_bug";
+    }
+
+    public static final String KEY_HELP = "help";
+    public static final String KEY_REPORT_BUG = "report_bug";
+    public static boolean isFirstLaunch() {
+        return false;
+    }
+
+    public static void setFirstLaunch(boolean first) {
     }
 
     public static class UpdateMode {

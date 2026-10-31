@@ -3,9 +3,15 @@ plugins {
 }
 
 android {
-    namespace 'rikka.shizuku.common'
+    namespace = 'rikka.shizuku.common'
     buildFeatures {
         buildConfig = false
+    }
+    testOptions {
+        unitTests {
+            returnDefaultValues = true
+            includeAndroidResources = true
+        }
     }
 }
 
@@ -13,11 +19,10 @@ dependencies {
     implementation 'androidx.annotation:annotation:1.9.1'
     implementation libs.hidden.compat
     compileOnly libs.hidden.stub
-
     testImplementation 'junit:junit:4.13.2'
-    testImplementation 'org.robolectric:robolectric:4.11.1'
+    testImplementation 'org.robolectric:robolectric:4.14.1'
     testImplementation 'androidx.test:core:1.5.0'
     testImplementation 'androidx.test.ext:junit:1.1.5'
     testImplementation 'org.mockito:mockito-core:4.11.0'
-    testImplementation 'org.robolectric:shadows-framework:4.11.1'
+    testImplementation 'org.robolectric:shadows-framework:4.14.1'
 }

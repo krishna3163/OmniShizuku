@@ -1,41 +1,53 @@
 package moe.shizuku.manager.ui.screen
 
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
-import androidx.compose.material.icons.outlined.AdminPanelSettings
-import androidx.compose.material.icons.outlined.AspectRatio
-import androidx.compose.material.icons.outlined.Android
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.PowerSettingsNew
-import androidx.compose.material.icons.outlined.Extension
-import androidx.compose.material.icons.outlined.ShoppingBag
-import androidx.compose.material.icons.outlined.FolderOpen
-import androidx.compose.material.icons.outlined.PhoneAndroid
-import androidx.compose.material.icons.outlined.Terminal
-import androidx.compose.material.icons.outlined.VisibilityOff
-import androidx.compose.material.icons.outlined.Wifi
-import androidx.compose.material.icons.outlined.Widgets
+import androidx.compose.material.icons.filled.Clear
+import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +55,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -50,6 +63,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -60,6 +75,7 @@ import moe.shizuku.manager.R
 import moe.shizuku.manager.manage.ForceDark
 import moe.shizuku.manager.manage.Hiding
 import moe.shizuku.manager.manage.PackageTools
+import moe.shizuku.manager.settings.DeveloperFeatures
 import moe.shizuku.manager.ui.Detail
 import moe.shizuku.manager.ui.component.FeaturePlateIcon
 import moe.shizuku.manager.ui.component.ScrollToTopButton
@@ -78,6 +94,13 @@ private val ActiveDotSize = 10.dp
  * device. The home screen's Restart button is a fixed blue for the same reason.
  */
 private val ActiveGreen = Color(0xFF34C759)
+
+private enum class LabCategory(@StringRes val titleRes: Int) {
+    APP_MANAGEMENT(R.string.labs_category_app_management),
+    SYSTEM_CONTROLS(R.string.labs_category_system_controls),
+    UTILITIES(R.string.labs_category_utilities),
+    COMPANION_APPS(R.string.labs_category_companion_apps)
+}
 
 /**
  * The things that are gone to rather than lived in.
@@ -98,6 +121,20 @@ private val ActiveGreen = Color(0xFF34C759)
 @Composable
 fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     val context = LocalContext.current
+    val prefs = remember {
+        context.getSharedPreferences("labs_preferences", Context.MODE_PRIVATE)
+    }
+    var isGridView by rememberSaveable {
+        mutableStateOf(
+            if (prefs.contains("is_grid_view_v2")) {
+                prefs.getBoolean("is_grid_view_v2", true)
+            } else {
+                prefs.edit().putBoolean("is_grid_view_v2", true).apply()
+                true
+            }
+        )
+    }
+    var query by rememberSaveable { mutableStateOf("") }
 
     // What each feature is doing, so the list can be read without opening eight screens to find
     // out. It is the only place every one of them is in sight at once, and a hiding mode that is
@@ -107,52 +144,284 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     // is about to be looked at.
     var refresh by remember { mutableIntStateOf(0) }
     var active by remember { mutableStateOf<Set<Detail>>(emptySet()) }
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) { refresh++ }
+    var essentialsHubUnlocked by remember {
+        mutableStateOf(DeveloperFeatures.isEssentialsHubUnlocked(context))
+    }
+    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
+        refresh++
+        essentialsHubUnlocked = DeveloperFeatures.isEssentialsHubUnlocked(context)
+    }
     LaunchedEffect(refresh) {
         active = withContext(Dispatchers.IO) { activeFeatures(context) }
     }
-    // Every feature there is, in no particular order. The order is worked out below.
-    val entries = listOf(
-        LabEntry(R.string.tab_manage, Icons.Outlined.AdminPanelSettings, Detail.APP_OPS),
-        LabEntry(R.string.tab_shell, Icons.Outlined.Terminal, Detail.SHELL),
-        LabEntry(
-            AppToggleFeature.FIREWALL.titleRes,
-            AppToggleFeature.FIREWALL.icon,
-            Detail.FIREWALL
-        ),
-        LabEntry(
-            AppToggleFeature.AUTOSTART.titleRes,
-            AppToggleFeature.AUTOSTART.icon,
-            Detail.AUTOSTART
-        ),
-        // The six hiding modes are one row rather than six: they are the same list with a
-        // different setting behind it, and six rows of the same shape was most of the list.
-        LabEntry(R.string.tab_hiding, Icons.Outlined.VisibilityOff, Detail.HIDING),
-        LabEntry(R.string.tab_log, Icons.AutoMirrored.Outlined.ReceiptLong, Detail.LOG),
-        LabEntry(R.string.tab_device_info, Icons.Outlined.PhoneAndroid, Detail.DEVICE_INFO),
-        LabEntry(R.string.tab_force_dark, Icons.Outlined.DarkMode, Detail.FORCE_DARK),
-        LabEntry(R.string.tab_activities, Icons.Outlined.Widgets, Detail.ACTIVITIES),
-        LabEntry(R.string.tab_power, Icons.Outlined.PowerSettingsNew, Detail.POWER),
-        LabEntry(R.string.tab_display, Icons.Outlined.AspectRatio, Detail.DISPLAY),
-        LabEntry(R.string.tab_wifi_passwords, Icons.Outlined.Wifi, Detail.WIFI_PASSWORDS),
-        LabEntry(R.string.tab_files, Icons.Outlined.FolderOpen, Detail.FILES),
-        LabEntry(R.string.tab_install, Icons.Outlined.Android, Detail.INSTALL),
-        LabEntry(R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS)
-    )
+    // The full Labs catalogue. Descriptive terms are indexed alongside the visible names so a
+    // search can find common alternate names without adding duplicate entries to the list.
+    val entries = remember {
+        listOf(
+            LabEntry(
+                R.string.tab_manage, Icons.Outlined.AdminPanelSettings, Detail.APP_OPS,
+                LabCategory.APP_MANAGEMENT, "app permissions app ops"
+            ),
+            LabEntry(
+                R.string.tab_essentials, Icons.Outlined.AutoAwesome, Detail.ESSENTIALS,
+                LabCategory.UTILITIES, "essentials hub"
+            ),
+            LabEntry(
+                R.string.tab_shell, Icons.Outlined.Terminal, Detail.SHELL,
+                LabCategory.UTILITIES, "command line shell"
+            ),
+            LabEntry(
+                AppToggleFeature.FIREWALL.titleRes,
+                AppToggleFeature.FIREWALL.icon,
+                Detail.FIREWALL,
+                LabCategory.APP_MANAGEMENT,
+                "network block internet deny"
+            ),
+            LabEntry(
+                AppToggleFeature.AUTOSTART.titleRes,
+                AppToggleFeature.AUTOSTART.icon,
+                Detail.AUTOSTART,
+                LabCategory.APP_MANAGEMENT,
+                "auto start startup launch at boot"
+            ),
+            // The six hiding modes are one row rather than six: they are the same list with a
+            // different setting behind it, and six rows of the same shape was most of the list.
+            LabEntry(
+                R.string.tab_hiding, Icons.Outlined.VisibilityOff, Detail.HIDING,
+                LabCategory.APP_MANAGEMENT, "hide apps packages"
+            ),
+            LabEntry(
+                R.string.tab_log, Icons.AutoMirrored.Outlined.ReceiptLong, Detail.LOG,
+                LabCategory.UTILITIES, "logs diagnostics"
+            ),
+            LabEntry(
+                R.string.tab_device_info, Icons.Outlined.PhoneAndroid, Detail.DEVICE_INFO,
+                LabCategory.UTILITIES, "device details phone hardware"
+            ),
+            LabEntry(
+                R.string.tab_force_dark, Icons.Outlined.DarkMode, Detail.FORCE_DARK,
+                LabCategory.APP_MANAGEMENT, "dark mode applications"
+            ),
+            LabEntry(
+                R.string.tab_activities, Icons.Outlined.Widgets, Detail.ACTIVITIES,
+                LabCategory.UTILITIES, "launch activities"
+            ),
+            LabEntry(
+                R.string.tab_power, Icons.Outlined.PowerSettingsNew, Detail.POWER,
+                LabCategory.SYSTEM_CONTROLS, "power menu reboot"
+            ),
+            LabEntry(
+                R.string.tab_display, Icons.Outlined.AspectRatio, Detail.DISPLAY,
+                LabCategory.SYSTEM_CONTROLS, "screen resolution density"
+            ),
+            LabEntry(
+                R.string.tab_wifi_passwords, Icons.Outlined.Wifi, Detail.WIFI_PASSWORDS,
+                LabCategory.SYSTEM_CONTROLS, "wireless network credentials"
+            ),
+            LabEntry(
+                R.string.tab_files, Icons.Outlined.FolderOpen, Detail.FILES,
+                LabCategory.UTILITIES, "file manager browse"
+            ),
+            LabEntry(
+                R.string.tab_install, Icons.Outlined.Android, Detail.INSTALL,
+                LabCategory.UTILITIES, "install apk package"
+            ),
+            LabEntry(
+                R.string.tab_debloater, Icons.Outlined.Delete, Detail.DEBLOATER,
+                LabCategory.APP_MANAGEMENT, "debloat remove uninstall apps"
+            ),
+            LabEntry(
+                R.string.tab_freezer, Icons.Outlined.AcUnit, Detail.FREEZER,
+                LabCategory.APP_MANAGEMENT, "freeze suspend applications"
+            ),
+            LabEntry(
+                R.string.tab_systemui_tuner, Icons.Outlined.Settings, Detail.SYSTEMUI_TUNER,
+                LabCategory.SYSTEM_CONTROLS, "system ui settings status bar"
+            ),
+            LabEntry(
+                R.string.tab_enforce_doze, Icons.Outlined.DarkMode, Detail.ENFORCE_DOZE,
+                LabCategory.SYSTEM_CONTROLS, "doze battery idle"
+            ),
+            LabEntry(
+                R.string.tab_private_dns, Icons.Outlined.Wifi, Detail.PRIVATE_DNS,
+                LabCategory.SYSTEM_CONTROLS, "dns domain name server"
+            ),
+            LabEntry(
+                R.string.tab_audio_master, Icons.Outlined.VolumeUp, Detail.AUDIO_MASTER,
+                LabCategory.SYSTEM_CONTROLS, "volume sound audio"
+            ),
+            LabEntry(
+                R.string.tab_carrier_tether, Icons.Outlined.WifiTethering, Detail.TETHER,
+                LabCategory.SYSTEM_CONTROLS, "hotspot tethering"
+            ),
+            LabEntry(
+                "Mixed Audio", Icons.Outlined.GraphicEq, Detail.MIXED_AUDIO,
+                LabCategory.SYSTEM_CONTROLS, "mixed audio appops focus"
+            ),
+            LabEntry(
+                "SoundMaster", Icons.Outlined.Tune, Detail.SOUND_MASTER,
+                LabCategory.SYSTEM_CONTROLS, "per app volume soundmaster"
+            ),
+            LabEntry(
+                R.string.tab_screen_security, Icons.Outlined.Security, Detail.SECURITY,
+                LabCategory.SYSTEM_CONTROLS, "screen capture protection secure"
+            ),
+            LabEntry(
+                R.string.tab_autodnd, Icons.Outlined.DoNotDisturbOn, Detail.AUTODND,
+                LabCategory.SYSTEM_CONTROLS, "do not disturb notifications"
+            ),
+            LabEntry(
+                R.string.tab_optimizer, Icons.Outlined.Speed, Detail.OPTIMIZER,
+                LabCategory.APP_MANAGEMENT, "app optimization performance"
+            ),
+            LabEntry(
+                R.string.tools_terminal, Icons.Outlined.Terminal, Detail.TERMINAL,
+                LabCategory.UTILITIES, "terminal command prompt"
+            ),
+            LabEntry(
+                R.string.intents_title, Icons.Outlined.Bolt, Detail.INTENTS,
+                LabCategory.UTILITIES, "intent activity broadcast"
+            ),
+            LabEntry(
+                R.string.tools_stealth, Icons.Outlined.VisibilityOff, Detail.STEALTH,
+                LabCategory.UTILITIES, "hide shizuku root detection"
+            ),
+            LabEntry(
+                R.string.settings_permissions, Icons.Outlined.VerifiedUser, Detail.PERMISSIONS,
+                LabCategory.UTILITIES, "permission access grant"
+            ),
+            LabEntry(
+                R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS,
+                LabCategory.UTILITIES, "more applications discover"
+            ),
+            LabEntry(
+                "Call Recording (ShizuCallRecorder Integration)",
+                Icons.Outlined.Call,
+                Detail.CALL_RECORDING,
+                LabCategory.UTILITIES,
+                "call recording shizucallrecorder phone calls voice recorder audio"
+            ),
+            LabEntry(
+                "DFRoot (DirtyFrag Kernel Exploit)",
+                Icons.Outlined.Security,
+                Detail.DFROOT,
+                LabCategory.SYSTEM_CONTROLS,
+                "dfroot dirtyfrag root cve-2026-43284 kernelsu su manager exploit"
+            ),
+            LabEntry(
+                R.string.lab_companion_quick_tiles,
+                Icons.Outlined.Widgets,
+                category = LabCategory.COMPANION_APPS,
+                searchTerms = "quick settings tiles",
+                packageName = "com.rbn.qtsettings",
+                releaseUrl = "https://github.com/RBN-Apps/Quick-Tile-Settings/releases/latest"
+            ),
+            LabEntry(
+                R.string.lab_companion_shizuwall,
+                Icons.Outlined.Security,
+                category = LabCategory.COMPANION_APPS,
+                searchTerms = "wallpaper security",
+                packageName = "com.arslan.shizuwall",
+                releaseUrl = "https://github.com/AhmetCanArslan/ShizuWall/releases/latest"
+            ),
+            LabEntry(
+                "Theme Patcher", Icons.Outlined.ColorLens, Detail.THEME_PATCHER,
+                LabCategory.SYSTEM_CONTROLS, "theme patcher customization"
+            ),
+            LabEntry(
+                "WallYou Wallpapers", Icons.Outlined.Wallpaper, Detail.WALLYOU,
+                LabCategory.UTILITIES, "wallpaper wall you"
+            ),
+        )
+    }
 
-    // By name, not by the order these features arrived in. A list is read by looking something up:
-    // the order they were built in put the six hiding lists after the two that need a running
-    // server, so finding one meant reading the whole list. Sorted here rather than written out in
-    // order above, so a row added later cannot land in the wrong place - it goes wherever its name
-    // goes.
-    val rows = entries
-        .map { entry -> entry to stringResource(entry.labelRes) }
-        .sortedBy { (_, label) -> label.lowercase() }
+    val hiddenLabDetails = setOf(
+        Detail.ESSENTIALS,
+        Detail.SMART_PIXELS,
+        Detail.MEDIA_KEYS,
+        Detail.WATERMARK,
+        Detail.EDGE_LIGHTING,
+        Detail.ISLAND
+    )
+    val visibleEntries = entries.filterNot {
+        it.detail in hiddenLabDetails
+    }
+    val displayEntries = visibleEntries.map { entry ->
+        LabDisplayEntry(
+            entry = entry,
+            label = entry.labelString ?: if (entry.labelRes != 0) stringResource(entry.labelRes) else "",
+            categoryLabel = stringResource(entry.category.titleRes)
+        )
+    }
+    val searchItems = remember(displayEntries) {
+        displayEntries.map { row ->
+            LabsSearchItem(
+                value = row,
+                name = row.label,
+                description = row.entry.searchTerms,
+                aliases = row.entry.searchTerms,
+                category = row.categoryLabel
+            )
+        }
+    }
+    val filteredEntries = filterLabsSearchItems(searchItems, query).map { it.value }
+    val groupedEntries = filteredEntries
+        .groupBy { it.entry.category }
+        .toSortedMap(compareBy { it.ordinal })
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text(stringResource(R.string.tab_labs)) },
+            actions = {
+                IconButton(
+                    onClick = {
+                        isGridView = !isGridView
+                        prefs.edit().putBoolean("is_grid_view_v2", isGridView).apply()
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (isGridView) Icons.Outlined.ViewList else Icons.Outlined.GridView,
+                        contentDescription = if (isGridView) "Switch to list view" else "Switch to grid view"
+                    )
+                }
+            },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
+        )
+
+        OutlinedTextField(
+            value = query,
+            onValueChange = { query = it },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 6.dp),
+            singleLine = true,
+            shape = RoundedCornerShape(24.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f),
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            ),
+            placeholder = { Text(stringResource(R.string.labs_search_hint)) },
+            leadingIcon = {
+                Icon(
+                    Icons.Outlined.Search,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            },
+            trailingIcon = if (query.isNotEmpty()) {
+                {
+                    IconButton(onClick = { query = "" }) {
+                        Icon(
+                            Icons.Filled.Clear,
+                            contentDescription = stringResource(R.string.labs_clear_search)
+                        )
+                    }
+                }
+            } else {
+                null
+            }
         )
 
         Box(
@@ -161,65 +430,209 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 .weight(1f)
         ) {
             val listState = rememberLazyListState()
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    start = 16.dp,
-                    top = 16.dp,
-                    end = 16.dp,
-                    bottom = bottomPadding
-                ),
-                verticalArrangement = Arrangement.spacedBy(13.dp)
-            ) {
-            items(rows, key = { (entry, _) -> entry.detail.name }) { (entry, label) ->
-                SegmentedCard {
-                    SegmentedListItem(
-                        // The item that opened a detail takes the focus back when it closes, on a
-                        // TV; off one this is nothing.
-                        modifier = Modifier.televisionReturnFocus(entry.detail),
-                        centerSlots = true,
-                        // The icon keeps the tinted plate it had on the tiles. It is what makes
-                        // the list scannable the way a launcher's icons are: at this size the
-                        // outline of the icon alone is not enough to tell one row from another at
-                        // a glance, and the colour is what the eye lands on first.
-                        leadingContent = {
-                            Box {
-                                FeaturePlateIcon(entry.icon)
+            val gridState = rememberLazyGridState()
 
-                                // On the plate's corner, the same mark the tiles carried: a mode
-                                // that is on with apps listed looks exactly like one that is off
-                                // from here, and this is the one thing about a row that changes on
-                                // its own.
-                                if (entry.detail in active) {
-                                    Box(
-                                        modifier = Modifier
-                                            .align(Alignment.BottomEnd)
-                                            .offset(x = 2.dp, y = 2.dp)
-                                            .size(ActiveDotSize)
-                                            .background(ActiveGreen, CircleShape)
+            LaunchedEffect(query) {
+                listState.scrollToItem(0)
+                gridState.scrollToItem(0)
+            }
+
+            if (isGridView) {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 150.dp),
+                    state = gridState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        top = 10.dp,
+                        end = 16.dp,
+                        bottom = bottomPadding + 8.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    if (groupedEntries.isEmpty()) {
+                        item(span = { GridItemSpan(maxLineSpan) }, key = "empty-search-grid") {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 48.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_title),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_message),
+                                    modifier = Modifier.padding(top = 6.dp),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                TextButton(
+                                    onClick = { query = "" },
+                                    modifier = Modifier.padding(top = 4.dp)
+                                ) {
+                                    Text(stringResource(R.string.labs_clear_search))
+                                }
+                            }
+                        }
+                    } else {
+                        groupedEntries.forEach { (category, rows) ->
+                            item(span = { GridItemSpan(maxLineSpan) }, key = "category-${category.name}") {
+                                Text(
+                                    text = rows.first().categoryLabel,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 4.dp, top = 8.dp, bottom = 2.dp),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            items(
+                                items = rows,
+                                key = { row ->
+                                    "${row.entry.labelRes}:${row.entry.labelString.orEmpty()}:${row.entry.packageName.orEmpty()}"
+                                }
+                            ) { row ->
+                                val entry = row.entry
+                                LabGridCard(
+                                    entry = entry,
+                                    label = row.label,
+                                    categoryLabel = row.categoryLabel,
+                                    isActive = entry.detail?.let { it in active } == true,
+                                    modifier = entry.detail?.let {
+                                        Modifier.televisionReturnFocus(it)
+                                    } ?: Modifier,
+                                    onClick = {
+                                        if (entry.packageName != null && entry.releaseUrl != null) {
+                                            openCompanionTool(
+                                                context,
+                                                entry.packageName,
+                                                entry.releaseUrl
+                                            )
+                                        } else {
+                                            entry.detail?.let(onOpenDetail)
+                                        }
+                                    }
+                                )
+                            }
+                        }
+                    }
+                }
+
+                ScrollToTopButton(
+                    gridState = gridState,
+                    bottomPadding = bottomPadding,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        top = 10.dp,
+                        end = 16.dp,
+                        bottom = bottomPadding + 8.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(13.dp)
+                ) {
+                    if (groupedEntries.isEmpty()) {
+                        item(key = "empty-search-list") {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 48.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_title),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_message),
+                                    modifier = Modifier.padding(top = 6.dp),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                TextButton(
+                                    onClick = { query = "" },
+                                    modifier = Modifier.padding(top = 4.dp)
+                                ) {
+                                    Text(stringResource(R.string.labs_clear_search))
+                                }
+                            }
+                        }
+                    } else {
+                        groupedEntries.forEach { (category, rows) ->
+                            item(key = "category-${category.name}") {
+                                Text(
+                                    text = rows.first().categoryLabel,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 4.dp, top = 8.dp, bottom = 1.dp),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            items(
+                                items = rows,
+                                key = { row ->
+                                    "${row.entry.labelRes}:${row.entry.labelString.orEmpty()}:${row.entry.packageName.orEmpty()}"
+                                }
+                            ) { row ->
+                                val entry = row.entry
+                                SegmentedCard {
+                                    SegmentedListItem(
+                                        modifier = entry.detail?.let {
+                                            Modifier.televisionReturnFocus(it)
+                                        } ?: Modifier,
+                                        centerSlots = true,
+                                        leadingContent = {
+                                            Box {
+                                                FeaturePlateIcon(entry.icon)
+                                                if (entry.detail?.let { it in active } == true) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .align(Alignment.BottomEnd)
+                                                            .offset(x = 2.dp, y = 2.dp)
+                                                            .size(ActiveDotSize)
+                                                            .background(ActiveGreen, CircleShape)
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        headlineContent = { Text(row.label) },
+                                        trailingContent = {
+                                            Icon(
+                                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                                contentDescription = null
+                                            )
+                                        },
+                                        onClick = {
+                                            if (entry.packageName != null && entry.releaseUrl != null) {
+                                                openCompanionTool(
+                                                    context,
+                                                    entry.packageName,
+                                                    entry.releaseUrl
+                                                )
+                                            } else {
+                                                entry.detail?.let(onOpenDetail)
+                                            }
+                                        }
                                     )
                                 }
                             }
-                        },
-                        headlineContent = { Text(label) },
-                        trailingContent = {
-                            Icon(
-                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                contentDescription = null
-                            )
-                        },
-                        onClick = { onOpenDetail(entry.detail) }
-                    )
+                        }
+                    }
                 }
-            }
-            }
 
-            ScrollToTopButton(
-                listState = listState,
-                bottomPadding = bottomPadding,
-                modifier = Modifier.align(Alignment.BottomEnd)
-            )
+                ScrollToTopButton(
+                    listState = listState,
+                    bottomPadding = bottomPadding,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
         }
     }
 }
@@ -275,7 +688,152 @@ private fun activeFeatures(context: Context): Set<Detail> = buildSet {
 
 /** One row of the list: what it is called, what is on it, and where it goes. */
 private data class LabEntry(
-    @StringRes val labelRes: Int,
+    @StringRes val labelRes: Int = 0,
     val icon: ImageVector,
-    val detail: Detail
+    val detail: Detail? = null,
+    val category: LabCategory,
+    val searchTerms: String,
+    val packageName: String? = null,
+    val releaseUrl: String? = null,
+    val labelString: String? = null
+) {
+    constructor(
+    val labelString: String? = null,
+    @StringRes val labelRes: Int = 0
+) {
+    constructor(
+        @StringRes labelRes: Int,
+        icon: ImageVector,
+        detail: Detail? = null,
+        category: LabCategory,
+        searchTerms: String,
+        packageName: String? = null,
+        releaseUrl: String? = null
+    ) : this(
+        icon = icon,
+        detail = detail,
+        category = category,
+        searchTerms = searchTerms,
+        packageName = packageName,
+        releaseUrl = releaseUrl,
+        labelString = null,
+        labelRes = labelRes
+    )
+
+    constructor(
+        labelString: String,
+        icon: ImageVector,
+        detail: Detail? = null,
+        category: LabCategory,
+        searchTerms: String,
+        packageName: String? = null,
+        releaseUrl: String? = null
+    ) : this(
+        labelRes = 0,
+        icon = icon,
+        detail = detail,
+        category = category,
+        searchTerms = searchTerms,
+        packageName = packageName,
+        releaseUrl = releaseUrl,
+        labelString = labelString
+        labelString = labelString,
+        labelRes = 0
+    )
+}
+
+private data class LabDisplayEntry(
+    val entry: LabEntry,
+    val label: String,
+    val categoryLabel: String
 )
+
+private fun openCompanionTool(context: Context, packageName: String, releaseUrl: String) {
+    val intent = context.packageManager.getLaunchIntentForPackage(packageName)
+        ?: Intent(Intent.ACTION_VIEW, Uri.parse(releaseUrl))
+    try {
+        context.startActivity(intent)
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, R.string.lab_companion_open_failed, Toast.LENGTH_LONG).show()
+    }
+}
+
+@Composable
+private fun LabGridCard(
+    entry: LabEntry,
+    label: String,
+    categoryLabel: String,
+    isActive: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(132.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(14.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Box {
+                    FeaturePlateIcon(entry.icon)
+                    if (isActive) {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .offset(x = 2.dp, y = 2.dp)
+                                .size(ActiveDotSize)
+                                .background(ActiveGreen, CircleShape)
+                        )
+                    }
+                }
+                if (entry.packageName != null && entry.releaseUrl != null) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.OpenInNew,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    )
+                } else {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    )
+                }
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = categoryLabel,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+

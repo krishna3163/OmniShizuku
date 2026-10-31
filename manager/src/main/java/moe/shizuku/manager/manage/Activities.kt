@@ -16,6 +16,7 @@ import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.utils.Diag
 import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.runShellCommand
+import moe.shizuku.manager.utils.shellQuote
 import org.lsposed.hiddenapibypass.HiddenApiBypass
 
 /**
@@ -268,13 +269,13 @@ object Activities {
     internal fun intentArguments(intent: Intent): List<String> = buildList {
         fun pair(flag: String, value: String) {
             add(flag)
-            add(quoted(value))
+            add(shellQuote(value))
         }
 
         fun triple(flag: String, key: String, value: String) {
             add(flag)
-            add(quoted(key))
-            add(quoted(value))
+            add(shellQuote(key))
+            add(shellQuote(value))
         }
 
         intent.action?.takeIf { it.isNotEmpty() }?.let { pair("-a", it) }
@@ -297,9 +298,6 @@ object Activities {
             }
         }
     }
-
-    /** Single-quoted, with a quote inside closed and reopened, which is what a shell needs. */
-    private fun quoted(value: String): String = "'" + value.replace("'", "'\\''") + "'"
 
     /** One of the things an intent would reach, for naming it before anything is sent. */
     data class Target(val label: String, val packageName: String)

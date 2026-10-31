@@ -1,0 +1,18 @@
+<resources>
+    <string name="home_usage_title">Current Usage</string>
+    <string name="home_usage_paused">Usage sampling pauses while Home is not visible.</string>
+    <string name="home_usage_service_unavailable">Connect the Shizuku service to view live usage.</string>
+    <string name="home_usage_permission_missing">Grant this app Shizuku permission to view live usage.</string>
+    <string name="home_usage_cpu">CPU utilization</string>
+    <string name="home_usage_memory">Device RAM used</string>
+    <string name="home_usage_battery_temperature">Battery temperature</string>
+    <string name="home_usage_battery_drain">Battery drain estimate</string>
+    <string name="home_usage_download">Download</string>
+    <string name="home_usage_upload">Upload</string>
+    <string name="home_usage_network_scope">Device-wide traffic (all apps/interfaces); rates need two valid byte-counter samples.</string>
+    <string name="home_usage_unavailable">Unavailable</string>
+    <string name="home_usage_sampling">Waiting for valid samples</string>
+    <string name="home_usage_percent_per_hour">%1$.1f%% / hour</string>
+    <string name="home_device_info_title">Device Info</string>
+    <string name="home_device_info_summary">Battery, system, storage, thermal and Shizuku details</string>
+</resources>

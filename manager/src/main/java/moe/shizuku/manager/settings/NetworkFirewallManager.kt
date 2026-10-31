@@ -2,6 +2,7 @@ package moe.shizuku.manager.settings
 
 import android.os.ParcelFileDescriptor
 import moe.shizuku.manager.ShizukuSettings
+import moe.shizuku.manager.utils.PackageNameValidator
 import moe.shizuku.server.IShizukuService
 import rikka.shizuku.Shizuku
 import java.util.concurrent.TimeUnit
@@ -9,8 +10,6 @@ import java.util.concurrent.TimeUnit
 object NetworkFirewallManager {
 
     private const val KEY_BLOCKED_PACKAGES = "network_firewall_blocked_packages"
-    private val packageNamePattern = Regex("[A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)+")
-
     fun blockedPackages(): Set<String> =
         ShizukuSettings.getPreferences()
             .getStringSet(KEY_BLOCKED_PACKAGES, emptySet())
@@ -27,7 +26,7 @@ object NetworkFirewallManager {
     }
 
     fun setBlocked(packageName: String, blocked: Boolean): Boolean {
-        if (!packageNamePattern.matches(packageName)) return false
+        if (!PackageNameValidator.isValid(packageName)) return false
 
         val chain = runCommand("cmd connectivity get-chain3-enabled")?.trim()
         if (chain?.endsWith(":enabled") != true) {

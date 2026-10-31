@@ -2064,7 +2064,9 @@ private fun LazyListScope.aboutSectionContent(
             SettingsRow(
                 icon = R.drawable.ic_outline_info_24,
                 title = stringResource(R.string.app_name),
-                summary = if (versionName.isNotBlank()) "v$versionName" else null,
+                summary = if (versionName.isNotBlank()) {
+                    if (versionName.startsWith("v", ignoreCase = true)) versionName else "v$versionName"
+                } else null,
                 onClick = onOpenAbout
             )
             GroupDivider()

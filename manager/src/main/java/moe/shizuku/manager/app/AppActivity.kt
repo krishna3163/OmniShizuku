@@ -34,6 +34,7 @@ abstract class AppActivity : MaterialActivity() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             window.isNavigationBarContrastEnforced = false
         }
+        window.decorView.filterTouchesWhenObscured = true
     }
 
     override fun computeUserThemeKey(): String {

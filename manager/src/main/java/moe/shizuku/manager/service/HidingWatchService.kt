@@ -179,9 +179,9 @@ class HidingWatchService : Service() {
             paused = Hiding.isPaused(),
             forcingDark = ForceDark.isApplied()
         )
-        // The type argument arrived with Android 10 (API 29); below it the two-argument call
-        // is the only one there is, and it is also the only one that is legal there.
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+        // The special-use type arrived with Android 14 (API 34); below it the single-argument call
+        // is used to prevent foregroundServiceType compatibility crashes.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             startForeground(
                 NOTIFICATION_ID,
                 notification,

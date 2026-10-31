@@ -24,6 +24,7 @@ import moe.shizuku.manager.adb.PreferenceAdbKeyStore
 import moe.shizuku.manager.deviceowner.DeviceOwnerManager
 import moe.shizuku.manager.ktx.logd
 import moe.shizuku.manager.utils.EnvironmentUtils
+import moe.shizuku.manager.utils.SafeIntentUtils
 import moe.shizuku.server.IShizukuService
 import rikka.shizuku.Shizuku
 import java.io.File
@@ -221,9 +222,8 @@ object StubManager {
                                     @Suppress("DEPRECATION")
                                     i.getParcelableExtra(Intent.EXTRA_INTENT)
                                 }
-                                if (confirmIntent != null) {
-                                    confirmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                    context.startActivity(confirmIntent)
+                                if (confirmIntent != null && SafeIntentUtils.isSafeInstallerIntent(context, confirmIntent)) {
+                                    context.startActivity(SafeIntentUtils.sanitizeInstallerIntent(confirmIntent))
                                     return
                                 }
                             }
@@ -241,7 +241,7 @@ object StubManager {
                         context,
                         receiver,
                         IntentFilter(action),
-                        ContextCompat.RECEIVER_EXPORTED
+                        ContextCompat.RECEIVER_NOT_EXPORTED
                     )
                     try {
                         session.commit(pendingIntent.intentSender)
@@ -290,9 +290,8 @@ object StubManager {
                                 @Suppress("DEPRECATION")
                                 i.getParcelableExtra(Intent.EXTRA_INTENT)
                             }
-                            if (confirmIntent != null) {
-                                confirmIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                                context.startActivity(confirmIntent)
+                            if (confirmIntent != null && SafeIntentUtils.isSafeInstallerIntent(context, confirmIntent)) {
+                                context.startActivity(SafeIntentUtils.sanitizeInstallerIntent(confirmIntent))
                                 return
                             }
                         }
@@ -310,7 +309,7 @@ object StubManager {
                     context,
                     receiver,
                     IntentFilter(action),
-                    ContextCompat.RECEIVER_EXPORTED
+                    ContextCompat.RECEIVER_NOT_EXPORTED
                 )
                 try {
                     packageInstaller.uninstall(type.packageName, pendingIntent.intentSender)

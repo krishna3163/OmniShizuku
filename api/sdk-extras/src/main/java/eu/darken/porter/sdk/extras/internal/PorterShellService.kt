@@ -30,6 +30,9 @@ internal class PorterShellService : IPorterShellService.Stub() {
     }
 
     override fun start(command: Array<String>, dir: String?, owner: IBinder): IPorterShellProcess {
+        if (command.isEmpty() || command.any { it.contains('\u0000') }) {
+            throw IllegalArgumentException("Invalid command arguments")
+        }
         // setsid gives the command a process group of its own, so a kill reaches what it starts as
         // well. Either way a command that is not found exits with 127, as in a shell.
         val grouped = File(SETSID).exists()

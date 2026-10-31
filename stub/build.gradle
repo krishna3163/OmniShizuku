@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace 'shevery.compat.stub'
+    namespace = 'shevery.compat.stub'
     defaultConfig {
         versionCode 2000000000
         versionName "14.5.0"
@@ -20,20 +20,20 @@ android {
         }
     }
     buildFeatures {
-        buildConfig false
-        aidl false
+        buildConfig = false
+        aidl = false
     }
     signingConfigs {
         sign
     }
     buildTypes {
         debug {
-            signingConfig signingConfigs.sign
+            signingConfig = signingConfigs.sign
         }
         release {
-            signingConfig signingConfigs.sign
-            minifyEnabled false
-            shrinkResources false
+            signingConfig = signingConfigs.sign
+            minifyEnabled = false
+            shrinkResources = false
         }
     }
     lint {

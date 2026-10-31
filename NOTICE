@@ -1,0 +1,37 @@
+Third-party code notices
+
+Package-name validation in
+manager/src/main/java/moe/shizuku/manager/utils/PackageNameValidator.kt is
+adapted from ShizukuPlus `InputValidationUtils.isValidPackageName`.
+Copyright 2026 thejaustin. Licensed under Apache License 2.0; see LICENSE.
+
+Private DNS hostname normalization in
+manager/src/main/java/moe/shizuku/manager/utils/DnsHostnameValidator.kt is
+adapted from ADNS `PrivateDnsHostname`.
+Copyright (c) 2026 Eyal Meirom. Licensed under MIT; see licenses/ADNS-MIT.txt.
+
+Private DNS provider profile hostnames and filtering categories in
+manager/src/main/java/moe/shizuku/manager/dns/PrivateDnsManager.kt are adapted
+from the ADNS `DnsProviderCatalog` data. Copyright (c) 2026 Eyal Meirom.
+Licensed under MIT; see licenses/ADNS-MIT.txt.
+
+The battery details, thermal, device and charging-mode utilities under
+manager/src/main/java/com/sameerasw/essentials/, and battery vector drawables
+under manager/src/main/res/drawable/, are adapted from the Essentials project
+by Sameera Sandakelum. Copyright (c) 2025 Sameera Sandakelum. Licensed under
+MIT; see licenses/ESSENTIALS-MIT.txt.
+
+The photo watermark engine and EXIF metadata provider under
+manager/src/main/java/com/sameerasw/essentials/domain/watermark/, and the
+rounded camera, control-camera, date-range, grain and shutter-speed vectors
+under manager/src/main/res/drawable/, are reused from the Essentials project
+by Sameera Sandakelum. Copyright (c) 2026 sameerasw.com. Licensed under MIT;
+see licenses/ESSENTIALS-MIT.txt. The target-specific MediaStore export adapter
+is maintained by OmniShizuku.
+
+The Caffeinate controller and foreground wake-lock service under
+manager/src/main/java/moe/shizuku/manager/essentials/ are adapted from the
+Essentials project by Sameera Sandakelum. Copyright (c) 2026 sameerasw.com.
+Licensed under MIT; see licenses/ESSENTIALS-MIT.txt. The settings screen,
+target manifest entry, and Quick Settings tile adapter are maintained by
+OmniShizuku.
