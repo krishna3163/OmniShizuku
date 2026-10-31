@@ -593,6 +593,7 @@
         <provider
             android:name=".connector.ShizukuConnectorProvider"
             android:authorities="${applicationId}.connector;moe.shizuku.privileged.api.connector"
+            android:permission="moe.shizuku.manager.permission.MANAGER"
             android:exported="true" />
 
         <provider

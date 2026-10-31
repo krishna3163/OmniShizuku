@@ -108,7 +108,8 @@ object BackupRestoreUtil {
         while (entry != null) {
             val name = entry.name
             val cleanName = name.replace('\\', '/').trim('/')
-            if (cleanName.contains("../") || cleanName.startsWith("/")) {
+            val parts = cleanName.split('/')
+            if (cleanName.startsWith("/") || parts.any { it == ".." || it == "." || it.isBlank() }) {
                 zipInputStream.closeEntry()
                 entry = zipInputStream.getNextEntry()
                 continue

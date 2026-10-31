@@ -78,6 +78,11 @@ android {
     lint {
         checkReleaseBuilds false
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
 }
 
 afterEvaluate {
