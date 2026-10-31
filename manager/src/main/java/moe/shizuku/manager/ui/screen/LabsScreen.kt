@@ -698,10 +698,6 @@ private data class LabEntry(
     val labelString: String? = null
 ) {
     constructor(
-    val labelString: String? = null,
-    @StringRes val labelRes: Int = 0
-) {
-    constructor(
         @StringRes labelRes: Int,
         icon: ImageVector,
         detail: Detail? = null,
@@ -710,14 +706,14 @@ private data class LabEntry(
         packageName: String? = null,
         releaseUrl: String? = null
     ) : this(
+        labelRes = labelRes,
         icon = icon,
         detail = detail,
         category = category,
         searchTerms = searchTerms,
         packageName = packageName,
         releaseUrl = releaseUrl,
-        labelString = null,
-        labelRes = labelRes
+        labelString = null
     )
 
     constructor(
@@ -737,8 +733,6 @@ private data class LabEntry(
         packageName = packageName,
         releaseUrl = releaseUrl,
         labelString = labelString
-        labelString = labelString,
-        labelRes = 0
     )
 }
 

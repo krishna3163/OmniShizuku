@@ -50,12 +50,8 @@ import net.youapps.wallpaper_apis.ps.PicsumApi
 import net.youapps.wallpaper_apis.px.GooglePixelApi
 import net.youapps.wallpaper_apis.re.RedditApi
 import net.youapps.wallpaper_apis.wh.WallhavenApi
-import moe.shizuku.manager.ui.Detail
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
 import net.youapps.wallpaper_apis.wi.WikipediaPotdApi
+import moe.shizuku.manager.ui.Detail
 
 data class WallpaperEngineOption(
     val name: String,
@@ -82,7 +78,7 @@ private val POPULAR_TAGS = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WallYouScreen(onBack: () -> Unit = {}) {
+fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -94,14 +90,8 @@ fun WallYouScreen(onBack: () -> Unit = {}) {
     var wallpapers by remember { mutableStateOf<List<Wallpaper>>(emptyList()) }
     var favorites by remember { mutableStateOf<List<Wallpaper>>(emptyList()) }
     var loading by remember { mutableStateOf(false) }
-    var page by remember { mutableStateOf(1) }
-    
-    val engines = listOf("Wallhaven", "Pixabay", "Reddit", "Picsum", "Bing", "Owalls")
-    
-    fun loadWallpapers() {
     var page by remember { mutableIntStateOf(1) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
-
     var activeWallpaperDetail by remember { mutableStateOf<Wallpaper?>(null) }
 
     fun refreshFavorites() {
@@ -121,15 +111,6 @@ fun WallYouScreen(onBack: () -> Unit = {}) {
             loading = true
             errorMessage = null
             try {
-                val api = when (selectedEngine) {
-                    "Wallhaven" -> WallhavenApi()
-                    "Pixabay" -> PixabayApi()
-                    "Reddit" -> RedditApi()
-                    "Picsum" -> PicsumApi()
-                    "Bing" -> BingApi()
-                    "Owalls" -> OwallsApi()
-                    else -> WallhavenApi()
-                }
                 val currentPage = if (reset) 1 else page
                 val results = withContext(Dispatchers.IO) {
                     val api = when (selectedEngine.name) {
@@ -211,7 +192,6 @@ fun WallYouScreen(onBack: () -> Unit = {}) {
                     IconButton(onClick = { onOpenDetail(Detail.WALLYOU_SETTINGS) }) {
                         Icon(Icons.Outlined.Settings, contentDescription = "Settings")
                     }
-                }
                     IconButton(onClick = { loadWallpapers(reset = true) }) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
