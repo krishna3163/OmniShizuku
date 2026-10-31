@@ -99,9 +99,10 @@ fun TerminalScreen(onBack: () -> Unit) {
                                     Text(
                                         stringResource(
                                             R.string.terminal_tutorial_2_description,
-                                            SH_NAME,
-                                            SH_NAME,
-                                            ".bashrc"
+                                            "Termux",
+                                            "PKG",
+                                            "com.termux",
+                                            "com.termux"
                                         )
                                     )
                                     Text(
