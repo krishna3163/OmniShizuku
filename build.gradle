@@ -85,7 +85,7 @@ gitCommitId = gitOutput(['rev-parse', '--short', 'HEAD'], gitCommitId)
 
 def gitCommitCount = gitOutput(['rev-list', '--count', 'HEAD'], '45').toInteger()
 
-def defaultVersionName = "v0.0.2"
+def defaultVersionName = "v1.0.0"
 def baseVersionName = providers.gradleProperty("omniVersionName").getOrElse(defaultVersionName)
 ext {
     versionCode = gitCommitCount

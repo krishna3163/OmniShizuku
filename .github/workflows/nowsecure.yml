@@ -53,7 +53,8 @@ jobs:
           cache: gradle
 
       - name: Build your application
-        run: ./gradlew assembleDebug              # Update this to build your Android or iOS application
+        if: env.NOWSECURE_CONFIGURED == 'true'
+        run: ./gradlew :manager:assembleDebug
 
       - name: Run NowSecure
         if: env.NOWSECURE_CONFIGURED == 'true'
@@ -64,7 +65,7 @@ jobs:
           group_id: ${{ vars.NOWSECURE_GROUP_ID }}
 
       - name: Upload SARIF file
-        if: env.NOWSECURE_CONFIGURED == 'true'
+        if: env.NOWSECURE_CONFIGURED == 'true' && hashFiles('NowSecure.sarif') != ''
         uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         with:
           sarif_file: NowSecure.sarif

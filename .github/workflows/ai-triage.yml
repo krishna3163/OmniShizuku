@@ -46,7 +46,18 @@ jobs:
       # note above.
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
+      - name: Check Gemini API Key
+        id: check-key
+        run: |
+          if [ -z "${{ secrets.GEMINI_API_KEYS }}" ]; then
+            echo "::notice ::GEMINI_API_KEYS secret is not configured. Skipping AI triage."
+            echo "has_key=false" >> $GITHUB_OUTPUT
+          else
+            echo "has_key=true" >> $GITHUB_OUTPUT
+          fi
+
       - uses: ./.github/actions/ai-triage-bot
+        if: steps.check-key.outputs.has_key == 'true'
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           gemini-api-keys: ${{ secrets.GEMINI_API_KEYS }}

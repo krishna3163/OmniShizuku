@@ -55,7 +55,7 @@ jobs:
         if: env.CHECKMARX_CONFIGURED != 'true'
         run: echo "::notice::Skipping Checkmarx scan because CX_CLIENT_ID, CX_CLIENT_SECRET, or CX_TENANT is not configured."
       - name: Upload SARIF file
-        if: env.CHECKMARX_CONFIGURED == 'true'
+        if: env.CHECKMARX_CONFIGURED == 'true' && hashFiles('cx_result.sarif') != ''
         uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
         with:
           # Path to SARIF file relative to the root of the repository

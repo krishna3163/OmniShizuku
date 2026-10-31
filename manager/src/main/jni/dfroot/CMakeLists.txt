@@ -4,8 +4,8 @@ enable_language(ASM)
 
 set(JNI_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-include_directories("${JNI_DIR}")
-set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${C_FLAGS} -Wall -Wextra -fno-stack-protector -fomit-frame-pointer")
+set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -I${JNI_DIR} -I${CMAKE_CURRENT_BINARY_DIR}")
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${C_FLAGS} -I${JNI_DIR} -I${CMAKE_CURRENT_BINARY_DIR} -Wall -Wextra -fno-stack-protector -fomit-frame-pointer")
 
 set(SPLICEHELPER "${CMAKE_CURRENT_BINARY_DIR}/splicehelper")
 add_custom_command(

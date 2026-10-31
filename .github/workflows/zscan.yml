@@ -30,6 +30,8 @@ jobs:
   zscan:
     name: zScan
     runs-on: ubuntu-latest
+    env:
+      ZSCAN_CONFIGURED: ${{ secrets.ZSCAN_CLIENT_SECRET != '' && vars.ZSCAN_CLIENT_ID != '' }}
     permissions:
       contents: read          # for actions/checkout to fetch code
       security-events: write  # for github/codeql-action/upload-sarif to upload SARIF results
@@ -39,6 +41,7 @@ jobs:
       uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
 
     - name: Set up JDK 21
+      if: env.ZSCAN_CONFIGURED == 'true'
       uses: actions/setup-java@b843ebf9b913146b38da2eaa7aeddf76074ae1ad # v6.1.0
       with:
         java-version: "21"
@@ -46,22 +49,25 @@ jobs:
         cache: gradle
 
     - name: Execute gradle build
-      run: ./gradlew build    # Change this to build your mobile application
+      if: env.ZSCAN_CONFIGURED == 'true'
+      run: ./gradlew :manager:assembleDebug
 
     - name: Run Zimperium zScan
+      if: env.ZSCAN_CONFIGURED == 'true'
       uses: zimperium/zscanmarketplace@bfc6670f6648d796098c251ccefcfdb98983174d
       timeout-minutes: 60
       with:
-        # REPLACE: Zimperium Client Environment Name
-        client_env: env_string
-        # REPLACE: Zimperium Client ID
-        client_id: id_string
-        # REPLACE: Zimperium Client Secret
+        client_env: ${{ vars.ZSCAN_CLIENT_ENV || 'default' }}
+        client_id: ${{ vars.ZSCAN_CLIENT_ID }}
         client_secret: ${{ secrets.ZSCAN_CLIENT_SECRET }}
-        # REPLACE: The path to an .ipa or .apk
-        app_file: manager/build/outputs/apk/release/manager-release.apk
+        app_file: manager/build/outputs/apk/debug/manager-debug.apk
 
     - name: Upload SARIF file
+      if: env.ZSCAN_CONFIGURED == 'true' && hashFiles('Zimperium.sarif') != ''
       uses: github/codeql-action/upload-sarif@9b3254085494b55a0f7c4c2b3d2d52cc712ce370 # v4.39.1
       with:
         sarif_file: Zimperium.sarif
+
+    - name: Report missing Zimperium configuration
+      if: env.ZSCAN_CONFIGURED != 'true'
+      run: echo "::warning::Set ZSCAN_CLIENT_SECRET secret and ZSCAN_CLIENT_ID repository variable to enable this scan."

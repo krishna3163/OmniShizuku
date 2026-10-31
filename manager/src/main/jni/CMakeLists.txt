@@ -41,6 +41,8 @@ if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif ()
 
 # DFRoot integration (CVE-2026-43284) - GPL-2.0 licensed
-if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/dfroot/ko")
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/dfroot/ko/dfroot-android12-5.10.ko")
     add_subdirectory(dfroot)
+else ()
+    message(STATUS "DFRoot kernel modules (ko/) not present. Skipping dfroot native build.")
 endif ()

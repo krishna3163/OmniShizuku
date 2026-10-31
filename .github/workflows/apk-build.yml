@@ -66,7 +66,7 @@ jobs:
             fi
             VERSION="$REF_NAME"
           else
-            VERSION="v0.0.2"
+            VERSION="v1.0.0"
           fi
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           echo "Selected OmniShizuku version: $VERSION"

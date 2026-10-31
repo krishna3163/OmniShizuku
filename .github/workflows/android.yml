@@ -2,9 +2,9 @@ name: Android CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "release/*", "security/*" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "release/*", "security/*" ]
 
 permissions:
   contents: read
@@ -34,3 +34,19 @@ jobs:
         yes | "$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager" --channel=3 "platforms;android-37.1" "build-tools;37.0.0" "ndk;29.0.14206865"
     - name: Test and build with Gradle
       run: ./gradlew :manager:testDebugUnitTest :manager:assembleDebug --stacktrace --no-daemon
+
+    - name: Upload Test Report
+      if: always()
+      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      with:
+        name: test-reports
+        path: manager/build/reports/tests/testDebugUnitTest/
+        if-no-files-found: ignore
+
+    - name: Upload Debug APK
+      if: success()
+      uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
+      with:
+        name: manager-debug-apk
+        path: manager/build/outputs/apk/debug/*.apk
+        if-no-files-found: warn

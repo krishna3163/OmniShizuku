@@ -241,7 +241,13 @@ class AboutActivity : AppActivity() {
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier
                             .combinedClickable(
-                                onClick = {},
+                                onClick = {
+                                    Toast.makeText(
+                                        context,
+                                        "OmniShizuku v${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE}) • Long-press to unlock developer tools",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                },
                                 onLongClick = {
                                     DeveloperFeatures.unlockEssentialsHub(context)
                                     Toast.makeText(

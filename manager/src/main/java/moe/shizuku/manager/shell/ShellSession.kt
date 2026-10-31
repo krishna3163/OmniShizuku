@@ -11,6 +11,9 @@ import rikka.shizuku.Shizuku
 
 /** Where a command runs. */
 enum class ShellBackend {
+    /** Run in the app's own process sandbox without privileges. */
+    LOCAL,
+
     /** Through the Shizuku server: uid 2000 over adb, 0 for root, 1000 for the exploit. */
     SHIZUKU,
 
@@ -82,6 +85,7 @@ class ShellSession {
     fun run(backend: ShellBackend, command: String, sink: (ShellLine) -> Unit): Int {
         val body = script(command)
         return when (backend) {
+            ShellBackend.LOCAL -> runThroughLocal(body, sink)
             ShellBackend.SHIZUKU -> runThroughShizuku(body, sink)
             ShellBackend.ROOT -> runThroughRoot(body, sink)
         }
@@ -205,6 +209,28 @@ class ShellSession {
         } catch (e: Throwable) {
             Log.w(AppConstants.TAG, "Root shell failed", e)
             sink(ShellLine(e.message ?: e.javaClass.simpleName, ShellLine.Kind.ERROR))
+            -1
+        }
+    }
+
+    private fun runThroughLocal(script: String, sink: (ShellLine) -> Unit): Int {
+        return try {
+            val process = ProcessBuilder("sh", "-c", script).start()
+            running = process
+            val out = pump(process.inputStream.bufferedReader(), ShellLine.Kind.OUTPUT, sink)
+            val err = pump(process.errorStream.bufferedReader(), ShellLine.Kind.ERROR, sink)
+
+            val code = process.waitFor()
+            out.join()
+            err.join()
+            val stopped = runCatching { process.exitValue() }.isFailure
+            runCatching { process.destroy() }
+            running = null
+            if (stopped) -1 else code
+        } catch (e: Throwable) {
+            Log.w(AppConstants.TAG, "Local shell failed", e)
+            sink(ShellLine(e.message ?: e.javaClass.simpleName, ShellLine.Kind.ERROR))
+            running = null
             -1
         }
     }
