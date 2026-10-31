@@ -55,24 +55,22 @@ fun EssentialsScreen(
     var searchQuery by remember { mutableStateOf("") }
     val expandedStates = remember { mutableStateMapOf<String, Boolean>() }
 
+    val hiddenDetails = remember {
+        setOf(
+            Detail.ISLAND,
+            Detail.SMART_PIXELS,
+            Detail.MEDIA_KEYS,
+            Detail.EDGE_LIGHTING,
+            Detail.WATERMARK
+        )
+    }
+
     val categories = remember {
         listOf(
             EssentialCategory(
-                title = "Display & Island",
+                title = "Display",
                 icon = Icons.Outlined.AspectRatio,
                 items = listOf(
-                    EssentialItem(
-                        title = "Dynamic Island",
-                        summary = "Floating punch-hole pill overlay for live media, battery & alerts",
-                        icon = Icons.Outlined.NotificationsActive,
-                        detail = Detail.ISLAND
-                    ),
-                    EssentialItem(
-                        title = "Smart Pixels (AMOLED Saver)",
-                        summary = "Disables 25%-75% OLED subpixel grid to save 15-44% display power",
-                        icon = Icons.Outlined.GridOn,
-                        detail = Detail.SMART_PIXELS
-                    ),
                     EssentialItem(
                         title = "Display Tweaker & Refresh Rate",
                         summary = "Resolution, screen density (DPI), and refresh rate overrides",
@@ -186,12 +184,6 @@ fun EssentialsScreen(
                         summary = "Independent volume stream control for media, ring, alarm, call",
                         icon = Icons.Outlined.GraphicEq,
                         detail = Detail.AUDIO_MASTER
-                    ),
-                    EssentialItem(
-                        title = "Volume Key Track Skipper",
-                        summary = "Skip tracks using volume up/down buttons when screen is off",
-                        icon = Icons.Outlined.MusicNote,
-                        detail = Detail.MEDIA_KEYS
                     )
                 )
             ),
@@ -199,12 +191,6 @@ fun EssentialsScreen(
                 title = "Interface & Visual Alerts",
                 icon = Icons.Outlined.Highlight,
                 items = listOf(
-                    EssentialItem(
-                        title = "Notification Edge Lighting",
-                        summary = "Neon edge glow animation along display perimeter on notifications",
-                        icon = Icons.Outlined.LightMode,
-                        detail = Detail.EDGE_LIGHTING
-                    ),
                     EssentialItem(
                         title = "Auto DND (Zen Mode)",
                         summary = "Automated Do-Not-Disturb scheduling based on app focus and schedules",
@@ -229,12 +215,6 @@ fun EssentialsScreen(
                 title = "Tools & Studio",
                 icon = Icons.Outlined.Build,
                 items = listOf(
-                    EssentialItem(
-                        title = "Photo Watermark & EXIF Studio",
-                        summary = "Luxury Leica frame & Hasselblad minimal branding with live EXIF strip",
-                        icon = Icons.Outlined.PhotoCamera,
-                        detail = Detail.WATERMARK
-                    ),
                     EssentialItem(
                         title = "Universal Android Debloater (UAD)",
                         summary = "1.6MB community safety-ranked package removal & 1-tap restore",
@@ -261,7 +241,10 @@ fun EssentialsScreen(
                     )
                 )
             )
-        )
+        ).mapNotNull { cat ->
+            val activeItems = cat.items.filterNot { it.detail in hiddenDetails }
+            if (activeItems.isNotEmpty()) cat.copy(items = activeItems) else null
+        }
     }
 
     // Default expand all categories

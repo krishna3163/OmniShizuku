@@ -299,8 +299,16 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         )
     }
 
+    val hiddenLabDetails = setOf(
+        Detail.ESSENTIALS,
+        Detail.SMART_PIXELS,
+        Detail.MEDIA_KEYS,
+        Detail.WATERMARK,
+        Detail.EDGE_LIGHTING,
+        Detail.ISLAND
+    )
     val visibleEntries = entries.filterNot {
-        it.detail == Detail.ESSENTIALS && !essentialsHubUnlocked
+        it.detail in hiddenLabDetails
     }
     val displayEntries = visibleEntries.map { entry ->
         LabDisplayEntry(
