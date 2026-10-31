@@ -142,7 +142,8 @@
         <activity
             android:name=".MainActivity"
             android:banner="@mipmap/banner"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

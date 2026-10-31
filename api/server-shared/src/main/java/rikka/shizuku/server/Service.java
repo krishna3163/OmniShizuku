@@ -307,6 +307,15 @@ public abstract class Service<
     public final IRemoteProcess newProcess(String[] cmd, String[] env, String dir) {
         enforceCallingPermission("newProcess");
 
+        if (cmd == null || cmd.length == 0) {
+            throw new IllegalArgumentException("cmd must not be empty");
+        }
+        for (String arg : cmd) {
+            if (arg != null && arg.indexOf('\0') != -1) {
+                throw new IllegalArgumentException("cmd arguments must not contain null characters");
+            }
+        }
+
         LOGGER.d("newProcess: uid=%d, cmd=%s, env=%s, dir=%s", Binder.getCallingUid(), Arrays.toString(cmd), Arrays.toString(env), dir);
 
         java.lang.Process process;

@@ -94,6 +94,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -308,7 +309,6 @@ private val tabs = listOf(
 
 @Composable
 fun ShizukuApp() {
-    val context = LocalContext.current
     ShizukuTheme {
         // Detail screens are shown outside the Scaffold, so wrap everything in a
         // Surface otherwise LocalContentColor falls back to black and plain
@@ -545,6 +545,7 @@ private fun MainTabs(
     onOpenDetail: (Detail) -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val view = LocalView.current
 
     // Whether the app has settled enough to read the lists nobody is looking at yet. Both app
     // lists are expensive to read - six hundred packages each - and a pager composes the page
@@ -764,8 +765,6 @@ private fun MainTabs(
                                     // Swiping still animates, because that is the gesture.
                                     if (!selected) {
                                         try {
-                                            val view = context.findViewById<android.view.View>(android.R.id.content)
-                                                ?: it
                                             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
                                                 view.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM)
                                             } else {

@@ -305,7 +305,7 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     val displayEntries = visibleEntries.map { entry ->
         LabDisplayEntry(
             entry = entry,
-            label = stringResource(entry.labelRes),
+            label = entry.labelString ?: if (entry.labelRes != 0) stringResource(entry.labelRes) else "",
             categoryLabel = stringResource(entry.category.titleRes)
         )
     }
@@ -525,14 +525,34 @@ private fun activeFeatures(context: Context): Set<Detail> = buildSet {
 
 /** One row of the list: what it is called, what is on it, and where it goes. */
 private data class LabEntry(
-    @StringRes val labelRes: Int,
+    @StringRes val labelRes: Int = 0,
     val icon: ImageVector,
     val detail: Detail? = null,
     val category: LabCategory,
     val searchTerms: String,
     val packageName: String? = null,
-    val releaseUrl: String? = null
-)
+    val releaseUrl: String? = null,
+    val labelString: String? = null
+) {
+    constructor(
+        labelString: String,
+        icon: ImageVector,
+        detail: Detail? = null,
+        category: LabCategory,
+        searchTerms: String,
+        packageName: String? = null,
+        releaseUrl: String? = null
+    ) : this(
+        labelRes = 0,
+        icon = icon,
+        detail = detail,
+        category = category,
+        searchTerms = searchTerms,
+        packageName = packageName,
+        releaseUrl = releaseUrl,
+        labelString = labelString
+    )
+}
 
 private data class LabDisplayEntry(
     val entry: LabEntry,

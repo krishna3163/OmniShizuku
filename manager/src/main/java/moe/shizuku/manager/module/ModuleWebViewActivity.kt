@@ -6,6 +6,7 @@ import android.widget.Toast
 import android.webkit.CookieManager
 import android.webkit.WebSettings
 import android.webkit.WebResourceRequest
+import android.webkit.WebResourceResponse
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.setContent
@@ -146,6 +147,16 @@ class ModuleWebViewActivity : AppActivity() {
         private val module: AdbModule,
         private val webNetworkAllowed: Boolean
     ) : WebViewClient() {
+
+        override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
+            val uri = request.url
+            if (uri.scheme?.lowercase() == "file") {
+                if (!isInsideWebRoot(uri.path.orEmpty())) {
+                    return WebResourceResponse("text/plain", "UTF-8", 403, "Forbidden", null, null)
+                }
+            }
+            return super.shouldInterceptRequest(view, request)
+        }
 
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
             val uri = request.url

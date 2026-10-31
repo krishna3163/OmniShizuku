@@ -9,6 +9,7 @@ import android.content.pm.PackageInstaller
 import android.os.Build
 import android.util.Log
 import androidx.core.content.ContextCompat
+import moe.shizuku.manager.utils.SafeIntentUtils
 import com.reandroid.apk.ApkModule
 import com.reandroid.archive.FileInputSource
 import moe.shizuku.manager.R
@@ -235,8 +236,8 @@ val installerReceiver =
             when (status) {
                 PackageInstaller.STATUS_PENDING_USER_ACTION -> {
                     val confirmationIntent = intent.getParcelableExtra<Intent>(Intent.EXTRA_INTENT)
-                    if (confirmationIntent != null) {
-                        context.startActivity(confirmationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                    if (confirmationIntent != null && SafeIntentUtils.isSafeInstallerIntent(context, confirmationIntent)) {
+                        context.startActivity(SafeIntentUtils.sanitizeInstallerIntent(confirmationIntent))
                     }
                 }
 

@@ -29,7 +29,6 @@ import net.youapps.wallpaper_apis.pb.PixabayApi
 import net.youapps.wallpaper_apis.ps.PicsumApi
 import net.youapps.wallpaper_apis.re.RedditApi
 import net.youapps.wallpaper_apis.wh.WallhavenApi
-import net.youapps.wallpaper_apis.wi.WikimediaApi
 import moe.shizuku.manager.ui.Detail
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -42,7 +41,7 @@ fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
     var loading by remember { mutableStateOf(false) }
     var page by remember { mutableStateOf(1) }
     
-    val engines = listOf("Wallhaven", "Pixabay", "Reddit", "Picsum", "Bing", "Owalls", "Wikimedia")
+    val engines = listOf("Wallhaven", "Pixabay", "Reddit", "Picsum", "Bing", "Owalls")
     
     fun loadWallpapers() {
         scope.launch {
@@ -55,7 +54,6 @@ fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
                     "Picsum" -> PicsumApi()
                     "Bing" -> BingApi()
                     "Owalls" -> OwallsApi()
-                    "Wikimedia" -> WikimediaApi()
                     else -> WallhavenApi()
                 }
                 val results = withContext(Dispatchers.IO) {
@@ -131,7 +129,7 @@ fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
                                 }
                         ) {
                             AsyncImage(
-                                model = wallpaper.thumbUrl,
+                                model = wallpaper.preview,
                                 contentDescription = wallpaper.title,
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop

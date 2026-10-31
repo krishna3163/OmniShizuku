@@ -155,6 +155,12 @@ class RequestPermissionActivity : AppActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        // Protect critical privileged permission dialog from tapjacking and overlay attacks
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+            window.setHideOverlayWindows(true)
+        }
+        window.decorView.filterTouchesWhenObscured = true
+
         val bundles = listOfNotNull(
             intent.extras,
             intent.getBundleExtra("bundle")

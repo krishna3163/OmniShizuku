@@ -15,7 +15,10 @@ public class Logger {
     }
 
     public boolean isLoggable(String tag, int level) {
-        return true;
+        if (level >= Log.INFO) {
+            return true;
+        }
+        return moe.shizuku.manager.BuildConfig.DEBUG || Log.isLoggable(tag, level);
     }
 
     public void v(String msg) {

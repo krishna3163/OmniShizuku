@@ -30,6 +30,7 @@
         <activity
             android:name="moe.shizuku.privileged.api.ForwardActivity"
             android:exported="true"
+            android:taskAffinity=""
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoDisplay">
             <intent-filter>
