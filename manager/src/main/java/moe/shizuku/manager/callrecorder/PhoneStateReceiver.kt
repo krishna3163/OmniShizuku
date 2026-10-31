@@ -10,12 +10,10 @@ import android.telephony.TelephonyManager
  * to the call recording decision engine.
  */
 class PhoneStateReceiver : BroadcastReceiver() {
-
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action != TelephonyManager.ACTION_PHONE_STATE_CHANGED) return
 
-        val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE)
-            ?: return
+        val state = intent.getStringExtra(TelephonyManager.EXTRA_STATE) ?: return
         val number = intent.getStringExtra(TelephonyManager.EXTRA_INCOMING_NUMBER)
 
         CallDetectionOrchestrator.getInstance(context.applicationContext).handlePhoneState(state, number)
@@ -23,7 +21,7 @@ class PhoneStateReceiver : BroadcastReceiver() {
 }
 
 /**
- * Orchestrates call detection and recording decisions.
+ * Orchestrates call detection and automatic recording decisions.
  */
 class CallDetectionOrchestrator private constructor(private val context: Context) {
     companion object {
@@ -35,53 +33,64 @@ class CallDetectionOrchestrator private constructor(private val context: Context
         }
     }
 
-    private var isAutoRecordEnabled = false
     private var currentCallData: CallData? = null
 
     fun handlePhoneState(state: String, number: String?) {
+        val autoRecord = RecordingStateHolder.autoRecordEnabled.value
         when (state) {
             TelephonyManager.EXTRA_STATE_RINGING -> {
-                currentCallData = CallData(number = number,
+                currentCallData = CallData(
+                    number = number,
                     direction = if (number != null) CallDirection.INCOMING else CallDirection.UNKNOWN,
-                    startTimeMs = System.currentTimeMillis())
-                if (isAutoRecordEnabled && shouldRecord(number)) {
+                    startTimeMs = System.currentTimeMillis()
+                )
+                if (autoRecord && RecordingStateHolder.recordIncoming.value && shouldRecord(number)) {
                     startRecording()
                 }
             }
             TelephonyManager.EXTRA_STATE_OFFHOOK -> {
                 if (currentCallData == null) {
-                    currentCallData = CallData(number = number,
+                    currentCallData = CallData(
+                        number = number,
                         direction = CallDirection.OUTGOING,
-                        startTimeMs = System.currentTimeMillis())
+                        startTimeMs = System.currentTimeMillis()
+                    )
                 }
-                if (isAutoRecordEnabled && shouldRecord(number)) {
+                if (autoRecord && RecordingStateHolder.recordOutgoing.value && shouldRecord(number)) {
                     startRecording()
                 }
             }
             TelephonyManager.EXTRA_STATE_IDLE -> {
-                stopRecording()
+                if (RecordingStateHolder.isRecording.value) {
+                    stopRecording()
+                }
                 currentCallData = null
             }
         }
     }
 
     private fun shouldRecord(number: String?): Boolean {
+        if (number.isNullOrBlank() && RecordingStateHolder.ignoreAnonymous.value) {
+            return false
+        }
         return true
     }
 
     private fun startRecording() {
-        val intent = android.content.Intent(context, RecordingForegroundService::class.java)
-        intent.action = "com.krishna.omnishizuku.action.START_RECORDING"
-        context.startForegroundService(intent)
+        val intent = Intent(context, RecordingForegroundService::class.java).apply {
+            action = RecordingForegroundService.ACTION_START
+        }
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            context.startForegroundService(intent)
+        } else {
+            context.startService(intent)
+        }
     }
 
     private fun stopRecording() {
-        val intent = android.content.Intent(context, RecordingForegroundService::class.java)
-        intent.action = "com.krishna.omnishizuku.action.STOP_RECORDING"
+        val intent = Intent(context, RecordingForegroundService::class.java).apply {
+            action = RecordingForegroundService.ACTION_STOP
+        }
         context.startService(intent)
-    }
-
-    fun setAutoRecord(enabled: Boolean) {
-        isAutoRecordEnabled = enabled
     }
 }

@@ -121,6 +121,17 @@ public abstract class UserServiceManager {
         int versionCode = options.getInt(USER_SERVICE_ARG_VERSION_CODE, 1);
         String tag = options.getString(USER_SERVICE_ARG_TAG);
         String processNameSuffix = options.getString(USER_SERVICE_ARG_PROCESS_NAME);
+
+        if (!className.matches("^[a-zA-Z0-9_.]+$")) {
+            throw new IllegalArgumentException("Illegal characters in className: " + className);
+        }
+        if (processNameSuffix != null && !processNameSuffix.matches("^[a-zA-Z0-9_.]+$")) {
+            throw new IllegalArgumentException("Illegal characters in processNameSuffix: " + processNameSuffix);
+        }
+        if (tag != null && !tag.matches("^[a-zA-Z0-9_.]+$")) {
+            throw new IllegalArgumentException("Illegal characters in tag: " + tag);
+        }
+
         boolean debug = options.getBoolean(USER_SERVICE_ARG_DEBUGGABLE, false);
         boolean noCreate = options.getBoolean(USER_SERVICE_ARG_NO_CREATE, false);
         boolean daemon = options.getBoolean(USER_SERVICE_ARG_DAEMON, true);

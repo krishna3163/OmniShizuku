@@ -3,23 +3,39 @@ package moe.shizuku.manager.callrecorder
 import android.content.Context
 import android.os.Binder
 import android.os.ParcelFileDescriptor
+import android.util.Log
 import androidx.annotation.Keep
+import moe.shizuku.manager.callrecorder.ILogCallback.Stub as LogCallbackStub
 import moe.shizuku.manager.callrecorder.IRecordingCallback.Stub as RecordingCallbackStub
 import moe.shizuku.manager.callrecorder.IShellService.Stub as ShellServiceStub
-import moe.shizuku.manager.callrecorder.ILogCallback.Stub as LogCallbackStub
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.system.exitProcess
 
+/**
+ * Privileged ShellService running inside the Shizuku shell process (UID 2000).
+ */
 @Keep
-class ShellService @Keep constructor(context: Context?) : ShellServiceStub() {
+class ShellService : ShellServiceStub {
+    companion object {
+        private const val TAG = "SCR:ShellService"
+    }
 
     private val isInitialized = AtomicBoolean(false)
     private val recordingEngine by lazy { ShellRecordingEngine() }
     private var logCallback: ILogCallback? = null
     private var recordingCallback: IRecordingCallback? = null
 
+    @Keep
+    constructor() : this(null)
+
+    @Keep
+    constructor(context: Context?)
+
     private fun ensureInitialized() {
         if (isInitialized.compareAndSet(false, true)) {
+            Log.d(TAG, "Initializing ShellService in UID ${android.os.Process.myUid()}...")
             ShellWorkarounds.apply()
+            Log.d(TAG, "ShellWorkarounds applied.")
         }
     }
 
@@ -34,8 +50,6 @@ class ShellService @Keep constructor(context: Context?) : ShellServiceStub() {
         }
     }
 
-    private fun clamp(value: Int, min: Int, max: Int): Int = value.coerceIn(min, max)
-
     override fun startRecording(
         outputFile: ParcelFileDescriptor,
         primarySource: Int,
@@ -43,90 +57,80 @@ class ShellService @Keep constructor(context: Context?) : ShellServiceStub() {
         channelSplit: Boolean,
         codec: Int,
         bitrate: Int
-    ) {
-        clearIdentity {
-            ensureInitialized()
-            val sources = AudioSource.values()
-            val primaryIdx = clamp(primarySource, 0, sources.lastIndex)
-            val secondaryIdx = if (secondarySource >= 0) clamp(secondarySource, 0, sources.lastIndex) else -1
-            val plan = RecordingPlan(
-                primary = CapturePlan(source = sources[primaryIdx]),
-                secondary = if (secondaryIdx >= 0) CapturePlan(source = sources[secondaryIdx]) else null,
-                isAudioChannelSplitEnabled = channelSplit,
-                codec = RecordingCodec.fromOrdinal(codec),
-                bitrate = bitrate
-            )
-            val cb = object : RecordingCallbackStub() {
-                override fun onRecordingStarted() {
-                    clearIdentity { recordingCallback?.onRecordingStarted(); Unit }
-                }
-                override fun onRecordingStopped() {
-                    clearIdentity { recordingCallback?.onRecordingStopped(); Unit }
-                }
-                override fun onRecordingPaused() {
-                    clearIdentity { recordingCallback?.onRecordingPaused(); Unit }
-                }
-                override fun onRecordingResumed() {
-                    clearIdentity { recordingCallback?.onRecordingResumed(); Unit }
-                }
-                override fun onRecordingFailure(errorCode: Int, message: String) {
-                    clearIdentity { recordingCallback?.onRecordingFailure(errorCode, message); Unit }
-                }
-                override fun onRecordingProgress(durationMs: Long, fileSizeBytes: Long) {
-                    clearIdentity { recordingCallback?.onRecordingProgress(durationMs, fileSizeBytes); Unit }
-                }
+    ) = clearIdentity {
+        ensureInitialized()
+        val primarySrc = AudioSource.fromOrdinal(primarySource)
+        val secondarySrc = if (secondarySource >= 0) AudioSource.fromOrdinal(secondarySource) else null
+        val targetCodec = RecordingCodec.fromOrdinal(codec)
+
+        val plan = RecordingPlan(
+            primary = CapturePlan(source = primarySrc),
+            secondary = secondarySrc?.let { CapturePlan(source = it) },
+            isAudioChannelSplitEnabled = channelSplit,
+            codec = targetCodec,
+            bitrate = if (bitrate > 0) bitrate else targetCodec.defaultBitrate
+        )
+
+        val cb = object : RecordingCallbackStub() {
+            override fun onRecordingStarted() {
+                clearIdentity { recordingCallback?.onRecordingStarted(); Unit }
             }
-            recordingEngine.start(outputFile, plan, cb)
+            override fun onRecordingStopped() {
+                clearIdentity { recordingCallback?.onRecordingStopped(); Unit }
+            }
+            override fun onRecordingPaused() {
+                clearIdentity { recordingCallback?.onRecordingPaused(); Unit }
+            }
+            override fun onRecordingResumed() {
+                clearIdentity { recordingCallback?.onRecordingResumed(); Unit }
+            }
+            override fun onRecordingFailure(errorCode: Int, message: String) {
+                clearIdentity { recordingCallback?.onRecordingFailure(errorCode, message); Unit }
+            }
+            override fun onRecordingProgress(durationMs: Long, fileSizeBytes: Long) {
+                clearIdentity { recordingCallback?.onRecordingProgress(durationMs, fileSizeBytes); Unit }
+            }
         }
+
+        recordingEngine.start(outputFile, plan, cb)
     }
 
-    override fun stopRecording() {
-        clearIdentity {
-            ensureInitialized()
-            recordingEngine.stop()
-        }
+    override fun stopRecording() = clearIdentity {
+        ensureInitialized()
+        recordingEngine.stop()
     }
 
-    override fun pauseRecording() {
-        clearIdentity {
-            ensureInitialized()
-            recordingEngine.pause()
-        }
+    override fun pauseRecording() = clearIdentity {
+        ensureInitialized()
+        recordingEngine.pause()
     }
 
-    override fun resumeRecording() {
-        clearIdentity {
-            ensureInitialized()
-            recordingEngine.resume()
-        }
+    override fun resumeRecording() = clearIdentity {
+        ensureInitialized()
+        recordingEngine.resume()
     }
 
-    override fun isRecording(): Boolean {
-        return clearIdentity {
-            ensureInitialized()
-            recordingEngine.isRecording()
-        }
+    override fun isRecording(): Boolean = clearIdentity {
+        ensureInitialized()
+        recordingEngine.isRecording()
     }
 
-    override fun setLogCallback(callback: ILogCallback, redactionEnabled: Boolean) {
-        clearIdentity {
-            logCallback = callback
-            ensureInitialized()
-        }
+    override fun setLogCallback(callback: ILogCallback, redactionEnabled: Boolean) = clearIdentity {
+        logCallback = callback
+        ensureInitialized()
     }
 
-    override fun setRecordingCallback(callback: IRecordingCallback) {
-        clearIdentity {
-            recordingCallback = callback
-        }
+    override fun setRecordingCallback(callback: IRecordingCallback) = clearIdentity {
+        recordingCallback = callback
     }
 
     override fun destroy() {
-        recordingEngine.stop()
+        Log.i(TAG, "ShellService.destroy() called, terminating shell process")
+        runCatching { recordingEngine.stop() }
         clearIdentity {
             logCallback = null
             recordingCallback = null
         }
-        kotlin.system.exitProcess(0)
+        exitProcess(0)
     }
 }

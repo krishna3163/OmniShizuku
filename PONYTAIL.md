@@ -36,8 +36,7 @@ Build: `./gradlew :manager:assembleDebug` | Release: `./gradlew :manager:assembl
 ### Entry / App shell
 | File | What it does |
 |------|-------------|
-| `MainActivity.kt` | Launcher activity — checks first launch, routes to `FirstLaunchActivity` or `HomeActivity` |
-| `FirstLaunchActivity.kt` | **First-time onboarding**: 6 disclaimers, agreement with 5s timer, language, theme, activation method |
+| `MainActivity.kt` | Launcher activity — directly boots to `HomeActivity` (onboarding screens removed) |
 | `ShizukuApplication.kt` | Application class, Crashlytics + uncaught handler |
 | `app/AppActivity.kt` | Base activity (edge-to-edge, theme, system bars) |
 | `app/AppBarActivity.kt` | AppBar host |
@@ -71,7 +70,6 @@ Tab screens (index → file):
 | Start ADB / root / Dhizuku | `starter/Starter.kt`, `start/AdbStartRun.kt`, `start/StartTransport.kt`, `dhizuku/DhizukuService.kt` |
 | Wireless ADB / pairing | `adb/AdbStarter.kt`, `adb/AdbPairingClient.kt`, `adb/AdbPairingService.kt`, `adb/WirelessPortHunt.kt` |
 | Wireless ADB auto-PIN (accessibility) | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `res/xml/wireless_adb_pin_service_config.xml` |
-| First-launch onboarding | `FirstLaunchActivity.kt`, `ShizukuSettings.java` (KEY_FIRST_LAUNCH, KEY_ACTIVATION_METHOD) |
 | App management / freeze / debloat | `management/ApplicationManagementActivity.kt`, `freeze/FreezerScreen.kt`, `debloater/DebloaterScreen.kt`, `manage/PackageTools.kt` |
 | Audio Mix / Mixed Audio | `audio/MixedAudioScreen.kt` | Audio stream mixing and routing |
 | Sound Master | `audio/SoundMasterScreen.kt` | Independent volume stream sliders |
@@ -118,7 +116,6 @@ Tab screens (index → file):
 | Auto-close / crash | `manager/ShizukuApplication.kt` | Firebase Crashlytics init + `Thread.setDefaultUncaughtExceptionHandler` safety net |
 | DeviceInfo infinite loading | `manage/DeviceInfo.kt`, `ui/screen/DeviceInfoScreen.kt` | `snapshot()` is now `suspend` with 20s `withTimeoutOrNull`; screen shows partial data instead of stuck spinner |
 | Wireless ADB PIN typing | `adb/WirelessAdbPinManager.kt`, `adb/WirelessAdbPinService.kt`, `ui/screen/SettingsScreen.kt` | New opt-in accessibility service: Off / Manual / Automatic modes. Automatic requires accessibility permission - user is prompted to enable it in system settings if not granted. |
-| First launch / onboarding | `FirstLaunchActivity.kt`, `MainActivity.kt` | 6-screen disclaimer, 5s agreement timer, language/theme/activation setup |
 
 ---
 
@@ -126,7 +123,6 @@ Tab screens (index → file):
 
 | File | What it does |
 |------|-------------|
-| `FirstLaunchActivity.kt` | First-launch onboarding activity (disclaimers, agreement, language, theme, activation) |
 | `adb/WirelessAdbPinManager.kt` | Auto-PIN mode persistence (Off/Manual/Automatic) + stored PIN |
 | `adb/WirelessAdbPinService.kt` | Accessibility service that auto-enters pairing PIN into dialog |
 | `res/xml/wireless_adb_pin_service_config.xml` | Accessibility service config (settings apps only) |
@@ -150,10 +146,9 @@ Tab screens (index → file):
 | `manage/DeviceInfo.kt` | `snapshot()` → `suspend` with 20s timeout |
 | `ui/screen/DeviceInfoScreen.kt` | Handles nullable/timeout snapshot, shows partial data |
 | `ui/screen/SettingsScreen.kt` | Added auto-PIN mode row + ChoiceDialog + accessibility permission check + strings |
-| `manager/AndroidManifest.xml` | Registered `WirelessAdbPinService` + `FirstLaunchActivity` |
-| `manager/ShizukuSettings.java` | Added `KEY_FIRST_LAUNCH`, `KEY_ACTIVATION_METHOD`, `ACTIVATION_*` constants, `isFirstLaunch/setFirstLaunch/getActivationMethod/setActivationMethod/setNightMode` |
-| `manager/MainActivity.kt` | Routes to `FirstLaunchActivity` on first launch |
-| `res/values/strings.xml` | Added onboarding + auto-PIN + accessibility strings |
+| `manager/AndroidManifest.xml` | Registered `WirelessAdbPinService` |
+| `manager/MainActivity.kt` | Boots directly to `HomeActivity` |
+| `res/values/strings.xml` | Auto-PIN + accessibility strings |
 | `README.md` | English documentation |
 | `README.hi.md` | Hindi documentation |
 | `README.es.md` | Spanish documentation |
@@ -175,6 +170,5 @@ Tab screens (index → file):
 - Looking for **crash handling**? → `manager/ShizukuApplication.kt`
 - Looking for **device info loading**? → `manage/DeviceInfo.kt` + `ui/screen/DeviceInfoScreen.kt`
 - Looking for **auto wireless ADB PIN**? → `adb/WirelessAdbPin*` + `SettingsScreen.kt` wireless section
-- Looking for **first launch / onboarding**? → `FirstLaunchActivity.kt` + `MainActivity.kt`
 
 Docs: `docs/` (build results, security review, feature mapping, architecture).

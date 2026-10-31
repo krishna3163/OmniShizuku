@@ -6,31 +6,46 @@ import android.content.Intent
 import android.net.Uri
 import android.widget.Toast
 import androidx.annotation.StringRes
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.automirrored.outlined.ReceiptLong
 import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.outlined.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -48,6 +63,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -104,6 +121,19 @@ private enum class LabCategory(@StringRes val titleRes: Int) {
 @Composable
 fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     val context = LocalContext.current
+    val prefs = remember {
+        context.getSharedPreferences("labs_preferences", Context.MODE_PRIVATE)
+    }
+    var isGridView by rememberSaveable {
+        mutableStateOf(
+            if (prefs.contains("is_grid_view_v2")) {
+                prefs.getBoolean("is_grid_view_v2", true)
+            } else {
+                prefs.edit().putBoolean("is_grid_view_v2", true).apply()
+                true
+            }
+        )
+    }
     var query by rememberSaveable { mutableStateOf("") }
 
     // What each feature is doing, so the list can be read without opening eight screens to find
@@ -265,12 +295,18 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 LabCategory.UTILITIES, "more applications discover"
             ),
             LabEntry(
-                R.string.lab_companion_call_recorder,
+                "Call Recording (ShizuCallRecorder Integration)",
                 Icons.Outlined.Call,
-                category = LabCategory.COMPANION_APPS,
-                searchTerms = "phone calls recording recorder",
-                packageName = "com.kitsumed.shizucallrecorder",
-                releaseUrl = "https://github.com/kitsumed/ShizuCallRecorder/releases/latest"
+                Detail.CALL_RECORDING,
+                LabCategory.UTILITIES,
+                "call recording shizucallrecorder phone calls voice recorder audio"
+            ),
+            LabEntry(
+                "DFRoot (DirtyFrag Kernel Exploit)",
+                Icons.Outlined.Security,
+                Detail.DFROOT,
+                LabCategory.SYSTEM_CONTROLS,
+                "dfroot dirtyfrag root cve-2026-43284 kernelsu su manager exploit"
             ),
             LabEntry(
                 R.string.lab_companion_quick_tiles,
@@ -299,8 +335,16 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         )
     }
 
+    val hiddenLabDetails = setOf(
+        Detail.ESSENTIALS,
+        Detail.SMART_PIXELS,
+        Detail.MEDIA_KEYS,
+        Detail.WATERMARK,
+        Detail.EDGE_LIGHTING,
+        Detail.ISLAND
+    )
     val visibleEntries = entries.filterNot {
-        it.detail == Detail.ESSENTIALS && !essentialsHubUnlocked
+        it.detail in hiddenLabDetails
     }
     val displayEntries = visibleEntries.map { entry ->
         LabDisplayEntry(
@@ -328,6 +372,19 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
             title = { Text(stringResource(R.string.tab_labs)) },
+            actions = {
+                IconButton(
+                    onClick = {
+                        isGridView = !isGridView
+                        prefs.edit().putBoolean("is_grid_view_v2", isGridView).apply()
+                    }
+                ) {
+                    Icon(
+                        imageVector = if (isGridView) Icons.Outlined.ViewList else Icons.Outlined.GridView,
+                        contentDescription = if (isGridView) "Switch to list view" else "Switch to grid view"
+                    )
+                }
+            },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp)
         )
 
@@ -336,11 +393,22 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
             onValueChange = { query = it },
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 6.dp),
             singleLine = true,
+            shape = RoundedCornerShape(24.dp),
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f),
+                unfocusedContainerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.25f),
+                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            ),
             placeholder = { Text(stringResource(R.string.labs_search_hint)) },
             leadingIcon = {
-                Icon(Icons.Outlined.Search, contentDescription = null)
+                Icon(
+                    Icons.Outlined.Search,
+                    contentDescription = null,
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             },
             trailingIcon = if (query.isNotEmpty()) {
                 {
@@ -362,91 +430,80 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 .weight(1f)
         ) {
             val listState = rememberLazyListState()
+            val gridState = rememberLazyGridState()
+
             LaunchedEffect(query) {
                 listState.scrollToItem(0)
+                gridState.scrollToItem(0)
             }
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(
-                    start = 16.dp,
-                    top = 16.dp,
-                    end = 16.dp,
-                    bottom = bottomPadding
-                ),
-                verticalArrangement = Arrangement.spacedBy(13.dp)
-            ) {
-                if (groupedEntries.isEmpty()) {
-                    item(key = "empty-search") {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(vertical = 48.dp),
-                            horizontalAlignment = Alignment.CenterHorizontally
-                        ) {
-                            Text(
-                                text = stringResource(R.string.labs_search_empty_title),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = stringResource(R.string.labs_search_empty_message),
-                                modifier = Modifier.padding(top = 6.dp),
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
-                            )
-                            TextButton(
-                                onClick = { query = "" },
-                                modifier = Modifier.padding(top = 4.dp)
-                            ) {
-                                Text(stringResource(R.string.labs_clear_search))
-                            }
-                        }
-                    }
-                } else {
-                    groupedEntries.forEach { (category, rows) ->
-                        item(key = "category-${category.name}") {
-                            Text(
-                                text = rows.first().categoryLabel,
+
+            if (isGridView) {
+                LazyVerticalGrid(
+                    columns = GridCells.Adaptive(minSize = 150.dp),
+                    state = gridState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        top = 10.dp,
+                        end = 16.dp,
+                        bottom = bottomPadding + 8.dp
+                    ),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    if (groupedEntries.isEmpty()) {
+                        item(span = { GridItemSpan(maxLineSpan) }, key = "empty-search-grid") {
+                            Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(start = 4.dp, top = 8.dp, bottom = 1.dp),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.primary
-                            )
-                        }
-                        items(
-                            items = rows,
-                            key = { row ->
-                                "${row.entry.labelRes}:${row.entry.packageName.orEmpty()}"
+                                    .padding(vertical = 48.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_title),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_message),
+                                    modifier = Modifier.padding(top = 6.dp),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                TextButton(
+                                    onClick = { query = "" },
+                                    modifier = Modifier.padding(top = 4.dp)
+                                ) {
+                                    Text(stringResource(R.string.labs_clear_search))
+                                }
                             }
-                        ) { row ->
-                            val entry = row.entry
-                            SegmentedCard {
-                                SegmentedListItem(
+                        }
+                    } else {
+                        groupedEntries.forEach { (category, rows) ->
+                            item(span = { GridItemSpan(maxLineSpan) }, key = "category-${category.name}") {
+                                Text(
+                                    text = rows.first().categoryLabel,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 4.dp, top = 8.dp, bottom = 2.dp),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    fontWeight = FontWeight.SemiBold,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            items(
+                                items = rows,
+                                key = { row ->
+                                    "${row.entry.labelRes}:${row.entry.labelString.orEmpty()}:${row.entry.packageName.orEmpty()}"
+                                }
+                            ) { row ->
+                                val entry = row.entry
+                                LabGridCard(
+                                    entry = entry,
+                                    label = row.label,
+                                    categoryLabel = row.categoryLabel,
+                                    isActive = entry.detail?.let { it in active } == true,
                                     modifier = entry.detail?.let {
                                         Modifier.televisionReturnFocus(it)
                                     } ?: Modifier,
-                                    centerSlots = true,
-                                    leadingContent = {
-                                        Box {
-                                            FeaturePlateIcon(entry.icon)
-                                            if (entry.detail?.let { it in active } == true) {
-                                                Box(
-                                                    modifier = Modifier
-                                                        .align(Alignment.BottomEnd)
-                                                        .offset(x = 2.dp, y = 2.dp)
-                                                        .size(ActiveDotSize)
-                                                        .background(ActiveGreen, CircleShape)
-                                                )
-                                            }
-                                        }
-                                    },
-                                    headlineContent = { Text(row.label) },
-                                    trailingContent = {
-                                        Icon(
-                                            Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                                            contentDescription = null
-                                        )
-                                    },
                                     onClick = {
                                         if (entry.packageName != null && entry.releaseUrl != null) {
                                             openCompanionTool(
@@ -463,13 +520,119 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                         }
                     }
                 }
-            }
 
-            ScrollToTopButton(
-                listState = listState,
-                bottomPadding = bottomPadding,
-                modifier = Modifier.align(Alignment.BottomEnd)
-            )
+                ScrollToTopButton(
+                    gridState = gridState,
+                    bottomPadding = bottomPadding,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(
+                        start = 16.dp,
+                        top = 10.dp,
+                        end = 16.dp,
+                        bottom = bottomPadding + 8.dp
+                    ),
+                    verticalArrangement = Arrangement.spacedBy(13.dp)
+                ) {
+                    if (groupedEntries.isEmpty()) {
+                        item(key = "empty-search-list") {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(vertical = 48.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_title),
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = stringResource(R.string.labs_search_empty_message),
+                                    modifier = Modifier.padding(top = 6.dp),
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                                TextButton(
+                                    onClick = { query = "" },
+                                    modifier = Modifier.padding(top = 4.dp)
+                                ) {
+                                    Text(stringResource(R.string.labs_clear_search))
+                                }
+                            }
+                        }
+                    } else {
+                        groupedEntries.forEach { (category, rows) ->
+                            item(key = "category-${category.name}") {
+                                Text(
+                                    text = rows.first().categoryLabel,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(start = 4.dp, top = 8.dp, bottom = 1.dp),
+                                    style = MaterialTheme.typography.titleSmall,
+                                    color = MaterialTheme.colorScheme.primary
+                                )
+                            }
+                            items(
+                                items = rows,
+                                key = { row ->
+                                    "${row.entry.labelRes}:${row.entry.labelString.orEmpty()}:${row.entry.packageName.orEmpty()}"
+                                }
+                            ) { row ->
+                                val entry = row.entry
+                                SegmentedCard {
+                                    SegmentedListItem(
+                                        modifier = entry.detail?.let {
+                                            Modifier.televisionReturnFocus(it)
+                                        } ?: Modifier,
+                                        centerSlots = true,
+                                        leadingContent = {
+                                            Box {
+                                                FeaturePlateIcon(entry.icon)
+                                                if (entry.detail?.let { it in active } == true) {
+                                                    Box(
+                                                        modifier = Modifier
+                                                            .align(Alignment.BottomEnd)
+                                                            .offset(x = 2.dp, y = 2.dp)
+                                                            .size(ActiveDotSize)
+                                                            .background(ActiveGreen, CircleShape)
+                                                    )
+                                                }
+                                            }
+                                        },
+                                        headlineContent = { Text(row.label) },
+                                        trailingContent = {
+                                            Icon(
+                                                Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                                                contentDescription = null
+                                            )
+                                        },
+                                        onClick = {
+                                            if (entry.packageName != null && entry.releaseUrl != null) {
+                                                openCompanionTool(
+                                                    context,
+                                                    entry.packageName,
+                                                    entry.releaseUrl
+                                                )
+                                            } else {
+                                                entry.detail?.let(onOpenDetail)
+                                            }
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+                }
+
+                ScrollToTopButton(
+                    listState = listState,
+                    bottomPadding = bottomPadding,
+                    modifier = Modifier.align(Alignment.BottomEnd)
+                )
+            }
         }
     }
 }
@@ -535,6 +698,29 @@ private data class LabEntry(
     val labelString: String? = null
 ) {
     constructor(
+    val labelString: String? = null,
+    @StringRes val labelRes: Int = 0
+) {
+    constructor(
+        @StringRes labelRes: Int,
+        icon: ImageVector,
+        detail: Detail? = null,
+        category: LabCategory,
+        searchTerms: String,
+        packageName: String? = null,
+        releaseUrl: String? = null
+    ) : this(
+        icon = icon,
+        detail = detail,
+        category = category,
+        searchTerms = searchTerms,
+        packageName = packageName,
+        releaseUrl = releaseUrl,
+        labelString = null,
+        labelRes = labelRes
+    )
+
+    constructor(
         labelString: String,
         icon: ImageVector,
         detail: Detail? = null,
@@ -551,6 +737,8 @@ private data class LabEntry(
         packageName = packageName,
         releaseUrl = releaseUrl,
         labelString = labelString
+        labelString = labelString,
+        labelRes = 0
     )
 }
 
@@ -569,3 +757,83 @@ private fun openCompanionTool(context: Context, packageName: String, releaseUrl:
         Toast.makeText(context, R.string.lab_companion_open_failed, Toast.LENGTH_LONG).show()
     }
 }
+
+@Composable
+private fun LabGridCard(
+    entry: LabEntry,
+    label: String,
+    categoryLabel: String,
+    isActive: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .fillMaxWidth()
+            .height(132.dp)
+            .clickable(onClick = onClick),
+        shape = RoundedCornerShape(20.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.45f)
+        ),
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.35f))
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(14.dp),
+            verticalArrangement = Arrangement.SpaceBetween
+        ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.Top
+            ) {
+                Box {
+                    FeaturePlateIcon(entry.icon)
+                    if (isActive) {
+                        Box(
+                            modifier = Modifier
+                                .align(Alignment.BottomEnd)
+                                .offset(x = 2.dp, y = 2.dp)
+                                .size(ActiveDotSize)
+                                .background(ActiveGreen, CircleShape)
+                        )
+                    }
+                }
+                if (entry.packageName != null && entry.releaseUrl != null) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.OpenInNew,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
+                    )
+                } else {
+                    Icon(
+                        Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp),
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
+                    )
+                }
+            }
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(
+                    text = label,
+                    style = MaterialTheme.typography.bodyMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = categoryLabel,
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.75f),
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+        }
+    }
+}
+

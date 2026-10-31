@@ -177,8 +177,13 @@ fun ComputScreen(
     val scope = rememberCoroutineScope()
     val snackbarHostState = remember { SnackbarHostState() }
 
-    var command by remember { mutableStateOf("pm list packages -3") }
-    var outputLog by remember { mutableStateOf(context.getString(R.string.comput_console_initialized)) }
+    var command by remember { mutableStateOf("agy help") }
+    var outputLog by remember {
+        mutableStateOf(
+            context.getString(R.string.comput_console_initialized) +
+            "\n\n⚡ AGY (Embedded Gemini Shell) is pre-installed with autonomous Shizuku privilege.\nType 'agy help' or select a quick action chip."
+        )
+    }
     var isRunning by remember { mutableStateOf(false) }
     var isAdbMode by remember { mutableStateOf(false) }
     var isExplaining by remember { mutableStateOf(false) }
@@ -333,6 +338,12 @@ fun ComputScreen(
 
         if (finalCmd.isBlank()) {
             return Pair("[E] Error: Command translates to empty string.", true)
+        }
+
+        if (moe.shizuku.manager.agy.AgyCliEngine.isAgyCommand(finalCmd)) {
+            return moe.shizuku.manager.agy.AgyCliEngine.execute(context, finalCmd) { cmdToRun ->
+                executeCommandInternal(cmdToRun)
+            }
         }
 
         val result = withContext(Dispatchers.IO) {
@@ -573,6 +584,11 @@ fun ComputScreen(
 
     val quickActionChips = remember {
         listOf(
+            "agy help",
+            "agy info",
+            "agy fix",
+            "agy optimize",
+            "agy bug-report",
             "pm list packages -3",
             "dumpsys battery",
             "logcat -d -t 30",
@@ -584,6 +600,12 @@ fun ComputScreen(
 
     val presetLibrary = remember {
         listOf(
+            PresetCommand("AGY Help & Commands", "agy help", "AI & AGY CLI"),
+            PresetCommand("AGY Environment & Shizuku Info", "agy info", "AI & AGY CLI"),
+            PresetCommand("AGY Diagnose & Auto-Fix Logcat", "agy fix", "AI & AGY CLI"),
+            PresetCommand("AGY Privilege System Optimization", "agy optimize", "AI & AGY CLI"),
+            PresetCommand("AGY Dispatch Bug Report to GitHub", "agy bug-report", "AI & AGY CLI"),
+
             PresetCommand("User Installed Apps", "pm list packages -3", "Package Manager"),
             PresetCommand("System Packages", "pm list packages -s", "Package Manager"),
             PresetCommand("Disabled Packages", "pm list packages -d", "Package Manager"),
@@ -965,6 +987,50 @@ fun ComputScreen(
                     },
                     onClearOutput = { clearConsole() }
                 )
+            }
+
+            if (lastFailed) {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        Button(
+                            onClick = {
+                                command = "agy fix"
+                                runShellCommand("agy fix")
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.errorContainer,
+                                contentColor = MaterialTheme.colorScheme.onErrorContainer
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Icon(Icons.Rounded.AutoAwesome, contentDescription = null, modifier = Modifier.size(16.dp))
+                            Spacer(Modifier.width(6.dp))
+                            Text("AGY Auto-Fix", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                        }
+
+                        Button(
+                            onClick = {
+                                val bugCmd = "agy bug-report Command '$lastRunCommand' failed"
+                                command = bugCmd
+                                runShellCommand(bugCmd)
+                            },
+                            colors = ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                contentColor = MaterialTheme.colorScheme.onSurface
+                            ),
+                            shape = RoundedCornerShape(12.dp),
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            Text("Report Bug", fontSize = 12.sp)
+                        }
+                    }
+                }
             }
 
             item {

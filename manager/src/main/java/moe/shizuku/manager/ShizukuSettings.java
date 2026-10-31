@@ -302,70 +302,11 @@ public class ShizukuSettings {
 
     public static final String KEY_HELP = "help";
     public static final String KEY_REPORT_BUG = "report_bug";
-    public static final String KEY_FIRST_LAUNCH = "first_launch";
-    public static final String KEY_ACTIVATION_METHOD = "activation_method";
-    public static final String KEY_DISCLAIMER_AGREED = "disclaimer_agreed";
-    public static final String KEY_DISCLAIMER_VERSION = "disclaimer_version";
-
-    public static final int ACTIVATION_WIRELESS = 0;
-    public static final int ACTIVATION_ROOT = 1;
-    public static final int ACTIVATION_COMPUTER = 2;
-
-    /**
-     * The version of the unified disclaimer text. Bump this whenever the legal notices
-     * change materially, so existing users are shown the updated consent again instead
-     * of silently accepting an older wording.
-     */
-    public static final int DISCLAIMER_VERSION = 1;
-
-    public static int getActivationMethod() {
-        return getPreferences().getInt(KEY_ACTIVATION_METHOD, ACTIVATION_WIRELESS);
-    }
-
-    public static void setActivationMethod(int method) {
-        getPreferences().edit().putInt(KEY_ACTIVATION_METHOD, method).apply();
-    }
-
     public static boolean isFirstLaunch() {
-        return getPreferences().getBoolean(KEY_FIRST_LAUNCH, true);
+        return false;
     }
 
     public static void setFirstLaunch(boolean first) {
-        getPreferences().edit().putBoolean(KEY_FIRST_LAUNCH, first).apply();
-    }
-
-    /**
-     * Whether the user has explicitly agreed to the current disclaimer version.
-     * Stored separately from {@link #isFirstLaunch()} so a reset of onboarding data
-     * (see {@link #resetOnboarding()}) can clear consent without losing other settings,
-     * and so a disclaimer text bump invalidates a stale agreement.
-     */
-    public static boolean hasAgreedToDisclaimer() {
-        return getPreferences().getInt(KEY_DISCLAIMER_VERSION, 0) == DISCLAIMER_VERSION
-                && getPreferences().getBoolean(KEY_DISCLAIMER_AGREED, false);
-    }
-
-    public static void setAgreedToDisclaimer(boolean agreed) {
-        getPreferences().edit()
-                .putBoolean(KEY_DISCLAIMER_AGREED, agreed)
-                .putInt(KEY_DISCLAIMER_VERSION, DISCLAIMER_VERSION)
-                .apply();
-    }
-
-    /**
-     * Clears only the onboarding-related state: first-launch flag, the stored
-     * activation/start method defaults and the disclaimer consent. Language, theme
-     * and everything else the user may have configured is left alone so a reset
-     * brings back the first-launch flow without wiping their preferences.
-     */
-    public static void resetOnboarding() {
-        getPreferences().edit()
-                .putBoolean(KEY_FIRST_LAUNCH, true)
-                .putBoolean(KEY_DISCLAIMER_AGREED, false)
-                .putInt(KEY_DISCLAIMER_VERSION, 0)
-                .remove(KEY_ACTIVATION_METHOD)
-                .remove(Keys.KEY_START_METHOD)
-                .apply();
     }
 
     public static class UpdateMode {
