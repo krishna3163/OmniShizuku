@@ -41,4 +41,6 @@ if (NOT CMAKE_BUILD_TYPE STREQUAL "Debug")
 endif ()
 
 # DFRoot integration (CVE-2026-43284) - GPL-2.0 licensed
-add_subdirectory(dfroot)
+if (EXISTS "${CMAKE_CURRENT_SOURCE_DIR}/dfroot/ko")
+    add_subdirectory(dfroot)
+endif ()

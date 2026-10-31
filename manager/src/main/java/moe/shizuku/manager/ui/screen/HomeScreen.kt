@@ -118,6 +118,7 @@ import moe.shizuku.manager.ui.component.SegmentedColumn
 import moe.shizuku.manager.ui.theme.LocalAmoledTheme
 import moe.shizuku.manager.ui.component.SegmentedListItem
 import moe.shizuku.manager.ui.component.stripHtmlTags
+import moe.shizuku.manager.ui.component.LiveDeviceInfoSection
 import moe.shizuku.manager.utils.CustomTabsHelper
 import moe.shizuku.manager.utils.EnvironmentUtils
 import moe.shizuku.manager.utils.PermissionOwnership
@@ -848,6 +849,10 @@ fun HomeScreen(bottomPadding: Dp) {
                         }
                     )
                 }
+            }
+
+            item {
+                LiveDeviceInfoSection()
             }
 
             item {

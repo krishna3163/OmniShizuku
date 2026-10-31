@@ -4,8 +4,8 @@ enable_language(ASM)
 
 set(JNI_DIR ${CMAKE_CURRENT_SOURCE_DIR})
 
-set(CMAKE_ASM_FLAGS "${CMAKE_ASM_FLAGS} -I${JNI_DIR}")
-set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${C_FLAGS} -I${JNI_DIR} -Wall -Wextra -fno-stack-protector -fomit-frame-pointer")
+include_directories("${JNI_DIR}")
+set(CMAKE_C_FLAGS   "${CMAKE_C_FLAGS} ${C_FLAGS} -Wall -Wextra -fno-stack-protector -fomit-frame-pointer")
 
 set(SPLICEHELPER "${CMAKE_CURRENT_BINARY_DIR}/splicehelper")
 add_custom_command(
@@ -37,7 +37,7 @@ set_source_files_properties(exp.c PROPERTIES
 target_link_libraries(dfroot log)
 target_link_options(dfroot PRIVATE -Wl,-z,max-page-size=16384)
 
-add_executable(bootstrap dfroot bootstrap.c)
+add_executable(bootstrap bootstrap.c)
 set_target_properties(bootstrap PROPERTIES
     PREFIX "lib"
     SUFFIX ".so"

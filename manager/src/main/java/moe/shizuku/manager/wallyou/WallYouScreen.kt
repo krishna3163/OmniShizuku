@@ -29,7 +29,7 @@ import net.youapps.wallpaper_apis.pb.PixabayApi
 import net.youapps.wallpaper_apis.ps.PicsumApi
 import net.youapps.wallpaper_apis.re.RedditApi
 import net.youapps.wallpaper_apis.wh.WallhavenApi
-import net.youapps.wallpaper_apis.wi.WikimediaApi
+import net.youapps.wallpaper_apis.wi.WikipediaPotdApi
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +54,7 @@ fun WallYouScreen(onBack: () -> Unit) {
                     "Picsum" -> PicsumApi()
                     "Bing" -> BingApi()
                     "Owalls" -> OwallsApi()
-                    "Wikimedia" -> WikimediaApi()
+                    "Wikimedia" -> WikipediaPotdApi()
                     else -> WallhavenApi()
                 }
                 val results = withContext(Dispatchers.IO) {
@@ -125,7 +125,7 @@ fun WallYouScreen(onBack: () -> Unit) {
                                 }
                         ) {
                             AsyncImage(
-                                model = wallpaper.thumbUrl,
+                                model = wallpaper.preview,
                                 contentDescription = wallpaper.title,
                                 modifier = Modifier.fillMaxSize(),
                                 contentScale = ContentScale.Crop
