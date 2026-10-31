@@ -21,13 +21,13 @@ class CallRecorderModelTest {
     @Test
     fun verifiesRecordingCodecMimeTypesAndBitrates() {
         assertEquals("audio/opus", RecordingCodec.OPUS.mimeType)
-        assertEquals(16_000, RecordingCodec.OPUS.defaultBitrate)
+        assertEquals(32_000, RecordingCodec.OPUS.defaultBitrate)
 
         assertEquals("audio/mp4a-latm", RecordingCodec.AAC.mimeType)
-        assertEquals(32_000, RecordingCodec.AAC.defaultBitrate)
+        assertEquals(64_000, RecordingCodec.AAC.defaultBitrate)
 
         assertEquals("audio/amr-wb", RecordingCodec.AMR_WB.mimeType)
-        assertEquals(12_000, RecordingCodec.AMR_WB.defaultBitrate)
+        assertEquals(16_000, RecordingCodec.AMR_WB.defaultBitrate)
     }
 
     @Test
@@ -47,8 +47,8 @@ class CallRecorderModelTest {
     fun verifiesCapturePlanDefaults() {
         val plan = CapturePlan()
         assertEquals(AudioSource.VOICE_COMMUNICATION, plan.source)
-        assertEquals(44100, plan.sampleRate)
-        assertEquals(1, plan.channelCount)
+        assertEquals(AudioConfig.SAMPLE_RATE, plan.sampleRate)
+        assertEquals(AudioConfig.CAPTURE_CHANNEL_COUNT, plan.channelCount)
     }
 
     @Test
@@ -57,7 +57,7 @@ class CallRecorderModelTest {
         assertEquals(AudioSource.VOICE_COMMUNICATION, plan.primary.source)
         assertNull(plan.secondary)
         assertFalse(plan.isAudioChannelSplitEnabled)
-        assertEquals(RecordingCodec.AAC, plan.codec)
+        assertEquals(RecordingCodec.OPUS, plan.codec)
         assertEquals(32_000, plan.bitrate)
     }
 

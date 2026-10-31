@@ -78,7 +78,10 @@ private val POPULAR_TAGS = listOf(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
+fun WallYouScreen(
+    onBack: () -> Unit = {},
+    onOpenDetail: (Detail) -> Unit = {}
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
 
@@ -908,12 +911,6 @@ private fun WallpaperDetailDialog(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
-                            AsyncImage(
-                                model = wallpaper.preview,
-                                contentDescription = wallpaper.title,
-                                modifier = Modifier.fillMaxSize(),
-                                contentScale = ContentScale.Crop
-                            )
                             Text("Blur Effect", style = MaterialTheme.typography.bodyMedium)
                             Text("${blurRadius.toInt()} px", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
                         }

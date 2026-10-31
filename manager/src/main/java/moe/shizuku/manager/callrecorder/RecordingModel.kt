@@ -87,6 +87,22 @@ data class RecordingPlan(
 )
 
 /**
+ * Recording failure codes.
+ */
+enum class RecordingFailure(val code: Int) {
+    CAPTURE_START_FAILED(1),
+    CAPTURE_READ_FAILED(2),
+    ENCODE_FAILED(3),
+    PERMISSION_DENIED(4),
+    INVALID_STATE(5);
+
+    companion object {
+        fun fromCode(code: Int): RecordingFailure =
+            entries.firstOrNull { it.code == code } ?: INVALID_STATE
+    }
+}
+
+/**
  * Recording session states.
  */
 enum class RecordingState {

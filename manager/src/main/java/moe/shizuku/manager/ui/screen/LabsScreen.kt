@@ -688,14 +688,14 @@ private fun activeFeatures(context: Context): Set<Detail> = buildSet {
 
 /** One row of the list: what it is called, what is on it, and where it goes. */
 private data class LabEntry(
-    @StringRes val labelRes: Int = 0,
     val icon: ImageVector,
     val detail: Detail? = null,
     val category: LabCategory,
     val searchTerms: String,
     val packageName: String? = null,
     val releaseUrl: String? = null,
-    val labelString: String? = null
+    val labelString: String? = null,
+    @StringRes val labelRes: Int = 0
 ) {
     constructor(
         @StringRes labelRes: Int,
@@ -725,14 +725,14 @@ private data class LabEntry(
         packageName: String? = null,
         releaseUrl: String? = null
     ) : this(
-        labelRes = 0,
         icon = icon,
         detail = detail,
         category = category,
         searchTerms = searchTerms,
         packageName = packageName,
         releaseUrl = releaseUrl,
-        labelString = labelString
+        labelString = labelString,
+        labelRes = 0
     )
 }
 

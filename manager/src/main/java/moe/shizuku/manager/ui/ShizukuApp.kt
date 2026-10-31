@@ -484,7 +484,7 @@ fun ShizukuApp() {
                             Detail.LOCAL_SHELL -> LocalShellScreen(onBack = { detail = null })
                             Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })
                             Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = { detail = null })
-                            Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = { detail = null })
+                            Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = { detail = null }, onOpenDetail = { detail = it })
                             Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = { detail = null })
                         }
                     }
