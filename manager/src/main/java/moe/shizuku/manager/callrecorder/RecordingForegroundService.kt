@@ -109,7 +109,7 @@ class RecordingForegroundService : Service() {
             .processNameSuffix("callrecorder")
             .debuggable(BuildConfig.DEBUG)
             .version(BuildConfig.VERSION_CODE)
-            .tag("omnishizuku-call-recorder")
+            .tag("callrecorder")
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -125,6 +125,7 @@ class RecordingForegroundService : Service() {
     }
 
     private fun startRecordingSession() {
+        RecordingStateHolder.lastError.value = null
         if (outputFile != null || RecordingStateHolder.isRecording.value) {
             Log.d(TAG, "Session already active or starting")
             return
