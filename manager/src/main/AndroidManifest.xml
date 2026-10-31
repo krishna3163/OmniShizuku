@@ -151,10 +151,6 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".FirstLaunchActivity"
-            android:exported="false"
-            android:label="@string/onboarding_title" />
-        <activity
             android:name=".management.ApplicationManagementActivity"
             android:label="@string/home_app_management_title" />
         <activity
