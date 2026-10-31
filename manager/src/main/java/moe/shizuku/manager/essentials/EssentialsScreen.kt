@@ -216,6 +216,18 @@ fun EssentialsScreen(
                 icon = Icons.Outlined.Build,
                 items = listOf(
                     EssentialItem(
+                        title = "WallYou Wallpapers",
+                        summary = "Browse and set wallpapers from multiple sources with auto-changer",
+                        icon = Icons.Outlined.Wallpaper,
+                        detail = Detail.WALLYOU
+                    ),
+                    EssentialItem(
+                        title = "Photo Watermark & EXIF Studio",
+                        summary = "Luxury Leica frame & Hasselblad minimal branding with live EXIF strip",
+                        icon = Icons.Outlined.PhotoCamera,
+                        detail = Detail.WATERMARK
+                    ),
+                    EssentialItem(
                         title = "Universal Android Debloater (UAD)",
                         summary = "1.6MB community safety-ranked package removal & 1-tap restore",
                         icon = Icons.Outlined.Delete,

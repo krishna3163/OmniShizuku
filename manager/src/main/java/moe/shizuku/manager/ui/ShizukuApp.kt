@@ -94,6 +94,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
@@ -234,6 +235,9 @@ enum class Detail(
 
     /** WallYou wallpaper browser and setter. */
     WALLYOU,
+
+    /** WallYou wallpaper changer settings. */
+    WALLYOU_SETTINGS,
 
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
@@ -481,6 +485,7 @@ fun ShizukuApp() {
                             Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })
                             Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = { detail = null })
                             Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = { detail = null })
+                            Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {
@@ -540,6 +545,7 @@ private fun MainTabs(
     onOpenDetail: (Detail) -> Unit
 ) {
     val scope = rememberCoroutineScope()
+    val view = LocalView.current
 
     // Whether the app has settled enough to read the lists nobody is looking at yet. Both app
     // lists are expensive to read - six hundred packages each - and a pager composes the page
@@ -757,7 +763,16 @@ private fun MainTabs(
                                     // composes what it scrolls past, so going from Settings to Home
                                     // started loading the Manage tab's six hundred apps on the way.
                                     // Swiping still animates, because that is the gesture.
-                                    if (!selected) scope.launch { pagerState.scrollToPage(index) }
+                                    if (!selected) {
+                                        try {
+                                            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.R) {
+                                                view.performHapticFeedback(android.view.HapticFeedbackConstants.CONFIRM)
+                                            } else {
+                                                view.performHapticFeedback(android.view.HapticFeedbackConstants.VIRTUAL_KEY)
+                                            }
+                                        } catch (_: Exception) {}
+                                        scope.launch { pagerState.scrollToPage(index) }
+                                    }
                                 },
                                     shapes = ToggleButtonShapes(
                                         shape = CircleShape,

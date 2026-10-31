@@ -50,6 +50,11 @@ import net.youapps.wallpaper_apis.ps.PicsumApi
 import net.youapps.wallpaper_apis.px.GooglePixelApi
 import net.youapps.wallpaper_apis.re.RedditApi
 import net.youapps.wallpaper_apis.wh.WallhavenApi
+import moe.shizuku.manager.ui.Detail
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun WallYouScreen(onBack: () -> Unit, onOpenDetail: (Detail) -> Unit = {}) {
 import net.youapps.wallpaper_apis.wi.WikipediaPotdApi
 
 data class WallpaperEngineOption(
@@ -89,6 +94,11 @@ fun WallYouScreen(onBack: () -> Unit = {}) {
     var wallpapers by remember { mutableStateOf<List<Wallpaper>>(emptyList()) }
     var favorites by remember { mutableStateOf<List<Wallpaper>>(emptyList()) }
     var loading by remember { mutableStateOf(false) }
+    var page by remember { mutableStateOf(1) }
+    
+    val engines = listOf("Wallhaven", "Pixabay", "Reddit", "Picsum", "Bing", "Owalls")
+    
+    fun loadWallpapers() {
     var page by remember { mutableIntStateOf(1) }
     var errorMessage by remember { mutableStateOf<String?>(null) }
 
@@ -111,6 +121,15 @@ fun WallYouScreen(onBack: () -> Unit = {}) {
             loading = true
             errorMessage = null
             try {
+                val api = when (selectedEngine) {
+                    "Wallhaven" -> WallhavenApi()
+                    "Pixabay" -> PixabayApi()
+                    "Reddit" -> RedditApi()
+                    "Picsum" -> PicsumApi()
+                    "Bing" -> BingApi()
+                    "Owalls" -> OwallsApi()
+                    else -> WallhavenApi()
+                }
                 val currentPage = if (reset) 1 else page
                 val results = withContext(Dispatchers.IO) {
                     val api = when (selectedEngine.name) {
@@ -189,6 +208,10 @@ fun WallYouScreen(onBack: () -> Unit = {}) {
                     }
                 },
                 actions = {
+                    IconButton(onClick = { onOpenDetail(Detail.WALLYOU_SETTINGS) }) {
+                        Icon(Icons.Outlined.Settings, contentDescription = "Settings")
+                    }
+                }
                     IconButton(onClick = { loadWallpapers(reset = true) }) {
                         Icon(
                             imageVector = Icons.Default.Refresh,
@@ -905,6 +928,12 @@ private fun WallpaperDetailDialog(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
+                            AsyncImage(
+                                model = wallpaper.preview,
+                                contentDescription = wallpaper.title,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
                             Text("Blur Effect", style = MaterialTheme.typography.bodyMedium)
                             Text("${blurRadius.toInt()} px", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
                         }

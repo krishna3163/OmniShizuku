@@ -18,6 +18,7 @@
         <activity
             android:name="com.rosan.dhizuku.ForwardDhizukuActivity"
             android:exported="true"
+            android:taskAffinity=""
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar">
             <intent-filter>

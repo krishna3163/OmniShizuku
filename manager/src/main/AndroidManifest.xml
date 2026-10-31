@@ -110,7 +110,7 @@
 
     <application
         android:name=".ShizukuApplication"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:autoRevokePermissions="allowed"
         android:banner="@drawable/ic_launcher"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -134,7 +134,8 @@
         <activity
             android:name=".MainActivity"
             android:banner="@mipmap/banner"
-            android:exported="true">
+            android:exported="true"
+            android:taskAffinity="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -142,6 +143,11 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".FirstLaunchActivity"
+            android:exported="false"
+            android:enabled="false"
+            tools:node="remove" />
         <activity
             android:name=".management.ApplicationManagementActivity"
             android:label="@string/home_app_management_title" />
@@ -549,7 +555,7 @@
             android:theme="@style/Theme.App.DialogHost"
             android:taskAffinity=""
             android:excludeFromRecents="true"
-            android:launchMode="singleTask"
+            android:launchMode="singleTop"
             android:exported="false" />
 
         <!-- Lab Features -->
