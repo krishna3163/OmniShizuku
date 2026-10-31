@@ -149,8 +149,8 @@ class AdbPairingTutorialActivity : AppActivity() {
     }
 
     private fun isNotificationEnabled(): Boolean {
-        val nm = getSystemService(NotificationManager::class.java)
-        val channel = nm.getNotificationChannel(AdbPairingService.notificationChannel)
+        val nm = getSystemService(NotificationManager::class.java) ?: return false
+        val channel = runCatching { nm.getNotificationChannel(AdbPairingService.notificationChannel) }.getOrNull()
         return nm.areNotificationsEnabled() &&
                 (channel == null || channel.importance != NotificationManager.IMPORTANCE_NONE)
     }
