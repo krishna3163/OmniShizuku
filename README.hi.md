@@ -2,9 +2,9 @@
 
 <img src="manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
 
-# OmniShizuku
+# ओमनीशिज़ुकु
 
-**A powerful, feature-rich fork of Shizuku with enhanced modules, modern UI, and extended system control capabilities.**
+**उन्नत मॉड्यूल, आधुनिक यूआई और विस्तारित सिस्टम नियंत्रण क्षमताओं के साथ शिज़ुकु का एक शक्तिशाली, सुविधा संपन्न कांटा।**
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163%2FOmniShizuku-blue?logo=github&style=for-the-badge)](https://github.com/krishna3163/OmniShizuku)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](LICENSE)
@@ -18,55 +18,55 @@
 
 ---
 
-## 📖 Table of Contents
+## 📖 सामग्री तालिका
 
-- [Overview](#-overview)
-- [Why Use OmniShizuku?](#-why-use-omnishizuku)
-- [Key Features](#-key-features)
-  - [Essentials Hub](#essentials-hub)
-  - [Labs - Advanced System Tools](#labs---advanced-system-tools)
-  - [Modules System](#modules-system)
-  - [Call Recording (ShizuCallRecorder Integration)](#call-recording-shizucallrecorder-integration)
-  - [AI & Developer Features](#ai--developer-features)
-  - [UI/UX Enhancements](#uiux-enhancements)
-- [Feature Comparison](#-feature-comparison-with-other-shizuku-forks)
-- [System Requirements](#-system-requirements)
-- [Installation](#-installation)
-- [Getting Started](#-getting-started)
-- [Building from Source](#-building-from-source)
-- [Architecture & Security](#-architecture--security)
-- [Permissions Explained](#-permissions-explained)
-- [Contributing](#-contributing)
-- [Credits & Acknowledgments](#-credits--acknowledgments)
-- [License](#-license)
-- [Support](#-support)
+- [अवलोकन](#-अवलोकन)
+- [ओम्नीशिज़ुकु का उपयोग क्यों करें?](#-क्यों-उपयोग-ओम्नीशिज़ुकु)
+- [मुख्य विशेषताएं](#-कुंजी-विशेषताएं)
+- [आवश्यक हब](#आवश्यक-हब)
+- [लैब्स - एडवांस्ड सिस्टम टूल्स](#लैब्स---एडवांस्ड-सिस्टम-टूल्स)
+- [मॉड्यूल सिस्टम](#मॉड्यूल-सिस्टम)
+- [कॉल रिकॉर्डिंग (शिज़ूकॉलरिकॉर्डर इंटीग्रेशन)](#कॉल-रिकॉर्डिंग-शिज़ुकॉलरिकॉर्डर-इंटीग्रेशन)
+- [एआई और डेवलपर सुविधाएं](#एआई--डेवलपर-फीचर्स)
+- [यूआई/यूएक्स संवर्द्धन](#uiux-संवर्द्धन)
+- [फ़ीचर तुलना](#-फ़ीचर-तुलना-अन्य-शिज़ुकु-फोर्क्स के साथ)
+- [सिस्टम आवश्यकताएँ](#-सिस्टम-आवश्यकताएँ)
+- [स्थापना](#-स्थापना)
+- [आरंभ करना](#-आरंभ करना)
+- [स्रोत से निर्माण](#-स्रोत से निर्माण)
+- [वास्तुकला एवं सुरक्षा](#-वास्तुकला--सुरक्षा)
+- [अनुमतियाँ समझाई गईं](#-अनुमतियाँ-समझाई गईं)
+- [योगदान](#-योगदान)
+- [श्रेय और आभार](#-श्रेय--स्वीकृतियां)
+- [लाइसेंस](#-लाइसेंस)
+- [समर्थन](#-समर्थन)
 
 ---
 
-## 🔍 Overview
+## 🔍 अवलोकन
 
-**OmniShizuku** is an extensively enhanced, open-source fork of the original [Shizuku](https://github.com/RikkaApps/Shizuku) project. It extends Shizuku's powerful system-level API access by combining it with a vast collection of practical utilities, system tweaks, privacy controls, and an intuitive modern interface.
+**ओम्नीशिज़ुकु** मूल [शिज़ुकु](https://github.com/RikkaApps/Shizuku) प्रोजेक्ट का एक व्यापक रूप से उन्नत, ओपन-सोर्स फोर्क है। यह व्यावहारिक उपयोगिताओं, सिस्टम ट्विक्स, गोपनीयता नियंत्रण और एक सहज आधुनिक इंटरफ़ेस के विशाल संग्रह के साथ संयोजन करके शिज़ुकु की शक्तिशाली सिस्टम-स्तरीय एपीआई पहुंच का विस्तार करता है।
 
 Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take full control of their Android device without requiring full root access in most cases - leveraging Shizuku's ADB/root bridging capabilities. From display customization and battery optimization to app management, debloating, call recording, and advanced automation, OmniShizuku is your all-in-one system utility suite.
 
 ---
 
-## 💡 Why Use OmniShizuku?
+## 💡 ओमनीशिज़ुकु का उपयोग क्यों करें?
 
-- **All-in-One Solution** - No need for multiple root/ADB apps. Everything from debloating to display tweaks in one place.
-- **No Root Required** - Works with Shizuku via Wireless ADB (Android 11+) or ADB, making it accessible to a wider audience.
-- **Modern & Intuitive UI** - Clean Material 3 Expressive interface with smooth animations, dynamic theming, and optimized layouts for phones, tablets, TVs and Wear OS.
-- **Actively Enhanced** - Regular updates with new features, bug fixes, and improvements beyond the original Shizuku.
-- **Privacy-Focused** - Granular control over app permissions, appops, hiding features, and system-level restrictions.
-- **Safe & Reversible** - Most changes are reversible, with backup/restore capabilities for debloating and module management.
-- **Extensible Module System** - Community-driven modules with built-in catalog, discovery, and installation support.
-- **Enterprise-Grade Stability** - Defensive coding practices, crash handling, timeout safeguards, and OEM compatibility fixes.
+- **ऑल-इन-वन समाधान** - एकाधिक रूट/एडीबी ऐप्स की कोई आवश्यकता नहीं। डिब्लोटिंग से लेकर बदलावों को प्रदर्शित करने तक सब कुछ एक ही स्थान पर।
+- **कोई रूट आवश्यक नहीं** - वायरलेस एडीबी (एंड्रॉइड 11+) या एडीबी के माध्यम से शिज़ुकु के साथ काम करता है, जिससे यह व्यापक दर्शकों के लिए सुलभ हो जाता है।
+- **आधुनिक और सहज यूआई** - सहज एनिमेशन, गतिशील थीम और फोन, टैबलेट, टीवी और वेयर ओएस के लिए अनुकूलित लेआउट के साथ स्वच्छ सामग्री 3 अभिव्यंजक इंटरफ़ेस।
+- **सक्रिय रूप से उन्नत** - नई सुविधाओं, बग फिक्स और मूल शिज़ुकु से परे सुधारों के साथ नियमित अपडेट।
+- **गोपनीयता-केंद्रित** - ऐप अनुमतियों, ऐपॉप्स, छिपाने की सुविधाओं और सिस्टम-स्तरीय प्रतिबंधों पर विस्तृत नियंत्रण।
+- **सुरक्षित और प्रतिवर्ती** - अधिकांश परिवर्तन प्रतिवर्ती हैं, डीब्लोटिंग और मॉड्यूल प्रबंधन के लिए बैकअप/पुनर्स्थापना क्षमताओं के साथ।
+- **एक्स्टेंसिबल मॉड्यूल सिस्टम** - अंतर्निहित कैटलॉग, खोज और इंस्टॉलेशन समर्थन के साथ समुदाय-संचालित मॉड्यूल।
+- **एंटरप्राइज़-ग्रेड स्थिरता** - रक्षात्मक कोडिंग प्रथाएं, क्रैश हैंडलिंग, टाइमआउट सुरक्षा उपाय, और OEM संगतता समाधान।
 
 ---
 
-## ✨ Key Features
+## ✨ मुख्य विशेषताएं
 
-### Essentials Hub
+### एसेंशियल हब
 
 The Essentials Hub is OmniShizuku's crown jewel - a curated collection of powerful, everyday utilities:
 
@@ -85,7 +85,7 @@ The Essentials Hub is OmniShizuku's crown jewel - a curated collection of powerf
 | **Auto DND (Zen Mode)** | Automate Do Not Disturb based on time schedules, location, events, or custom triggers. |
 | **Pocket Mode, Shut Up! & More** | Per-app media muting, volume key track skipping when screen is off, and intelligent audio controls. |
 
-### Labs - Advanced System Tools
+### लैब्स - उन्नत सिस्टम उपकरण
 
 Labs houses powerful system-level utilities for advanced users and power users:
 
@@ -118,57 +118,57 @@ Labs houses powerful system-level utilities for advanced users and power users:
 | **Stealth Mode** | Advanced hiding and stealth capabilities for enhanced privacy. |
 | **Permissions Manager** | Centralized privileged permission management. |
 
-### Modules System
+### मॉड्यूल सिस्टम
 
 OmniShizuku features a powerful, extensible module system inspired by Magisk/KernelSU modules but designed for Shizuku-based mods:
 
-- **Module Catalog** - Browse community modules from a curated GitHub-based catalog with search, filtering, and sorting.
-- **Module Discovery** - Automatic discovery of modules from GitHub repositories tagged with `shevery-modules` or official sources.
-- **One-Tap Installation** - Download, verify, and install modules directly from the app with progress tracking.
-- **Module Manager** - Enable, disable, update, and remove installed modules with ease.
-- **WebUI Support** - Many modules include web-based configuration interfaces accessible from within the app.
-- **Module Scripts** - Execute install, uninstall, service, and boot scripts with proper logging and error handling.
-- **Update Checker** - Automatic update detection for installed modules from their GitHub releases.
-- **Safe Installation** - Validation of module structure, props, and scripts before installation.
-- **Cross-Platform UI** - Optimized module screens for phones, tablets, TVs, and Wear OS.
+- **मॉड्यूल कैटलॉग** - खोज, फ़िल्टरिंग और सॉर्टिंग के साथ क्यूरेटेड GitHub-आधारित कैटलॉग से सामुदायिक मॉड्यूल ब्राउज़ करें।
+- **मॉड्यूल डिस्कवरी** - 'शेवरी-मॉड्यूल' या आधिकारिक स्रोतों के साथ टैग किए गए GitHub रिपॉजिटरी से मॉड्यूल की स्वचालित खोज।
+- **वन-टैप इंस्टालेशन** - प्रगति ट्रैकिंग के साथ सीधे ऐप से मॉड्यूल डाउनलोड करें, सत्यापित करें और इंस्टॉल करें।
+- **मॉड्यूल मैनेजर** - इंस्टॉल किए गए मॉड्यूल को आसानी से सक्षम, अक्षम, अपडेट और हटाएं।
+- **वेबयूआई समर्थन** - कई मॉड्यूल में ऐप के भीतर से पहुंच योग्य वेब-आधारित कॉन्फ़िगरेशन इंटरफ़ेस शामिल हैं।
+- **मॉड्यूल स्क्रिप्ट** - उचित लॉगिंग और त्रुटि प्रबंधन के साथ इंस्टॉल, अनइंस्टॉल, सर्विस और बूट स्क्रिप्ट निष्पादित करें।
+- **अपडेट चेकर** - उनके GitHub रिलीज़ से स्थापित मॉड्यूल के लिए स्वचालित अपडेट का पता लगाना।
+- **सुरक्षित इंस्टालेशन** - इंस्टालेशन से पहले मॉड्यूल संरचना, प्रॉप्स और स्क्रिप्ट का सत्यापन।
+- **क्रॉस-प्लेटफॉर्म यूआई** - फोन, टैबलेट, टीवी और वेयर ओएस के लिए अनुकूलित मॉड्यूल स्क्रीन।
 
-### Call Recording (ShizuCallRecorder Integration)
+### कॉल रिकॉर्डिंग (शिज़ुकॉलरिकॉर्डर एकीकरण)
 
 Built-in support for call recording through Shizuku's privileged access:
 
-- **Shell-Based Recording Engine** - Uses privileged shell services for reliable audio capture.
-- **Foreground Service** - Persistent recording service with proper notifications.
-- **InCallService Integration** - Automatic call detection and recording management.
-- **Recording Management** - View, play, rename, and delete recordings with an intuitive UI.
-- **Configurable Options** - Customize recording format, codec, source, and storage location.
-- **AIDL Interfaces** - Secure IPC between app components for recording control.
-- **Permission Handling** - Proper runtime permission management for call recording requirements.
-- **Background Operation** - Reliable recording even with app in background.
+- **शेल-आधारित रिकॉर्डिंग इंजन** - विश्वसनीय ऑडियो कैप्चर के लिए विशेषाधिकार प्राप्त शेल सेवाओं का उपयोग करता है।
+- **अग्रभूमि सेवा** - उचित सूचनाओं के साथ लगातार रिकॉर्डिंग सेवा।
+- **इनकॉलसर्विस इंटीग्रेशन** - स्वचालित कॉल डिटेक्शन और रिकॉर्डिंग प्रबंधन।
+- **रिकॉर्डिंग प्रबंधन** - सहज यूआई के साथ रिकॉर्डिंग देखें, चलाएं, नाम बदलें और हटाएं।
+- **कॉन्फ़िगर करने योग्य विकल्प** - रिकॉर्डिंग प्रारूप, कोडेक, स्रोत और भंडारण स्थान को अनुकूलित करें।
+- **एआईडीएल इंटरफेस** - रिकॉर्डिंग नियंत्रण के लिए ऐप घटकों के बीच सुरक्षित आईपीसी।
+- **अनुमति प्रबंधन** - कॉल रिकॉर्डिंग आवश्यकताओं के लिए उचित रनटाइम अनुमति प्रबंधन।
+- **बैकग्राउंड ऑपरेशन** - बैकग्राउंड में ऐप के साथ भी विश्वसनीय रिकॉर्डिंग।
 
-### AI & Developer Features
+### एआई और डेवलपर सुविधाएँ
 
-- **AI Manager** - Integrated AI capabilities with support for multiple providers (configurable in settings).
-- **Developer Options** - Advanced developer tools, debugging utilities, and experimental features.
-- **Bug Report System** - Built-in bug reporting with logs, device info, and crash reports.
-- **Labs Reapply** - Reapply persistent lab modifications after updates or reboots.
-- **Device Info Dashboard** - Comprehensive device information with detailed hardware, software, and system properties.
-- **Log Viewer** - Real-time logcat viewer with filtering and search capabilities.
+- **एआई मैनेजर** - कई प्रदाताओं के समर्थन के साथ एकीकृत एआई क्षमताएं (सेटिंग्स में कॉन्फ़िगर करने योग्य)।
+- **डेवलपर विकल्प** - उन्नत डेवलपर उपकरण, डिबगिंग उपयोगिताएँ, और प्रयोगात्मक सुविधाएँ।
+- **बग रिपोर्ट सिस्टम** - लॉग, डिवाइस जानकारी और क्रैश रिपोर्ट के साथ अंतर्निहित बग रिपोर्टिंग।
+- **लैब पुन: लागू** - अपडेट या रीबूट के बाद लगातार लैब संशोधनों को पुन: लागू करें।
+- **डिवाइस जानकारी डैशबोर्ड** - विस्तृत हार्डवेयर, सॉफ्टवेयर और सिस्टम गुणों के साथ व्यापक डिवाइस जानकारी।
+- **लॉग व्यूअर** - फ़िल्टरिंग और खोज क्षमताओं के साथ वास्तविक समय लॉगकैट व्यूअर।
 
-### UI/UX Enhancements
+### यूआई/यूएक्स संवर्द्धन
 
-- **Material 3 Expressive Design** - Latest Material Design with dynamic color theming (Material You) support.
-- **Multi-Form Factor Support** - Optimized for phones, tablets, foldables, Android TV, and Wear OS.
-- **Dark Mode & AMOLED Black** - Full dark theme support with pure black option for AMOLED displays.
-- **Smooth Animations** - Polished transitions, lazy motion blur optimization, and fluid interactions.
-- **Adaptive Layouts** - Responsive UI that adapts to screen sizes and orientations.
-- **Localization** - Extensive multi-language support (English, Hindi, Spanish, French, Chinese, Russian, Japanese, Arabic, Kazakh, and more).
-- **Accessibility** - Wireless ADB Auto-PIN with accessibility service support (opt-in only).
-- **Performance Optimized** - Lazy loading, bounded data fetching, timeout safeguards, and efficient memory usage.
-- **Crash Resilience** - Defensive binder access, uncaught exception handling, and graceful degradation on OEM-specific issues.
+- **सामग्री 3 अभिव्यंजक डिज़ाइन** - गतिशील रंग थीम (सामग्री आप) समर्थन के साथ नवीनतम सामग्री डिज़ाइन।
+- **मल्टी-फॉर्म फैक्टर सपोर्ट** - फोन, टैबलेट, फोल्डेबल्स, एंड्रॉइड टीवी और वेयर ओएस के लिए अनुकूलित।
+- **डार्क मोड और AMOLED ब्लैक** - AMOLED डिस्प्ले के लिए शुद्ध ब्लैक विकल्प के साथ पूर्ण डार्क थीम समर्थन।
+- **स्मूद एनिमेशन** - पॉलिश किए गए बदलाव, आलसी गति धुंधला अनुकूलन, और तरल इंटरैक्शन।
+- **अनुकूली लेआउट** - उत्तरदायी यूआई जो स्क्रीन आकार और ओरिएंटेशन के अनुकूल होता है।
+- **स्थानीयकरण** - व्यापक बहु-भाषा समर्थन (अंग्रेजी, हिंदी, स्पेनिश, फ्रेंच, चीनी, रूसी, जापानी, अरबी, कज़ाख, और अधिक)।
+- **एक्सेसिबिलिटी** - एक्सेसिबिलिटी सर्विस सपोर्ट के साथ वायरलेस एडीबी ऑटो-पिन (केवल ऑप्ट-इन)।
+- **प्रदर्शन अनुकूलित** - आलसी लोडिंग, सीमित डेटा फ़ेचिंग, टाइमआउट सुरक्षा उपाय, और कुशल मेमोरी उपयोग।
+- **क्रैश रेजिलिएशन** - रक्षात्मक बाइंडर एक्सेस, अनकहा अपवाद हैंडलिंग, और ओईएम-विशिष्ट मुद्दों पर शानदार गिरावट।
 
 ---
 
-## 📊 Feature Comparison with Other Shizuku Forks
+## 📊 अन्य शिज़ुकु फोर्क्स के साथ फ़ीचर तुलना
 
 | Feature | **OmniShizuku** | **Shizuku (Original)** | **Shizuku Next** | **Xhizuku** | **Shevery** | **ShizukuPlus** | **Stellar** |
 | --- | :------------: | :--------------------: | :------------: | :--------: | :--------: | :------------: | :--------: |
@@ -197,11 +197,11 @@ Built-in support for call recording through Shizuku's privileged access:
 | **Wireless ADB Auto-PIN** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **License** | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | MPL-2.0 |
 
-*Comparison is based on publicly available features at the time of writing. Features may change over time.*
+*तुलना लेखन के समय सार्वजनिक रूप से उपलब्ध सुविधाओं पर आधारित है। समय के साथ सुविधाएँ बदल सकती हैं।*
 
 ---
 
-## 📱 System Requirements
+## 📱 सिस्टम आवश्यकताएँ
 
 | Component | Requirement |
 | --- | --- |
@@ -214,112 +214,112 @@ Built-in support for call recording through Shizuku's privileged access:
 
 ---
 
-## 📥 Installation
+## 📥 स्थापना
 
-### From GitHub Releases (Recommended)
+### GitHub रिलीज़ से (अनुशंसित)
 
-1. Go to the [Releases page](https://github.com/krishna3163/OmniShizuku/releases)
-2. Download the latest `manager-debug.apk` or `manager-release.apk`
-3. Install the APK on your Android device
-4. Follow the setup process
+1. [रिलीज़ पेज](https://github.com/krishna3163/OmniShizuku/releases) पर जाएं
+2. नवीनतम `manager-debug.apk` या `manager-release.apk` डाउनलोड करें
+3. अपने एंड्रॉइड डिवाइस पर एपीके इंस्टॉल करें
+4. सेटअप प्रक्रिया का पालन करें
 
-### Via ADB
+### एडीबी के माध्यम से
 
 ```bash
 adb install -r OmniShizuku.apk
 ```
 
-### Important Notes
+### महत्वपूर्ण नोट्स
 
-- If you have the original Shizuku installed, you can usually install OmniShizuku alongside it, or replace it. Check compatibility for your use case.
-- Some features require specific Android versions or device capabilities.
-- For call recording features, additional permissions may be required depending on Android version.
+- यदि आपके पास मूल शिज़ुकु स्थापित है, तो आप आमतौर पर इसके साथ ओमनीशिज़ुकु स्थापित कर सकते हैं, या इसे बदल सकते हैं। अपने उपयोग के मामले के लिए अनुकूलता की जाँच करें।
+- कुछ सुविधाओं के लिए विशिष्ट Android संस्करण या डिवाइस क्षमताओं की आवश्यकता होती है।
+- कॉल रिकॉर्डिंग सुविधाओं के लिए, एंड्रॉइड संस्करण के आधार पर अतिरिक्त अनुमतियों की आवश्यकता हो सकती है।
 
 ---
 
-## 🚀 Getting Started
+## 🚀 आरंभ करना
 
-1. **Install OmniShizuku** - Download and install the APK
-2. **Setup Shizuku** - Start Shizuku service via Wireless Debugging (Android 11+) or ADB/Root
-3. **Grant Permission** - Open OmniShizuku and grant Shizuku permission when prompted
-4. **Explore** - Navigate through Home, Apps, Modules, Labs, and Settings tabs
-5. **Customize** - Head to Essentials Hub or Labs to enable features you need
-6. **Stay Safe** - Read feature descriptions before applying system-level changes
+1. **ओम्नीशिज़ुकु इंस्टॉल करें** - एपीके डाउनलोड और इंस्टॉल करें
+2. **सेटअप शिज़ुकु** - वायरलेस डिबगिंग (एंड्रॉइड 11+) या एडीबी/रूट के माध्यम से शिज़ुकु सेवा प्रारंभ करें
+3. **अनुमति प्रदान करें** - ओमनीशिज़ुकु खोलें और संकेत मिलने पर शिज़ुकु को अनुमति दें
+4. **एक्सप्लोर करें** - होम, ऐप्स, मॉड्यूल, लैब्स और सेटिंग्स टैब के माध्यम से नेविगेट करें
+5. **कस्टमाइज़** - अपनी आवश्यक सुविधाओं को सक्षम करने के लिए एसेंशियल हब या लैब्स पर जाएं
+6. **सुरक्षित रहें** - सिस्टम-स्तरीय परिवर्तन लागू करने से पहले सुविधा विवरण पढ़ें
 
-**For Wireless Debugging (Android 11+):**
-- Go to `Settings > Developer Options > Wireless debugging` and pair with OmniShizuku or Shizuku
+**वायरलेस डिबगिंग के लिए (एंड्रॉइड 11+):**
+- `सेटिंग्स > डेवलपर विकल्प > वायरलेस डिबगिंग` पर जाएं और ओम्नीशिज़ुकु या शिज़ुकु के साथ युग्मित करें
 
-**For ADB (via PC):**
+**एडीबी के लिए (पीसी के माध्यम से):**
 ```bash
 adb shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh
 ```
-*(Or use the appropriate start command for your setup)*
+*(या अपने सेटअप के लिए उपयुक्त स्टार्ट कमांड का उपयोग करें)*
 
 ---
 
-## 🔨 Building from Source
+## 🔨 स्रोत से निर्माण
 
-### Prerequisites
+### पूर्वावश्यकताएँ
 
-- [Android Studio](https://developer.android.com/studio) (latest stable) or [Android SDK](https://developer.android.com/studio#command-tools)
-- [JDK 17](https://adoptium.net/) or higher
-- [Git](https://git-scm.com/)
-- Gradle (wrapper included)
+- [एंड्रॉइड स्टूडियो] (https://developer.android.com/studio) (नवीनतम स्थिर) या [एंड्रॉइड एसडीके] (https://developer.android.com/studio#command-tools)
+- [जेडीके 17](https://adoptium.net/) या उच्चतर
+- [गिट](https://git-scm.com/)
+- ग्रैडल (रैपर शामिल)
 
-### Clone and Build
+### क्लोन और निर्माण
 
 ```bash
-# Clone the repository
+# रिपॉजिटरी को क्लोन करें
 git clone https://github.com/krishna3163/OmniShizuku.git
 cd OmniShizuku
 
-# Build debug APK
+# डिबग एपीके बनाएं
 ./gradlew :manager:assembleDebug
 
-# Build release APK (requires signing configuration)
+# बिल्ड रिलीज़ एपीके (हस्ताक्षर कॉन्फ़िगरेशन की आवश्यकता है)
 ./gradlew :manager:assembleRelease
 
-# Install to connected device
+# कनेक्टेड डिवाइस पर इंस्टॉल करें
 ./gradlew :manager:installDebug
 ```
 
 The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug.apk`
 
-### Build Requirements
+### निर्माण आवश्यकताएँ
 
 - `compileSdk`: 36
-- `minSdk`: 21
-- `targetSdk`: 36
-- Kotlin with Jetpack Compose
-- R8/ProGuard for release builds
+- `मिनएसडीके`: 21
+- `लक्ष्यएसडीके`: 36
+- जेटपैक कंपोज़ के साथ कोटलिन
+- रिलीज़ बिल्ड के लिए R8/ProGuard
 
 ---
 
-## 🔐 Architecture & Security
+## 🔐 वास्तुकला एवं सुरक्षा
 
-### Security Measures
+### सुरक्षा उपाय
 
-- **Defensive Programming** - Null-safe binder access, try-catch blocks around critical operations, and graceful fallbacks
-- **Permission Scoping** - Minimal permission usage with runtime permission requests where necessary
-- **Secure IPC** - AIDL interfaces for inter-process communication with proper service binding
-- **No Telemetry** - No analytics, tracking, or data collection
-- **Open Source** - Fully transparent, auditable codebase
-- **Reversible Changes** - Most modifications can be undone through the app
-- **Validation** - Module validation, package verification, and safe installation practices
-- **OEM Compatibility** - Special handling for Realme, OPPO, Xiaomi, OnePlus and other OEMs with aggressive battery optimization
+- **रक्षात्मक प्रोग्रामिंग** - अशक्त-सुरक्षित बाइंडर पहुंच, महत्वपूर्ण परिचालनों के आसपास ट्राई-कैच ब्लॉक, और सुंदर फ़ॉलबैक
+- **अनुमति स्कोपिंग** - जहां आवश्यक हो, रनटाइम अनुमति अनुरोधों के साथ न्यूनतम अनुमति उपयोग
+- **सुरक्षित आईपीसी** - उचित सेवा बंधन के साथ अंतर-प्रक्रिया संचार के लिए एआईडीएल इंटरफेस
+- **कोई टेलीमेट्री नहीं** - कोई विश्लेषण, ट्रैकिंग या डेटा संग्रह नहीं
+- **ओपन सोर्स** - पूरी तरह से पारदर्शी, ऑडिटेबल कोडबेस
+- **प्रतिवर्ती परिवर्तन** - अधिकांश संशोधनों को ऐप के माध्यम से पूर्ववत किया जा सकता है
+- **सत्यापन** - मॉड्यूल सत्यापन, पैकेज सत्यापन, और सुरक्षित स्थापना प्रथाएँ
+- **ओईएम अनुकूलता** - आक्रामक बैटरी अनुकूलन के साथ रियलमी, ओप्पो, श्याओमी, वनप्लस और अन्य ओईएम के लिए विशेष हैंडलिंग
 
-### Architecture Highlights
+### वास्तुकला की मुख्य विशेषताएं
 
-- **MVVM Pattern** - Clean separation of concerns with ViewModels and UI state
-- **Jetpack Compose** - Modern declarative UI framework
-- **Kotlin Coroutines** - Asynchronous operations with proper lifecycle handling
-- **Room/Preferences** - Local data persistence
-- **Hilt/Dagger** - Dependency injection (where applicable)
-- **Modular Design** - Feature modules for better organization and maintainability
+- **एमवीवीएम पैटर्न** - व्यूमॉडल और यूआई स्थिति के साथ चिंताओं का स्पष्ट पृथक्करण
+- **जेटपैक कंपोज़** - आधुनिक घोषणात्मक यूआई ढांचा
+- **कोटलिन कोरटाइन्स** - उचित जीवनचक्र संचालन के साथ अतुल्यकालिक संचालन
+- **कमरा/वरीयताएँ** - स्थानीय डेटा दृढ़ता
+- **हिल्ट/डैगर** - निर्भरता इंजेक्शन (जहां लागू हो)
+- **मॉड्यूलर डिज़ाइन** - बेहतर संगठन और रखरखाव के लिए फ़ीचर मॉड्यूल
 
 ---
 
-## 🔑 Permissions Explained
+## 🔑 अनुमतियों की व्याख्या
 
 | Permission | Purpose | Required For |
 | --- | --- | --- |
@@ -333,72 +333,72 @@ The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug
 | `REQUEST_INSTALL_PACKAGES` | Install APKs | Package Installer Pro |
 | `SYSTEM_ALERT_WINDOW` | Overlay display | Dynamic Island, Edge Lighting |
 
-*Most permissions are only requested when needed for specific features.*
+*अधिकांश अनुमतियाँ केवल विशिष्ट सुविधाओं के लिए आवश्यक होने पर ही अनुरोध की जाती हैं।*
 
 ---
 
-## 🤝 Contributing
+## 🤝 योगदान दे रहे हैं
 
 Contributions are welcome! Whether it's bug reports, feature requests, documentation improvements, or code contributions.
 
-### How to Contribute
+### योगदान कैसे करें
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
+1. **फोर्क** भंडार
+2. **एक फीचर शाखा बनाएं** (`git checkout -b फीचर/AmazingFeature`)
+3. **प्रतिबद्ध** अपने परिवर्तन (`गिट कमिट -एम 'कुछ अद्भुत फीचर जोड़ें'')
+4. शाखा में **पुश** (`गिट पुश ओरिजिन फीचर/अमेजिंगफीचर`)
+5. पुल अनुरोध **खोलें**
 
-### Guidelines
+### दिशानिर्देश
 
-- Follow existing code style and conventions
-- Write clear commit messages
-- Test your changes thoroughly
-- Update documentation if needed
-- For major features, open an issue first to discuss
+- मौजूदा कोड शैली और परंपराओं का पालन करें
+- स्पष्ट प्रतिबद्ध संदेश लिखें
+- अपने परिवर्तनों का अच्छी तरह से परीक्षण करें
+- यदि आवश्यक हो तो दस्तावेज़ अद्यतन करें
+- प्रमुख विशेषताओं के लिए, चर्चा के लिए पहले एक मुद्दा खोलें
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
 
 ---
 
-## 🙏 Credits & Acknowledgments
+## 🙏 श्रेय एवं आभार
 
-### Core Projects
+### कोर परियोजनाएं
 
-- **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** - The original project that made all of this possible. Huge thanks to Rikka and all contributors.
-- **[Dhizuku](https://github.com/iamr0s/Dhizuku)** - For Dhizuku API integration support.
+- **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** - मूल परियोजना जिसने यह सब संभव बनाया। रिक्का और सभी योगदानकर्ताओं को बहुत-बहुत धन्यवाद।
+- **[धिज़ुकु](https://github.com/iamr0s/Dhizuku)** - ढिज़ुकु एपीआई एकीकरण समर्थन के लिए।
 
-### Communities & Inspirations
+### समुदाय और प्रेरणाएँ
 
-- **[Universal Android Debloater (UAD)](https://github.com/0x192/universal-android-debloater)** - Safety rankings and debloating methodology
-- **[LSPosed](https://github.com/LSPosed/LSPosed)** - Inspiration for module system concepts
-- **[Magisk](https://github.com/topjohnwu/Magisk)** - Module system architecture inspiration
-- **[KernelSU](https://github.com/tiann/KernelSU)** - Modern root solution inspiration
+- **[यूनिवर्सल एंड्रॉइड डिब्लोटर (यूएडी)](https://github.com/0x192/universal-android-debloater)** - सुरक्षा रैंकिंग और डिब्लोटिंग पद्धति
+- **[LSPosed](https://github.com/LSPosed/LSPosed)** - मॉड्यूल सिस्टम अवधारणाओं के लिए प्रेरणा
+- **[मैजिस्क](https://github.com/topjohnwu/Magisk)** - मॉड्यूल सिस्टम आर्किटेक्चर प्रेरणा
+- **[कर्नेलएसयू](https://github.com/tiann/KernelSU)** - आधुनिक रूट समाधान प्रेरणा
 
-### Module Developers & Integrations
+### मॉड्यूल डेवलपर्स और एकीकरण
 
-- **[kitsumed/ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder)** - Call recording functionality integration
-- **[RBN-Apps/Quick-Tile-Settings](https://github.com/RBN-Apps/Quick-Tile-Settings)** - Companion app integration
-- **[AhmetCanArslan/ShizuWall](https://github.com/AhmetCanArslan/ShizuWall)** - Companion app integration
-- **[Shevery Modules Community](https://github.com/topics/shevery-modules)** - Community module ecosystem
+- **[kitsumed/ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder)** - कॉल रिकॉर्डिंग कार्यक्षमता एकीकरण
+- **[आरबीएन-ऐप्स/क्विक-टाइल-सेटिंग्स](https://github.com/RBN-Apps/Quick-Tile-Settings)** - सहयोगी ऐप एकीकरण
+- **[AhmetCanArslan/ShizuWall](https://github.com/AhmetCanArslan/ShizuWall)** - सहयोगी ऐप एकीकरण
+- **[शेवरी मॉड्यूल समुदाय](https://github.com/topics/shevery-modules)** - सामुदायिक मॉड्यूल पारिस्थितिकी तंत्र
 
-### Special Thanks
+### विशेष धन्यवाद
 
 A heartfelt thank you to:
 
-- **The Shizuku Community** - For continuous support, feedback, and testing
-- **All Contributors** - Everyone who has reported bugs, suggested features, submitted PRs, or helped improve OmniShizuku
-- **Translators** - For making OmniShizuku accessible in multiple languages
-- **Beta Testers** - For helping catch bugs and ensuring stability
-- **OEM Community** - For sharing device-specific workarounds and fixes
+- **शिज़ुकु समुदाय** - निरंतर समर्थन, प्रतिक्रिया और परीक्षण के लिए
+- **सभी योगदानकर्ता** - हर कोई जिसने बग की रिपोर्ट की है, सुविधाओं का सुझाव दिया है, पीआर सबमिट किया है, या ओमनीशिज़ुकु को बेहतर बनाने में मदद की है
+- **अनुवादक** - ओमनीशिज़ुकु को कई भाषाओं में सुलभ बनाने के लिए
+- **बीटा परीक्षक** - बग पकड़ने और स्थिरता सुनिश्चित करने में मदद के लिए
+- **ओईएम समुदाय** - डिवाइस-विशिष्ट वर्कअराउंड और फिक्स साझा करने के लिए
 
-### Why Choose OmniShizuku?
+### ओमनीशिज़ुकु क्यों चुनें?
 
 OmniShizuku stands apart by combining the power of Shizuku with a comprehensive suite of practical tools in one beautifully designed app. Instead of juggling multiple apps for debloating, tweaking, optimizing, and managing your device, OmniShizuku brings everything together with a cohesive experience. Whether you're a casual user looking to disable bloatware or a power user seeking deep system customization, OmniShizuku provides the tools you need with safety, reversibility, and ease of use at its core.
 
 ---
 
-## 📄 License
+## 📄 लाइसेंस
 
 This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for full details.
 
@@ -420,19 +420,19 @@ limitations under the License.
 
 ---
 
-## 💬 Support
+## 💬समर्थन
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/krishna3163/OmniShizuku/issues)
-- **GitHub Discussions**: [Ask questions and share ideas](https://github.com/krishna3163/OmniShizuku/discussions)
-- **Documentation**: Check the README in your preferred language
-- **Source Code**: [github.com/krishna3163/OmniShizuku](https://github.com/krishna3163/OmniShizuku)
+- **गिटहब मुद्दे**: [बग की रिपोर्ट करें या सुविधाओं का अनुरोध करें](https://github.com/krishna3163/OmniShizuku/issues)
+- **गिटहब चर्चाएँ**: [प्रश्न पूछें और विचार साझा करें](https://github.com/krishna3163/OmniShizuku/discussions)
+- **दस्तावेज़ीकरण**: अपनी पसंदीदा भाषा में README की जाँच करें
+- **स्रोत कोड**: [github.com/krishna3163/OmniShizuku](https://github.com/krishna3163/OmniShizuku)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [krishna3163](https://github.com/krishna3163) and the amazing OmniShizuku community**
+**[कृष्ण3163](https://github.com/krishna3163) और अद्भुत ओमनीशिज़ुकु समुदाय द्वारा ❤️ के साथ बनाया गया**
 
-*If you find OmniShizuku useful, please consider giving it a ⭐ on GitHub!*
+*यदि आपको ओमनीशिज़ुकु उपयोगी लगता है, तो कृपया इसे GitHub पर ⭐ देने पर विचार करें!*
 
 </div>
