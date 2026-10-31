@@ -1,0 +1,17 @@
+appId: com.krishna.omnishizuku
+---
+- launchApp
+- tapOn:
+    text: ".*Shell.*"
+    optional: true
+- tapOn:
+    id: ".*shell.*"
+    optional: true
+- assertVisible:
+    text: ".*Terminal.*|.*Shell.*|.*Command.*"
+- inputText: "id"
+- tapOn:
+    text: ".*Run.*|.*Send.*|.*Execute.*"
+    optional: true
+- takeScreenshot: "02_shell_screen_execution"
+

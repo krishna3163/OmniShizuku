@@ -1,0 +1,23 @@
+appId: com.krishna.omnishizuku
+---
+- launchApp
+- tapOn:
+    text: ".*Settings.*"
+    optional: true
+- tapOn:
+    id: ".*settings.*"
+    optional: true
+- assertVisible:
+    text: ".*Theme.*|.*Language.*|.*About.*"
+- scrollUntilVisible:
+    element:
+      text: ".*About.*"
+    direction: DOWN
+    timeout: 5000
+    speed: 40
+- tapOn:
+    text: ".*About.*"
+- assertVisible:
+    text: ".*OmniShizuku.*|.*Version.*"
+- takeScreenshot: "04_about_screen"
+

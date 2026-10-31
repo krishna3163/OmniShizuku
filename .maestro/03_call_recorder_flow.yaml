@@ -1,0 +1,18 @@
+appId: com.krishna.omnishizuku
+---
+- launchApp
+- tapOn:
+    text: ".*Call Recorder.*"
+    optional: true
+- tapOn:
+    id: ".*call_recorder.*"
+    optional: true
+- assertVisible:
+    text: ".*Record.*|.*Settings.*|.*Recordings.*"
+- tapOn:
+    text: "Settings"
+    optional: true
+- assertVisible:
+    text: ".*Audio.*|.*Codec.*|.*Format.*|.*Auto.*"
+- takeScreenshot: "03_call_recorder_settings"
+

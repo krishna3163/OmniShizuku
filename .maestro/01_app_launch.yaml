@@ -1,0 +1,14 @@
+appId: com.krishna.omnishizuku
+---
+- launchApp:
+    clearState: false
+- assertVisible:
+    text: ".*Shizuku.*"
+- scrollUntilVisible:
+    element:
+      text: ".*Start.*"
+    direction: DOWN
+    timeout: 5000
+    speed: 40
+- takeScreenshot: "01_home_screen_ready"
+

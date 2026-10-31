@@ -1,0 +1,13 @@
+appId: com.krishna.omnishizuku
+---
+- launchApp
+- tapOn:
+    text: ".*DFRoot.*"
+    optional: true
+- tapOn:
+    id: ".*dfroot.*"
+    optional: true
+- assertVisible:
+    text: ".*DFRoot.*|.*Kernel.*|.*Root.*"
+- takeScreenshot: "05_dfroot_screen"
+
