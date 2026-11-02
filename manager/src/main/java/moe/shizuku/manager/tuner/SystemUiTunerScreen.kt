@@ -115,8 +115,8 @@ fun SystemUiTunerScreen(
                         items(SystemSettingsManager.STATUS_BAR_ICONS, key = { it.slot }) { icon ->
                             val isVisible = !blacklistedIcons.contains(icon.slot)
                             Card(
-                                shape = RoundedCornerShape(12.dp),
-                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                                shape = MaterialTheme.shapes.extraLarge,
+                                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
                             ) {
                                 Row(
                                     modifier = Modifier
@@ -168,12 +168,12 @@ fun SystemUiTunerScreen(
                                             Toast.makeText(context, "Immersive mode applied", Toast.LENGTH_SHORT).show()
                                         }
                                     },
-                                shape = RoundedCornerShape(12.dp),
+                                shape = MaterialTheme.shapes.extraLarge,
                                 colors = CardDefaults.cardColors(
                                     containerColor = if (isSelected)
                                         MaterialTheme.colorScheme.primaryContainer
                                     else
-                                        MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f)
+                                        MaterialTheme.colorScheme.surfaceContainer
                                 )
                             ) {
                                 Row(
@@ -262,9 +262,9 @@ fun SystemUiTunerScreen(
                                                 editingItem = item
                                                 editValue = item.value
                                             },
-                                        shape = RoundedCornerShape(8.dp),
+                                        shape = MaterialTheme.shapes.extraLarge,
                                         colors = CardDefaults.cardColors(
-                                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                                            containerColor = MaterialTheme.colorScheme.surfaceContainer
                                         )
                                     ) {
                                         Column(modifier = Modifier.padding(12.dp)) {

@@ -359,8 +359,8 @@ fun PocketModeScreen(
 
             // Dismiss instructions
             Card(
-                shape = RoundedCornerShape(20.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.7f)),
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer),
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Row(

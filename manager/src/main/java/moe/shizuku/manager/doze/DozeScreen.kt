@@ -77,7 +77,7 @@ fun DozeScreen(
         ) {
             // Status Card
             Card(
-                shape = RoundedCornerShape(16.dp),
+                shape = MaterialTheme.shapes.extraLarge,
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
@@ -175,8 +175,8 @@ fun DozeScreen(
 
             // Switch 1: Aggressive Doze
             Card(
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
             ) {
                 Row(
                     modifier = Modifier
@@ -205,8 +205,8 @@ fun DozeScreen(
 
             // Switch 2: Motion Sensor Kill
             Card(
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
             ) {
                 Row(
                     modifier = Modifier
@@ -241,8 +241,8 @@ fun DozeScreen(
             )
 
             Card(
-                shape = RoundedCornerShape(12.dp),
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
+                shape = MaterialTheme.shapes.extraLarge,
+                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
             ) {
                 Column(modifier = Modifier.padding(12.dp)) {
                     Text(

@@ -52,14 +52,15 @@ fun SegmentedColumn(
                     Modifier.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = MaterialTheme.shapes.large
+                        shape = MaterialTheme.shapes.extraLarge
                     )
                 } else {
                     Modifier
                 }
             ),
-        shape = MaterialTheme.shapes.large,
-        color = MaterialTheme.colorScheme.surfaceContainerHigh
+        shape = MaterialTheme.shapes.extraLarge,
+        color = MaterialTheme.colorScheme.surfaceContainer,
+        tonalElevation = 2.dp
     ) {
         val scope = SegmentedColumnScope()
         Column { scope.content() }
@@ -76,7 +77,7 @@ fun SegmentedColumn(
 @Composable
 fun SegmentedCard(
     modifier: Modifier = Modifier,
-    color: Color = MaterialTheme.colorScheme.surfaceContainerHigh,
+    color: Color = MaterialTheme.colorScheme.surfaceContainer,
     content: @Composable () -> Unit
 ) {
     Surface(
@@ -87,14 +88,15 @@ fun SegmentedCard(
                     Modifier.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = MaterialTheme.shapes.large
+                        shape = MaterialTheme.shapes.extraLarge
                     )
                 } else {
                     Modifier
                 }
             ),
-        shape = MaterialTheme.shapes.large,
-        color = color
+        shape = MaterialTheme.shapes.extraLarge,
+        color = color,
+        tonalElevation = 2.dp
     ) {
         content()
     }

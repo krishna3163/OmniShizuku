@@ -90,8 +90,8 @@ fun PrivateDnsScreen(
                 // Modes
                 item {
                     Card(
-                        shape = RoundedCornerShape(16.dp),
-                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f))
+                        shape = MaterialTheme.shapes.extraLarge,
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainer)
                     ) {
                         Column(modifier = Modifier.padding(8.dp)) {
                             PrivateDnsManager.DnsMode.entries.forEach { mode ->
@@ -147,12 +147,12 @@ fun PrivateDnsScreen(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .clickable { customInput = preset.hostname },
-                            shape = RoundedCornerShape(12.dp),
+                            shape = MaterialTheme.shapes.extraLarge,
                             colors = CardDefaults.cardColors(
                                 containerColor = if (isCurrent)
                                     MaterialTheme.colorScheme.primaryContainer
                                 else
-                                    MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.35f)
+                                    MaterialTheme.colorScheme.surfaceContainer
                             )
                         ) {
                             Row(
