@@ -87,9 +87,10 @@ class StealthTutorialViewModel(
                 val apk =
                     when (apkType) {
                         ApkType.CLONE -> {
+                            val pkg = _packageName ?: throw IllegalStateException("Package name is not set")
                             File(app.applicationInfo.sourceDir)
                                 .changePackageName(
-                                    _packageName!!,
+                                    pkg,
                                     maybeCreateSigningKey = true,
                                     displayName = _displayName
                                 )

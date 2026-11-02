@@ -215,7 +215,7 @@ fragment browseListProfileItemResource on BrowseProfileItem {
             variables = ZedgeVariables(
                 ZedgeInput(
                     categories = category,
-                    sort = selectedFilters["sort"]!!.uppercase(),
+                    sort = (selectedFilters["sort"] ?: "recent").uppercase(),
                     colors = selectedFilters["colors"]
                         .takeIf { it != "all" }
                         ?.let { listOf(it) }

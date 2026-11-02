@@ -465,7 +465,7 @@ fun CenteredMessage(content: @Composable ColumnScope.() -> Unit) {
 fun AppIcon(pi: PackageInfo) {
     val context = LocalContext.current
     val icon = remember(pi.packageName) {
-        runCatching { pi.applicationInfo!!.loadIcon(context.packageManager) }.getOrNull()
+        runCatching { pi.applicationInfo?.loadIcon(context.packageManager) }.getOrNull()
     }
     AppIcon(icon)
 }
@@ -490,8 +490,9 @@ private fun AppIcon(drawable: android.graphics.drawable.Drawable?) {
             runCatching { drawable?.toBitmap(96, 96)?.asImageBitmap() }.getOrNull()
         }
     }
-    if (bitmap != null) {
-        Image(bitmap = bitmap!!, contentDescription = null, modifier = Modifier.size(40.dp))
+    val currentBitmap = bitmap
+    if (currentBitmap != null) {
+        Image(bitmap = currentBitmap, contentDescription = null, modifier = Modifier.size(40.dp))
     } else {
         Spacer(modifier = Modifier.size(40.dp))
     }

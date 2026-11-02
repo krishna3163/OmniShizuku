@@ -306,9 +306,10 @@ private fun DebloatAppCard(
                     overflow = TextOverflow.Ellipsis
                 )
 
-                if (!app.uadEntry?.description.isNullOrBlank()) {
+                val desc = app.uadEntry?.description
+                if (!desc.isNullOrBlank()) {
                     Text(
-                        text = app.uadEntry!!.description,
+                        text = desc,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.8f),
                         maxLines = 2,
@@ -395,16 +396,20 @@ private fun AppActionBottomSheet(
                     style = MaterialTheme.typography.labelMedium,
                     fontWeight = FontWeight.Bold
                 )
-                Text(
-                    text = app.uadEntry!!.description,
-                    style = MaterialTheme.typography.bodyMedium
-                )
+                val desc = app.uadEntry?.description
+                if (!desc.isNullOrBlank()) {
+                    Text(
+                        text = desc,
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             }
 
-            if (!app.uadEntry?.dependencies.isNullOrEmpty()) {
+            val deps = app.uadEntry?.dependencies
+            if (!deps.isNullOrEmpty()) {
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
-                    text = "Dependencies: ${app.uadEntry!!.dependencies.joinToString()}",
+                    text = "Dependencies: ${deps.joinToString()}",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error
                 )

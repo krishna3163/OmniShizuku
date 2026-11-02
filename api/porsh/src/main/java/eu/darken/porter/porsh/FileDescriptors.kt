@@ -17,10 +17,8 @@ internal object FileDescriptors {
     }
 
     fun getFd(fileDescriptor: FileDescriptor?): Int = try {
-        getInt!!.invoke(fileDescriptor) as Int
-    } catch (ignored: IllegalAccessException) {
-        -1
-    } catch (ignored: InvocationTargetException) {
+        getInt?.invoke(fileDescriptor) as? Int ?: -1
+    } catch (ignored: Throwable) {
         -1
     }
 

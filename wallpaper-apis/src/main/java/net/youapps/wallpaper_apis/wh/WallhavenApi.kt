@@ -23,23 +23,24 @@ class WallhavenApi : WallpaperApi() {
         return api.search(
             page = page,
             query = selectedTags.joinToString(" "),
-            ratios = selectedFilters["ratios"]!!,
+            ratios = selectedFilters["ratios"] ?: "16x9,16x10",
             categories = when (selectedFilters["categories"]) {
                 "general" -> "100"
                 "anime" -> "010"
                 "people" -> "001"
                 else -> "111"
             },
-            sorting = selectedFilters["sorting"]!!,
-            order = selectedFilters["order"]!!,
+            sorting = selectedFilters["sorting"] ?: "date_added",
+            order = selectedFilters["order"] ?: "desc",
             purity = when (selectedFilters["purity"]) {
                 "sfw" -> "100"
                 "sketchy" -> "010"
                 else -> "110"
             }
-        ).data?.map {
+        ).data?.mapNotNull {
+            val path = it.path ?: return@mapNotNull null
             Wallpaper(
-                imgSrc = it.path!!,
+                imgSrc = path,
                 title = it.category,
                 url = it.url,
                 category = it.category,

@@ -516,14 +516,17 @@ abstract class HomeActivity : AppActivity() {
                             }
                         )
                     } else if (activeDetail != null) {
+                        val currentDetail = activeDetail
                         BackHandler {
                             activeDetail = null
                         }
-                        DetailHost(
-                            detail = activeDetail!!,
-                            onBack = { activeDetail = null },
-                            onOpenDetail = { activeDetail = it }
-                        )
+                        if (currentDetail != null) {
+                            DetailHost(
+                                detail = currentDetail,
+                                onBack = { activeDetail = null },
+                                onOpenDetail = { activeDetail = it }
+                            )
+                        }
                     } else {
                         BackHandler(enabled = selectedTab != 0) {
                             selectedTab = 0

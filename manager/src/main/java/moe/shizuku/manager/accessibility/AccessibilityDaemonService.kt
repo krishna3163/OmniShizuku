@@ -94,7 +94,7 @@ class AccessibilityDaemonService : Service() {
 
     private fun registerObserver() {
         val resolver: ContentResolver = contentResolver
-        observer = object : ContentObserver(mainHandler) {
+        val obs = object : ContentObserver(mainHandler) {
             override fun onChange(selfChange: Boolean) {
                 // Ignore our own writes so a restore can't loop on itself.
                 if (AccessibilityManager.isSelfWrite()) {
@@ -104,10 +104,11 @@ class AccessibilityDaemonService : Service() {
                 scheduleCheck(delayMs = 500L)
             }
         }
+        observer = obs
         resolver.registerContentObserver(
             Settings.Secure.getUriFor(Settings.Secure.ENABLED_ACCESSIBILITY_SERVICES),
             false,
-            observer!!
+            obs
         )
     }
 

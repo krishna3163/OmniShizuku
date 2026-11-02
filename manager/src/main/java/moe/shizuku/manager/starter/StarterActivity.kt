@@ -249,7 +249,8 @@ private class ViewModel(context: Context, root: Boolean, dhizuku: Boolean, host:
             when {
                 dhizuku -> startDhizuku(context)
                 root -> startRoot()
-                else -> startAdb(host!!, port)
+                host != null -> startAdb(host, port)
+                else -> postResult(IllegalStateException("ADB host cannot be null"))
             }
         } catch (e: Throwable) {
             postResult(e)

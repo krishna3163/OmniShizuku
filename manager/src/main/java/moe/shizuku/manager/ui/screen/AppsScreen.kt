@@ -296,9 +296,10 @@ fun AppsScreen(
             val limited = withContext(Dispatchers.IO) {
                 var limited = false
                 for (pi in apps) {
+                    val uid = pi.applicationInfo?.uid ?: continue
                     val result = runCatching {
-                        if (grant) AuthorizationManager.grant(pi.packageName, pi.applicationInfo!!.uid)
-                        else AuthorizationManager.revoke(pi.packageName, pi.applicationInfo!!.uid)
+                        if (grant) AuthorizationManager.grant(pi.packageName, uid)
+                        else AuthorizationManager.revoke(pi.packageName, uid)
                     }
                     if (result.exceptionOrNull() is SecurityException) limited = true
                 }
@@ -322,9 +323,10 @@ fun AppsScreen(
                 // Back the other way, over the same apps.
                 withContext(Dispatchers.IO) {
                     for (pi in apps) {
+                        val uid = pi.applicationInfo?.uid ?: continue
                         runCatching {
-                            if (grant) AuthorizationManager.revoke(pi.packageName, pi.applicationInfo!!.uid)
-                            else AuthorizationManager.grant(pi.packageName, pi.applicationInfo!!.uid)
+                            if (grant) AuthorizationManager.revoke(pi.packageName, uid)
+                            else AuthorizationManager.grant(pi.packageName, uid)
                         }
                     }
                 }
@@ -378,10 +380,11 @@ fun AppsScreen(
                             scope.launch {
                                 val allGranted = withContext(Dispatchers.IO) {
                                     shown.all {
+                                        val uid = it.applicationInfo?.uid ?: return@all false
                                         runCatching {
                                             AuthorizationManager.granted(
                                                 it.packageName,
-                                                it.applicationInfo!!.uid
+                                                uid
                                             )
                                         }.getOrDefault(false)
                                     }
@@ -518,7 +521,7 @@ fun AppsScreen(
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
             items(shown, key = { it.rowKey() }) { pi ->
-                val uid = pi.applicationInfo!!.uid
+                val uid = pi.applicationInfo?.uid ?: return@items
                 val granted = remember(pi.packageName, version) {
                     runCatching { AuthorizationManager.granted(pi.packageName, uid) }.getOrDefault(false)
                 }
@@ -556,8 +559,8 @@ fun AppsScreen(
                     leadingContent = { AppIcon(pi) },
                     headlineContent = {
                         Text(
-                            runCatching { pi.applicationInfo!!.loadLabel(pm).toString() }
-                                .getOrDefault(pi.packageName)
+                            runCatching { pi.applicationInfo?.loadLabel(pm)?.toString() }
+                                .getOrNull() ?: pi.packageName
                         )
                     },
                     // The name has the whole first line now, so a long one no longer wraps to

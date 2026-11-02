@@ -284,12 +284,10 @@ fun ComputAgentSheet(
                     phase = AgentPhase.DONE
                     return@launch
                 }
-                if (built.steps.size > maxSteps) {
-                    plan = built.copy(steps = built.steps.take(maxSteps))
-                } else {
-                    plan = built
-                }
-                val steps = plan!!.steps
+                val effectiveSteps = if (built.steps.size > maxSteps) built.steps.take(maxSteps) else built.steps
+                val effectivePlan = built.copy(steps = effectiveSteps)
+                plan = effectivePlan
+                val steps = effectiveSteps
                 statuses = List(steps.size) { AgentStepStatus.PENDING }
                 outputs = List(steps.size) { "" }
                 phase = AgentPhase.EXECUTING
@@ -554,7 +552,8 @@ fun ComputAgentSheet(
                         )
                     }
                 }
-                if (error != null) {
+                val currentError = error
+                if (currentError != null) {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.errorContainer,
@@ -572,7 +571,7 @@ fun ComputAgentSheet(
                             )
                             Spacer(Modifier.width(8.dp))
                             Text(
-                                text = error!!,
+                                text = currentError,
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onErrorContainer,
                             )

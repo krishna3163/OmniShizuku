@@ -21,7 +21,7 @@ class MicrosoftSpotlightApi : WallpaperApi() {
     private val api = RetrofitHelper.create<Spotlight>(baseUrl)
 
     override suspend fun getWallpapers(page: Int): List<Wallpaper> {
-        val country = selectedFilters["country"]!!
+        val country = selectedFilters["country"] ?: "US"
         val apiResp = api.getLatestPage(country = country, locale = "en-${country}")
         val images = apiResp.batchrsp.items.map {
             RetrofitHelper.json.decodeFromString<SpotlightImage>(it.item)
@@ -41,7 +41,7 @@ class MicrosoftSpotlightApi : WallpaperApi() {
     }
 
     override suspend fun getRandomWallpaperUrl(): String {
-        val country = selectedFilters["country"]!!
+        val country = selectedFilters["country"] ?: "US"
         return api.getLatest(country = country, locale = "en-${country}").ad.portraitImage.asset
     }
 }

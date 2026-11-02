@@ -21,7 +21,7 @@ class PixabayApi: WallpaperApi() {
     override suspend fun getWallpapers(page: Int): List<Wallpaper> {
         return api.getWallpapers(
             query = selectedTags.joinToString(" "),
-            category = selectedFilters["category"]!!,
+            category = selectedFilters["category"] ?: "all",
             pageNumber = page,
             orientation = selectedFilters["orientation"].takeIf { it != "all" },
             contentType = selectedFilters["content_type"].takeIf { it != "all" },

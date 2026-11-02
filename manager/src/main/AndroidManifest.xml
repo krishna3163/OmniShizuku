@@ -143,11 +143,7 @@
                 <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".FirstLaunchActivity"
-            android:exported="false"
-            android:enabled="false"
-            tools:node="remove" />
+
         <activity
             android:name=".management.ApplicationManagementActivity"
             android:label="@string/home_app_management_title" />
@@ -174,6 +170,7 @@
         <activity
             android:name=".accessibility.AccessibilityManagerActivity"
             android:exported="true"
+            android:taskAffinity=""
             android:label="@string/accessibility_manager_title">
             <intent-filter>
                 <action android:name="com.krishna.omnishizuku.action.ACCESSIBILITY_MANAGER" />
@@ -197,6 +194,7 @@
             android:name=".module.InstallZipModuleActivity"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:taskAffinity=""
             android:label="@string/modules_install_zip_module"
             android:noHistory="true"
             android:theme="@style/GrantPermissions">
@@ -233,6 +231,7 @@
             android:directBootAware="true"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:taskAffinity=""
             android:theme="@style/GrantPermissions">
             <intent-filter>
                 <action android:name="${applicationId}.intent.action.REQUEST_PERMISSION" />
@@ -253,6 +252,7 @@
             android:directBootAware="true"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:taskAffinity=""
             android:theme="@style/GrantPermissions">
             <intent-filter>
                 <action android:name="rikka.shizuku.intent.action.REQUEST_BINDER" />
@@ -264,6 +264,7 @@
             android:name=".legacy.LegacyIsNotSupportedActivity"
             android:excludeFromRecents="true"
             android:exported="true"
+            android:taskAffinity=""
             android:permission="moe.shizuku.manager.permission.API"
             android:theme="@style/GrantPermissions">
             <intent-filter>
@@ -622,6 +623,7 @@
         <!-- ShizuCallRecorder: Phone state receiver for call detection -->
         <receiver
             android:name=".callrecorder.PhoneStateReceiver"
+            android:permission="android.permission.READ_PHONE_STATE"
             android:enabled="true"
             android:exported="true">
             <intent-filter>

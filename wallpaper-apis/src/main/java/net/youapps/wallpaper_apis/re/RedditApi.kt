@@ -29,11 +29,11 @@ class RedditApi : WallpaperApi() {
 
         // reset the after query if starting from the beginning
         if (page == 1) nextPageAfter = null
-        val subreddit = communityName!!.replaceFirst("r/", "")
+        val subreddit = (communityName ?: "wallpapers").replaceFirst("r/", "")
 
         val xml = api.getRedditData(
             subreddit,
-            selectedFilters["sort"]!!,
+            selectedFilters["sort"] ?: "hot",
             selectedFilters["time"],
             nextPageAfter
         ).string()

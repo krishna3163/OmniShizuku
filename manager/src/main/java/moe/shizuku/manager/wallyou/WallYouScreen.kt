@@ -666,9 +666,10 @@ private fun WallpaperDetailDialog(
                     .padding(vertical = 50.dp, horizontal = 16.dp),
                 contentAlignment = Alignment.Center
             ) {
-                if (filteredBitmap != null) {
+                val currentFiltered = filteredBitmap
+                if (currentFiltered != null) {
                     androidx.compose.foundation.Image(
-                        bitmap = filteredBitmap!!.asImageBitmap(),
+                        bitmap = currentFiltered.asImageBitmap(),
                         contentDescription = wallpaper.title,
                         modifier = Modifier
                             .fillMaxSize()

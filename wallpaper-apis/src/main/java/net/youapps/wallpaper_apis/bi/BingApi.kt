@@ -22,7 +22,7 @@ class BingApi : WallpaperApi() {
     override suspend fun getWallpapers(page: Int): List<Wallpaper> {
         // doesn't support pagination, at most 7 images are available
         if (page != 1) return emptyList()
-        val resolution = selectedFilters["resolution"]!!
+        val resolution = selectedFilters["resolution"] ?: "1920x1080"
 
         return api.getImages().images.map {
             Wallpaper(
@@ -43,6 +43,6 @@ class BingApi : WallpaperApi() {
     override suspend fun getRandomWallpaperUrl() = api.getImages(1).images
         .firstOrNull()
         ?.let {
-            getImgSrc(it.urlBase, selectedFilters["resolution"]!!)
+            getImgSrc(it.urlBase, selectedFilters["resolution"] ?: "1920x1080")
         }
 }

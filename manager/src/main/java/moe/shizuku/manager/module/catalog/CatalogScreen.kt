@@ -607,13 +607,14 @@ private fun ModuleDetailScreen(
                     Column(modifier = Modifier.padding(horizontal = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                         Text("README", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.SemiBold)
 
+                        val content = readmeContent
                         if (isLoadingReadme) {
                             Row(modifier = Modifier.fillMaxWidth().padding(vertical = 16.dp), horizontalArrangement = Arrangement.Center) {
                                 LoadingIndicator(Modifier.size(28.dp))
                             }
-                        } else if (!readmeContent.isNullOrBlank()) {
+                        } else if (!content.isNullOrBlank()) {
                             Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceContainerHighest, modifier = Modifier.fillMaxWidth()) {
-                                ReadmeText(content = readmeContent!!, modifier = Modifier.padding(16.dp))
+                                ReadmeText(content = content, modifier = Modifier.padding(16.dp))
                             }
                         } else {
                             Surface(shape = MaterialTheme.shapes.medium, color = MaterialTheme.colorScheme.surfaceContainerHigh, modifier = Modifier.fillMaxWidth()) {
@@ -858,10 +859,14 @@ private fun ReadmeText(content: String, modifier: Modifier = Modifier) {
                 Regex("^\\d+\\.\\s").containsMatchIn(t) -> {
                     val indent = (line.length - line.trimStart().length) / 2
                     val indentDp = (indent * 16).dp
-                    val match = Regex("^(\\d+)\\.\\s(.+)").find(t)!!
-                    Row(modifier = Modifier.padding(start = indentDp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Text("${match.groupValues[1]}.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        StyledText(parseInline(match.groupValues[2], linkColor), MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    val match = Regex("^(\\d+)\\.\\s*(.*)").find(t)
+                    if (match != null) {
+                        Row(modifier = Modifier.padding(start = indentDp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Text("${match.groupValues[1]}.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            StyledText(parseInline(match.groupValues[2], linkColor), MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    } else {
+                        StyledText(parseInline(t, linkColor), MaterialTheme.typography.bodySmall)
                     }
                 }
                 t.startsWith("- ") || t.startsWith("* ") -> {

@@ -344,10 +344,10 @@ fun CommandiumSheet(
                             modifier = Modifier.fillMaxWidth(),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            if (!isError) {
+                            if (!isError && !outcomeText.isNullOrBlank()) {
                                 Button(
                                     onClick = {
-                                        onUseCommand(outcomeText!!)
+                                        outcomeText?.let { onUseCommand(it) }
                                         onDismiss()
                                     },
                                     modifier = Modifier.weight(1f),

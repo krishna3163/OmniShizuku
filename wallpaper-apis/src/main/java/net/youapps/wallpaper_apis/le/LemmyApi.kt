@@ -42,12 +42,13 @@ class LemmyApi : WallpaperApi() {
         return api.getWallpapers(
             page = page,
             communityName = communityName ?: throw IllegalArgumentException("no community name specified"),
-            sort = selectedFilters["sort"]!!,
-            type = selectedFilters["type"]!!
+            sort = selectedFilters["sort"] ?: "Active",
+            type = selectedFilters["type"] ?: "All"
         ).posts.filter {
             !it.post.thumbnailUrl.isNullOrEmpty()
         }.map {
-            val imgUrl = extractImageUrl(it.post.thumbnailUrl!!)
+            val thumbUrl = it.post.thumbnailUrl ?: ""
+            val imgUrl = extractImageUrl(thumbUrl)
 
             Wallpaper(
                 imgSrc = imgUrl,
@@ -65,8 +66,9 @@ class LemmyApi : WallpaperApi() {
         val url = plainUrl.toHttpUrlOrNull() ?: return plainUrl
 
         // proxied urls: https://lemmy.local/api/v3/image_proxy?url=...
-        if (!url.queryParameter("url").isNullOrEmpty()) {
-            return url.queryParameter("url")!!
+        val param = url.queryParameter("url")
+        if (!param.isNullOrEmpty()) {
+            return param
         }
 
         return plainUrl

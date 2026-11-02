@@ -17,10 +17,11 @@ class ImgthApi: WallpaperApi() {
     }
 
     override suspend fun getWallpapers(page: Int): List<Wallpaper> {
-        val response = if (communityName.isNullOrBlank()) {
+        val community = communityName
+        val response = if (community.isNullOrBlank()) {
             api.getLive()
         } else {
-            api.getCategory(communityName!!, page - 1)
+            api.getCategory(community, page - 1)
         }
         val doc = Ksoup.parse(response.string())
 

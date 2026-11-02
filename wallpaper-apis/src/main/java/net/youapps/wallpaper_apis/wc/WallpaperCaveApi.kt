@@ -34,7 +34,7 @@ class WallpaperCaveApi: WallpaperApi() {
 
     override suspend fun getWallpapers(page: Int): List<Wallpaper> {
         // page is 0-based
-        val pageType = selectedFilters["page"]!!
+        val pageType = selectedFilters["page"] ?: "featured"
         val responseHtml = when (pageType) {
             "featured" -> {
                 api.getFeaturedWallpapers(page - 1).first().imgs

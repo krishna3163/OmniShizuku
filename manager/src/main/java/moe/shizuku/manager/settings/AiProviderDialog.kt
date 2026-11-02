@@ -109,15 +109,15 @@ fun AiProviderDialog(
                 modelOptions = cached
             }
         }
-        val stale = haveCache && AiProviderRepository.isModelCacheStale(providerId!!, url)
+        val stale = haveCache && providerId != null && AiProviderRepository.isModelCacheStale(providerId, url)
         if (haveCache && !stale) return@LaunchedEffect
-        if (stale) {
+        if (stale && providerId != null) {
             // Show the cached list immediately, refresh silently behind it.
             AiClient.listModels(url, apiKey.trim())
                 .onSuccess { list ->
                     if (list.isNotEmpty()) {
                         modelOptions = AiProviderRepository.displayModels(url, list)
-                        AiProviderRepository.setCachedModels(providerId!!, url, list)
+                        AiProviderRepository.setCachedModels(providerId, url, list)
                     }
                 }
                 .onFailure { }

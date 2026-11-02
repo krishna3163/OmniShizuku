@@ -14,7 +14,7 @@ class PicsumApi : WallpaperApi() {
     override suspend fun getWallpapers(page: Int): List<Wallpaper> {
         return api.getWallpapers(maxPage + 1 - page).map {
             Wallpaper(
-                imgSrc = it.downloadUrl!!,
+                imgSrc = it.downloadUrl ?: it.url ?: "$baseUrl/id/${it.id ?: "0"}/1080/1920",
                 author = it.author,
                 resolution = "${it.width}x${it.height}",
                 url = it.url

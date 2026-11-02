@@ -17,7 +17,7 @@ class UnsplashApi : WallpaperApi() {
     private val api = RetrofitHelper.create<Unsplash>(baseUrl)
 
     override suspend fun getWallpapers(page: Int): List<Wallpaper> {
-        val sortOrder = selectedFilters["order_by"]!!
+        val sortOrder = selectedFilters["order_by"] ?: "latest"
         val orientation = selectedFilters["orientation"].takeIf { it != "any" }
 
         val wallpapers = if (selectedTags.isEmpty()) {

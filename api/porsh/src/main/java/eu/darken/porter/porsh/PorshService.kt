@@ -60,8 +60,8 @@ abstract class PorshService internal constructor(
                 val stdin = data.readFileDescriptor()
                 val stdout = data.readFileDescriptor()
                 val stderr = if ((tty.toInt() and PorshConstants.ATTY_ERR) == 0) data.readFileDescriptor() else null
-                val args = data.createStringArray()!!
-                val env = data.createStringArray()!!
+                val args = data.createStringArray() ?: emptyArray()
+                val env = data.createStringArray() ?: emptyArray()
                 val dir = data.readString()
                 createHost(args, env, dir, tty, stdin, stdout, stderr)
                 reply.writeNoException()

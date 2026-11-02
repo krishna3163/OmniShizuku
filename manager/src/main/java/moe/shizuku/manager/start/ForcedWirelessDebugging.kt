@@ -289,11 +289,12 @@ object ForcedWirelessDebugging {
             }
         }
 
+        val r = reason
         when {
-            reason != null -> Diag.warn(
+            r != null -> Diag.warn(
                 AppConstants.TAG,
                 "Local-only hotspot refused (attempt ${attempt + 1} of $attempts): " +
-                    reasonName(reason!!).also { lastRefusal = it }
+                    reasonName(r).also { lastRefusal = it }
             )
             // Silence would look the same as a refusal in the log, and the difference
             // matters: a call that never answers means the Wi-Fi stack was not ready yet.

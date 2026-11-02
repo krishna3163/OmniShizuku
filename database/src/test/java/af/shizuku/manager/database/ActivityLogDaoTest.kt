@@ -3,8 +3,7 @@ package af.shizuku.manager.database
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
-import io.kotest.matchers.collections.shouldHaveSize
-import io.kotest.matchers.shouldBe
+import org.junit.Assert.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.After
@@ -13,7 +12,11 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
+private infix fun <T> T.shouldBe(expected: T) = assertEquals(expected, this)
+private infix fun Collection<*>.shouldHaveSize(size: Int) = assertEquals(size, this.size)
+
 @RunWith(RobolectricTestRunner::class)
+@org.robolectric.annotation.Config(sdk = [34])
 class ActivityLogDaoTest {
 
     private lateinit var database: ActivityLogDatabase

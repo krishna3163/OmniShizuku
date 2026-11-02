@@ -311,7 +311,10 @@ public abstract class Service<
             throw new IllegalArgumentException("cmd must not be empty");
         }
         for (String arg : cmd) {
-            if (arg != null && arg.indexOf('\0') != -1) {
+            if (arg == null) {
+                throw new IllegalArgumentException("cmd arguments must not be null");
+            }
+            if (arg.indexOf('\0') != -1) {
                 throw new IllegalArgumentException("cmd arguments must not contain null characters");
             }
         }

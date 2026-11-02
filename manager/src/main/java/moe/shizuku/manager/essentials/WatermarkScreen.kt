@@ -388,7 +388,8 @@ fun WatermarkScreen(
             // Export Button
             Button(
                 onClick = {
-                    if (selectedImageUri == null) {
+                    val uri = selectedImageUri
+                    if (uri == null) {
                         Toast.makeText(context, "Please select an image first", Toast.LENGTH_SHORT).show()
                         return@Button
                     }
@@ -396,7 +397,7 @@ fun WatermarkScreen(
                         isSaving = true
                         val success = saveWatermarkedImage(
                             context = context,
-                            uri = selectedImageUri!!,
+                            uri = uri,
                             options = WatermarkOptions(
                                 style = selectedStyle,
                                 colorMode = selectedColorMode,

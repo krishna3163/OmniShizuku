@@ -286,8 +286,8 @@ fun DeviceOwnerTransferScreen(
     }
 
 
-    if (showConfirmDialog && selectedApp != null) {
-        val app = selectedApp!!
+    val app = selectedApp
+    if (showConfirmDialog && app != null) {
         AlertDialog(
             onDismissRequest = { showConfirmDialog = false },
             title = {

@@ -1,16 +1,21 @@
 package af.shizuku.manager.database
 
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.shouldNotBe
-import io.kotest.matchers.nulls.shouldBeNull
-import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.collections.shouldHaveSize
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
+import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.junit.After
 import java.lang.reflect.Field
+
+private infix fun <T> T.shouldBe(expected: T) = assertEquals(expected, this)
+private infix fun <T> T.shouldNotBe(unexpected: T) = assertNotEquals(unexpected, this)
+private fun Any?.shouldBeNull() = assertNull(this)
+private infix fun Collection<*>.shouldHaveSize(size: Int) = assertEquals(size, this.size)
+private infix fun <T> Collection<T>.shouldContain(element: T) = assertTrue(this.contains(element))
 
 @RunWith(RobolectricTestRunner::class)
 @org.robolectric.annotation.Config(sdk = [34])

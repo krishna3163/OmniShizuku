@@ -260,7 +260,8 @@ fun DFRootScreen(onBack: () -> Unit) {
                     }
                     Button(
                         onClick = {
-                            if (selectedSuManager == null || isRunning || isAlreadyHooked) return@Button
+                            val manager = selectedSuManager
+                            if (manager == null || isRunning || isAlreadyHooked) return@Button
                             isRunning = true
                             output = ""
                             scope.launch(Dispatchers.IO) {
@@ -272,7 +273,7 @@ fun DFRootScreen(onBack: () -> Unit) {
                                                 output += msg
                                             }
                                         }
-                                    }, selectedSuManager!!)
+                                    }, manager)
                                 } catch (e: Exception) {
                                     scope.launch(Dispatchers.Main) {
                                         output += "\nException: $e\n"

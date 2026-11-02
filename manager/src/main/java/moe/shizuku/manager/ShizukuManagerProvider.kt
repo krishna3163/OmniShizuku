@@ -96,9 +96,12 @@ class ShizukuManagerProvider : ShizukuProvider() {
                             Shizuku.attachUserService(binder, bundleOf(
                                 USER_SERVICE_ARG_TOKEN to token
                             ))
-                            val container = BinderContainer(Shizuku.getBinder())
-                            reply!!.putParcelable(EXTRA_BINDER, container)
-                            reply!!.putParcelable(EXTRA_BINDER_SHEVERY, container)
+                            val currentReply = reply
+                            if (currentReply != null) {
+                                val container = BinderContainer(Shizuku.getBinder())
+                                currentReply.putParcelable(EXTRA_BINDER, container)
+                                currentReply.putParcelable(EXTRA_BINDER_SHEVERY, container)
+                            }
                         } catch (e: Throwable) {
                             LOGGER.e(e, "attachUserService $token")
                             reply = null

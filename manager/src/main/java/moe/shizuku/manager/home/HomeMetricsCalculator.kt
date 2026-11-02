@@ -39,8 +39,9 @@ internal object HomeMetricsCalculator {
         currentPercent: Int?,
         elapsedMillis: Long
     ): Double? {
-        if (previousPercent !in 0..100 || currentPercent !in 0..100 ||
-            previousPercent!! <= currentPercent!! || elapsedMillis < MIN_DRAIN_SAMPLE_MS ||
+        if (previousPercent == null || currentPercent == null ||
+            previousPercent !in 0..100 || currentPercent !in 0..100 ||
+            previousPercent <= currentPercent || elapsedMillis < MIN_DRAIN_SAMPLE_MS ||
             elapsedMillis > MAX_DRAIN_SAMPLE_MS
         ) return null
         val rate = (previousPercent - currentPercent) * 3_600_000.0 / elapsedMillis

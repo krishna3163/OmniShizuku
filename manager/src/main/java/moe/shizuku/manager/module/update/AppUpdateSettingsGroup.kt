@@ -38,6 +38,7 @@ import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 import android.content.Intent
 import androidx.compose.material3.Icon
+import moe.shizuku.manager.utils.SafeIntentUtils
 import androidx.compose.ui.res.painterResource
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.material3.Surface
@@ -278,9 +279,15 @@ internal fun SheveryAppUpdateDialog(
             phase = AppUpdatePhase.Downloading
             progress = -1f
             errorMessage = null
+            val downloadUrl = result.downloadUrl ?: result.htmlUrl
+            if (downloadUrl.isNullOrBlank()) {
+                errorMessage = "Download URL is not available"
+                phase = AppUpdatePhase.Failed
+                return@launch
+            }
             try {
                 AppUpdateDownloader.downloadToFile(
-                    url = result.downloadUrl!!,
+                    url = downloadUrl,
                     targetFile = apkFile,
                     onProgress = { read, total ->
                         progress = total?.takeIf { it > 0 }?.let { read.toFloat() / it } ?: -1f
@@ -292,7 +299,9 @@ internal fun SheveryAppUpdateDialog(
                     is AppUpdateInstaller.Result.UserActionRequired -> {
                         outcome.confirmIntent?.let { confirm ->
                             runCatching {
-                                context.startActivity(confirm.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                if (SafeIntentUtils.isSafeInstallerIntent(context, confirm)) {
+                                    context.startActivity(SafeIntentUtils.sanitizeInstallerIntent(confirm))
+                                }
                             }
                         }
                         onDismiss()
