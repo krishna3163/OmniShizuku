@@ -1249,9 +1249,10 @@ private fun pagerOffsetBlur(
     return (offset * maxRadius * sensitivity).dp
 }
 
-private data class HomeButtonSpec(
+internal data class HomeButtonSpec(
     @param:StringRes val label: Int,
-    @param:DrawableRes val icon: Int,
+    @param:DrawableRes val icon: Int = 0,
+    val imageVector: androidx.compose.ui.graphics.vector.ImageVector? = null,
     val primary: Boolean = false,
     val enabled: Boolean = true,
     val onClick: () -> Unit
@@ -2255,10 +2256,11 @@ private fun SimpleActionCard(
 }
 
 @Composable
-private fun HomeCard(
-    @DrawableRes icon: Int,
+internal fun HomeCard(
+    @DrawableRes icon: Int = 0,
+    imageVector: androidx.compose.ui.graphics.vector.ImageVector? = null,
     title: String,
-    body: String,
+    body: String = "",
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
     onClick: (() -> Unit)? = null,
@@ -2288,12 +2290,21 @@ private fun HomeCard(
                 color = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Box(contentAlignment = Alignment.Center) {
-                    ShizukuIcon(
-                        icon = icon,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(24.dp)
-                    )
+                    if (imageVector != null) {
+                        ShizukuIcon(
+                            imageVector = imageVector,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    } else if (icon != 0) {
+                        ShizukuIcon(
+                            icon = icon,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
             Column(
@@ -2320,7 +2331,7 @@ private fun HomeCard(
 }
 
 @Composable
-private fun HomeButtons(buttons: List<HomeButtonSpec>) {
+internal fun HomeButtons(buttons: List<HomeButtonSpec>) {
     if (buttons.isEmpty()) return
 
     Spacer(Modifier.height(8.dp))
@@ -2335,7 +2346,7 @@ private fun HomeButtons(buttons: List<HomeButtonSpec>) {
                     onClick = button.onClick,
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)
                 ) {
-                    ButtonIcon(button.icon)
+                    ButtonIcon(button.icon, button.imageVector)
                     Text(stringResource(button.label))
                 }
             } else if (button.enabled) {
@@ -2343,7 +2354,7 @@ private fun HomeButtons(buttons: List<HomeButtonSpec>) {
                     onClick = button.onClick,
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)
                 ) {
-                    ButtonIcon(button.icon)
+                    ButtonIcon(button.icon, button.imageVector)
                     Text(stringResource(button.label))
                 }
             } else {
@@ -2352,7 +2363,7 @@ private fun HomeButtons(buttons: List<HomeButtonSpec>) {
                     onClick = button.onClick,
                     contentPadding = PaddingValues(horizontal = 14.dp, vertical = 10.dp)
                 ) {
-                    ButtonIcon(button.icon)
+                    ButtonIcon(button.icon, button.imageVector)
                     Text(stringResource(button.label))
                 }
             }
@@ -2361,14 +2372,27 @@ private fun HomeButtons(buttons: List<HomeButtonSpec>) {
 }
 
 @Composable
-private fun ButtonIcon(@DrawableRes icon: Int) {
-    ShizukuIcon(
-        icon = icon,
-        contentDescription = null,
-        modifier = Modifier
-            .padding(end = 8.dp)
-            .size(18.dp)
-    )
+private fun ButtonIcon(
+    @DrawableRes icon: Int = 0,
+    imageVector: androidx.compose.ui.graphics.vector.ImageVector? = null
+) {
+    if (imageVector != null) {
+        ShizukuIcon(
+            imageVector = imageVector,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .size(18.dp)
+        )
+    } else if (icon != 0) {
+        ShizukuIcon(
+            icon = icon,
+            contentDescription = null,
+            modifier = Modifier
+                .padding(end = 8.dp)
+                .size(18.dp)
+        )
+    }
 }
 
 private fun formatServiceUptime(millis: Long): String {

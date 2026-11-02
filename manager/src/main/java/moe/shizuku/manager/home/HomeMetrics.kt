@@ -13,7 +13,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Smartphone
+import androidx.compose.material.icons.outlined.Speed
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -199,111 +201,113 @@ internal fun HomeCurrentUsageCard(isVisible: Boolean) {
         }
     }
 
-    Card(modifier = Modifier.fillMaxWidth()) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
-        ) {
-            Text(
-                stringResource(R.string.home_usage_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-            when {
-                !isVisible || !started -> Text(
-                    stringResource(R.string.home_usage_paused),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                !metrics.serviceConnected -> Text(
-                    stringResource(R.string.home_usage_service_unavailable),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                !metrics.permissionGranted -> Text(
-                    stringResource(R.string.home_usage_permission_missing),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-                else -> {
-                    val memoryUsedBytes = metrics.memoryUsedBytes
-                    val memoryTotalBytes = metrics.memoryTotalBytes
-                    val batteryTemperatureC = metrics.batteryTemperatureC
-                    val batteryDrainRate = metrics.batteryDrainPercentPerHour
-                    val receivedRate = metrics.receivedBytesPerSecond
-                    val sentRate = metrics.sentBytesPerSecond
+    val statusText = when {
+        !isVisible || !started -> stringResource(R.string.home_usage_paused)
+        !metrics.serviceConnected -> stringResource(R.string.home_usage_service_unavailable)
+        !metrics.permissionGranted -> stringResource(R.string.home_usage_permission_missing)
+        else -> ""
+    }
 
-                    UsageMetricRow(
-                        stringResource(R.string.home_usage_cpu),
-                        metrics.cpuPercent?.let { String.format(Locale.getDefault(), "%.0f%%", it) }
-                            ?: unavailableOrWaiting(metrics.cpuCounterAvailable)
+    HomeCard(
+        imageVector = Icons.Outlined.Speed,
+        title = stringResource(R.string.home_usage_title),
+        body = statusText
+    ) {
+        if (statusText.isEmpty()) {
+            Column(
+                modifier = Modifier.fillMaxWidth().padding(top = 4.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                val memoryUsedBytes = metrics.memoryUsedBytes
+                val memoryTotalBytes = metrics.memoryTotalBytes
+                val batteryTemperatureC = metrics.batteryTemperatureC
+                val batteryDrainRate = metrics.batteryDrainPercentPerHour
+                val receivedRate = metrics.receivedBytesPerSecond
+                val sentRate = metrics.sentBytesPerSecond
+
+                UsageMetricRow(
+                    stringResource(R.string.home_usage_cpu),
+                    metrics.cpuPercent?.let { String.format(Locale.getDefault(), "%.0f%%", it) }
+                        ?: unavailableOrWaiting(metrics.cpuCounterAvailable)
+                )
+                UsageMetricRow(
+                    stringResource(R.string.home_usage_memory),
+                    if (memoryUsedBytes != null && memoryTotalBytes != null) {
+                        "${formatBytes(memoryUsedBytes)} / ${formatBytes(memoryTotalBytes)}"
+                    } else stringResource(R.string.home_usage_unavailable)
+                )
+                UsageMetricRow(
+                    stringResource(R.string.home_usage_battery_temperature),
+                    batteryTemperatureC?.let {
+                        String.format(Locale.getDefault(), "%.1f °C", it)
+                    } ?: stringResource(R.string.home_usage_unavailable)
+                )
+                UsageMetricRow(
+                    stringResource(R.string.home_usage_battery_drain),
+                    batteryDrainRate?.let {
+                        stringResource(R.string.home_usage_percent_per_hour, it)
+                    } ?: stringResource(
+                        if (metrics.batteryLevelAvailable) R.string.home_usage_sampling
+                        else R.string.home_usage_unavailable
                     )
-                    UsageMetricRow(
-                        stringResource(R.string.home_usage_memory),
-                        if (memoryUsedBytes != null && memoryTotalBytes != null) {
-                            "${formatBytes(memoryUsedBytes)} / ${formatBytes(memoryTotalBytes)}"
-                        } else stringResource(R.string.home_usage_unavailable)
-                    )
-                    UsageMetricRow(
-                        stringResource(R.string.home_usage_battery_temperature),
-                        batteryTemperatureC?.let {
-                            String.format(Locale.getDefault(), "%.1f °C", it)
-                        } ?: stringResource(R.string.home_usage_unavailable)
-                    )
-                    UsageMetricRow(
-                        stringResource(R.string.home_usage_battery_drain),
-                        batteryDrainRate?.let {
-                            stringResource(R.string.home_usage_percent_per_hour, it)
-                        } ?: stringResource(
-                            if (metrics.batteryLevelAvailable) R.string.home_usage_sampling
-                            else R.string.home_usage_unavailable
-                        )
-                    )
-                    UsageMetricRow(
-                        stringResource(R.string.home_usage_download),
-                        formatRate(receivedRate, metrics.receiveCounterAvailable)
-                    )
-                    UsageMetricRow(
-                        stringResource(R.string.home_usage_upload),
-                        formatRate(sentRate, metrics.sendCounterAvailable)
-                    )
-                    Text(
-                        stringResource(R.string.home_usage_network_scope),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                }
+                )
+                UsageMetricRow(
+                    stringResource(R.string.home_usage_download),
+                    formatRate(receivedRate, metrics.receiveCounterAvailable)
+                )
+                UsageMetricRow(
+                    stringResource(R.string.home_usage_upload),
+                    formatRate(sentRate, metrics.sendCounterAvailable)
+                )
+                Text(
+                    stringResource(R.string.home_usage_network_scope),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
             }
+        } else if (metrics.serviceConnected && !metrics.permissionGranted) {
+            HomeButtons(
+                listOf(
+                    HomeButtonSpec(
+                        label = R.string.home_usage_grant_permission,
+                        icon = R.drawable.ic_security_24dp,
+                        primary = true,
+                        onClick = {
+                            runCatching { Shizuku.requestPermission(0) }
+                        }
+                    )
+                )
+            )
         }
     }
 }
 
 @Composable
 internal fun HomeDeviceInfoCard(onClick: () -> Unit) {
-    androidx.compose.material3.Card(
-        modifier = Modifier.fillMaxWidth(),
+    HomeCard(
+        imageVector = Icons.Outlined.Smartphone,
+        title = stringResource(R.string.home_device_info_title),
+        body = stringResource(R.string.home_device_info_summary),
         onClick = onClick
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            Text(
-                stringResource(R.string.home_device_info_title),
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
+        HomeButtons(
+            listOf(
+                HomeButtonSpec(
+                    label = R.string.home_device_info_view,
+                    icon = R.drawable.ic_outline_info_24,
+                    primary = false,
+                    onClick = onClick
+                )
             )
-            Text(
-                stringResource(R.string.home_device_info_summary),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        )
     }
 }
 
 @Composable
 private fun UsageMetricRow(label: String, value: String) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-        Text(label, color = MaterialTheme.colorScheme.onSurfaceVariant)
-        Text(value, fontWeight = FontWeight.Medium)
+        Text(label, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text(value, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold, color = MaterialTheme.colorScheme.onSurface)
     }
 }
 
