@@ -87,7 +87,14 @@ class InstallZipModuleActivity : Activity() {
         val target = File(cacheDir, "shared_module_${System.currentTimeMillis()}.zip")
         return try {
             val input = if (uri.scheme.equals("file", ignoreCase = true)) {
-                uri.path?.let { File(it).inputStream() }
+                val filePath = uri.path ?: return null
+                val file = File(filePath).canonicalFile
+                val dataDir = applicationInfo.dataDir?.let { File(it).canonicalFile }
+                if (dataDir != null && file.path.startsWith(dataDir.path)) {
+                    // Refuse reading private internal application directories
+                    return null
+                }
+                file.inputStream()
             } else {
                 contentResolver.openInputStream(uri)
             } ?: return null

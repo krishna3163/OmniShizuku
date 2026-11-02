@@ -2,9 +2,12 @@ package moe.shizuku.manager.connector
 
 import android.content.ContentProvider
 import android.content.ContentValues
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.database.MatrixCursor
 import android.net.Uri
+import android.os.Binder
+import android.os.Process
 import moe.shizuku.manager.module.ModuleSettings
 import moe.shizuku.manager.starter.Starter
 
@@ -26,6 +29,15 @@ class ShizukuConnectorProvider : ContentProvider() {
     ): Cursor? {
         if (!ModuleSettings.isConnectorEnabled()) {
             return null
+        }
+        val ctx = context ?: return null
+        val callingUid = Binder.getCallingUid()
+        if (callingUid != Process.myUid()) {
+            val hasPerm = ctx.checkCallingPermission("${ctx.packageName}.permission.MANAGER") == PackageManager.PERMISSION_GRANTED
+                || ctx.checkCallingPermission("moe.shizuku.manager.permission.MANAGER") == PackageManager.PERMISSION_GRANTED
+            if (!hasPerm) {
+                return null
+            }
         }
 
         val cursor = MatrixCursor(arrayOf("command"))

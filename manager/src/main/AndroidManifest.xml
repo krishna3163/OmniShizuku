@@ -93,6 +93,16 @@
     <uses-permission android:name="com.krishna.omnishizuku.permission.MANAGER" />
 
     <permission
+        android:name="moe.shizuku.manager.permission.MANAGER"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="moe.shizuku.manager.permission.MANAGER" />
+
+    <permission
+        android:name="moe.shizuku.manager.permission.API"
+        android:protectionLevel="signature" />
+    <uses-permission android:name="moe.shizuku.manager.permission.API" />
+
+    <permission
         android:name="com.krishna.omnishizuku.permission.API_V23"
         android:description="@string/permission_description"
         android:icon="@drawable/ic_system_icon"
@@ -588,7 +598,7 @@
         <provider
             android:name=".connector.ShizukuConnectorProvider"
             android:authorities="${applicationId}.connector;moe.shizuku.privileged.api.connector"
-            android:permission="moe.shizuku.manager.permission.MANAGER"
+            android:permission="${applicationId}.permission.MANAGER"
             android:exported="true" />
 
         <provider

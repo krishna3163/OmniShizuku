@@ -59,12 +59,34 @@ import moe.shizuku.manager.utils.UserHandleCompat
  * the same list about different questions, and they should not drift apart.
  */
 
+/** In-memory cache for app labels and icons to eliminate scrolling jank/lag. */
+object AppIconCache {
+    private val iconCache = android.util.LruCache<String, ImageBitmap>(150)
+    private val labelCache = android.util.LruCache<String, String>(300)
+
+    fun getLabel(pm: PackageManager, pi: PackageInfo): String {
+        val cached = labelCache.get(pi.packageName)
+        if (cached != null) return cached
+        val label = runCatching { pi.applicationInfo?.loadLabel(pm)?.toString() }
+            .getOrNull()
+            ?.takeIf { it.isNotBlank() }
+            ?: pi.packageName
+        labelCache.put(pi.packageName, label)
+        return label
+    }
+
+    fun getIcon(packageName: String): ImageBitmap? {
+        return iconCache.get(packageName)
+    }
+
+    fun putIcon(packageName: String, bitmap: ImageBitmap) {
+        iconCache.put(packageName, bitmap)
+    }
+}
+
 /** The label, or the package name when there is no application record to read one from. */
 fun appLabel(pm: PackageManager, pi: PackageInfo): String =
-    runCatching { pi.applicationInfo?.loadLabel(pm)?.toString() }
-        .getOrNull()
-        ?.takeIf { it.isNotBlank() }
-        ?: pi.packageName
+    AppIconCache.getLabel(pm, pi)
 
 /**
  * One filter, sized to its share of the row rather than to its label, with its label and how
@@ -464,10 +486,31 @@ fun CenteredMessage(content: @Composable ColumnScope.() -> Unit) {
 @Composable
 fun AppIcon(pi: PackageInfo) {
     val context = LocalContext.current
-    val icon = remember(pi.packageName) {
-        runCatching { pi.applicationInfo?.loadIcon(context.packageManager) }.getOrNull()
+    val pkg = pi.packageName
+    val cached = remember(pkg) { AppIconCache.getIcon(pkg) }
+    if (cached != null) {
+        Image(bitmap = cached, contentDescription = null, modifier = Modifier.size(40.dp))
+        return
     }
-    AppIcon(icon)
+
+    val bitmap by produceState<ImageBitmap?>(null, pkg) {
+        value = withContext(Dispatchers.IO) {
+            val loaded = runCatching {
+                val drawable = pi.applicationInfo?.loadIcon(context.packageManager)
+                drawable?.toBitmap(96, 96)?.asImageBitmap()
+            }.getOrNull()
+            if (loaded != null) {
+                AppIconCache.putIcon(pkg, loaded)
+            }
+            loaded
+        }
+    }
+    val current = bitmap
+    if (current != null) {
+        Image(bitmap = current, contentDescription = null, modifier = Modifier.size(40.dp))
+    } else {
+        Spacer(modifier = Modifier.size(40.dp))
+    }
 }
 
 /**
@@ -477,22 +520,27 @@ fun AppIcon(pi: PackageInfo) {
 @Composable
 fun AppIcon(packageName: String) {
     val context = LocalContext.current
-    val icon = remember(packageName) {
-        runCatching { context.packageManager.getApplicationIcon(packageName) }.getOrNull()
+    val cached = remember(packageName) { AppIconCache.getIcon(packageName) }
+    if (cached != null) {
+        Image(bitmap = cached, contentDescription = null, modifier = Modifier.size(40.dp))
+        return
     }
-    AppIcon(icon)
-}
 
-@Composable
-private fun AppIcon(drawable: android.graphics.drawable.Drawable?) {
-    val bitmap by produceState<ImageBitmap?>(null, drawable) {
+    val bitmap by produceState<ImageBitmap?>(null, packageName) {
         value = withContext(Dispatchers.IO) {
-            runCatching { drawable?.toBitmap(96, 96)?.asImageBitmap() }.getOrNull()
+            val loaded = runCatching {
+                val drawable = context.packageManager.getApplicationIcon(packageName)
+                drawable.toBitmap(96, 96).asImageBitmap()
+            }.getOrNull()
+            if (loaded != null) {
+                AppIconCache.putIcon(packageName, loaded)
+            }
+            loaded
         }
     }
-    val currentBitmap = bitmap
-    if (currentBitmap != null) {
-        Image(bitmap = currentBitmap, contentDescription = null, modifier = Modifier.size(40.dp))
+    val current = bitmap
+    if (current != null) {
+        Image(bitmap = current, contentDescription = null, modifier = Modifier.size(40.dp))
     } else {
         Spacer(modifier = Modifier.size(40.dp))
     }

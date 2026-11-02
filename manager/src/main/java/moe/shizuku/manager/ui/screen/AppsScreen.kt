@@ -4,6 +4,8 @@ import android.content.pm.ApplicationInfo
 import android.util.Log
 import moe.shizuku.manager.ui.component.PillButton
 import moe.shizuku.manager.ui.component.PillButtonQuiet
+import moe.shizuku.manager.ui.component.appLabel
+import moe.shizuku.manager.ui.component.AppIconCache
 import moe.shizuku.manager.AppConstants
 import android.content.pm.PackageInfo
 import android.content.Intent
@@ -520,7 +522,11 @@ fun AppsScreen(
             contentPadding = PaddingValues(start = 16.dp, top = 4.dp, end = 16.dp, bottom = bottomPadding),
             verticalArrangement = Arrangement.spacedBy(8.dp)
         ) {
-            items(shown, key = { it.rowKey() }) { pi ->
+            items(
+                items = shown,
+                key = { it.rowKey() },
+                contentType = { "app_row" }
+            ) { pi: PackageInfo ->
                 val uid = pi.applicationInfo?.uid ?: return@items
                 val granted = remember(pi.packageName, version) {
                     runCatching { AuthorizationManager.granted(pi.packageName, uid) }.getOrDefault(false)
@@ -558,10 +564,8 @@ fun AppsScreen(
                     ),
                     leadingContent = { AppIcon(pi) },
                     headlineContent = {
-                        Text(
-                            runCatching { pi.applicationInfo?.loadLabel(pm)?.toString() }
-                                .getOrNull() ?: pi.packageName
-                        )
+                        val label = remember(pi.packageName) { appLabel(pm, pi) }
+                        Text(label)
                     },
                     // The name has the whole first line now, so a long one no longer wraps to
                     // make room for the chip and the switch: they moved to the line under it,

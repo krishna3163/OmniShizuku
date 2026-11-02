@@ -332,7 +332,7 @@ fun HomeScreen(bottomPadding: Dp) {
             // permission, so finding out what they find is worth saying - once, and out of the way.
             val ownership = permissionOwner
             if (ownership !is PermissionOwnership.Ours && ownership != permissionWarningDismissed) {
-                item {
+                item(key = "permission_ownership", contentType = "warning") {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.errorContainer,
@@ -371,7 +371,7 @@ fun HomeScreen(bottomPadding: Dp) {
             }
 
             if (updateAvailable) {
-                item {
+                item(key = "update_banner", contentType = "banner") {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.tertiaryContainer,
@@ -399,7 +399,7 @@ fun HomeScreen(bottomPadding: Dp) {
             }
 
             (startStatus as? StartStatus.Failed)?.let { failed ->
-                item {
+                item(key = "start_failed", contentType = "error") {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.errorContainer,
@@ -539,7 +539,7 @@ fun HomeScreen(bottomPadding: Dp) {
             }
 
             if (!batteryIgnored) {
-                item {
+                item(key = "battery_warning", contentType = "warning") {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.errorContainer,
@@ -580,7 +580,7 @@ fun HomeScreen(bottomPadding: Dp) {
             // live, a server that dies on its own, and comes back on its own, is the expected
             // behaviour - and an app that hides the connection it runs on cannot avoid it.
             if (hidingActive) {
-                item {
+                item(key = "hiding_active", contentType = "info") {
                     Surface(
                         modifier = Modifier.fillMaxWidth(),
                         color = MaterialTheme.colorScheme.tertiaryContainer,
@@ -598,7 +598,7 @@ fun HomeScreen(bottomPadding: Dp) {
                 }
             }
 
-            item {
+            item(key = "status_card", contentType = "status") {
                 StatusCard(
                     running = running,
                     uid = uid,
@@ -606,7 +606,7 @@ fun HomeScreen(bottomPadding: Dp) {
                 )
             }
 
-            item {
+            item(key = "server_actions", contentType = "actions") {
                 // The actions sit outside the status card and stay on screen in the
                 // same place, so the buttons don't move around as the state changes.
                 ServerActionButtons(
@@ -640,8 +640,7 @@ fun HomeScreen(bottomPadding: Dp) {
                     }
                 )
             }
-            item {
-                // The ways to start, as cards rather than rows: each one is a decision with
+            item(key = "start_methods", contentType = "methods") {
                 // a reason attached, so it gets an icon to be recognised by and a body that
                 // says the trade. The start options are disabled while Shizuku is running,
                 // because starting again does nothing and Restart is how you relaunch it.
@@ -776,7 +775,7 @@ fun HomeScreen(bottomPadding: Dp) {
                     }
                 }
             }
-            item {
+            item(key = "device_details", contentType = "details") {
                 SegmentedColumn(modifier = Modifier.fillMaxWidth()) {
                     // Same rows KernelSU's manager shows, so the device is described the
                     // same way in both apps.
@@ -826,7 +825,7 @@ fun HomeScreen(bottomPadding: Dp) {
             }
 
             if (diagnostics.isNotEmpty()) {
-                item {
+                item(key = "diagnostics", contentType = "diagnostics") {
                     // Last of the state, after the device rows: the status card is the
                     // glance, this is the whole answer, and it is the one place that puts it
                     // on the clipboard. Whoever needs it has already scrolled this far.
@@ -851,11 +850,11 @@ fun HomeScreen(bottomPadding: Dp) {
                 }
             }
 
-            item {
+            item(key = "live_metrics", contentType = "metrics") {
                 LiveDeviceInfoSection()
             }
 
-            item {
+            item(key = "support_coffee", contentType = "coffee") {
                 // The other half of the About row in Settings, and at the end of the page
                 // rather than the top: nobody opens this app to be asked, and the person who
                 // has scrolled past the device details is the one who has got something out

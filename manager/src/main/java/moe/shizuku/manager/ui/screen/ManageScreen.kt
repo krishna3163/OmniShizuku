@@ -360,7 +360,11 @@ fun ManageScreen(
                 contentPadding = PaddingValues(start = 16.dp, top = 4.dp, end = 16.dp, bottom = bottomPadding),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(shown, key = { it.rowKey() }) { pi ->
+                items(
+                    items = shown,
+                    key = { it.rowKey() },
+                    contentType = { "manage_app_row" }
+                ) { pi: PackageInfo ->
                     val removed = pi.packageName in removedPackages
 
                     SegmentedCard {
@@ -371,7 +375,10 @@ fun ManageScreen(
                                 // space so the labels stay aligned with the rest.
                                 if (removed) Box(modifier = Modifier.padding(20.dp)) else AppIcon(pi)
                             },
-                            headlineContent = { Text(appLabel(pm, pi)) },
+                            headlineContent = {
+                                val label = remember(pi.packageName) { appLabel(pm, pi) }
+                                Text(label)
+                            },
                             // The name has the whole first line now; the package, the chips and
                             // the arrow share the line under it, and the package gives way.
                             supportingContent = {

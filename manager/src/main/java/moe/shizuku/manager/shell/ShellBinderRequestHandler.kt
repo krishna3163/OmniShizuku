@@ -10,7 +10,9 @@ import rikka.shizuku.Shizuku
 object ShellBinderRequestHandler {
 
     fun handleRequest(context: Context, intent: Intent): Boolean {
-        if (intent.action != "rikka.shizuku.intent.action.REQUEST_BINDER") {
+        if (intent.action != "rikka.shizuku.intent.action.REQUEST_BINDER"
+            && intent.action != "${context.packageName}.intent.action.REQUEST_BINDER"
+            && intent.action != "moe.shizuku.privileged.api.intent.action.REQUEST_BINDER") {
             return false
         }
 
@@ -28,7 +30,7 @@ object ShellBinderRequestHandler {
         val data = Parcel.obtain()
         return try {
             data.writeStrongBinder(shizukuBinder)
-            data.writeString(context.applicationInfo.sourceDir)
+            data.writeString(context.applicationInfo?.sourceDir ?: "")
             binder.transact(1, data, null, IBinder.FLAG_ONEWAY)
             true
         } catch (e: Throwable) {
