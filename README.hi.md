@@ -21,6 +21,15 @@ OmniShizuku एक ओपन-सोर्स एंड्रॉइड यूट�
 
 ---
 
+## 📸 स्क्रीनशॉट्स (Screenshots)
+
+| **होम और स्थिति (Home & Status)** | **ADB मॉड्यूल्स (ADB Modules)** | **लैब्स और ट्वीक्स (Labs & Tweaks)** | **कंप्यूट (Terminal & AI)** | **सेटिंग्स (Settings)** |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="screenshots/home.png" width="190" alt="Home Screen" /> | <img src="screenshots/modules.png" width="190" alt="ADB Modules" /> | <img src="screenshots/labs.png" width="190" alt="Labs Screen" /> | <img src="screenshots/comput.png" width="190" alt="Comput Console" /> | <img src="screenshots/settings.png" width="190" alt="Settings Screen" /> |
+| लाइव सेवा स्थिति, वायरलेस ADB और सिस्टम डायग्नोस्टिक्स | Magisk/KernelSU-शैली ZIP मॉड्यूल इंस्टॉलर और मैनेजर | AppOps, डेब्लोटर, ऐप फ्रीज़र और सिस्टम नियंत्रण | AI इंटीग्रेशन के साथ इंटरैक्टिव शेल टर्मिनल | डिवाइस ओनर, ऑटोमेशन, बैकअप और सुरक्षा कॉन्फ़िगरेशन |
+
+---
+
 ## सुविधाएँ (Features)
 
 ### एसेंशियल्स हब (Essentials Hub)

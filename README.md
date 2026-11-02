@@ -21,6 +21,7 @@
 ## 📖 Table of Contents
 
 - [Overview](#-overview)
+- [Screenshots](#-screenshots)
 - [Why Use OmniShizuku?](#-why-use-omnishizuku)
 - [Key Features](#-key-features)
   - [Essentials Hub](#essentials-hub)
@@ -49,6 +50,15 @@
 
 🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take full control of their Android device without requiring full root access in most cases - leveraging Shizuku's ADB/root bridging capabilities. From display customization and battery optimization to app management, debloating, call recording, and advanced automation, OmniShizuku is your all-in-one system utility suite.
+
+---
+
+## 📸 Screenshots
+
+| **Home & Status** | **ADB Modules** | **Labs & Tweaks** | **Comput (Terminal & AI)** | **Settings** |
+|:---:|:---:|:---:|:---:|:---:|
+| <img src="screenshots/home.png" width="190" alt="Home Screen" /> | <img src="screenshots/modules.png" width="190" alt="ADB Modules" /> | <img src="screenshots/labs.png" width="190" alt="Labs Screen" /> | <img src="screenshots/comput.png" width="190" alt="Comput Console" /> | <img src="screenshots/settings.png" width="190" alt="Settings Screen" /> |
+| Real-time service status, Wireless ADB pairing & diagnostics | Magisk/KernelSU-style ZIP module installer & manager | App ops, debloater, freezer, display & power tweaks | Interactive shell terminal with AI provider integration | Device Owner, automation, backups & security config |
 
 ---
 
