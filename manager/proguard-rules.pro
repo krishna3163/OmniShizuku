@@ -83,3 +83,39 @@
 -keep class androidx.compose.** { *; }
 -dontwarn androidx.compose.**
 
+
+# Additional rules for stability
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-keep class okhttp3.** { *; }
+-keep interface okhttp3.** { *; }
+
+-keep class com.google.gson.** { *; }
+-keep class org.json.** { *; }
+
+# Crash reporting
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**
+
+# Coil
+-keep class coil.** { *; }
+-dontwarn coil.**
+
+# Material Kolor
+-keep class com.materialkolor.** { *; }
+-dontwarn com.materialkolor.**
+
+# Ensure native methods not stripped
+-keepclasseswithmembernames class * {
+    native <methods>;
+}
+
+# Keep Dhizuku API
+-keep class com.rosan.dhizuku.** { *; }
+-dontwarn com.rosan.dhizuku.**
+
+# Keep Shizuku API classes
+-keep class rikka.shizuku.** { *; }
+-keep class moe.shizuku.api.** { *; }
