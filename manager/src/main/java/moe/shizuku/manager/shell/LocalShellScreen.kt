@@ -83,6 +83,20 @@ fun LocalShellScreen(
     val session = remember { ShellSession() }
     val shizukuRunning = remember { ShizukuStateMachine.isRunning() }
 
+    // IntentShell configuration state
+    val executionPrefs = remember { context.getSharedPreferences("execution", Context.MODE_PRIVATE) }
+    var intentShellEnabled by remember {
+        mutableStateOf(executionPrefs.getBoolean("enabled", false))
+    }
+    var intentShellKey by remember {
+        var key = executionPrefs.getString("key", null)
+        if (key == null) {
+            key = java.util.UUID.randomUUID().toString().replace("-", "")
+            executionPrefs.edit().putString("key", key).apply()
+        }
+        mutableStateOf(key)
+    }
+
     fun executeCommand(cmd: String) {
         val trimmed = cmd.trim()
         if (trimmed.isEmpty() || isRunning) return
@@ -396,6 +410,66 @@ fun LocalShellScreen(
                         executeCommand(preset.command)
                     }
                 )
+            }
+
+            // IntentShell Section
+            item {
+                Spacer(modifier = Modifier.height(12.dp))
+                Text(
+                    text = "IntentShell Settings",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+                Text(
+                    text = "Execute raw adb commands on-demand through intents. Locks for 5 minutes after usage of a wrong access key.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(16.dp)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Accept adb intents", style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                                Text("Allow commands via IntentReceiver broadcast", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            }
+                            Switch(
+                                checked = intentShellEnabled,
+                                onCheckedChange = { checked ->
+                                    intentShellEnabled = checked
+                                    executionPrefs.edit().putBoolean("enabled", checked).apply()
+                                }
+                            )
+                        }
+
+                        HorizontalDivider()
+
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Column(modifier = Modifier.weight(1f)) {
+                                Text("Access Key", style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(intentShellKey, style = MaterialTheme.typography.bodyMedium, fontFamily = FontFamily.Monospace)
+                            }
+                            IconButton(onClick = {
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                                clipboard.setPrimaryClip(ClipData.newPlainText("access_key", intentShellKey))
+                                Toast.makeText(context, "Key copied to clipboard", Toast.LENGTH_SHORT).show()
+                            }) {
+                                Icon(Icons.Outlined.ContentCopy, contentDescription = "Copy access key")
+                            }
+                        }
+                    }
+                }
             }
 
             item {

@@ -284,6 +284,10 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 LabCategory.UTILITIES, "terminal command prompt"
             ),
             LabEntry(
+                R.string.localshell, Icons.Outlined.Code, Detail.LOCAL_SHELL,
+                LabCategory.UTILITIES, "localshell raw adb command intentshell"
+            ),
+            LabEntry(
                 R.string.intents_title, Icons.Outlined.Bolt, Detail.INTENTS,
                 LabCategory.UTILITIES, "intent activity broadcast"
             ),

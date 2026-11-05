@@ -365,6 +365,18 @@
         <receiver android:name=".receiver.NotifRestoreReceiver" android:exported="false" />
 
         <receiver
+            android:name=".receiver.IntentReceiver"
+            android:exported="true"
+            android:enabled="true"
+            android:label="@string/intent_shell">
+            <intent-filter>
+                <action android:name="com.krishna.omnishizuku.execute" />
+                <action android:name="com.legendsayantan.adbtools.execute" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
             android:name=".accessibility.AccessibilityBootReceiver"
             android:enabled="true"
             android:exported="true">
