@@ -133,7 +133,7 @@ import moe.shizuku.manager.ui.screen.TerminalScreen
 import moe.shizuku.manager.ui.screen.WifiPasswordsScreen
 import moe.shizuku.manager.audio.MixedAudioLauncher
 import moe.shizuku.manager.audio.SoundMasterScreen
-import moe.shizuku.manager.lookback.LookBackScreen
+import moe.shizuku.manager.lookback.LookbackLauncher
 import moe.shizuku.manager.pip.UniversalPiPScreen
 import moe.shizuku.manager.shell.LocalShellScreen
 import moe.shizuku.manager.themepatcher.ThemePatcherScreen
@@ -479,7 +479,7 @@ fun ShizukuApp() {
                             Detail.THEME_PATCHER -> ThemePatcherScreen(onBack = { detail = null })
                             Detail.MIXED_AUDIO -> MixedAudioLauncher(onBack = { detail = null })
                             Detail.SOUND_MASTER -> SoundMasterScreen(onBack = { detail = null })
-                            Detail.LOOKBACK -> LookBackScreen(onBack = { detail = null })
+                            Detail.LOOKBACK -> LookbackLauncher(onBack = { detail = null })
                             Detail.UNIVERSAL_PIP -> UniversalPiPScreen(onBack = { detail = null })
                             Detail.LOCAL_SHELL -> LocalShellScreen(onBack = { detail = null })
                             Detail.CALL_RECORDING -> moe.shizuku.manager.callrecorder.CallRecorderScreen(onBack = { detail = null })

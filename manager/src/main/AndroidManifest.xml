@@ -576,11 +576,27 @@
             android:exported="false" />
 
         <activity
+            android:name=".lookback.LookbackActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".audio.SoundMasterActivity"
             android:excludeFromRecents="true"
-            android:exported="false"
+            android:exported="true"
             android:label=""
             android:theme="@style/DialogActivityTheme" />
+
+        <activity
+            android:name=".audio.PipStarterActivity"
+            android:excludeFromRecents="true"
+            android:exported="true"
+            android:label=""
+            android:theme="@style/DialogActivityTheme" />
+
+        <receiver
+            android:name=".audio.PipReceiver"
+            android:enabled="true"
+            android:exported="true" />
 
         <service
             android:name=".audio.SoundMasterService"

@@ -264,6 +264,10 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 LabCategory.SYSTEM_CONTROLS, "per app volume soundmaster"
             ),
             LabEntry(
+                R.string.universalpip, Icons.Outlined.PictureInPicture, Detail.UNIVERSAL_PIP,
+                LabCategory.SYSTEM_CONTROLS, "force pip picture in picture virtual display"
+            ),
+            LabEntry(
                 R.string.tab_screen_security, Icons.Outlined.Security, Detail.SECURITY,
                 LabCategory.SYSTEM_CONTROLS, "screen capture protection secure"
             ),
