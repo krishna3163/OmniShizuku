@@ -40,25 +40,7 @@ jobs:
           EVENT_NAME: ${{ github.event_name }}
         run: |
           if [[ "$EVENT_NAME" != "pull_request" && "$GITHUB_REF" == "refs/heads/main" ]]; then
-            VERSION=$(python3 - <<'PY'
-          import re, subprocess
-
-          source = open("build.gradle", encoding="utf-8").read()
-          base = re.search(r'def defaultVersionName = "(v\d+\.\d+\.\d+)"', source).group(1)
-          major, minor, patch = map(int, re.fullmatch(r"v(\d+)\.(\d+)\.(\d+)", base).groups())
-          pattern = re.compile(rf"v{major}\.{minor}\.(\d+)(?:-dev(?:\.\d+)?)?")
-          tags = subprocess.check_output(["git", "tag", "--list", f"v{major}.{minor}.*"], text=True).splitlines()
-          patches = [int(match.group(1)) for tag in tags if (match := pattern.fullmatch(tag))]
-          current_tags = subprocess.check_output(
-              ["git", "tag", "--points-at", "HEAD"], text=True
-          ).splitlines()
-          current_versions = [tag for tag in current_tags if pattern.fullmatch(tag)]
-          if current_versions:
-              print(max(current_versions, key=lambda tag: int(pattern.fullmatch(tag).group(1))))
-          else:
-              print(f"v{major}.{minor}.{max([patch, *patches]) + 1}-dev")
-          PY
-            )
+            VERSION="v1.0.0"
           elif [[ "$REF_TYPE" == "tag" ]]; then
             VERSION="$REF_NAME"
           else
@@ -192,6 +174,16 @@ jobs:
         with:
           name: manager-debug-apk
           path: debug-apk
+
+      - name: Clean up old releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "Cleaning up all old releases so only v1.0.0 exists..."
+          for tag in $(gh release list --limit 100 --json tagName -q '.[].tagName' 2>/dev/null || true); do
+            echo "Deleting old release: $tag"
+            gh release delete "$tag" --yes --cleanup-tag=false || true
+          done
 
       - name: Publish to GitHub Releases
         env:

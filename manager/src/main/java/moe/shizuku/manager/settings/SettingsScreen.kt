@@ -100,6 +100,7 @@ import moe.shizuku.manager.ui.compose.SettingsRow
 import moe.shizuku.manager.ui.compose.ShizukuLazyScaffold
 import moe.shizuku.manager.ui.compose.SwitchSettingsRow
 import moe.shizuku.manager.ui.compose.htmlToPlainText
+import moe.shizuku.manager.ui.theme.OmniTokens
 import rikka.core.util.ResourceUtils
 import rikka.core.util.ClipboardUtils
 import rikka.material.app.LocaleDelegate
@@ -955,7 +956,7 @@ fun SettingsScreen(
                                         Icon(
                                             imageVector = Icons.Rounded.ChevronRight,
                                             contentDescription = null,
-                                            tint = MaterialTheme.colorScheme.onSurfaceVariant
+                                            tint = OmniTokens.brandPrimary()
                                         )
                                     }
                                 )
@@ -1051,8 +1052,8 @@ fun SettingsScreen(
                     Text(stringResource(android.R.string.cancel))
                 }
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            shape = MaterialTheme.shapes.extraLarge
+            containerColor = OmniTokens.brandPrimary(),
+            shape = OmniTokens.shapeLarge
         )
     }
 
@@ -1077,8 +1078,8 @@ fun SettingsScreen(
                     Text(stringResource(android.R.string.cancel))
                 }
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            shape = MaterialTheme.shapes.extraLarge
+            containerColor = OmniTokens.brandPrimary(),
+            shape = OmniTokens.shapeLarge
         )
     }
 
@@ -1125,8 +1126,8 @@ fun SettingsScreen(
                     Text(stringResource(android.R.string.cancel))
                 }
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            shape = MaterialTheme.shapes.extraLarge
+            containerColor = OmniTokens.brandPrimary(),
+            shape = OmniTokens.shapeLarge
         )
     }
 
@@ -1151,8 +1152,8 @@ fun SettingsScreen(
                     Text(stringResource(android.R.string.cancel))
                 }
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            shape = MaterialTheme.shapes.extraLarge
+            containerColor = OmniTokens.brandPrimary(),
+            shape = OmniTokens.shapeLarge
         )
     }
 
@@ -1272,7 +1273,7 @@ fun SettingsScreen(
                         Spacer(Modifier.height(8.dp))
                         Text(
                             text = stringResource(R.string.settings_start_on_boot_adb_missing_permission_instruction),
-                            style = MaterialTheme.typography.bodySmall,
+                            style = OmniTokens.bodySmall(),
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                         if (!tcpMode) {
@@ -1329,8 +1330,8 @@ fun SettingsScreen(
                     Text(stringResource(android.R.string.cancel))
                 }
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            shape = MaterialTheme.shapes.extraLarge
+            containerColor = OmniTokens.brandPrimary(),
+            shape = OmniTokens.shapeLarge
         )
     }
 
@@ -1355,8 +1356,8 @@ fun SettingsScreen(
                     Text(stringResource(android.R.string.cancel))
                 }
             },
-            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
-            shape = MaterialTheme.shapes.extraLarge
+            containerColor = OmniTokens.brandPrimary(),
+            shape = OmniTokens.shapeLarge
         )
     }
 }
@@ -1596,8 +1597,8 @@ private fun MotionBlurSliderRow(
         trailing = {
             Text(
                 text = "$value%",
-                style = MaterialTheme.typography.labelLarge,
-                color = MaterialTheme.colorScheme.primary
+                style = OmniTokens.labelLarge(),
+                color = OmniTokens.brandPrimary()
             )
         }
     )
@@ -2280,7 +2281,7 @@ private fun RecommendationsScreen(onNavigateUp: () -> Unit) {
                     } else {
                         Text(
                             text = if (isLive) "Live from GitHub" else "Offline",
-                            style = MaterialTheme.typography.bodySmall,
+                            style = OmniTokens.bodySmall(),
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }

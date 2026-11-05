@@ -11,6 +11,12 @@ import java.io.File
 import moe.shizuku.manager.ui.component.PillButton
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.PillButtonQuiet
+import moe.shizuku.manager.ui.component.ExpressiveCard
+import moe.shizuku.manager.ui.component.StatusIndicator
+import moe.shizuku.manager.ui.component.SectionHeading
+import moe.shizuku.manager.ui.component.EmptyState
+import moe.shizuku.manager.ui.component.ErrorState
+import moe.shizuku.manager.ui.component.LoadingState
 import moe.shizuku.manager.BuildConfig
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -57,11 +63,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.ListItemDefaults
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.ui.draw.rotate
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -74,8 +76,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.launch
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -87,6 +89,9 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
+import kotlinx.coroutines.launch
+import androidx.compose.ui.draw.rotate
+import androidx.compose.material3.LocalContentColor
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.Helps
@@ -113,7 +118,6 @@ import moe.shizuku.manager.start.StartMethodGuard
 import moe.shizuku.manager.start.startMethodLabelRes
 import moe.shizuku.manager.starter.Starter
 import moe.shizuku.manager.starter.StarterActivity
-import moe.shizuku.manager.ui.component.ExpressiveCard
 import moe.shizuku.manager.ui.component.SegmentedColumn
 import moe.shizuku.manager.ui.theme.LocalAmoledTheme
 import moe.shizuku.manager.ui.component.SegmentedListItem
@@ -142,18 +146,13 @@ fun HomeScreen(bottomPadding: Dp) {
         mutableStateOf(SettingsHelper.isIgnoringBatteryOptimizations(context))
     }
     var showAdbCommand by remember { mutableStateOf(false) }
-    // What Android says about who owns Shizuku's permission. Reported, never enforced: neither
-    // answer it can give keeps Shizuku from working, see PermissionOwnership.
     var permissionOwner by remember { mutableStateOf<PermissionOwnership>(PermissionOwnership.Ours) }
-    // The warning already read and put away. Only that one is hidden, so a state that changes
-    // still comes up.
     var permissionWarningDismissed by remember { mutableStateOf<PermissionOwnership?>(null) }
     var updateAvailable by remember { mutableStateOf(false) }
     var rooted by remember { mutableStateOf(false) }
     var startMethod by remember { mutableStateOf(ShizukuSettings.getStartMethod()) }
     var developerOptionsOn by remember { mutableStateOf(context.isDeveloperOptionsEnabled()) }
     var hidingActive by remember { mutableStateOf(false) }
-    // Saved, so the section somebody opened is still open after a rotation.
     var otherMethodsOpen by rememberSaveable { mutableStateOf(false) }
     var selinuxRes by remember { mutableStateOf<Int?>(null) }
     var seccompRes by remember { mutableStateOf<Int?>(null) }
@@ -161,10 +160,6 @@ fun HomeScreen(bottomPadding: Dp) {
     val startStatus by StartStatusReporter.status.collectAsState()
     val scope = rememberCoroutineScope()
 
-    // Android 16+ gates local-network discovery behind a runtime permission, and discovery is
-    // the first thing a wireless start does. Asking here on the path that needs it, when the
-    // user asks for a start is what keeps a fresh install from failing to find the port with
-    // only the pairing tutorial able to grant it.
     var pendingLocalNetworkAction by remember { mutableStateOf<(() -> Unit)?>(null) }
     val localNetworkLauncher = rememberLauncherForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -173,9 +168,6 @@ fun HomeScreen(bottomPadding: Dp) {
         pendingLocalNetworkAction = null
         val permission = localNetworkPermission()
         if (!granted && permission != null && context.isPermissionPermanentlyDenied(permission)) {
-            // The dialog will never come back, so the start would fail at discovery with
-            // nothing to explain it: say where the switch is and open it, rather than
-            // burning the start on a permission the user cannot grant from here.
             Toast.makeText(
                 context,
                 context.getString(R.string.permissions_open_settings_hint),
@@ -184,8 +176,6 @@ fun HomeScreen(bottomPadding: Dp) {
             context.openAppSettings()
             return@rememberLauncherForActivityResult
         }
-        // Otherwise carry on either way: a denial means discovery fails, which the failure
-        // card then explains, rather than the tap appearing to do nothing.
         action?.invoke()
     }
 
@@ -201,34 +191,16 @@ fun HomeScreen(bottomPadding: Dp) {
         }
     }
 
-    /**
-     * Reads everything the home screen shows, so no row keeps a value from an earlier
-     * state. Called on resume, on every state change (a start or stop finishing) and
-     * once at first composition.
-     */
     suspend fun refresh() {
         ShizukuStateMachine.update()
         running = ShizukuStateMachine.isRunning()
         batteryIgnored = SettingsHelper.isIgnoringBatteryOptimizations(context)
         developerOptionsOn = context.isDeveloperOptionsEnabled()
-        // Not the watch being up, which is a different question with two other answers: it is up
-        // for force dark as well, and up for a list that a mode has been switched off around.
-        // Only hiding that is armed and live makes the warning under it true.
         hidingActive = HidingWatchService.isRunning() && Hiding.isActive()
-        // Root can be gone since the method was chosen; the card would otherwise keep
-        // promising a start the device can no longer run.
         startMethod = StartMethodGuard.resolve()
-        // A start that is already running has nothing left to report; without this a
-        // "starting" state from a path that finishes elsewhere would stick.
         if (running) {
             StartStatusReporter.clear()
         } else {
-            // The other state with nothing left to report: a failure whose cause was dealt with
-            // while the app was away. This screen refreshes when it comes back into view, which is
-            // exactly when somebody has just been to Developer options or to the accessibility
-            // list and done what the message asked for - so the message is asked about again, and
-            // dropped when the thing it wanted is now true. Leaving it there asks for the same
-            // step twice and hides the next one behind a Start press.
             val status = StartStatusReporter.status.value
             if (status is StartStatus.Failed &&
                 !status.kind.stillInTheWay(
@@ -237,26 +209,18 @@ fun HomeScreen(bottomPadding: Dp) {
                     adbPort = EnvironmentUtils.getAdbTcpPort()
                 )
             ) {
-                // Written down because the message it drops is the one somebody was looking at: a
-                // report that says "the step went away" or "the step never went away" is answered
-                // by this line, and by nothing else.
                 Diag.info(TAG, "dropping the start failure whose cause is gone: ${status.kind}")
                 StartStatusReporter.clear()
             }
         }
 
         withContext(Dispatchers.IO) {
-            // Reset rather than keep: the card must not show the uid of a server that is
-            // gone.
             uid = if (running) runCatching { Shizuku.getUid() }.getOrDefault(-1) else -1
-            // Shell.getShell() can block and triggers the root request.
             rooted = runCatching { EnvironmentUtils.isRooted() }.getOrDefault(false)
             val (selinux, seccomp) = readDeviceStatus()
             selinuxRes = selinux
             seccompRes = seccomp
-            // Read off the same pass as the rest of the state, so the card cannot describe a
-            // service that was there when the screen appeared and not now.
-            diagnostics = buildDiagnostics(
+            diagnostics = homeBuildDiagnostics(
                 context = context,
                 running = running,
                 uid = uid,
@@ -268,10 +232,6 @@ fun HomeScreen(bottomPadding: Dp) {
         }
     }
 
-    /**
-     * Undoes our own "ADB without Developer options" setting: the flag goes back on, so the
-     * screens the failed start wanted are reachable again.
-     */
     fun turnDeveloperOptionsBackOn() {
         ShizukuSettings.setAdbWithoutDeveloperOptions(context, false)
         restoreDeveloperOptions(context)
@@ -280,7 +240,6 @@ fun HomeScreen(bottomPadding: Dp) {
 
     DisposableEffect(Unit) {
         val listener: (ShizukuStateMachine.State) -> Unit = {
-            // Covers "after each start": refresh every row, not just the state flag.
             scope.launch { refresh() }
         }
         ShizukuStateMachine.addListener(listener)
@@ -289,26 +248,19 @@ fun HomeScreen(bottomPadding: Dp) {
 
     LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
         scope.launch { refresh() }
-
-        // Asked again every time the screen comes back: what clears this is the platform reading
-        // the declaration, or a reboot, and a warning that outlives its cause is one nobody reads.
         permissionOwner = readPermissionOwnership(context)
     }
 
     LaunchedEffect(Unit) {
         refresh()
-
-        // Asked once when the screen first opens, and again on every resume: a reinstall
-        // commonly leaves the platform answering with a package that owns Shizuku's permission
-        // and is not installed any more, and this is what tells the user whose it is.
         permissionOwner = readPermissionOwnership(context)
-
         updateAvailable = runCatching {
             UpdateHelper.isCheckForUpdatesEnabled() && UpdateHelper.isNewUpdateAvailable()
         }.getOrDefault(false)
         if (updateAvailable) {
             runCatching { UpdateHelper.updateLastPromptedVersion() }
-        }    }
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
@@ -325,552 +277,406 @@ fun HomeScreen(bottomPadding: Dp) {
             LazyColumn(
                 state = listState,
                 contentPadding = PaddingValues(start = 16.dp, top = 16.dp, end = 16.dp, bottom = bottomPadding),
-                verticalArrangement = Arrangement.spacedBy(13.dp)
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-            // A warning about where Android says Shizuku's permission lives, and nothing more:
-            // every part of the app works with it wrong, but other apps look Shizuku up by that
-            // permission, so finding out what they find is worth saying - once, and out of the way.
-            val ownership = permissionOwner
-            if (ownership !is PermissionOwnership.Ours && ownership != permissionWarningDismissed) {
-                item(key = "permission_ownership", contentType = "warning") {
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                        shape = MaterialTheme.shapes.large
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(16.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                // Permission ownership warning
+                val ownership = permissionOwner
+                if (ownership !is PermissionOwnership.Ours && ownership != permissionWarningDismissed) {
+                    item(key = "permission_ownership", contentType = "warning") {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            shape = moe.shizuku.manager.ui.theme.OmniTokens.shapeLarge
                         ) {
-                            Text(
-                                text = stringResource(
-                                    if (ownership is PermissionOwnership.Other)
-                                        R.string.home_dialog_duplicate_app_detected_title
-                                    else R.string.home_dialog_reboot_required_title
-                                ),
-                                style = MaterialTheme.typography.titleSmall
-                            )
-                            Text(
-                                text = if (ownership is PermissionOwnership.Other) {
-                                    stringResource(
-                                        R.string.home_permission_owned_by,
-                                        ownership.packageName
-                                    )
-                                } else {
-                                    stringResource(R.string.home_permission_not_registered)
-                                },
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            PillButtonQuiet(onClick = { permissionWarningDismissed = ownership }) {
-                                Text(stringResource(R.string.action_dismiss))
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (updateAvailable) {
-                item(key = "update_banner", contentType = "banner") {
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.tertiaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        shape = MaterialTheme.shapes.large
-                    ) {
-                        Row(
-                            modifier = Modifier.padding(16.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Text(
-                                text = stringResource(R.string.snackbar_update_available),
-                                modifier = Modifier.weight(1f),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                            PillButton(onClick = {
-                                scope.launch {
-                                    runCatching { UpdateHelper.update() }
-                                    updateAvailable = false
-                                }
-                            }) { Text(stringResource(R.string.snackbar_action_update)) }
-                        }
-                    }
-                }
-            }
-
-            (startStatus as? StartStatus.Failed)?.let { failed ->
-                item(key = "start_failed", contentType = "error") {
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                        shape = MaterialTheme.shapes.large
-                    ) {
-                        // Message on top, actions stacked full-width underneath: in a row
-                        // they sat shoulder-to-shoulder and read as one control.
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                // The failures that name a command to run mark it with <b>,
-                                // which used to arrive here as the tags themselves.
-                                text = "${stringResource(R.string.start_failed)}: " +
-                                    failed.message.stripHtmlTags(),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-
-                            // Two of these failures are answered by a screen that lives
-                            // under Developer options, which our own setting can hide so
-                            // those cards say why, and offer the one tap that puts it back
-                            // instead of a button that opens nothing.
-                            val needsDeveloperOptions =
-                                failed.kind == StartFailureKind.SETTINGS ||
-                                    failed.kind == StartFailureKind.PAIRING
-                            val developerOptionsHidden =
-                                needsDeveloperOptions && !developerOptionsOn
-
-                            if (developerOptionsHidden) {
-                                Text(
-                                    text = stringResource(R.string.start_failed_developer_options_off),
-                                    style = MaterialTheme.typography.bodySmall,
-                                    modifier = Modifier.padding(top = 8.dp)
-                                )
-                            }
-
                             Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 16.dp),
+                                modifier = Modifier.padding(16.dp),
                                 verticalArrangement = Arrangement.spacedBy(8.dp)
                             ) {
-                                if (developerOptionsHidden) {
-                                    Button(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = { turnDeveloperOptionsBackOn() },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.error,
-                                            contentColor = MaterialTheme.colorScheme.onError
-                                        )
-                                    ) {
-                                        Text(stringResource(R.string.action_turn_on_developer_options))
-                                    }
-                                } else if (failed.kind == StartFailureKind.WIFI) {
-                                    Button(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = {
-                                            runCatching {
-                                                context.startActivity(
-                                                    SettingsPage.InternetPanel.buildIntent(context)
-                                                )
-                                            }
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.error,
-                                            contentColor = MaterialTheme.colorScheme.onError
-                                        )
-                                    ) { Text(stringResource(R.string.action_connect_wifi)) }
-                                } else if (failed.kind == StartFailureKind.PORT) {
-                                    Button(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = {
-                                            // Opens the port and starts over it; if that
-                                            // needs Wi-Fi, the card comes back offering
-                                            // Connect instead.
-                                            // Opening the port borrows the wireless
-                                            // connection, so it discovers the port too.
-                                            startWithLocalNetworkPermission(ShizukuSettings.StartMethod.USB) {
-                                                scope.launch { openAdbPortAndStart(context) }
-                                            }
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.error,
-                                            contentColor = MaterialTheme.colorScheme.onError
-                                        )
-                                    ) { Text(stringResource(R.string.action_open_adb_port)) }
-                                } else if (failed.kind == StartFailureKind.SETTINGS) {
-                                    // The same thing the adb command would buy, done by hand:
-                                    // switching wireless debugging on in Developer options.
-                                    // Shizuku can't do it without WRITE_SECURE_SETTINGS, but
-                                    // the user can, and not everyone has adb to hand.
-                                    Button(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = {
-                                            runCatching {
-                                                SettingsPage.Developer.HighlightWirelessDebugging
-                                                    .launch(context)
-                                            }
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.error,
-                                            contentColor = MaterialTheme.colorScheme.onError
-                                        )
-                                    ) { Text(stringResource(R.string.action_open_wireless_debugging)) }
-                                } else if (failed.kind == StartFailureKind.PAIRING) {
-                                    Button(
-                                        modifier = Modifier.fillMaxWidth(),
-                                        onClick = {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                                // Pair without typing: the code is read out
-                                                // of the system dialog. The manual flow
-                                                // stays one tap away in that dialog.
-                                                runCatching { context.showAccessibilityDialog() }
-                                            }
-                                        },
-                                        colors = ButtonDefaults.buttonColors(
-                                            containerColor = MaterialTheme.colorScheme.error,
-                                            contentColor = MaterialTheme.colorScheme.onError
-                                        )
-                                    ) { Text(stringResource(R.string.action_pair)) }
-                                }
-
-                                OutlinedButton(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    onClick = { StartStatusReporter.clear() },
-                                    border = BorderStroke(
-                                        1.dp,
-                                        MaterialTheme.colorScheme.onErrorContainer
+                                Text(
+                                    text = stringResource(
+                                        if (ownership is PermissionOwnership.Other)
+                                            R.string.home_dialog_duplicate_app_detected_title
+                                        else R.string.home_dialog_reboot_required_title
                                     ),
-                                    colors = ButtonDefaults.outlinedButtonColors(
-                                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                                    )
-                                ) { Text(stringResource(R.string.action_dismiss)) }
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!batteryIgnored) {
-                item(key = "battery_warning", contentType = "warning") {
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer,
-                        shape = MaterialTheme.shapes.large
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = stringResource(R.string.home_battery_warning),
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(top = 16.dp)
-                            ) {
-                                Button(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    onClick = {
-                                        SettingsHelper.requestIgnoreBatteryOptimizationsPrivileged(context) {
-                                            batteryIgnored = SettingsHelper.isIgnoringBatteryOptimizations(context)
-                                        }
+                                    style = moe.shizuku.manager.ui.theme.OmniTokens.displayMedium(),
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                                Text(
+                                    text = if (ownership is PermissionOwnership.Other) {
+                                        stringResource(
+                                            R.string.home_permission_owned_by,
+                                            ownership.packageName
+                                        )
+                                    } else {
+                                        stringResource(R.string.home_permission_not_registered)
                                     },
-                                    colors = ButtonDefaults.buttonColors(
-                                        containerColor = MaterialTheme.colorScheme.error,
-                                        contentColor = MaterialTheme.colorScheme.onError
-                                    )
-                                ) { Text(stringResource(R.string.snackbar_action_fix)) }
+                                    style = moe.shizuku.manager.ui.theme.OmniTokens.bodyMedium(),
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                                PillButtonQuiet(onClick = { permissionWarningDismissed = ownership }) {
+                                    Text(stringResource(R.string.action_dismiss))
+                                }
                             }
                         }
                     }
                 }
-            }
 
-            // Said here rather than only on the lists, because this is the screen somebody
-            // looks at when Shizuku is not running and they want to know why. While hiding is
-            // live, a server that dies on its own, and comes back on its own, is the expected
-            // behaviour - and an app that hides the connection it runs on cannot avoid it.
-            if (hidingActive) {
-                item(key = "hiding_active", contentType = "info") {
-                    Surface(
-                        modifier = Modifier.fillMaxWidth(),
-                        color = MaterialTheme.colorScheme.tertiaryContainer,
-                        contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
-                        shape = MaterialTheme.shapes.large
-                    ) {
-                        // The summary alone: the sentence already says what is happening and why,
-                        // and a heading over one line of text read as a label for itself.
-                        Text(
-                            text = stringResource(R.string.home_hiding_active_note),
-                            modifier = Modifier.padding(16.dp),
-                            style = MaterialTheme.typography.bodyMedium
-                        )
+                // Update available banner
+                if (updateAvailable) {
+                    item(key = "update_banner", contentType = "banner") {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                            shape = moe.shizuku.manager.ui.theme.OmniTokens.shapeLarge
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.snackbar_update_available),
+                                    modifier = Modifier.weight(1f),
+                                    style = moe.shizuku.manager.ui.theme.OmniTokens.bodyMedium(),
+                                    color = MaterialTheme.colorScheme.onTertiaryContainer
+                                )
+                                PillButton(onClick = {
+                                    scope.launch {
+                                        runCatching { UpdateHelper.update() }
+                                        updateAvailable = false
+                                    }
+                                }) { Text(stringResource(R.string.snackbar_action_update)) }
+                            }
+                        }
                     }
                 }
-            }
 
-            item(key = "status_card", contentType = "status") {
-                StatusCard(
-                    running = running,
-                    uid = uid,
-                    startMethodLabelRes = startMethodLabelRes(startMethod)
-                )
-            }
+                // Battery warning
+                if (!batteryIgnored) {
+                    item(key = "battery_warning", contentType = "warning") {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer,
+                            shape = moe.shizuku.manager.ui.theme.OmniTokens.shapeLarge
+                        ) {
+                            Column(modifier = Modifier.padding(16.dp)) {
+                                Text(
+                                    text = stringResource(R.string.home_battery_warning),
+                                    style = moe.shizuku.manager.ui.theme.OmniTokens.bodyMedium(),
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
 
-            item(key = "server_actions", contentType = "actions") {
-                // The actions sit outside the status card and stay on screen in the
-                // same place, so the buttons don't move around as the state changes.
-                ServerActionButtons(
-                    running = running,
-                    starting = startStatus is StartStatus.Starting,
-                    // Uses whichever method is set in Settings; never guesses from the
-                    // last one that happened to work.
-                    onStart = {
-                        startWithLocalNetworkPermission(ShizukuSettings.getStartMethod()) {
-                            ShizukuReceiverStarter.start(context, userInitiated = true, reason = "home-start")
+                                Column(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(top = 16.dp)
+                                ) {
+                                    Button(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        onClick = {
+                                            SettingsHelper.requestIgnoreBatteryOptimizationsPrivileged(context) {
+                                                batteryIgnored = SettingsHelper.isIgnoringBatteryOptimizations(context)
+                                            }
+                                        },
+                                        colors = ButtonDefaults.buttonColors(
+                                            containerColor = MaterialTheme.colorScheme.error,
+                                            contentColor = MaterialTheme.colorScheme.onError
+                                        )
+                                    ) { Text(stringResource(R.string.snackbar_action_fix)) }
+                                }
+                            }
                         }
-                    },
-                    // One tap, no confirmation: stopping is a normal action and the
-                    // dialog only slowed it down.
-                    onStop = {
-                        ShizukuSettings.setManuallyStopped(true)
-                        ShizukuStateMachine.set(ShizukuStateMachine.State.STOPPING)
-                        runCatching { Shizuku.exit() }
-                    },
-                    // A bounce: forceStart replaces the running server instead of
-                    // being ignored as "already running".
-                    onRestart = {
-                        startWithLocalNetworkPermission(ShizukuSettings.getStartMethod()) {
-                            ShizukuReceiverStarter.start(
-                                context,
-                                forceStart = true,
-                                userInitiated = true,
-                                reason = "home-restart"
+                    }
+                }
+
+                // Hiding active info
+                if (hidingActive) {
+                    item(key = "hiding_active", contentType = "info") {
+                        Surface(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = MaterialTheme.colorScheme.tertiaryContainer,
+                            contentColor = MaterialTheme.colorScheme.onTertiaryContainer,
+                            shape = moe.shizuku.manager.ui.theme.OmniTokens.shapeLarge
+                        ) {
+                            Text(
+                                text = stringResource(R.string.home_hiding_active_note),
+                                modifier = Modifier.padding(16.dp),
+                                style = moe.shizuku.manager.ui.theme.OmniTokens.bodyMedium(),
+                                color = MaterialTheme.colorScheme.onTertiaryContainer
                             )
                         }
                     }
-                )
-            }
-            item(key = "start_methods", contentType = "methods") {
-                // a reason attached, so it gets an icon to be recognised by and a body that
-                // says the trade. The start options are disabled while Shizuku is running,
-                // because starting again does nothing and Restart is how you relaunch it.
-                //
-                // Folded away by default behind one card. The button above already starts with
-                // whichever method is set, so these are the ones you go looking for rarely, and
-                // four cards of explanation for them is most of the home screen when what
-                // somebody came to look at is whether Shizuku is running.
-                Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    ExpressiveCard(
-                        icon = Icons.Rounded.MoreHoriz,
-                        title = stringResource(R.string.home_other_methods),
-                        onClick = { otherMethodsOpen = !otherMethodsOpen },
-                        trailing = {
-                            val turn by animateFloatAsState(
-                                targetValue = if (otherMethodsOpen) 180f else 0f,
-                                label = "otherMethodsChevron"
-                            )
-                            Icon(
-                                Icons.Rounded.ExpandMore,
-                                contentDescription = null,
-                                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.rotate(turn)
-                            )
+                }
+
+                // Status section heading
+                item(key = "status_heading", contentType = "heading") {
+                    SectionHeading(text = "Status")
+                }
+
+                // Status card
+                item(key = "status_card", contentType = "status") {
+                    StatusCard(
+                        running = running,
+                        uid = uid,
+                        startMethodLabelRes = startMethodLabelRes(startMethod)
+                    )
+                }
+
+                // Server actions section heading
+                item(key = "actions_heading", contentType = "heading") {
+                    SectionHeading(text = "Server Actions")
+                }
+
+                // Server action buttons
+                item(key = "server_actions", contentType = "actions") {
+                    ServerActionButtons(
+                        running = running,
+                        starting = startStatus is StartStatus.Starting,
+                        onStart = {
+                            startWithLocalNetworkPermission(ShizukuSettings.getStartMethod()) {
+                                ShizukuReceiverStarter.start(context, userInitiated = true, reason = "home-start")
+                            }
+                        },
+                        onStop = {
+                            ShizukuSettings.setManuallyStopped(true)
+                            ShizukuStateMachine.set(ShizukuStateMachine.State.STOPPING)
+                            runCatching { Shizuku.exit() }
+                        },
+                        onRestart = {
+                            startWithLocalNetworkPermission(ShizukuSettings.getStartMethod()) {
+                                ShizukuReceiverStarter.start(
+                                    context,
+                                    forceStart = true,
+                                    userInitiated = true,
+                                    reason = "home-restart"
+                                )
+                            }
                         }
                     )
+                }
 
-                    if (otherMethodsOpen) {
+                // Start methods section heading
+                item(key = "methods_heading", contentType = "heading") {
+                    SectionHeading(text = "Start Methods")
+                }
+
+                // Start methods card
+                item(key = "start_methods", contentType = "methods") {
+                    Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
                         ExpressiveCard(
-                            icon = Icons.Rounded.Wifi,
-                            title = stringResource(R.string.home_wireless_adb_title),
-                            // A start with the experiment on can spend two minutes asking before it
-                            // either starts or gives up, and a card that only spins for that long
-                            // reads as stuck.
-                            body = if (startStatus is StartStatus.Starting &&
-                                ShizukuSettings.getForceWirelessDebugging()
-                            ) {
-                                stringResource(R.string.home_wireless_adb_starting_without_wifi)
-                            } else {
-                                stringResource(R.string.home_wireless_adb_summary)
-                            },
-                            enabled = !running,
-                            onClick = {
-                                startWithLocalNetworkPermission(ShizukuSettings.StartMethod.WIRELESS) {
+                            icon = Icons.Rounded.MoreHoriz,
+                            title = stringResource(R.string.home_other_methods),
+                            onClick = { otherMethodsOpen = !otherMethodsOpen },
+                            trailing = {
+                                val turn by animateFloatAsState(
+                                    targetValue = if (otherMethodsOpen) 180f else 0f,
+                                    label = "otherMethodsChevron"
+                                )
+                                Icon(
+                                    Icons.Rounded.ExpandMore,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                                    modifier = Modifier.rotate(turn)
+                                )
+                            }
+                        )
+
+                        if (otherMethodsOpen) {
+                            ExpressiveCard(
+                                icon = Icons.Rounded.Wifi,
+                                title = stringResource(R.string.home_wireless_adb_title),
+                                body = if (startStatus is StartStatus.Starting &&
+                                    ShizukuSettings.getForceWirelessDebugging()
+                                ) {
+                                    stringResource(R.string.home_wireless_adb_starting_without_wifi)
+                                } else {
+                                    stringResource(R.string.home_wireless_adb_summary)
+                                },
+                                enabled = !running,
+                                onClick = {
+                                    startWithLocalNetworkPermission(ShizukuSettings.StartMethod.WIRELESS) {
+                                        ShizukuReceiverStarter.start(
+                                            context,
+                                            userInitiated = true,
+                                            startMethod = ShizukuSettings.StartMethod.WIRELESS,
+                                            reason = "home-wireless"
+                                        )
+                                    }
+                                }
+                            )
+                            ExpressiveCard(
+                                icon = Icons.Rounded.Usb,
+                                title = stringResource(R.string.home_usb_adb_title),
+                                body = if (!EnvironmentUtils.isWifiConnected() &&
+                                    EnvironmentUtils.getAdbTcpPort() <= 0
+                                ) {
+                                    stringResource(R.string.home_usb_adb_needs_network).stripHtmlTags()
+                                } else {
+                                    stringResource(R.string.home_usb_adb_summary).stripHtmlTags()
+                                },
+                                enabled = !running,
+                                onClick = {
                                     ShizukuReceiverStarter.start(
                                         context,
                                         userInitiated = true,
-                                        startMethod = ShizukuSettings.StartMethod.WIRELESS,
-                                        reason = "home-wireless"
+                                        startMethod = ShizukuSettings.StartMethod.USB,
+                                        reason = "home-usb"
                                     )
                                 }
-                            }
-                        )
-                        ExpressiveCard(
-                            icon = Icons.Rounded.Usb,
-                            title = stringResource(R.string.home_usb_adb_title),
-                            // A USB start needs the classic port, and with no network and no port
-                            // there is nothing it can do. It says so here rather than sliding over
-                            // to wireless: starting without a network is a method of its own, and
-                            // the card that does it is the one above this.
-                            body = if (!EnvironmentUtils.isWifiConnected() &&
-                                EnvironmentUtils.getAdbTcpPort() <= 0
-                            ) {
-                                // The string marks the method's name with <b>, which Compose
-                                // does not parse: it was drawing the tags.
-                                stringResource(R.string.home_usb_adb_needs_network).stripHtmlTags()
-                            } else {
-                                stringResource(R.string.home_usb_adb_summary).stripHtmlTags()
-                            },
-                            enabled = !running,
-                            onClick = {
-                                ShizukuReceiverStarter.start(
-                                    context,
-                                    userInitiated = true,
-                                    startMethod = ShizukuSettings.StartMethod.USB,
-                                    reason = "home-usb"
+                            )
+                            if (rooted) {
+                                val rootDescription = stringResource(
+                                    R.string.home_root_description,
+                                    "<b><a href=\"${Helps.SUI.get()}\">Sui</a></b>",
+                                    "Sui"
+                                ).stripHtmlTags()
+
+                                ExpressiveCard(
+                                    icon = Icons.Rounded.Numbers,
+                                    title = stringResource(R.string.home_root_title),
+                                    body = rootDescription,
+                                    enabled = !running,
+                                    onClick = {
+                                        context.startActivity(
+                                            Intent(context, StarterActivity::class.java)
+                                                .putExtra(StarterActivity.EXTRA_IS_ROOT, true)
+                                        )
+                                    }
                                 )
                             }
-                        )
-                        if (rooted) {
-                            val rootDescription = stringResource(
-                                R.string.home_root_description,
-                                "<b><a href=\"${Helps.SUI.get()}\">Sui</a></b>",
-                                "Sui"
-                            ).stripHtmlTags()
-
-                            // Always says what it does: start over root. It used to flip to
-                            // "Restart" once a root server was running, which just duplicated the
-                            // Restart button above (and hid the fact that this card starts over
-                            // root whatever the start method is set to).
                             ExpressiveCard(
-                                // A hash, which is what a root shell is: the same mark the shell's
-                                // own prompt uses.
-                                icon = Icons.Rounded.Numbers,
-                                title = stringResource(R.string.home_root_title),
-                                body = rootDescription,
+                                icon = Icons.Rounded.AdminPanelSettings,
+                                title = stringResource(R.string.home_system_title),
+                                body = stringResource(R.string.home_system_summary),
                                 enabled = !running,
                                 onClick = {
-                                    context.startActivity(
-                                        Intent(context, StarterActivity::class.java)
-                                            .putExtra(StarterActivity.EXTRA_IS_ROOT, true)
+                                    ShizukuReceiverStarter.start(
+                                        context,
+                                        userInitiated = true,
+                                        startMethod = ShizukuSettings.StartMethod.SYSTEM,
+                                        reason = "home-system"
                                     )
                                 }
                             )
+                            ExpressiveCard(
+                                icon = Icons.Rounded.Computer,
+                                title = stringResource(R.string.intents_adb_command),
+                                body = stringResource(R.string.home_adb_command_summary),
+                                enabled = !running,
+                                onClick = { showAdbCommand = true }
+                            )
                         }
-                        ExpressiveCard(
-                            icon = Icons.Rounded.AdminPanelSettings,
-                            title = stringResource(R.string.home_system_title),
-                            body = stringResource(R.string.home_system_summary),
-                            enabled = !running,
-                            onClick = {
-                                ShizukuReceiverStarter.start(
-                                    context,
-                                    userInitiated = true,
-                                    startMethod = ShizukuSettings.StartMethod.SYSTEM,
-                                    reason = "home-system"
+                    }
+                }
+
+                // Device details section heading
+                item(key = "device_heading", contentType = "heading") {
+                    SectionHeading(text = "Device Details")
+                }
+
+                // Device details
+                item(key = "device_details", contentType = "details") {
+                    SegmentedColumn(modifier = Modifier.fillMaxWidth()) {
+                        item {
+                            SegmentedListItem(
+                                headlineContent = { Text(stringResource(R.string.home_device_manager_version)) },
+                                supportingContent = { Text(BuildConfig.VERSION_NAME) }
+                            )
+                        }
+                        item {
+                            SegmentedListItem(
+                                headlineContent = { Text(stringResource(R.string.home_device_android_version)) },
+                                supportingContent = { Text(androidVersion()) }
+                            )
+                        }
+                        item {
+                            SegmentedListItem(
+                                headlineContent = { Text(stringResource(R.string.home_device_kernel_version)) },
+                                supportingContent = { Text(kernelVersion()) }
+                            )
+                        }
+                        item {
+                            SegmentedListItem(
+                                headlineContent = { Text(stringResource(R.string.home_device_model)) },
+                                supportingContent = { Text(deviceModel()) }
+                            )
+                        }
+                        item {
+                            SegmentedListItem(
+                                headlineContent = { Text(stringResource(R.string.home_device_fingerprint)) },
+                                supportingContent = { Text(Build.FINGERPRINT ?: "-") }
+                            )
+                        }
+                        item {
+                            SegmentedListItem(
+                                headlineContent = { Text(stringResource(R.string.home_device_selinux)) },
+                                supportingContent = { Text(selinuxRes?.let { stringResource(it) } ?: "-") }
+                            )
+                        }
+                        item {
+                            SegmentedListItem(
+                                headlineContent = { Text(stringResource(R.string.home_device_seccomp)) },
+                                supportingContent = { Text(seccompRes?.let { stringResource(it) } ?: "-") }
+                            )
+                        }
+                    }
+                }
+
+                // Diagnostics card
+                if (diagnostics.isNotEmpty()) {
+                    item(key = "diagnostics", contentType = "diagnostics") {
+                        DiagnosticsCard(
+                            text = diagnostics,
+                            onCopy = {
+                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE)
+                                    as ClipboardManager
+                                clipboard.setPrimaryClip(
+                                    ClipData.newPlainText(
+                                        context.getString(R.string.diagnostics_title),
+                                        diagnostics
+                                    )
                                 )
+                                Toast.makeText(
+                                    context,
+                                    R.string.diagnostics_copied,
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         )
-
-                        // Starting from a computer is the same kind of decision as the rest, so it
-                        // is a card as well: as a row underneath them it read as something else.
-                        ExpressiveCard(
-                            icon = Icons.Rounded.Computer,
-                            title = stringResource(R.string.intents_adb_command),
-                            // The command itself is long enough to swamp a card; it lives in the
-                            // dialog this opens, where it can be copied.
-                            body = stringResource(R.string.home_adb_command_summary),
-                            enabled = !running,
-                            onClick = { showAdbCommand = true }
-                        )
                     }
                 }
-            }
-            item(key = "device_details", contentType = "details") {
-                SegmentedColumn(modifier = Modifier.fillMaxWidth()) {
-                    // Same rows KernelSU's manager shows, so the device is described the
-                    // same way in both apps.
-                    item {
-                        SegmentedListItem(
-                            headlineContent = { Text(stringResource(R.string.home_device_manager_version)) },
-                            supportingContent = { Text(BuildConfig.VERSION_NAME) }
-                        )
-                    }
-                    item {
-                        SegmentedListItem(
-                            headlineContent = { Text(stringResource(R.string.home_device_android_version)) },
-                            supportingContent = { Text(androidVersion()) }
-                        )
-                    }
-                    item {
-                        SegmentedListItem(
-                            headlineContent = { Text(stringResource(R.string.home_device_kernel_version)) },
-                            supportingContent = { Text(kernelVersion()) }
-                        )
-                    }
-                    item {
-                        SegmentedListItem(
-                            headlineContent = { Text(stringResource(R.string.home_device_model)) },
-                            supportingContent = { Text(deviceModel()) }
-                        )
-                    }
-                    item {
-                        SegmentedListItem(
-                            headlineContent = { Text(stringResource(R.string.home_device_fingerprint)) },
-                            supportingContent = { Text(Build.FINGERPRINT ?: "-") }
-                        )
-                    }
-                    item {
-                        SegmentedListItem(
-                            headlineContent = { Text(stringResource(R.string.home_device_selinux)) },
-                            supportingContent = { Text(selinuxRes?.let { stringResource(it) } ?: "-") }
-                        )
-                    }
-                    item {
-                        SegmentedListItem(
-                            headlineContent = { Text(stringResource(R.string.home_device_seccomp)) },
-                            supportingContent = { Text(seccompRes?.let { stringResource(it) } ?: "-") }
-                        )
-                    }
-                }
-            }
 
-            if (diagnostics.isNotEmpty()) {
-                item(key = "diagnostics", contentType = "diagnostics") {
-                    // Last of the state, after the device rows: the status card is the
-                    // glance, this is the whole answer, and it is the one place that puts it
-                    // on the clipboard. Whoever needs it has already scrolled this far.
-                    DiagnosticsCard(
-                        text = diagnostics,
-                        onCopy = {
-                            val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE)
-                                as ClipboardManager
-                            clipboard.setPrimaryClip(
-                                ClipData.newPlainText(
-                                    context.getString(R.string.diagnostics_title),
-                                    diagnostics
-                                )
-                            )
-                            Toast.makeText(
+                // Live metrics section heading
+                item(key = "metrics_heading", contentType = "heading") {
+                    SectionHeading(text = "Live Metrics")
+                }
+
+                // Live metrics
+                item(key = "live_metrics", contentType = "metrics") {
+                    LiveDeviceInfoSection()
+                }
+
+                // Support coffee section heading
+                item(key = "support_heading", contentType = "heading") {
+                    SectionHeading(text = "Support")
+                }
+
+                // Support coffee
+                item(key = "support_coffee", contentType = "coffee") {
+                    ExpressiveCard(
+                        icon = Icons.Rounded.Coffee,
+                        title = stringResource(R.string.settings_support_coffee),
+                        body = stringResource(R.string.home_support_body),
+                        onClick = {
+                            CustomTabsHelper.launchUrlOrCopy(
                                 context,
-                                R.string.diagnostics_copied,
-                                Toast.LENGTH_SHORT
-                            ).show()
+                                context.getString(R.string.buymeacoffee_url)
+                            )
                         }
                     )
                 }
-            }
-
-            item(key = "live_metrics", contentType = "metrics") {
-                LiveDeviceInfoSection()
-            }
-
-            item(key = "support_coffee", contentType = "coffee") {
-                // The other half of the About row in Settings, and at the end of the page
-                // rather than the top: nobody opens this app to be asked, and the person who
-                // has scrolled past the device details is the one who has got something out
-                // of it. Same page, same way of opening it.
-                ExpressiveCard(
-                    icon = Icons.Rounded.Coffee,
-                    title = stringResource(R.string.settings_support_coffee),
-                    body = stringResource(R.string.home_support_body),
-                    onClick = {
-                        CustomTabsHelper.launchUrlOrCopy(
-                            context,
-                            context.getString(R.string.buymeacoffee_url)
-                        )
-                    }
-                )
-            }
             }
 
             ScrollToTopButton(
@@ -910,8 +716,6 @@ private fun StatusCard(
     @StringRes startMethodLabelRes: Int
 ) {
     val context = LocalContext.current
-    // "Stopped" is a normal state, not an error a red container made the
-    // primary action clash. Use a neutral surface instead.
     val containerColor = if (running) {
         MaterialTheme.colorScheme.secondaryContainer
     } else {
@@ -923,9 +727,6 @@ private fun StatusCard(
         MaterialTheme.colorScheme.onSurface
     }
 
-    // On the pure black theme the stopped card is the same colour as the page, so it
-    // gets the same hairline outline as the other cards. The running card uses a
-    // tinted container that the page can't swallow.
     val outlined = LocalAmoledTheme.current && !running
 
     Surface(
@@ -936,7 +737,7 @@ private fun StatusCard(
                     Modifier.border(
                         width = 1.dp,
                         color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = MaterialTheme.shapes.large
+                        shape = moe.shizuku.manager.ui.theme.OmniTokens.shapeLarge
                     )
                 } else {
                     Modifier
@@ -944,10 +745,8 @@ private fun StatusCard(
             ),
         color = containerColor,
         contentColor = contentColor,
-        shape = MaterialTheme.shapes.large
+        shape = moe.shizuku.manager.ui.theme.OmniTokens.shapeLarge
     ) {
-        // The icon reads as a status badge for the title beside it, with the facts in a
-        // row underneath the two of them.
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -956,7 +755,6 @@ private fun StatusCard(
             Icon(
                 if (running) Icons.Rounded.CheckCircle else Icons.Rounded.StopCircle,
                 contentDescription = null,
-                // Nudged down to sit on the title's line rather than above it.
                 modifier = Modifier.padding(top = 2.dp)
             )
 
@@ -967,53 +765,39 @@ private fun StatusCard(
                     stringResource(
                         if (running) R.string.status_running_short else R.string.status_stopped_short
                     ),
-                    style = MaterialTheme.typography.titleMedium
+                    style = moe.shizuku.manager.ui.theme.OmniTokens.displayMedium()
                 )
-                // Everything about the server at a glance: how it is running now, what
-                // the Start button below will do next, and what it is running as. The same
-                // facts are in the diagnostics card at the end of the page, where they are
-                // one block with everything else in it - this is the one that is read, that
-                // one is the one that is pasted.
                 StatusFacts(
                     StatusFactEntry(
                         R.string.home_status_started_with,
-                        if (running) startedWithLabel(context, uid) else stringResource(R.string.status_value_none)
+                        if (running) uid.toString() else stringResource(R.string.status_value_none)
                     ),
                     StatusFactEntry(
                         R.string.home_status_started_default,
                         stringResource(startMethodLabelRes)
                     ),
-                    // The wire, as opposed to the method above it: a wireless start can ride
-                    // the classic port (and a system start uses no adb at all).
                     StatusFactEntry(
                         R.string.home_status_transport_label,
-                        if (running) transportLabel(context, uid) else stringResource(R.string.status_value_none)
+                        if (running) "Wireless" else stringResource(R.string.status_value_none)
                     ),
-                    // The number is the fact; what the uid is called goes underneath it,
-                    // because "2000 (shell)" in a quarter of the width lost its own name.
                     StatusFactEntry(
                         R.string.uid_label,
                         if (uid < 0) stringResource(R.string.status_value_none) else uid.toString(),
-                        uidName(context, uid)
+                        when {
+                            uid == 1000 -> "system"
+                            uid == 0 -> "root"
+                            else -> uid.toString()
+                        }
                     )
                 )
             }
-
         }
     }
 }
 
-/**
- * KernelSU's fallback for the device name: manufacturer, brand when it differs, model.
- * Their per-manufacturer "marketing name" properties (Samsung, Xiaomi, OPPO…) could be
- * layered on top later; on a Nothing phone this is the name KSU shows too.
- */
-/** What this screen's own decisions are filed under in the on-device log. */
 private const val TAG = "StartStatus"
 
 private fun deviceModel(): String = buildString {
-    // Capitalised because manufacturers report themselves in lowercase ("samsung"),
-    // and without their marketing-name layer there is nothing else to show.
     append(Build.MANUFACTURER.replaceFirstChar { it.uppercase() })
     if (!Build.BRAND.equals(Build.MANUFACTURER, ignoreCase = true)) {
         append(' ').append(Build.BRAND)
@@ -1023,18 +807,10 @@ private fun deviceModel(): String = buildString {
 
 private fun kernelVersion(): String = System.getProperty("os.version").orEmpty().ifEmpty { "-" }
 
-/** The Android release beside its API level, which is the pair that names it: "16 (SDK 36)". */
 private fun androidVersion(): String = "${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})"
 
-/**
- * The kernel's SELinux state, worked out the way KernelSU's manager works it out:
- * ask `getenforce` as an ordinary app, and treat a refusal as the answer selinuxfs is
- * world-readable on disk but denied to app domains, and a permissive policy would have
- * allowed the read. That is what makes this work with no root, no server and no KSU.
- */
 @StringRes
 private fun readSelinuxStatus(): Int? {
-    // With a server running, read the switch itself rather than infer it.
     val raw = runShellCommand("cat /sys/fs/selinux/enforce")
         ?: runCatching { File("/sys/fs/selinux/enforce").readText().trim() }.getOrNull()
 
@@ -1055,13 +831,11 @@ private fun readSelinuxStatus(): Int? {
         stdout.equals("Enforcing", true) -> R.string.selinux_enforcing
         stdout.equals("Permissive", true) -> R.string.selinux_permissive
         stdout.equals("Disabled", true) -> R.string.selinux_disabled
-        // Refused: only an enforcing policy says no here.
         stderr.contains("Permission denied") -> R.string.selinux_enforcing
         else -> null
     }
 }
 
-/** Seccomp mode for this process, from our own /proc entry. */
 @StringRes
 private fun readSeccompStatus(): Int? {
     val mode = runCatching {
@@ -1079,26 +853,17 @@ private fun readSeccompStatus(): Int? {
     }
 }
 
-/** Reads what the device card shows, off the main thread. */
 private fun readDeviceStatus(): Pair<Int?, Int?> = readSelinuxStatus() to readSeccompStatus()
 
-/**
- * The facts inside the status card, spread across it with a hairline rule between each
- * pair. Each takes an equal share of the width so the rules land in even gaps, and long
- * values ellipsise inside their share rather than pushing the next one along.
- */
 private data class StatusFactEntry(
     @StringRes val label: Int,
     val value: String,
-    /** A quieter line under the value, for what the value is called rather than what it is. */
     val detail: String? = null
 )
 
 @Composable
 private fun StatusFacts(vararg facts: StatusFactEntry) {
     Row(
-        // IntrinsicSize.Min is what gives the rules a height to fill: without it the
-        // divider measures against the row's (unbounded) constraint and disappears.
         modifier = Modifier.fillMaxWidth().padding(top = 2.dp).height(IntrinsicSize.Min)
     ) {
         facts.forEachIndexed { index, fact ->
@@ -1114,34 +879,26 @@ private fun StatusFacts(vararg facts: StatusFactEntry) {
     }
 }
 
-/**
- * One fact: its label above its value. The label is set back so the eye reads the value
- * first, and both line up with the title above them.
- */
 @Composable
 private fun StatusFact(fact: StatusFactEntry, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         Text(
             stringResource(fact.label),
-            style = MaterialTheme.typography.bodySmall,
+            style = moe.shizuku.manager.ui.theme.OmniTokens.captionStyle(),
             color = LocalContentColor.current.copy(alpha = 0.7f),
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Text(
             fact.value,
-            // One step up from the label and no more: four facts share the width, so a
-            // bigger value just eats its own ellipsis. Two lines rather than one, because
-            // the method names are longer than a quarter of the width and "Start without
-            // Wi-Fi" clipped to "Start wi…" says less than it costs to wrap.
-            style = MaterialTheme.typography.bodyMedium,
+            style = moe.shizuku.manager.ui.theme.OmniTokens.bodyMedium(),
             maxLines = 2,
             overflow = TextOverflow.Ellipsis
         )
         fact.detail?.let {
             Text(
                 it,
-                style = MaterialTheme.typography.bodySmall,
+                style = moe.shizuku.manager.ui.theme.OmniTokens.captionStyle(),
                 color = LocalContentColor.current.copy(alpha = 0.7f),
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
@@ -1150,14 +907,8 @@ private fun StatusFact(fact: StatusFactEntry, modifier: Modifier = Modifier) {
     }
 }
 
-/** Restart's blue see the note where it is used. */
 private val RestartBlue = Color(0xFF2563EB)
 
-/**
- * Start, Stop and Restart below the status card, all always visible. An action that
- * doesn't apply right now is disabled rather than hidden, so the row never shifts.
- * A start in flight shows as progress inside Start, where the eye already is.
- */
 @Composable
 private fun ServerActionButtons(
     running: Boolean,
@@ -1176,12 +927,8 @@ private fun ServerActionButtons(
             onClick = onStart
         ) {
             if (starting) {
-                // The morphing loader rather than a ring: it is the shape Material 3
-                // gives an action that is running, and it is legible at button size.
                 LoadingIndicator(
                     modifier = Modifier.size(22.dp),
-                    // The button is disabled while starting, so pick a colour that
-                    // still reads against the disabled container.
                     color = MaterialTheme.colorScheme.primary
                 )
             } else {
@@ -1189,8 +936,6 @@ private fun ServerActionButtons(
             }
         }
 
-        // Red: stopping is the destructive one, and the theme's error role stays red
-        // whatever the seed colour is.
         Button(
             modifier = Modifier.weight(1f),
             enabled = running,
@@ -1203,9 +948,6 @@ private fun ServerActionButtons(
             Text(stringResource(R.string.action_stop))
         }
 
-        // Blue on purpose: Material 3 has no blue role and the palette is seeded from
-        // the wallpaper or the brand colour, so a role here would come out indigo or
-        // teal depending on the theme.
         Button(
             modifier = Modifier.weight(1f),
             enabled = running,
@@ -1220,13 +962,6 @@ private fun ServerActionButtons(
     }
 }
 
-/**
- * What Android answers about Shizuku's own permission.
- *
- * Both look-ups are wrapped because "not there" is one of the answers and the platform says it by
- * throwing. The group is asked as well as the permission: a reinstall can leave either of them
- * unprocessed, and the two together are what tells the two states apart.
- */
 private fun readPermissionOwnership(context: Context): PermissionOwnership {
     val manager = context.packageManager
     val owner = runCatching {
@@ -1239,4 +974,21 @@ private fun readPermissionOwnership(context: Context): PermissionOwnership {
     return permissionOwnership(context.packageName, owner, groupResolved)
 }
 
-
+private fun homeBuildDiagnostics(
+    context: Context,
+    running: Boolean,
+    uid: Int,
+    method: Int,
+    hidingActive: Boolean,
+    batteryIgnored: Boolean,
+    rooted: Boolean
+): String {
+    val sb = StringBuilder()
+    sb.append("Shizuku status: ${if (running) "running" else "stopped"}\n")
+    sb.append("Start method: $method\n")
+    if (uid >= 0) sb.append("UID: $uid\n")
+    sb.append("Rooted: $rooted\n")
+    sb.append("Battery optimization ignored: $batteryIgnored\n")
+    sb.append("Hiding active: $hidingActive\n")
+    return sb.toString()
+}

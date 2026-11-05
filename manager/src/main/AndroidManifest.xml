@@ -761,6 +761,14 @@
             android:enabled="true"
             android:exported="false" />
 
+        <activity
+            android:name=".themepatcher.ThemePatcherActivity"
+            android:exported="true" />
+
+        <service
+            android:name=".themepatcher.ThemePatcherService"
+            android:exported="false"
+            android:foregroundServiceType="shortService" />
     </application>
 
 </manifest>
