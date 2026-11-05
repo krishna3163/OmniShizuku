@@ -131,7 +131,7 @@ import moe.shizuku.manager.module.ModulesScreen
 import moe.shizuku.manager.ui.screen.StealthScreen
 import moe.shizuku.manager.ui.screen.TerminalScreen
 import moe.shizuku.manager.ui.screen.WifiPasswordsScreen
-import moe.shizuku.manager.audio.MixedAudioScreen
+import moe.shizuku.manager.audio.MixedAudioLauncher
 import moe.shizuku.manager.audio.SoundMasterScreen
 import moe.shizuku.manager.lookback.LookBackScreen
 import moe.shizuku.manager.pip.UniversalPiPScreen
@@ -477,7 +477,7 @@ fun ShizukuApp() {
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })
                             Detail.THEME_PATCHER -> ThemePatcherScreen(onBack = { detail = null })
-                            Detail.MIXED_AUDIO -> MixedAudioScreen(onBack = { detail = null })
+                            Detail.MIXED_AUDIO -> MixedAudioLauncher(onBack = { detail = null })
                             Detail.SOUND_MASTER -> SoundMasterScreen(onBack = { detail = null })
                             Detail.LOOKBACK -> LookBackScreen(onBack = { detail = null })
                             Detail.UNIVERSAL_PIP -> UniversalPiPScreen(onBack = { detail = null })

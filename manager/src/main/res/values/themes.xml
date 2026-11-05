@@ -25,4 +25,11 @@
 
     <style name="Theme" parent="Base.AppTheme" />
 
+    <style name="DialogActivityTheme" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:background">@android:color/transparent</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

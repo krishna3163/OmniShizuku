@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import moe.shizuku.manager.ui.Detail
+import moe.shizuku.manager.audio.MixedAudioLauncher
 import moe.shizuku.manager.ui.screen.ActivitiesScreen
 import moe.shizuku.manager.ui.screen.CatalogKind
 import moe.shizuku.manager.ui.screen.CatalogScreen
@@ -159,7 +160,7 @@ fun DetailHost(
                     Detail.INTENTS -> IntentsScreen(onBack = onBack)
                     Detail.PERMISSIONS -> PermissionsScreen(onBack = onBack)
                     Detail.THEME_PATCHER -> moe.shizuku.manager.themepatcher.ThemePatcherScreen(onBack = onBack)
-                    Detail.MIXED_AUDIO -> moe.shizuku.manager.audio.MixedAudioScreen(onBack = onBack)
+                    Detail.MIXED_AUDIO -> moe.shizuku.manager.audio.MixedAudioLauncher(onBack = onBack)
                     Detail.SOUND_MASTER -> moe.shizuku.manager.audio.SoundMasterScreen(onBack = onBack)
                     Detail.LOOKBACK -> moe.shizuku.manager.lookback.LookBackScreen(onBack = onBack)
                     Detail.UNIVERSAL_PIP -> moe.shizuku.manager.pip.UniversalPiPScreen(onBack = onBack)

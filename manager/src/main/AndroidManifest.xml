@@ -26,6 +26,8 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MICROPHONE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
     <uses-permission
         android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE"
         tools:targetApi="34" />
@@ -568,6 +570,23 @@
             android:excludeFromRecents="true"
             android:launchMode="singleTop"
             android:exported="false" />
+
+        <activity
+            android:name=".audio.MixedAudioActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".audio.SoundMasterActivity"
+            android:excludeFromRecents="true"
+            android:exported="false"
+            android:label=""
+            android:theme="@style/DialogActivityTheme" />
+
+        <service
+            android:name=".audio.SoundMasterService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="mediaProjection" />
 
         <!-- Lab Features -->
         <activity
