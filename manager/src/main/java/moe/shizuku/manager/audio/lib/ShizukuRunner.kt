@@ -1,6 +1,10 @@
 package moe.shizuku.manager.audio.lib
 
-import moe.shizuku.manager.utils.runShellCommand
+import moe.shizuku.server.IShizukuService
+import rikka.shizuku.Shizuku
+import java.io.BufferedReader
+import java.io.FileInputStream
+import java.io.InputStreamReader
 
 /**
  * @author legendsayantan
@@ -25,12 +29,36 @@ class ShizukuRunner {
         fun command(command: String, listener: CommandResultListener, lineBundle: Int = 50) {
             Thread {
                 try {
-                    val output = runShellCommand(command)
-                    if (output != null) {
-                        listener.onCommandResult(output, true)
-                    } else {
-                        listener.onCommandError("No Shizuku or command failed")
+                    val binder = Shizuku.getBinder()
+                    if (binder == null) {
+                        listener.onCommandError("Shizuku binder is null")
+                        return@Thread
                     }
+                    val process = IShizukuService.Stub.asInterface(binder)
+                        .newProcess(arrayOf("sh", "-c", command), null, null)
+                    val reader = BufferedReader(InputStreamReader(FileInputStream(process.inputStream.fileDescriptor)))
+                    val err = BufferedReader(InputStreamReader(FileInputStream(process.errorStream.fileDescriptor)))
+                    val output = StringBuilder()
+                    val errordata = StringBuilder()
+                    var line: String?
+                    var linecount = 0
+                    while (reader.readLine().also { line = it } != null) {
+                        linecount++
+                        output.append(line).append("\n")
+                        if (linecount == lineBundle) {
+                            linecount = 0
+                            listener.onCommandResult(output.toString(), false)
+                        }
+                    }
+                    while (err.readLine().also { line = it } != null) {
+                        errordata.append(line).append("\n")
+                    }
+                    if (errordata.isNotBlank()) {
+                        listener.onCommandError(errordata.toString())
+                    } else {
+                        listener.onCommandResult(output.toString(), true)
+                    }
+                    process.waitFor()
                 } catch (e: Exception) {
                     listener.onCommandError(e.message ?: "No Shizuku")
                 }
