@@ -2,10 +2,10 @@ name: Build Android APK
 
 on:
   push:
-    branches: [ "main", "dev", "nightly" ]
-    tags: [ "v*" ]
+    branches: [ "main", "dev", "nightly", "release/*" ]
+    tags: [ "v*", "[0-9]*" ]
   pull_request:
-    branches: [ "main", "dev", "nightly" ]
+    branches: [ "main", "dev", "nightly", "release/*" ]
   workflow_dispatch:
 
 concurrency:
@@ -59,11 +59,7 @@ jobs:
               print(f"v{major}.{minor}.{max([patch, *patches]) + 1}-dev")
           PY
             )
-          elif [[ "$REF_TYPE" == "tag" && "$REF_NAME" == v* ]]; then
-            if [[ ! "$REF_NAME" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-dev(\.[0-9]+)?)?$ ]]; then
-              echo "::error::Unsupported release tag format: $REF_NAME"
-              exit 1
-            fi
+          elif [[ "$REF_TYPE" == "tag" ]]; then
             VERSION="$REF_NAME"
           else
             VERSION="v1.0.0"
@@ -132,21 +128,11 @@ jobs:
           chmod +x gradlew 2>/dev/null || true
           ./gradlew :manager:assembleDebug "-PomniVersionName=${OMNI_VERSION_NAME}" --stacktrace --no-daemon 2>&1 | tee build-debug.log
 
-      - name: Build release APK
-        env:
-          OMNI_VERSION_NAME: ${{ steps.version.outputs.version }}
-        run: |
-          set -e -o pipefail
-          ./gradlew :manager:assembleRelease "-PomniVersionName=${OMNI_VERSION_NAME}" --stacktrace --no-daemon 2>&1 | tee build-release.log
-
       - name: Dump build log on failure
         if: failure()
         run: |
           echo "::group::Debug Build Log"
           tail -n 250 build-debug.log 2>/dev/null || true
-          echo "::endgroup::"
-          echo "::group::Release Build Log"
-          tail -n 250 build-release.log 2>/dev/null || true
           echo "::endgroup::"
 
       - name: Locate generated APKs
@@ -158,7 +144,7 @@ jobs:
       - name: Verify APK signature
         if: always()
         run: |
-          APK=$(find out/apk manager/build/outputs/apk/release -name "*.apk" 2>/dev/null | head -n1)
+          APK=$(find out/apk manager/build/outputs/apk/debug -name "*.apk" 2>/dev/null | head -n1)
           if [ -n "$APK" ] && [ -f "$APK" ]; then
             APKSIGNER=$(ls -d "$ANDROID_SDK_ROOT"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -n1)
             if [ -n "$APKSIGNER" ]; then
@@ -171,38 +157,27 @@ jobs:
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: omnishizuku-build-logs
-          path: |
-            build-debug.log
-            build-release.log
+          path: build-debug.log
           if-no-files-found: ignore
 
-      - name: Upload all APKs as Artifact
+      - name: Upload debug APK as Artifact
         if: always()
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
-          name: omnishizuku-all-apks
-          path: |
-            out/apk/*.apk
-            manager/build/outputs/apk/**/*.apk
+          name: omnishizuku-debug-apk
+          path: manager/build/outputs/apk/debug/*.apk
           if-no-files-found: warn
-
-      - name: Upload release APK for publishing
-        uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
-        with:
-          name: manager-release-apk
-          path: manager/build/outputs/apk/release/*.apk
-          if-no-files-found: error
 
       - name: Upload debug APK for publishing
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: manager-debug-apk
           path: manager/build/outputs/apk/debug/*.apk
-          if-no-files-found: warn
+          if-no-files-found: error
 
   publish:
     needs: build
-    if: (startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/main') && github.event_name != 'pull_request' && !contains(github.ref_name, '-dev')
+    if: (startsWith(github.ref, 'refs/tags/') || github.ref == 'refs/heads/main') && github.event_name != 'pull_request' && !contains(github.ref_name, '-dev')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -212,15 +187,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Download release APK
-        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
-        with:
-          name: manager-release-apk
-          path: release-apk
-
       - name: Download debug APK
-        id: debug-apk
-        continue-on-error: true
         uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
         with:
           name: manager-debug-apk
@@ -232,9 +199,9 @@ jobs:
           OMNI_VERSION_NAME: ${{ needs.build.outputs.version }}
         run: |
           mkdir -p release-assets
-          RELEASE_APK=$(find release-apk -maxdepth 1 -type f -name '*.apk' -print -quit)
-          if [ -z "$RELEASE_APK" ]; then
-            echo "::error::Release APK was not generated; refusing to publish an empty release."
+          DEBUG_APK=$(find debug-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)
+          if [ -z "$DEBUG_APK" ]; then
+            echo "::error::Debug APK was not generated; refusing to publish an empty release."
             exit 1
           fi
 
@@ -245,12 +212,9 @@ jobs:
           fi
           RELEASE_TITLE="OmniShizuku ${RELEASE_TAG}"
 
-          cp "$RELEASE_APK" "release-assets/omnishizuku-${RELEASE_TAG}-release.apk"
-          cp "$RELEASE_APK" "release-assets/omnishizuku.apk"
-          DEBUG_APK=$(find debug-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)
-          if [ -n "$DEBUG_APK" ]; then
-            cp "$DEBUG_APK" "release-assets/omnishizuku-${RELEASE_TAG}-debug.apk"
-          fi
+          # Strictly ONE APK in release assets: the debug APK!
+          APK_NAME="omnishizuku-${RELEASE_TAG}-debug.apk"
+          cp "$DEBUG_APK" "release-assets/${APK_NAME}"
 
           RELEASE_ARGS=(--title "$RELEASE_TITLE" --target "$GITHUB_SHA" --generate-notes)
           if [[ "$RELEASE_TAG" == *-dev ]]; then
@@ -261,6 +225,11 @@ jobs:
 
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             echo "Release '$RELEASE_TAG' exists. Updating APK assets..."
+            for asset in $(gh release view "$RELEASE_TAG" --json assets -q '.assets[].name' 2>/dev/null || true); do
+              if [ "$asset" != "$APK_NAME" ]; then
+                gh release delete-asset "$RELEASE_TAG" "$asset" --yes || true
+              fi
+            done
             if [[ "$RELEASE_TAG" == *-dev ]]; then
               gh release edit "$RELEASE_TAG" --title "$RELEASE_TITLE" --prerelease
             else
@@ -273,23 +242,25 @@ jobs:
           fi
 
           mkdir -p latest-assets
-          cp "$RELEASE_APK" latest-assets/omnishizuku-latest-release.apk
-          cp "$RELEASE_APK" latest-assets/omnishizuku.apk
-          if [ -n "$DEBUG_APK" ]; then
-            cp "$DEBUG_APK" latest-assets/omnishizuku-latest-debug.apk
-          fi
+          LATEST_APK_NAME="omnishizuku-latest-debug.apk"
+          cp "$DEBUG_APK" "latest-assets/${LATEST_APK_NAME}"
           git tag -f latest "$GITHUB_SHA"
           git push origin refs/tags/latest --force
           if gh release view latest >/dev/null 2>&1; then
+            for asset in $(gh release view latest --json assets -q '.assets[].name' 2>/dev/null || true); do
+              if [ "$asset" != "$LATEST_APK_NAME" ]; then
+                gh release delete-asset latest "$asset" --yes || true
+              fi
+            done
             gh release edit latest \
               --title "OmniShizuku Latest Build (${RELEASE_TAG})" \
-              --notes "Automated build from commit ${GITHUB_SHA} (${RELEASE_TAG}). Download the versioned APK from [${RELEASE_TAG}](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${RELEASE_TAG})." \
+              --notes "Automated build from commit ${GITHUB_SHA} (${RELEASE_TAG}). Debug APK: [${LATEST_APK_NAME}](https://github.com/${GITHUB_REPOSITORY}/releases/download/latest/${LATEST_APK_NAME})" \
               --latest
             gh release upload latest latest-assets/*.apk --clobber
           else
             gh release create latest latest-assets/*.apk \
               --title "OmniShizuku Latest Build (${RELEASE_TAG})" \
-              --notes "Automated build from commit ${GITHUB_SHA} (${RELEASE_TAG}). Download the versioned APK from [${RELEASE_TAG}](https://github.com/${GITHUB_REPOSITORY}/releases/tag/${RELEASE_TAG})." \
+              --notes "Automated build from commit ${GITHUB_SHA} (${RELEASE_TAG}). Debug APK: [${LATEST_APK_NAME}](https://github.com/${GITHUB_REPOSITORY}/releases/download/latest/${LATEST_APK_NAME})" \
               --target "$GITHUB_SHA" \
               --latest
           fi
