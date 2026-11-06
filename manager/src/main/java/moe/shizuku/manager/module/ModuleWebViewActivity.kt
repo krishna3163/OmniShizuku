@@ -4,9 +4,10 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.widget.Toast
 import android.webkit.CookieManager
-import android.webkit.WebSettings
+import android.webkit.MimeTypeMap
 import android.webkit.WebResourceRequest
 import android.webkit.WebResourceResponse
+import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.activity.compose.setContent
@@ -62,11 +63,11 @@ class ModuleWebViewActivity : AppActivity() {
                             WebView(context).apply {
                                 settings.javaScriptEnabled = true
                                 settings.domStorageEnabled = true
-                                settings.allowFileAccess = true
+                                settings.allowFileAccess = false
                                 settings.allowContentAccess = false
-                                settings.allowFileAccessFromFileURLs = trusted
-                                settings.allowUniversalAccessFromFileURLs = trusted
-                                settings.blockNetworkLoads = !webNetworkAllowed
+                                settings.allowFileAccessFromFileURLs = false
+                                settings.allowUniversalAccessFromFileURLs = false
+                                settings.blockNetworkLoads = false
                                 settings.cacheMode = WebSettings.LOAD_DEFAULT
                                 settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
                                 CookieManager.getInstance().setAcceptThirdPartyCookies(this, false)
@@ -85,7 +86,7 @@ class ModuleWebViewActivity : AppActivity() {
                                         "Shizuku"
                                     )
                                 }
-                                loadUrl(index.toURI().toString())
+                                loadUrl(LocalModuleWebViewClient.moduleUrl())
                             }
                         },
                         modifier = androidx.compose.ui.Modifier
@@ -150,10 +151,22 @@ class ModuleWebViewActivity : AppActivity() {
 
         override fun shouldInterceptRequest(view: WebView, request: WebResourceRequest): WebResourceResponse? {
             val uri = request.url
-            if (uri.scheme?.lowercase() == "file") {
-                if (!isInsideWebRoot(uri.path.orEmpty())) {
-                    return WebResourceResponse("text/plain", "UTF-8", 403, "Forbidden", null, null)
+            if (uri.scheme?.lowercase() == MODULE_SCHEME && uri.host == MODULE_HOST) {
+                val file = resolveModuleFile(uri.path.orEmpty())
+                    ?: return WebResourceResponse("text/plain", "UTF-8", 404, "Not Found", null, null)
+                return try {
+                    WebResourceResponse(
+                        MimeTypeMap.getSingleton().getMimeTypeFromExtension(file.extension)
+                            ?: "application/octet-stream",
+                        null,
+                        file.inputStream()
+                    )
+                } catch (_: Exception) {
+                    WebResourceResponse("text/plain", "UTF-8", 404, "Not Found", null, null)
                 }
+            }
+            if (!webNetworkAllowed && (uri.scheme == "http" || uri.scheme == "https")) {
+                return WebResourceResponse("text/plain", "UTF-8", 403, "Forbidden", null, null)
             }
             return super.shouldInterceptRequest(view, request)
         }
@@ -161,6 +174,9 @@ class ModuleWebViewActivity : AppActivity() {
         override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
             val uri = request.url
             val scheme = uri.scheme?.lowercase()
+            if (scheme == MODULE_SCHEME && uri.host == MODULE_HOST) {
+                return false
+            }
             if (scheme == "http" || scheme == "https") {
                 try {
                     val intent = android.content.Intent(android.content.Intent.ACTION_VIEW, uri).apply {
@@ -172,19 +188,29 @@ class ModuleWebViewActivity : AppActivity() {
                 }
                 return true
             }
-            if (scheme == "file") {
-                return !isInsideWebRoot(uri.path.orEmpty())
-            }
             return true
         }
 
-        private fun isInsideWebRoot(path: String): Boolean {
-            val root = module.webRoot ?: return false
+        private fun resolveModuleFile(path: String): File? {
+            val root = module.webRoot ?: return null
             return runCatching {
                 val rootPath = root.canonicalPath
-                val targetPath = File(path).canonicalPath
-                targetPath == rootPath || targetPath.startsWith(rootPath + File.separator)
-            }.getOrDefault(false)
+                val target = File(root, java.net.URLDecoder.decode(path.removePrefix("/"), "UTF-8"))
+                val targetPath = target.canonicalPath
+                if (targetPath == rootPath || targetPath.startsWith(rootPath + File.separator)) {
+                    target.takeIf { it.isFile }
+                } else {
+                    null
+                }
+            }.getOrNull()
+        }
+
+        companion object {
+            private const val MODULE_SCHEME = "https"
+            private const val MODULE_HOST = "module.local"
+
+            fun moduleUrl(): String =
+                "$MODULE_SCHEME://$MODULE_HOST/index.html"
         }
     }
 
