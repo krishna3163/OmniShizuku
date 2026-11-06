@@ -23,11 +23,24 @@ private val shellOutputExecutor = Executors.newCachedThreadPool { task ->
 fun runShellCommand(cmd: String): String? {
     val process = newShellProcess(cmd) ?: return null
     val output = shellOutputExecutor.submit<String> {
-        process.inputStream.bufferedReader().use { it.readText() }
+        val out = process.inputStream.bufferedReader().use { it.readText() }
+        val err = process.errorStream.bufferedReader().use { it.readText() }
+        if (out.isNotEmpty()) out else err
     }
 
     return try {
-        output.get(SHELL_COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS).trim().ifEmpty { null }
+        val res = output.get(SHELL_COMMAND_TIMEOUT_SECONDS, TimeUnit.SECONDS)
+        val exitCode = try {
+            process.waitFor(2, TimeUnit.SECONDS)
+            process.exitValue()
+        } catch (_: Exception) { 0 }
+        
+        // If execution succeeded (exit 0) and produced empty output (typical for settings put), return empty string instead of null
+        if (exitCode == 0 && res.trim().isEmpty()) {
+            ""
+        } else {
+            res.trim().ifEmpty { if (exitCode == 0) "" else null }
+        }
     } catch (e: TimeoutException) {
         Log.w(TAG, "Timed out waiting for shell command: $cmd")
         null
