@@ -38,7 +38,7 @@ internal class PorterShellService : IPorterShellService.Stub() {
         val grouped = File(SETSID).exists()
         val argv = if (grouped) arrayOf(SETSID) + command else arrayOf("sh", "-c", "exec \"\$@\"", "sh") + command
         val process = try {
-            Runtime.getRuntime().exec(argv, null, dir?.let(::File))
+            ProcessBuilder(*argv).directory(dir?.let(::File)).start()
         } catch (e: Exception) {
             // Only a few exception types cross a binder; this is one of them.
             throw IllegalStateException(e.message ?: e.toString())
