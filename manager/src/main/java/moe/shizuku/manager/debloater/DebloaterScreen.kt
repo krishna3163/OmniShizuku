@@ -13,6 +13,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -93,7 +94,17 @@ fun DebloaterScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Universal Debloater (UAD)") },
+                title = {
+                    Column {
+                        Text("Universal Debloater (UAD)")
+                        Text(
+                            "Inspect packages and review risk before making changes.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -262,7 +273,7 @@ private fun DebloatAppCard(
                     Icon(
                         imageVector = if (app.isSystem) Icons.Outlined.Android else Icons.Outlined.Apps,
                         contentDescription = null,
-                        tint = MaterialTheme.colorScheme.primary
+                        tint = OmniTokens.brandPrimary()
                     )
                 }
             }
@@ -348,6 +359,8 @@ private fun AppActionBottomSheet(
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     var executing by remember { mutableStateOf(false) }
+    var confirmDebloat by remember { mutableStateOf(false) }
+    var confirmClearData by remember { mutableStateOf(false) }
 
     ModalBottomSheet(onDismissRequest = onDismiss) {
         Column(
@@ -475,19 +488,7 @@ private fun AppActionBottomSheet(
                     }
 
                     Button(
-                        onClick = {
-                            scope.launch {
-                                executing = true
-                                val res = DebloaterManager.uninstallUser0(app.packageName)
-                                executing = false
-                                res.onSuccess {
-                                    Toast.makeText(context, "Uninstalled for User 0 (Data Kept)", Toast.LENGTH_SHORT).show()
-                                    onRefresh()
-                                }.onFailure {
-                                    Toast.makeText(context, "Failed: ${it.message}", Toast.LENGTH_LONG).show()
-                                }
-                            }
-                        },
+                        onClick = { confirmDebloat = true },
                         enabled = !executing,
                         colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
                         modifier = Modifier.weight(1f)
@@ -501,18 +502,7 @@ private fun AppActionBottomSheet(
 
             Spacer(modifier = Modifier.height(10.dp))
             OutlinedButton(
-                onClick = {
-                    scope.launch {
-                        executing = true
-                        val res = DebloaterManager.clearData(app.packageName)
-                        executing = false
-                        res.onSuccess {
-                            Toast.makeText(context, "Cleared data", Toast.LENGTH_SHORT).show()
-                        }.onFailure {
-                            Toast.makeText(context, "Failed: ${it.message}", Toast.LENGTH_LONG).show()
-                        }
-                    }
-                },
+                onClick = { confirmClearData = true },
                 enabled = !executing && app.state != AppState.UNINSTALLED,
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -521,5 +511,24 @@ private fun AppActionBottomSheet(
                 Text("Clear App Data & Cache")
             }
         }
+    }
+
+    if (confirmDebloat) {
+        AlertDialog(
+            onDismissRequest = { if (!executing) confirmDebloat = false },
+            title = { Text("Confirm debloat") },
+            text = { Text("Uninstall ${app.label} (${app.packageName}) for User 0? App data may be kept where supported. Review removal safety before continuing.") },
+            confirmButton = { TextButton(onClick = { scope.launch { executing = true; val res = DebloaterManager.uninstallUser0(app.packageName); executing = false; confirmDebloat = false; res.onSuccess { Toast.makeText(context, "Uninstalled for User 0 (Data Kept)", Toast.LENGTH_SHORT).show(); onRefresh() }.onFailure { Toast.makeText(context, "Failed: ${it.message}", Toast.LENGTH_LONG).show() } } }, enabled = !executing) { Text("Debloat") } },
+            dismissButton = { TextButton(onClick = { confirmDebloat = false }, enabled = !executing) { Text("Cancel") } }
+        )
+    }
+    if (confirmClearData) {
+        AlertDialog(
+            onDismissRequest = { if (!executing) confirmClearData = false },
+            title = { Text("Clear data and cache?") },
+            text = { Text("Clear app data and cache for ${app.label} (${app.packageName})? This cannot be undone.") },
+            confirmButton = { TextButton(onClick = { scope.launch { executing = true; val res = DebloaterManager.clearData(app.packageName); executing = false; confirmClearData = false; res.onSuccess { Toast.makeText(context, "Data cleared", Toast.LENGTH_SHORT).show(); onRefresh() }.onFailure { Toast.makeText(context, "Failed: ${it.message}", Toast.LENGTH_LONG).show() } } }, enabled = !executing) { Text("Clear") } },
+            dismissButton = { TextButton(onClick = { confirmClearData = false }, enabled = !executing) { Text("Cancel") } }
+        )
     }
 }

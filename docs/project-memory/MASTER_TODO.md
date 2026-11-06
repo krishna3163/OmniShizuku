@@ -77,8 +77,8 @@
 | ID | Priority | Title | Requirements | Affected | Dependencies | Acceptance Criteria | Status |
 |----|----------|-------|-------------|----------|--------------|---------------------|--------|
 | P5-01 | P1 | Home Dashboard | Device identity, status, quick actions | HomeScreen | P4 phase | Redesigned, quality gates pass | [x] |
-| P5-02 | P1 | Connection Centre | Shizuku, ADB, wireless debugging, root | Settings-related | P4 phase | Redesigned, quality gates pass | [~] |
-| P5-03 | P1 | App Manager | List, filters, search, actions | AppsScreen | P4 phase | Redesigned, quality gates pass | [ ] |
+| P5-02 | P1 | Connection Centre | Shizuku, ADB, wireless debugging, root | Settings-related | P4 phase | Redesigned, quality gates pass | [x] |
+| P5-03 | P1 | App Manager | List, filters, search, actions | AppsScreen | P4 phase | Redesigned, quality gates pass | [~] |
 | P5-04 | P1 | Debloater | Discovery, risk, selection, preview | DebloaterScreen | P4 phase | Redesigned, quality gates pass | [ ] |
 | P5-05 | P1 | Automation Centre | Tasks, triggers, execution state | Labs-related | P4 phase | Redesigned, quality gates pass | [ ] |
 | P5-06 | P1 | Module Manager | Installed modules, status, actions | ModulesScreen | P4 phase | Redesigned, quality gates pass | [ ] |
@@ -137,3 +137,50 @@
 - If a feature doesn't exist, classify as planned or missing
 - Never erase previous project history
 - Update all memory files at every meaningful checkpoint
+
+---
+
+## Labs Redesign (LAB-001..LAB-039)
+
+| ID | Priority | Title | Requirements | Affected | Dependencies | Acceptance Criteria | Status |
+|----|----------|-------|-------------|----------|--------------|---------------------|--------|
+| LAB-000 | P0 | Labs complete audit | Audit all 39 entries | docs/uiux/LABS_COMPLETE_AUDIT.md | None | Audit doc created | [x] |
+| LAB-001 | P1 | App Ops detail redesign | Per-app ops | AppOpsScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-002 | P1 | Firewall detail redesign | Network rules | FirewallScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-003 | P1 | Autostart detail redesign | Startup mgmt | AutostartScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-004 | P1 | Hiding detail redesign | Visibility mgmt | HidingScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-005 | P1 | Force Dark detail redesign | Per-app dark | ForceDarkScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-006 | P1 | Debloater detail redesign | Package mgmt | DebloaterScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-007 | P1 | App Freezer detail redesign | Freeze apps | FreezerScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-008 | P1 | Axeron Gaming Optimizer redesign | Perf profiles | OptimizerScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-009 | P1 | Power detail redesign | Restart actions | PowerScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-010 | P1 | Display detail redesign | Resolution/dpi | DisplayScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-011 | P1 | Wi-Fi Passwords redesign | Saved networks | WifiPasswordsScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-012 | P1 | SystemUI Tuner redesign | Status bar | SystemUiTunerScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-013 | P1 | Enforce Doze redesign | Doze controls | EnforceDozeScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-014 | P1 | Private DNS redesign | DNS config | PrivateDnsScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-015 | P1 | Audio Stream Master redesign | Volume streams | AudioMasterScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-016 | P1 | Carrier Tethering redesign | Tethering | TetherScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-017 | P1 | Mixed Audio redesign | Audio focus | MixedAudioScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-018 | P1 | SoundMaster redesign | Per-app volume | SoundMasterScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-019 | P1 | UniversalPiP redesign | PiP controls | UniversalPipScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-020 | P1 | Screen Security & DRM redesign | FLAG_SECURE info | SecurityScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-021 | P1 | Auto DND redesign | DND automation | AutoDndScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-022 | P1 | Theme Patcher redesign | Theme patching | ThemePatcherScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-023 | P1 | DFRoot redesign | Kernel compat | DfrootScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-024 | P1 | Shell redesign | Terminal | ShellScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-025 | P1 | Log redesign | Logcat | LogScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-026 | P1 | Device Info redesign | Hardware info | DeviceInfoScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-027 | P1 | Activities Launcher redesign | Activity launch | ActivitiesScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-028 | P1 | Files redesign | File browser | FilesScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-029 | P1 | App Installer redesign | APK install | InstallScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-030 | P1 | Terminal Apps redesign | Terminal integration | TerminalScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-031 | P1 | LocalShell redesign | Local ADB bridge | LocalShellScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-032 | P1 | Intents redesign | Intent builder | IntentsScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-033 | P1 | Stealth Mode redesign | Package visibility | StealthScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-034 | P1 | Permissions redesign | Runtime perms | PermissionsScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-035 | P1 | Shizuku Store redesign | App catalog | MoreAppsScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-036 | P1 | Call Recording redesign | Recording engine | CallRecordingScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-037 | P1 | WallYou redesign | Wallpaper engine | WallYouScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-038 | P1 | Quick Settings Tiles companion | Integration | Companion entry | LAB-000 | Redesigned + tested | [ ] |
+| LAB-039 | P1 | ShizuWall companion | Integration | Companion entry | LAB-000 | Redesigned + tested | [ ] |

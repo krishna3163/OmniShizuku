@@ -67,6 +67,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import moe.shizuku.manager.ui.component.televisionTextInput
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.R
 import moe.shizuku.manager.manage.WifiBackup
 import moe.shizuku.manager.manage.WifiControl
@@ -786,7 +787,7 @@ private fun PasswordLine(
                 Text(
                     text = stringResource(R.string.wifi_passwords_connected),
                     style = MaterialTheme.typography.labelSmall,
-                    color = MaterialTheme.colorScheme.primary
+                    color = OmniTokens.brandPrimary()
                 )
             }
         }

@@ -5,6 +5,7 @@
 
 package moe.shizuku.manager.module.update
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -45,6 +46,7 @@ import androidx.compose.material3.Surface
 import moe.shizuku.manager.BuildConfig
 import moe.shizuku.manager.R
 import moe.shizuku.manager.module.ModuleSettings
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.ui.compose.GroupDivider
 import moe.shizuku.manager.ui.compose.SettingsGroup
 import moe.shizuku.manager.ui.compose.SettingsRow
@@ -102,7 +104,7 @@ fun AppUpdateSettingsGroup() {
             onClick = { showPendingInstall.value = true },
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.primaryContainer,
-            tonalElevation = 2.dp,
+            border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor()),
             modifier = Modifier.fillMaxWidth()
         ) {
             Row(

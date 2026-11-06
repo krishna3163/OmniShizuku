@@ -51,7 +51,7 @@ fun MixedAudioScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Mixed Audio") },
+                title = { Column { Text("Mixed Audio"); Text("Configure supported audio-focus behavior. App/device support varies.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")

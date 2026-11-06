@@ -29,10 +29,14 @@ import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.unit.dp
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ui.theme.LocalAmoledTheme
+import moe.shizuku.manager.ui.theme.OmniTokens
 
 /**
  * A Material 3 list rendered as a single rounded container with dividers between
  * rows (KernelSU-style "segmented list").
+ *
+ * Tight radius (12dp) and hairline border per Awesome Design MD principles:
+ * no drop shadows, surface ladder for depth, tight radius vocabulary.
  */
 @Composable
 fun SegmentedColumn(
@@ -50,17 +54,16 @@ fun SegmentedColumn(
             .then(
                 if (outlined) {
                     Modifier.border(
-                        width = 1.dp,
+                        width = OmniTokens.hairlineWidth,
                         color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = MaterialTheme.shapes.extraLarge
+                        shape = OmniTokens.shapeLarge
                     )
                 } else {
                     Modifier
                 }
             ),
-        shape = MaterialTheme.shapes.extraLarge,
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        tonalElevation = 2.dp
+        shape = OmniTokens.shapeLarge,
+        color = MaterialTheme.colorScheme.surfaceContainer
     ) {
         val scope = SegmentedColumnScope()
         Column { scope.content() }
@@ -68,7 +71,7 @@ fun SegmentedColumn(
 }
 
 /**
- * One rounded card around a single row, for lists where every entry is its own card 
+ * One rounded card around a single row, for lists where every entry is its own card
  * the app list, where a flat run of rows reads as one undifferentiated block.
  *
  * Same surface and outline as [SegmentedColumn], so the two kinds of list sit together
@@ -86,17 +89,16 @@ fun SegmentedCard(
             .then(
                 if (LocalAmoledTheme.current) {
                     Modifier.border(
-                        width = 1.dp,
+                        width = OmniTokens.hairlineWidth,
                         color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = MaterialTheme.shapes.extraLarge
+                        shape = OmniTokens.shapeLarge
                     )
                 } else {
                     Modifier
                 }
             ),
-        shape = MaterialTheme.shapes.extraLarge,
-        color = color,
-        tonalElevation = 2.dp
+        shape = OmniTokens.shapeLarge,
+        color = color
     ) {
         content()
     }

@@ -1274,14 +1274,14 @@ fun SettingsScreen(
                         Text(
                             text = stringResource(R.string.settings_start_on_boot_adb_missing_permission_instruction),
                             style = OmniTokens.bodySmall(),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = OmniTokens.semanticInfo()
                         )
                         if (!tcpMode) {
                             Spacer(Modifier.height(12.dp))
                             Text(
                                 text = stringResource(R.string.settings_start_on_boot_adb_warning_no_tcp),
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                style = OmniTokens.bodySmall(),
+                                color = OmniTokens.semanticInfo()
                             )
                         }
                     }
@@ -1821,8 +1821,8 @@ private fun LazyListScope.automationSectionContent(
         SettingsGroup(title = stringResource(R.string.automation_security_group_title)) {
             Text(
                 text = stringResource(R.string.automation_security_description),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = OmniTokens.bodyMedium(),
+                color = OmniTokens.semanticInfo(),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
             GroupDivider()
@@ -1845,8 +1845,8 @@ private fun LazyListScope.automationSectionContent(
         SettingsGroup(title = stringResource(R.string.automation_tasker_macrodroid_title)) {
             Text(
                 text = stringResource(R.string.automation_dialog_description),
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                style = OmniTokens.bodyMedium(),
+                color = OmniTokens.semanticInfo(),
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
             )
             GroupDivider()
@@ -2218,8 +2218,8 @@ private fun ContributorsCreditsScreen(onNavigateUp: () -> Unit) {
                 Text(
                     text = "Projects this fork is built on — code and ideas taken over with thanks, " +
                         "their authors did not commit to this repository.",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = OmniTokens.bodyMedium(),
+                    color = OmniTokens.semanticInfo(),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
                 credits.forEachIndexed { index, credit ->
@@ -2260,8 +2260,8 @@ private fun RecommendationsScreen(onNavigateUp: () -> Unit) {
                     } else {
                         "Shizuku-powered apps (offline list). Add a GitHub token in Settings for a live GitHub list. Tap Refresh to retry."
                     },
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    style = OmniTokens.bodyMedium(),
+                    color = OmniTokens.semanticInfo(),
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                 )
 
@@ -2282,7 +2282,7 @@ private fun RecommendationsScreen(onNavigateUp: () -> Unit) {
                         Text(
                             text = if (isLive) "Live from GitHub" else "Offline",
                             style = OmniTokens.bodySmall(),
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = OmniTokens.semanticInfo()
                         )
                     }
                 }
@@ -2291,8 +2291,8 @@ private fun RecommendationsScreen(onNavigateUp: () -> Unit) {
                 if (apps.isEmpty() && isLoading) {
                     Text(
                         text = "Loading…",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        style = OmniTokens.bodyMedium(),
+                        color = OmniTokens.semanticInfo(),
                         modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp)
                     )
                 } else {

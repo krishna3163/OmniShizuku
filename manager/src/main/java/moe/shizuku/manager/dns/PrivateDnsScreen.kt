@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -54,7 +55,12 @@ fun PrivateDnsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Private DNS Controller") },
+                title = {
+                    Column {
+                        Text("Private DNS Controller")
+                        Text("Configure Private DNS mode and hostname.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -163,11 +169,11 @@ fun PrivateDnsScreen(
                             ) {
                                 Column(modifier = Modifier.weight(1f)) {
                                     Text(preset.name, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
-                                    Text(preset.hostname, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                                    Text(preset.hostname, style = MaterialTheme.typography.bodySmall, color = OmniTokens.brandPrimary())
                                     Text(preset.description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                                 }
                                 if (isCurrent) {
-                                    Icon(Icons.Outlined.Check, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                                    Icon(Icons.Outlined.Check, contentDescription = null, tint = OmniTokens.brandPrimary())
                                 }
                             }
                         }

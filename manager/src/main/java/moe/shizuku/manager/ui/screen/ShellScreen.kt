@@ -3,6 +3,7 @@
 package moe.shizuku.manager.ui.screen
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -129,6 +130,7 @@ import moe.shizuku.manager.shell.ShellSuggestion
 import moe.shizuku.manager.shell.ShellSuggestions
 import moe.shizuku.manager.ui.component.AppIcon
 import moe.shizuku.manager.ui.component.appLabel
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.manage.InstalledPackages
 import moe.shizuku.manager.shell.ShellLine
 import moe.shizuku.manager.shell.ShellSession
@@ -909,7 +911,7 @@ fun ShellScreen(bottomPadding: Dp = 0.dp, onBack: (() -> Unit)? = null) {
                     keyboardActions = KeyboardActions(onSend = { submit(field.text) }),
                     colors = OutlinedTextFieldDefaults.colors(
                         unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                        focusedBorderColor = MaterialTheme.colorScheme.primary
+                        focusedBorderColor = OmniTokens.brandPrimary()
                     )
                 )
                 IconButton(onClick = { recall(-1) }, enabled = history.isNotEmpty()) {

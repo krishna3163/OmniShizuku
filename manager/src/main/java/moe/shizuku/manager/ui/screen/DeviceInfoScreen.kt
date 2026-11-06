@@ -123,7 +123,7 @@ fun DeviceInfoScreen(bottomPadding: Dp, onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.tab_device_info)) },
+            title = { Column { Text(stringResource(R.string.tab_device_info)); Text("Hardware, build, and device details available on this device.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {

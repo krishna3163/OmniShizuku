@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -77,6 +78,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import moe.shizuku.manager.ui.theme.LocalAmoledTheme
 import kotlinx.coroutines.launch
 import moe.shizuku.manager.Helps
 import moe.shizuku.manager.R
@@ -84,6 +86,7 @@ import moe.shizuku.manager.agy.AgyCliEngine
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.SegmentedColumn
 import moe.shizuku.manager.ui.component.SegmentedListItem
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.CustomTabsHelper
 import rikka.compatibility.DeviceCompatibility
 import rikka.shizuku.Shizuku
@@ -103,7 +106,7 @@ fun TerminalScreen(onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.tools_terminal)) },
+            title = { Column { Text(stringResource(R.string.tools_terminal)); Text("Launch and integrate supported terminal apps.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {
@@ -286,8 +289,20 @@ private fun EmbeddedAgyTerminal(modifier: Modifier = Modifier) {
     ) {
         // Status Card
         Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(14.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .then(
+                    if (LocalAmoledTheme.current) {
+                        Modifier.border(
+                            width = OmniTokens.hairlineWidth,
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            shape = OmniTokens.shapeMedium
+                        )
+                    } else {
+                        Modifier
+                    }
+                ),
+            shape = OmniTokens.shapeMedium,
             colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceContainerHigh)
         ) {
             Row(

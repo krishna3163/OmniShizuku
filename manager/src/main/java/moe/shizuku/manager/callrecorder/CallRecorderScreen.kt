@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -68,7 +69,7 @@ fun CallRecorderScreen(onBack: () -> Unit = {}) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Call Recorder") },
+                title = { Column { Text("Call Recording"); Text("Recording depends on Android/device restrictions and permissions.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -149,7 +150,7 @@ fun RecordingControlsScreen() {
                     imageVector = if (isRecording) Icons.Outlined.Stop else Icons.Outlined.Mic,
                     contentDescription = null,
                     modifier = Modifier.size(56.dp),
-                    tint = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                    tint = if (isRecording) MaterialTheme.colorScheme.error else OmniTokens.brandPrimary()
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
@@ -206,7 +207,7 @@ fun RecordingControlsScreen() {
                 .fillMaxWidth(0.85f)
                 .height(52.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.primary
+                containerColor = if (isRecording) MaterialTheme.colorScheme.error else OmniTokens.brandPrimary()
             )
         ) {
             Icon(
@@ -247,7 +248,7 @@ fun RecorderSettingsScreen() {
                 text = "Capture Triggers",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = OmniTokens.brandPrimary()
             )
         }
 
@@ -323,7 +324,7 @@ fun RecorderSettingsScreen() {
                 text = "Exclusion Filters",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = OmniTokens.brandPrimary()
             )
         }
 
@@ -377,7 +378,7 @@ fun RecorderSettingsScreen() {
                 text = "Audio Encoding Format",
                 style = MaterialTheme.typography.titleMedium,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = OmniTokens.brandPrimary()
             )
         }
 
@@ -545,7 +546,7 @@ fun RecordingsListScreen() {
                             Icon(
                                 imageVector = if (isPlaying) Icons.Outlined.Pause else Icons.Outlined.PlayArrow,
                                 contentDescription = if (isPlaying) "Pause" else "Play",
-                                tint = MaterialTheme.colorScheme.primary
+                                tint = OmniTokens.brandPrimary()
                             )
                         }
 

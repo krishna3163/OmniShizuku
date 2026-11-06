@@ -37,6 +37,7 @@ import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.starter.Starter
 import moe.shizuku.manager.ui.component.SegmentedColumn
 import moe.shizuku.manager.ui.component.SegmentedListItem
+import moe.shizuku.manager.ui.theme.OmniTokens
 import rikka.core.util.ClipboardUtils
 
 /**
@@ -63,7 +64,7 @@ fun IntentsScreen(onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.intents_title)) },
+            title = { Column { Text(stringResource(R.string.intents_title)); Text("Build and send supported intents. Review before execution.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {

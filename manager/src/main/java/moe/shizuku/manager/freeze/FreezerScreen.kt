@@ -44,6 +44,8 @@ fun FreezerScreen(
     var selectedTag by remember { mutableStateOf("All") }
     var selectedAppForTags by remember { mutableStateOf<FreezableApp?>(null) }
     var autoFreeze by remember { mutableStateOf(FreezerManager.isAutoFreezeEnabled(context)) }
+    var confirmFreezeTag by remember { mutableStateOf<String?>(null) }
+    var confirmUnfreezeTag by remember { mutableStateOf<String?>(null) }
 
     fun refresh() {
         loading = true
@@ -81,7 +83,17 @@ fun FreezerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("App Freezer") },
+                title = {
+                    Column {
+                        Text("App Freezer")
+                        Text(
+                            "Suspend or restore apps. Availability depends on device and backend.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -176,13 +188,7 @@ fun FreezerScreen(
                     horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
                     FilledTonalButton(
-                        onClick = {
-                            scope.launch {
-                                val count = FreezerManager.freezeTag(context, selectedTag)
-                                Toast.makeText(context, "Froze $count apps in $selectedTag", Toast.LENGTH_SHORT).show()
-                                refresh()
-                            }
-                        },
+                        onClick = { confirmFreezeTag = selectedTag },
                         modifier = Modifier.weight(1f),
                         colors = ButtonDefaults.filledTonalButtonColors(
                             containerColor = MaterialTheme.colorScheme.errorContainer,
@@ -195,13 +201,7 @@ fun FreezerScreen(
                     }
 
                     FilledTonalButton(
-                        onClick = {
-                            scope.launch {
-                                val count = FreezerManager.unfreezeTag(context, selectedTag)
-                                Toast.makeText(context, "Unfroze $count apps in $selectedTag", Toast.LENGTH_SHORT).show()
-                                refresh()
-                            }
-                        },
+                        onClick = { confirmUnfreezeTag = selectedTag },
                         modifier = Modifier.weight(1f)
                     ) {
                         Icon(Icons.Outlined.WbSunny, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -250,6 +250,26 @@ fun FreezerScreen(
     }
 
     // Tag Editor Dialog
+
+    confirmFreezeTag?.let { tag ->
+        AlertDialog(
+            onDismissRequest = { confirmFreezeTag = null },
+            title = { Text("Freeze tag?") },
+            text = { Text("Freeze all apps in \"$tag\"? Frozen apps may stop background activity until restored.") },
+            confirmButton = { TextButton(onClick = { scope.launch { val count = FreezerManager.freezeTag(context, tag); Toast.makeText(context, "Froze $count apps in $tag", Toast.LENGTH_SHORT).show(); confirmFreezeTag = null; refresh() } }) { Text("Freeze") } },
+            dismissButton = { TextButton(onClick = { confirmFreezeTag = null }) { Text("Cancel") } }
+        )
+    }
+    confirmUnfreezeTag?.let { tag ->
+        AlertDialog(
+            onDismissRequest = { confirmUnfreezeTag = null },
+            title = { Text("Unfreeze tag?") },
+            text = { Text("Unfreeze all apps in \"$tag\"?") },
+            confirmButton = { TextButton(onClick = { scope.launch { val count = FreezerManager.unfreezeTag(context, tag); Toast.makeText(context, "Unfroze $count apps in $tag", Toast.LENGTH_SHORT).show(); confirmUnfreezeTag = null; refresh() } }) { Text("Unfreeze") } },
+            dismissButton = { TextButton(onClick = { confirmUnfreezeTag = null }) { Text("Cancel") } }
+        )
+    }
+
     selectedAppForTags?.let { app ->
         TagEditorDialog(
             app = app,

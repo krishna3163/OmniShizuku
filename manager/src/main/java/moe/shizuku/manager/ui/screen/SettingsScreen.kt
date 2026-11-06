@@ -91,6 +91,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.adb.WirelessAdbPinManager
 import moe.shizuku.manager.adb.WirelessAdbPinMode
 import moe.shizuku.manager.BuildConfig
@@ -1425,9 +1426,9 @@ private fun SettingsSectionHeader(
     ) {
         Text(
             text = stringResource(titleRes),
-            style = MaterialTheme.typography.labelLarge,
+            style = OmniTokens.labelLarge(),
             fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.primary
+            color = OmniTokens.brandPrimary()
         )
         // How many people the wall is holding, beside the title, so the number is read rather than
         // counted off the faces.
@@ -1438,8 +1439,8 @@ private fun SettingsSectionHeader(
             ) {
                 Text(
                     text = it,
-                    style = MaterialTheme.typography.labelMedium,
-                    color = MaterialTheme.colorScheme.primary,
+                    style = OmniTokens.labelMedium(),
+                    color = OmniTokens.brandPrimary(),
                     modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
                 )
             }
@@ -1454,7 +1455,7 @@ private fun SettingsSectionHeader(
                 },
                 // Nothing of its own to say: the label above already names the action.
                 contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
+                tint = OmniTokens.brandPrimary(),
                 modifier = Modifier.size(20.dp)
             )
         }

@@ -48,7 +48,7 @@ fun ThemePatcherScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Theme Patcher") },
+                title = { Column { Text("Theme Patcher"); Text("Apply supported theme changes. Review compatibility before patching.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")

@@ -17,6 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.OpenInNew
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -89,7 +90,7 @@ fun DFRootScreen(onBack: () -> Unit) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("DFRoot (CVE-2026-43284)") },
+                title = { Column { Text("DFRoot"); Text("Diagnostics and supported integration only. Requires explicit user action and compatibility checks.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -142,7 +143,7 @@ fun DFRootScreen(onBack: () -> Unit) {
                         Icon(
                             Icons.Outlined.Security,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = OmniTokens.brandPrimary()
                         )
                         Text(
                             "Install a SU Manager",
@@ -253,7 +254,7 @@ fun DFRootScreen(onBack: () -> Unit) {
                         Icon(
                             if (isAlreadyHooked) Icons.Outlined.CheckCircle else Icons.Outlined.Warning,
                             contentDescription = null,
-                            tint = if (isAlreadyHooked) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                            tint = if (isAlreadyHooked) OmniTokens.brandPrimary() else MaterialTheme.colorScheme.error
                         )
                         Spacer(Modifier.width(8.dp))
                         Text(if (isAlreadyHooked) "Already hooked (/dev/df exists)" else "Not hooked")

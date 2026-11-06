@@ -9,6 +9,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -71,7 +72,12 @@ fun DozeScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Enforce Doze (Deep Sleep)") },
+                title = {
+                    Column {
+                        Text("Enforce Doze (Deep Sleep)")
+                        Text("Configure Doze behavior. May delay background work.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -104,7 +110,7 @@ fun DozeScreen(
                         Icon(
                             Icons.Outlined.DarkMode,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary,
+                            tint = OmniTokens.brandPrimary(),
                             modifier = Modifier.size(28.dp)
                         )
                         Spacer(modifier = Modifier.width(12.dp))
@@ -128,7 +134,7 @@ fun DozeScreen(
                                 text = deepState,
                                 style = MaterialTheme.typography.titleMedium,
                                 fontWeight = FontWeight.Bold,
-                                color = if (deepState.equals("IDLE", true)) Color(0xFF2E7D32) else MaterialTheme.colorScheme.primary
+                                color = if (deepState.equals("IDLE", true)) Color(0xFF2E7D32) else OmniTokens.brandPrimary()
                             )
                         }
 

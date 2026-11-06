@@ -27,6 +27,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -125,6 +126,7 @@ import moe.shizuku.manager.R
 import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.settings.UsbDebuggingHideManager
 import moe.shizuku.manager.settings.UsbDebuggingHideService
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.settings.SettingsSection
 import moe.shizuku.manager.adb.AdbArm
 import moe.shizuku.manager.adb.AdbStarter
@@ -2278,7 +2280,7 @@ internal fun HomeCard(
             .alpha(if (enabled) 1f else 0.56f),
         shape = MaterialTheme.shapes.extraLarge,
         color = MaterialTheme.colorScheme.surfaceContainer,
-        tonalElevation = 2.dp
+        border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor())
     ) {
         Row(
             modifier = Modifier.padding(18.dp),

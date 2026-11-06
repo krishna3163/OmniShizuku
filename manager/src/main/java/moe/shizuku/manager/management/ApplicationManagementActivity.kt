@@ -11,6 +11,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
@@ -80,6 +81,7 @@ import moe.shizuku.manager.ui.compose.ExpressiveCard
 import moe.shizuku.manager.ui.compose.ShizukuExpressiveTheme
 import moe.shizuku.manager.ui.compose.ShizukuIcon
 import moe.shizuku.manager.ui.compose.ShizukuLazyScaffold
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.CustomTabsHelper
 import moe.shizuku.manager.utils.ShizukuSystemApis
 import moe.shizuku.manager.utils.UserHandleCompat
@@ -411,7 +413,7 @@ class ApplicationManagementActivity : AppActivity() {
                                         modifier = Modifier.fillMaxWidth(),
                                         shape = MaterialTheme.shapes.extraLarge,
                                         color = MaterialTheme.colorScheme.surfaceContainer,
-                                        tonalElevation = 1.dp
+                                        border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor())
                                     ) {
                                         Column {
                                             filteredEntries.forEachIndexed { index, entry ->

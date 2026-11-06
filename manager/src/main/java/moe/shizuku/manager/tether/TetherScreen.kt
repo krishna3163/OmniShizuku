@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,7 +45,7 @@ fun TetherScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Carrier Hotspot Bypass") },
+                title = { Column { Text("Carrier Tethering"); Text("Configure supported tethering options. Carrier/device support varies.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -96,7 +97,7 @@ fun TetherScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Outlined.WifiTethering, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.Outlined.WifiTethering, contentDescription = null, tint = OmniTokens.brandPrimary())
                         Spacer(Modifier.width(8.dp))
                         Text("Rootless Entitlement Bypass", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     }
@@ -154,7 +155,7 @@ fun TetherScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Outlined.Speed, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.Outlined.Speed, contentDescription = null, tint = OmniTokens.brandPrimary())
                         Spacer(Modifier.width(8.dp))
                         Text("TTL Hop-Limit Camouflage (TTL 64)", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     }

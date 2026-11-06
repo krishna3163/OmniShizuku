@@ -24,6 +24,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -51,6 +52,7 @@ import kotlinx.coroutines.withContext
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.SegmentedCard
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.runShellCommand
 
@@ -198,7 +200,17 @@ fun DisplayScreen(bottomPadding: Dp, onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.tab_display)) },
+            title = {
+                Column {
+                    Text(stringResource(R.string.tab_display))
+                    Text(
+                        text = stringResource(R.string.labs_display_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1
+                    )
+                }
+            },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {
@@ -426,15 +438,19 @@ private fun RefreshControl(
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.error
                 )
-                OutlinedTextField(
-                    value = field,
-                    onValueChange = onFieldChange,
-                    modifier = Modifier.fillMaxWidth(),
-                    singleLine = true,
-                    enabled = enabled,
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-                    textStyle = MaterialTheme.typography.bodyLarge.copy(fontFamily = FontFamily.Monospace)
+OutlinedTextField(
+                value = field,
+                onValueChange = onFieldChange,
+                modifier = Modifier.fillMaxWidth(),
+                singleLine = true,
+                enabled = enabled,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                textStyle = MaterialTheme.typography.bodyLarge.copy(fontFamily = FontFamily.Monospace),
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedBorderColor = OmniTokens.brandPrimary(),
+                    unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
                 )
+            )
             } else {
                 FlowRow(
                     modifier = Modifier.fillMaxWidth(),

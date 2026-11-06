@@ -70,6 +70,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.ui.component.televisionTextInput
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.ui.component.PillButtonQuiet
 import moe.shizuku.manager.AppConstants
 import moe.shizuku.manager.R
@@ -183,6 +184,14 @@ enum class AppToggleFeature(
      * packages listed against a question they never ask would bury the six that do.
      */
     val userAppsOnly: Boolean get() = signal != null
+
+    @get:StringRes
+    val descriptionRes: Int
+        get() = when (this) {
+            FIREWALL -> R.string.labs_firewall_desc
+            AUTOSTART -> R.string.labs_autostart_desc
+            else -> R.string.labs_hiding_desc
+        }
 
     /** Whether the list cannot do anything at all without the shell. */
     val needsShell: Boolean get() = signal != null || this == AUTOSTART
@@ -493,12 +502,6 @@ fun LabsToggleScreen(
                     // How many are blocked, next to the name: the list's filters can say it,
                     // but the count is the thing somebody opens this screen to see.
                     Text(
-                        // "Off" rather than a count while the mode is switched off: the number
-                        // of apps on the list is true either way, and it is not the thing this
-                        // screen is currently doing.
-                        // Off shows what is being kept rather than repeating the word below it,
-                        // which is the one question this screen still answers with the list out
-                        // of sight.
                         text = if (!gateOn) {
                             stringResource(R.string.hiding_gate_kept, blocked.size)
                         } else {
@@ -530,6 +533,21 @@ fun LabsToggleScreen(
                 )
             }
         )
+
+        Text(
+            text = stringResource(feature.descriptionRes),
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 4.dp),
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+        if (feature.needsShell && !running) {
+            Text(
+                text = stringResource(R.string.apps_needs_shizuku),
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 2.dp),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
 
         // Two rows, because they answer two questions and one row cannot say which is which:
         // what kind of app this is, and whether it is blocked. Five kind labels do not fit on a
@@ -666,7 +684,7 @@ fun LabsToggleScreen(
             shape = MaterialTheme.shapes.extraLarge,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                focusedBorderColor = MaterialTheme.colorScheme.primary
+                focusedBorderColor = OmniTokens.brandPrimary()
             )
         )
 

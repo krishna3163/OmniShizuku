@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,11 +29,23 @@ fun OptimizerScreen(
     val scope = rememberCoroutineScope()
 
     var activeProfile by remember { mutableStateOf(OptimizerManager.getActiveProfile(context)) }
+    var confirmingProfile by remember { mutableStateOf<PerformanceProfile?>(null) }
+    var confirmingAction by remember { mutableStateOf<String?>(null) }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Axeron Gaming & CPU Optimizer") },
+                title = {
+                    Column {
+                        Text("Axeron Gaming & CPU Optimizer")
+                        Text(
+                            "Apply supported profiles. Results vary by device; no FPS guarantee.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 2
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -52,7 +65,7 @@ fun OptimizerScreen(
                 "SYSTEM PERFORMANCE PROFILES",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = OmniTokens.brandPrimary()
             )
 
             PerformanceProfile.entries.forEach { profile ->
@@ -60,13 +73,7 @@ fun OptimizerScreen(
                 Card(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .clickable {
-                            activeProfile = profile
-                            scope.launch {
-                                OptimizerManager.applyProfile(context, profile)
-                                Toast.makeText(context, "${profile.title} Activated!", Toast.LENGTH_SHORT).show()
-                            }
-                        },
+                        .clickable { if (activeProfile != profile) confirmingProfile = profile },
                     shape = RoundedCornerShape(12.dp),
                     colors = CardDefaults.cardColors(
                         containerColor = if (isSelected)
@@ -83,13 +90,7 @@ fun OptimizerScreen(
                     ) {
                         RadioButton(
                             selected = isSelected,
-                            onClick = {
-                                activeProfile = profile
-                                scope.launch {
-                                    OptimizerManager.applyProfile(context, profile)
-                                    Toast.makeText(context, "${profile.title} Activated!", Toast.LENGTH_SHORT).show()
-                                }
-                            }
+                            onClick = { if (activeProfile != profile) confirmingProfile = profile }
                         )
 
                         Spacer(Modifier.width(12.dp))
@@ -123,7 +124,7 @@ fun OptimizerScreen(
                 "MEMORY & KERNEL RECLAMATION",
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
+                color = OmniTokens.brandPrimary()
             )
 
             Card(
@@ -142,12 +143,7 @@ fun OptimizerScreen(
 
                     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                         Button(
-                            onClick = {
-                                scope.launch {
-                                    OptimizerManager.clearSystemCaches()
-                                    Toast.makeText(context, "System caches trimmed!", Toast.LENGTH_SHORT).show()
-                                }
-                            },
+                            onClick = { confirmingAction = "trim" },
                             modifier = Modifier.weight(1f)
                         ) {
                             Icon(Icons.Outlined.CleaningServices, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -156,12 +152,7 @@ fun OptimizerScreen(
                         }
 
                         OutlinedButton(
-                            onClick = {
-                                scope.launch {
-                                    OptimizerManager.dropLinuxBuffers()
-                                    Toast.makeText(context, "Page buffers purged!", Toast.LENGTH_SHORT).show()
-                                }
-                            },
+                            onClick = { confirmingAction = "purge" },
                             modifier = Modifier.weight(1f)
                         ) {
                             Icon(Icons.Outlined.Memory, contentDescription = null, modifier = Modifier.size(16.dp))
@@ -172,5 +163,25 @@ fun OptimizerScreen(
                 }
             }
         }
+    }
+
+    confirmingProfile?.let { profile ->
+        AlertDialog(
+            onDismissRequest = { confirmingProfile = null },
+            title = { Text("Apply profile?") },
+            text = { Text("Apply ${profile.title}? Results vary by device and backend; this does not guarantee performance gains.") },
+            confirmButton = { TextButton(onClick = { scope.launch { activeProfile = profile; OptimizerManager.applyProfile(context, profile); Toast.makeText(context, "${profile.title} activated", Toast.LENGTH_SHORT).show(); confirmingProfile = null } }) { Text("Apply") } },
+            dismissButton = { TextButton(onClick = { confirmingProfile = null }) { Text("Cancel") } }
+        )
+    }
+    confirmingAction?.let { action ->
+        val (title, msg, runAction) = if (action == "trim") Triple("Trim system caches?", "This requests system cache trimming. Effects depend on device and backend.", suspend { OptimizerManager.clearSystemCaches(); Toast.makeText(context, "System caches trimmed", Toast.LENGTH_SHORT).show() }) else Triple("Purge page buffers?", "This requests kernel buffer purging where supported. Effects depend on device and backend.", suspend { OptimizerManager.dropLinuxBuffers(); Toast.makeText(context, "Page buffers purged", Toast.LENGTH_SHORT).show() })
+        AlertDialog(
+            onDismissRequest = { confirmingAction = null },
+            title = { Text(title) },
+            text = { Text(msg) },
+            confirmButton = { TextButton(onClick = { scope.launch { runAction(); confirmingAction = null } }) { Text("Continue") } },
+            dismissButton = { TextButton(onClick = { confirmingAction = null }) { Text("Cancel") } }
+        )
     }
 }

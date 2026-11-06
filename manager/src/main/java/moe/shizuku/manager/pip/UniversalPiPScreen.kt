@@ -71,7 +71,7 @@ fun UniversalPiPScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.universalpip)) },
+                title = { Column { Text(stringResource(R.string.universalpip)); Text("Enable supported Picture-in-Picture behavior. App support varies.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")

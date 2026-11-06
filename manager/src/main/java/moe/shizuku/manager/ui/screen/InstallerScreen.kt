@@ -61,6 +61,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.ui.component.televisionTextInput
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.R
 import moe.shizuku.manager.files.PrivilegedFiles
 import moe.shizuku.manager.install.AppInstall
@@ -430,7 +431,7 @@ fun InstallerScreen(path: String?, bottomPadding: Dp, onBack: () -> Unit) {
                                     style = MaterialTheme.typography.titleSmall,
                                     color = when (outcome) {
                                         is AppInstall.Outcome.Done ->
-                                            MaterialTheme.colorScheme.primary
+                                            OmniTokens.brandPrimary()
                                         is AppInstall.Outcome.Failed ->
                                             MaterialTheme.colorScheme.error
                                     }
@@ -458,7 +459,7 @@ fun InstallerScreen(path: String?, bottomPadding: Dp, onBack: () -> Unit) {
                                                 else Icons.Outlined.RemoveCircleOutline,
                                                 contentDescription = null,
                                                 tint = if (row.applied) {
-                                                    MaterialTheme.colorScheme.primary
+                                                    OmniTokens.brandPrimary()
                                                 } else {
                                                     MaterialTheme.colorScheme.onSurfaceVariant
                                                 },

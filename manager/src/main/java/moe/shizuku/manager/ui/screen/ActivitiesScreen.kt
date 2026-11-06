@@ -78,6 +78,7 @@ import moe.shizuku.manager.ui.component.IntentForm
 import moe.shizuku.manager.ui.component.SegmentedCard
 import moe.shizuku.manager.ui.component.StatusChip
 import moe.shizuku.manager.ui.component.appLabel
+import moe.shizuku.manager.ui.theme.OmniTokens
 import rikka.core.util.ClipboardUtils
 
 /**
@@ -382,7 +383,7 @@ fun ActivitiesScreen(bottomPadding: Dp, onBack: () -> Unit) {
             shape = MaterialTheme.shapes.extraLarge,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                focusedBorderColor = MaterialTheme.colorScheme.primary
+                focusedBorderColor = OmniTokens.brandPrimary()
             )
         )
 

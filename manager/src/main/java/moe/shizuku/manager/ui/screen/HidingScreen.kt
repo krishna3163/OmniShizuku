@@ -49,6 +49,7 @@ import moe.shizuku.manager.ui.component.ExpressiveSwitch
 import moe.shizuku.manager.ui.component.FeaturePlateIcon
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.SegmentedCard
+import moe.shizuku.manager.ui.theme.OmniTokens
 
 /**
  * One mode, and the three things worth knowing about it from here.
@@ -140,7 +141,17 @@ fun HidingScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.tab_hiding)) },
+            title = {
+                Column {
+                    Text(stringResource(R.string.tab_hiding))
+                    Text(
+                        text = stringResource(R.string.labs_hiding_screen_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2
+                    )
+                }
+            },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {

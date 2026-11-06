@@ -8,6 +8,7 @@ import androidx.activity.compose.BackHandler
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
@@ -17,6 +18,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +30,7 @@ import com.rosan.dhizuku.aidl.IDhizukuRequestPermissionListener
 import com.rosan.dhizuku.shared.DhizukuVariables
 import kotlinx.coroutines.delay
 import moe.shizuku.manager.Helps
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.app.AppActivity
@@ -497,7 +500,7 @@ class RequestPermissionActivity : AppActivity() {
                             Surface(
                                 shape = RoundedCornerShape(16.dp),
                                 color = MaterialTheme.colorScheme.surfaceVariant,
-                                tonalElevation = 2.dp,
+                                border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor()),
                                 modifier = Modifier.size(54.dp)
                             ) {
                                 if (appBitmap != null) {
@@ -541,7 +544,7 @@ class RequestPermissionActivity : AppActivity() {
                             Surface(
                                 shape = RoundedCornerShape(16.dp),
                                 color = MaterialTheme.colorScheme.surfaceVariant,
-                                tonalElevation = 2.dp,
+                                border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor()),
                                 modifier = Modifier.size(54.dp)
                             ) {
                                 if (sheveryBitmap != null) {

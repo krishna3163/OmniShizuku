@@ -94,6 +94,7 @@ import moe.shizuku.manager.ui.component.ChipEmphasis
 import moe.shizuku.manager.ui.component.SegmentedCard
 import moe.shizuku.manager.ui.component.StatusChip
 import moe.shizuku.manager.ui.component.stripHtmlTags
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.ShizukuStateMachine
 
 enum class SortOrder {
@@ -505,7 +506,7 @@ fun AppsScreen(
             shape = MaterialTheme.shapes.extraLarge,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                focusedBorderColor = MaterialTheme.colorScheme.primary
+                focusedBorderColor = OmniTokens.brandPrimary()
             )
         )
 
@@ -616,7 +617,7 @@ fun AppsScreen(
                     !running -> {
                         Text(
                             text = stringResource(R.string.apps_needs_shizuku),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = OmniTokens.bodyMedium(),
                             textAlign = TextAlign.Center
                         )
                         Button(
@@ -629,7 +630,7 @@ fun AppsScreen(
 
                     query.isNotBlank() -> Text(
                         text = stringResource(R.string.apps_no_match),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = OmniTokens.bodyMedium(),
                         textAlign = TextAlign.Center
                     )
 
@@ -637,13 +638,13 @@ fun AppsScreen(
                     // not the same as there being no apps at all.
                     filter != AppFilter.ALL || kind != ManageFilter.ALL -> Text(
                         text = stringResource(R.string.apps_filter_empty),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = OmniTokens.bodyMedium(),
                         textAlign = TextAlign.Center
                     )
 
                     else -> Text(
                         text = stringResource(R.string.apps_empty),
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = OmniTokens.bodyMedium(),
                         textAlign = TextAlign.Center
                     )
                 }
@@ -686,8 +687,8 @@ fun AppsScreen(
                     if (adbUrl.isNotEmpty()) {
                         Text(
                             adbUrl,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary
+                            style = OmniTokens.bodySmall(),
+                            color = OmniTokens.brandPrimary()
                         )
                     }
                 }

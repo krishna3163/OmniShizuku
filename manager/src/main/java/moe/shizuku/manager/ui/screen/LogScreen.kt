@@ -79,6 +79,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.ui.component.televisionTextInput
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.ui.component.PillButtonQuiet
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.AppConstants
@@ -755,7 +756,7 @@ private fun SearchField(
         shape = MaterialTheme.shapes.extraLarge,
         colors = OutlinedTextFieldDefaults.colors(
             unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-            focusedBorderColor = MaterialTheme.colorScheme.primary
+            focusedBorderColor = OmniTokens.brandPrimary()
         )
     )
 }

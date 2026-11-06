@@ -47,6 +47,7 @@ import moe.shizuku.manager.R
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.SegmentedColumn
 import moe.shizuku.manager.ui.component.SegmentedListItem
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.Diag
 import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.runShellCommand
@@ -243,7 +244,17 @@ fun PowerScreen(bottomPadding: Dp, onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.tab_power)) },
+            title = {
+                Column {
+                    Text(stringResource(R.string.tab_power))
+                    Text(
+                        text = stringResource(R.string.labs_power_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1
+                    )
+                }
+            },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {

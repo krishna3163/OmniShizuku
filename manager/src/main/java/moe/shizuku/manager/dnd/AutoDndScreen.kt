@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -55,7 +56,7 @@ fun AutoDndScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Auto DND & Zen Automator") },
+                title = { Column { Text("Auto DND (Zen Mode)"); Text("Configure DND automation where supported. Requires required permissions.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -198,7 +199,7 @@ fun AutoDndScreen(
                     "TRIGGER APPS (GAMES, CAMERA, NAVIGATION)",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = OmniTokens.brandPrimary()
                 )
             }
 

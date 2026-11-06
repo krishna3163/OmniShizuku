@@ -4,6 +4,7 @@ import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.util.Log
 import moe.shizuku.manager.ui.component.televisionTextInput
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.AppConstants
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
@@ -247,7 +248,17 @@ fun ManageScreen(
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.tab_manage)) },
+            title = {
+                Column {
+                    Text(stringResource(R.string.tab_manage))
+                    Text(
+                        text = stringResource(R.string.labs_app_ops_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 2
+                    )
+                }
+            },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             // Shown when this is opened from the Labs list rather than being the page: it is a
             // detail over the tabs then, with no bar underneath to go back to.
@@ -339,7 +350,7 @@ fun ManageScreen(
             shape = MaterialTheme.shapes.extraLarge,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                focusedBorderColor = MaterialTheme.colorScheme.primary
+                focusedBorderColor = OmniTokens.brandPrimary()
             )
         )
 

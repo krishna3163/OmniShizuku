@@ -50,6 +50,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.ui.component.televisionTextInput
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.R
 import moe.shizuku.manager.manage.ForceDark
 import moe.shizuku.manager.manage.InstalledPackages
@@ -202,6 +203,12 @@ fun ForceDarkScreen(bottomPadding: Dp, onBack: () -> Unit) {
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
+                    Text(
+                        text = stringResource(R.string.labs_force_dark_desc),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        maxLines = 1
+                    )
                 }
             },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
@@ -306,7 +313,7 @@ fun ForceDarkScreen(bottomPadding: Dp, onBack: () -> Unit) {
             shape = MaterialTheme.shapes.extraLarge,
             colors = OutlinedTextFieldDefaults.colors(
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant,
-                focusedBorderColor = MaterialTheme.colorScheme.primary
+                focusedBorderColor = OmniTokens.brandPrimary()
             )
         )
 

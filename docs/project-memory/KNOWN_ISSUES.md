@@ -23,3 +23,6 @@ When recording an issue:
 - Workaround
 - Status (open/resolved)
 - Date resolved
+
+5. **Labs Batch 2 not fully verified (2026-11-06)**: LAB-001..LAB-008 have code-level improvements (descriptions, confirmations) but `compileDebugKotlin`/`assembleDebug`/tests timed out in the agent session and runtime navigation/state coverage is unverified. `docs/uiux/LABS_TEST_MATRIX.md` evidence pending. Severity: P1. Affected: App Management Labs screens.
+6. **Gradle build timeouts in agent environment (2026-11-06)**: Kotlin/Gradle compilation exceeded 120s tool timeout multiple times; builds may still complete but output was not captured. Workaround: run builds locally with sufficient timeout and capture logs.

@@ -60,6 +60,7 @@ import moe.shizuku.manager.stealth.validateDisplayName
 import moe.shizuku.manager.stealth.validatePackageName
 import moe.shizuku.manager.ui.component.SegmentedColumn
 import moe.shizuku.manager.ui.component.SegmentedListItem
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.ApkUtils.ORIGINAL_PACKAGE_NAME
 import moe.shizuku.manager.utils.Diag
 import moe.shizuku.manager.utils.ApkUtils.buildApkFilename
@@ -155,7 +156,7 @@ fun StealthScreen(onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.tools_stealth)) },
+            title = { Column { Text(stringResource(R.string.tools_stealth)); Text("Configure supported visibility controls. Detection evasion is not guaranteed.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {

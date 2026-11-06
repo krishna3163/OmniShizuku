@@ -30,6 +30,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.ui.component.SegmentedListItem
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.ShizukuStateMachine
 
 private const val PREFS = "local_shell"
@@ -136,7 +137,7 @@ fun LocalShellScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Local Shell") },
+                title = { Column { Text("LocalShell"); Text("Local ADB/IntentShell bridge where supported.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -330,7 +331,7 @@ fun LocalShellScreen(
                                 )
                             }
                             exitCode?.let { code ->
-                                val chipColor = if (code == 0) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.error
+                                val chipColor = if (code == 0) OmniTokens.brandPrimary() else MaterialTheme.colorScheme.error
                                 Text(
                                     text = "exit: $code",
                                     style = MaterialTheme.typography.labelSmall,
@@ -360,7 +361,7 @@ fun LocalShellScreen(
                         ) {
                             items(outputLines) { line ->
                                 val color = when (line.kind) {
-                                    ShellLine.Kind.COMMAND -> MaterialTheme.colorScheme.primary
+                                    ShellLine.Kind.COMMAND -> OmniTokens.brandPrimary()
                                     ShellLine.Kind.ERROR -> MaterialTheme.colorScheme.error
                                     ShellLine.Kind.INFO -> MaterialTheme.colorScheme.tertiary
                                     ShellLine.Kind.EXIT -> MaterialTheme.colorScheme.outline
@@ -402,7 +403,7 @@ fun LocalShellScreen(
                         Icon(
                             Icons.Outlined.PlayCircleOutline,
                             contentDescription = "Execute ${preset.title}",
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = OmniTokens.brandPrimary()
                         )
                     },
                     onClick = {

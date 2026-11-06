@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.annotation.StringRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -77,6 +78,8 @@ import moe.shizuku.manager.manage.ForceDark
 import moe.shizuku.manager.manage.Hiding
 import moe.shizuku.manager.manage.PackageTools
 import moe.shizuku.manager.settings.DeveloperFeatures
+import moe.shizuku.manager.ui.theme.LocalAmoledTheme
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.ui.Detail
 import moe.shizuku.manager.ui.component.FeaturePlateIcon
 import moe.shizuku.manager.ui.component.ScrollToTopButton
@@ -96,11 +99,14 @@ private val ActiveDotSize = 10.dp
  */
 private val ActiveGreen = Color(0xFF34C759)
 
-private enum class LabCategory(@StringRes val titleRes: Int) {
-    APP_MANAGEMENT(R.string.labs_category_app_management),
-    SYSTEM_CONTROLS(R.string.labs_category_system_controls),
-    UTILITIES(R.string.labs_category_utilities),
-    COMPANION_APPS(R.string.labs_category_companion_apps)
+private enum class LabCategory(
+    @StringRes val titleRes: Int,
+    @StringRes val descriptionRes: Int
+) {
+    APP_MANAGEMENT(R.string.labs_category_app_management, R.string.labs_category_app_management_desc),
+    SYSTEM_CONTROLS(R.string.labs_category_system_controls, R.string.labs_category_system_controls_desc),
+    UTILITIES(R.string.labs_category_utilities, R.string.labs_category_utilities_desc),
+    COMPANION_APPS(R.string.labs_category_companion_apps, R.string.labs_category_companion_apps_desc)
 }
 
 /**
@@ -359,7 +365,8 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         LabDisplayEntry(
             entry = entry,
             label = entry.labelString ?: if (entry.labelRes != 0) stringResource(entry.labelRes) else "",
-            categoryLabel = stringResource(entry.category.titleRes)
+            categoryLabel = stringResource(entry.category.titleRes),
+            categoryDescription = stringResource(entry.category.descriptionRes)
         )
     }
     val searchItems = remember(displayEntries) {
@@ -408,7 +415,7 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
             colors = OutlinedTextFieldDefaults.colors(
                 focusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
                 unfocusedContainerColor = MaterialTheme.colorScheme.surfaceContainer,
-                focusedBorderColor = MaterialTheme.colorScheme.primary,
+                focusedBorderColor = OmniTokens.brandPrimary(),
                 unfocusedBorderColor = MaterialTheme.colorScheme.outlineVariant
             ),
             placeholder = { Text(stringResource(R.string.labs_search_hint)) },
@@ -488,14 +495,10 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                     } else {
                         groupedEntries.forEach { (category, rows) ->
                             item(span = { GridItemSpan(maxLineSpan) }, key = "category-${category.name}") {
-                                Text(
-                                    text = rows.first().categoryLabel,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 4.dp, top = 8.dp, bottom = 2.dp),
-                                    style = MaterialTheme.typography.titleSmall,
-                                    fontWeight = FontWeight.SemiBold,
-                                    color = MaterialTheme.colorScheme.primary
+                                LabsCategoryHeader(
+                                    title = rows.first().categoryLabel,
+                                    description = rows.first().categoryDescription,
+                                    count = rows.size
                                 )
                             }
                             items(
@@ -575,13 +578,10 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                     } else {
                         groupedEntries.forEach { (category, rows) ->
                             item(key = "category-${category.name}") {
-                                Text(
-                                    text = rows.first().categoryLabel,
-                                    modifier = Modifier
-                                        .fillMaxWidth()
-                                        .padding(start = 4.dp, top = 8.dp, bottom = 1.dp),
-                                    style = MaterialTheme.typography.titleSmall,
-                                    color = MaterialTheme.colorScheme.primary
+                                LabsCategoryHeader(
+                                    title = rows.first().categoryLabel,
+                                    description = rows.first().categoryDescription,
+                                    count = rows.size
                                 )
                             }
                             items(
@@ -748,8 +748,45 @@ private data class LabEntry(
 private data class LabDisplayEntry(
     val entry: LabEntry,
     val label: String,
-    val categoryLabel: String
+    val categoryLabel: String,
+    val categoryDescription: String
 )
+
+@Composable
+private fun LabsCategoryHeader(title: String, description: String, count: Int) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 4.dp, top = 12.dp, bottom = 4.dp),
+        verticalArrangement = Arrangement.spacedBy(2.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleSmall,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.weight(1f)
+            )
+            Surface(
+                color = MaterialTheme.colorScheme.secondaryContainer,
+                shape = RoundedCornerShape(999.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.labs_tools_count, count),
+                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp),
+                    style = MaterialTheme.typography.labelSmall,
+                    color = MaterialTheme.colorScheme.onSecondaryContainer
+                )
+            }
+        }
+        Text(
+            text = description,
+            style = MaterialTheme.typography.bodySmall,
+            color = MaterialTheme.colorScheme.onSurfaceVariant
+        )
+    }
+}
 
 private fun openCompanionTool(context: Context, packageName: String, releaseUrl: String) {
     val intent = context.packageManager.getLaunchIntentForPackage(packageName)
@@ -774,10 +811,20 @@ private fun LabGridCard(
         modifier = modifier
             .fillMaxWidth()
             .height(136.dp)
-            .clickable(onClick = onClick),
-        shape = MaterialTheme.shapes.extraLarge,
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        tonalElevation = 2.dp
+            .clickable(onClick = onClick)
+            .then(
+                if (LocalAmoledTheme.current) {
+                    Modifier.border(
+                        width = OmniTokens.hairlineWidth,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        shape = OmniTokens.shapeMedium
+                    )
+                } else {
+                    Modifier
+                }
+            ),
+        shape = OmniTokens.shapeMedium,
+        color = MaterialTheme.colorScheme.surfaceContainer
     ) {
         Column(
             modifier = Modifier
@@ -814,14 +861,14 @@ private fun LabGridCard(
                         Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp),
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant
+                        tint = OmniTokens.brandPrimary()
                     )
                 }
             }
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(
                     text = label,
-                    style = MaterialTheme.typography.bodyMedium,
+                    style = OmniTokens.bodyMedium(),
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.onSurface,
                     maxLines = 2,
@@ -829,7 +876,7 @@ private fun LabGridCard(
                 )
                 Text(
                     text = categoryLabel,
-                    style = MaterialTheme.typography.labelSmall,
+                    style = OmniTokens.labelMedium(),
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

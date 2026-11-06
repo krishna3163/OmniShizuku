@@ -18,6 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -346,7 +347,7 @@ fun WallYouScreen(
                             contentAlignment = Alignment.Center
                         ) {
                             Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                                CircularProgressIndicator(color = MaterialTheme.colorScheme.primary)
+                                CircularProgressIndicator(color = OmniTokens.brandPrimary())
                                 Spacer(modifier = Modifier.height(14.dp))
                                 Text(
                                     text = "Loading wallpapers from ${selectedEngine.name}...",
@@ -913,7 +914,7 @@ private fun WallpaperDetailDialog(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text("Blur Effect", style = MaterialTheme.typography.bodyMedium)
-                            Text("${blurRadius.toInt()} px", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                            Text("${blurRadius.toInt()} px", style = MaterialTheme.typography.bodySmall, color = OmniTokens.brandPrimary())
                         }
                         Slider(
                             value = blurRadius,
@@ -929,7 +930,7 @@ private fun WallpaperDetailDialog(
                             horizontalArrangement = Arrangement.SpaceBetween
                         ) {
                             Text("Brightness", style = MaterialTheme.typography.bodyMedium)
-                            Text(String.format(java.util.Locale.getDefault(), "%.1fx", brightness), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.primary)
+                            Text(String.format(java.util.Locale.getDefault(), "%.1fx", brightness), style = MaterialTheme.typography.bodySmall, color = OmniTokens.brandPrimary())
                         }
                         Slider(
                             value = brightness,

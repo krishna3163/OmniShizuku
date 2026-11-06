@@ -21,8 +21,12 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.spring
 import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.shrinkHorizontally
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -146,6 +150,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -167,6 +172,7 @@ import androidx.core.text.HtmlCompat
 import moe.shizuku.manager.R
 import moe.shizuku.manager.ShizukuSettings
 import moe.shizuku.manager.app.ThemeHelper
+import moe.shizuku.manager.ui.theme.OmniTokens
 
 val LocalFloatingNavBarVisible = compositionLocalOf<MutableState<Boolean>> {
     mutableStateOf(true)
@@ -377,24 +383,44 @@ fun RefreshedNavigationBar(
     AnimatedVisibility(
         visible = !isKeyboardVisible && navBarState.value,
         modifier = modifier,
-        enter = fadeIn(),
-        exit = fadeOut()
+        enter = fadeIn(
+            animationSpec = tween(
+                durationMillis = OmniTokens.motionStandardMs,
+                easing = FastOutSlowInEasing
+            )
+        ),
+        exit = fadeOut(
+            animationSpec = tween(
+                durationMillis = OmniTokens.motionStandardMs,
+                easing = FastOutSlowInEasing
+            )
+        )
     ) {
         NavigationBar(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .border(OmniTokens.hairlineWidth, OmniTokens.hairlineColor()),
             containerColor = MaterialTheme.colorScheme.surfaceContainer,
-            tonalElevation = 3.dp,
             windowInsets = WindowInsets.navigationBars
         ) {
             items.forEachIndexed { index, item ->
                 val selected = index == selectedIndex
+                val iconScale by animateFloatAsState(
+                    targetValue = if (selected) 1.15f else 1f,
+                    animationSpec = tween(
+                        durationMillis = OmniTokens.motionFastMs,
+                        easing = FastOutSlowInEasing
+                    ),
+                    label = "navIconScale"
+                )
                 NavigationBarItem(
                     selected = selected,
                     onClick = { if (!selected) onItemSelected(index) },
                     icon = {
                         Icon(
                             imageVector = item.icon,
-                            contentDescription = item.title
+                            contentDescription = item.title,
+                            modifier = Modifier.scale(iconScale)
                         )
                     },
                     label = {
@@ -758,7 +784,7 @@ fun ExpressiveCard(
             .alpha(if (enabled) 1f else 0.56f),
         shape = MaterialTheme.shapes.extraLarge,
         color = container,
-        tonalElevation = 2.dp
+        border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor())
     ) {
         Row(
             modifier = Modifier.padding(18.dp),

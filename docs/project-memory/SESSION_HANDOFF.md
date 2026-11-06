@@ -1,63 +1,77 @@
 # Session Handoff - OmniShizuku
 
-## Previous Agent Actions
-- Ported EnforceDoze feature to OmniShizuku (10 Kotlin files + manifest + strings)
-- Ported ThemePatcher feature to OmniShizuku (Activity, Service, layout + manifest)
-- Built and installed OmniShizuku APK on tablet MBRKCEQGUKOJLV6X
-- Verified ThemePatcherService running via dumpsys
-- Initialized project memory system (14 files)
-- Researched all four external design repositories (UI UX Pro Max, Impeccable, Emil Kowalski Skills, Awesome Design MD)
-- Created PRODUCT.md and DESIGN.md
-- Created baseline UI audit, accessibility audit, performance audit, QA checklist
-- Created AGENTS.md at repository root
-- Implemented design token system (OmniTokens.kt)
-- Implemented reusable components (StatusIndicator.kt: StatusIndicator, SectionHeading, EmptyState, ErrorState, LoadingState, ConfirmationDialogContent)
-- **Redesigned HomeScreen.kt using OmniTokens and new components** - SectionHeading for section dividers, OmniTokens for colors/typography/spacing/shape
-- Verified build + tests pass, APK installed and running on tablet MBRKCEQGUKOJLV6X
+## Previous Agent Actions (Session 2026-11-06)
+
+### Phase 1: Design Repository Study
+- Cloned VoltAgent/awesome-design-md to /tmp/awesome-design-md
+- Inspected 84 DESIGN.md files from real brand design systems
+- Identified 5 most relevant systems: Raycast, Warp, NVIDIA, Linear, Ollama
+- Extracted 9 key design principles for OmniShizuku
+- Created `docs/uiux/PHASE1_STUDY.md`
+
+### Phase 4: Design System Application to Components
+- Enhanced OmniTokens.kt with hairlineColor(), hairlineStrongColor(), terminalTypography(), hairlineWidth
+- Updated ExpressiveCard.kt: tightened radius from 14dp to 10dp, reduced sizes
+- Updated SegmentedColumn/SegmentedList/SegmentedCard: replaced tonalElevation with hairline borders, tightened radius from extraLarge to shapeLarge (12dp)
+
+### Phase 5: Screen Redesign (Partial)
+- LabsScreen.kt: Applied design system (brandPrimary, hairline borders, tightened radius)
+- DisplayScreen.kt: Applied design system (brandPrimary focused border)
+- ShellScreen.kt: Applied design system (brandPrimary focused border)
+- TerminalScreen.kt: Applied design system (hairline border on status card)
+- SettingsScreen.kt: Applied design system (brandPrimary in section headers)
+- ModulesScreen.kt: Applied design system (hairline borders, OmniTokens typography, no tonalElevation)
 
 ## Files Changed (This Session)
-- `docs/project-memory/` — Updated CURRENT_STATE.md, MASTER_TODO.md, SESSION_HANDOFF.md
-- `docs/uiux/PRODUCT.md` — Created
-- `docs/uiux/DESIGN.md` — Created
-- `docs/uiux/BASELINE_AUDIT.md` — Created
-- `docs/uiux/ACCESSIBILITY_AUDIT.md` — Created
-- `docs/uiux/PERFORMANCE_AUDIT.md` — Created
-- `docs/uiux/QA_CHECKLIST.md` — Created
-- `AGENTS.md` — Created at repository root
-- `manager/src/main/java/moe/shizuku/manager/ui/theme/OmniTokens.kt` — Created
-- `manager/src/main/java/moe/shizuku/manager/ui/component/StatusIndicator.kt` — Created
-- `manager/src/main/java/moe/shizuku/manager/ui/screen/HomeScreen.kt` — Redesigned
+- `docs/uiux/PHASE1_STUDY.md` — Created
+- `docs/project-memory/COMPLETED_WORK.md` — Updated
+- `docs/project-memory/CURRENT_STATE.md` — Updated
+- `docs/project-memory/IN_PROGRESS.md` — Updated
+- `manager/src/main/java/moe/shizuku/manager/ui/theme/OmniTokens.kt` — Enhanced
+- `manager/src/main/java/moe/shizuku/manager/ui/component/ExpressiveCard.kt` — Updated
+- `manager/src/main/java/moe/shizuku/manager/ui/component/SegmentedList.kt` — Updated
+- `manager/src/main/java/moe/shizuku/manager/ui/screen/LabsScreen.kt` — Updated
+- `manager/src/main/java/moe/shizuku/manager/ui/screen/DisplayScreen.kt` — Updated
+- `manager/src/main/java/moe/shizuku/manager/ui/screen/ShellScreen.kt` — Updated
+- `manager/src/main/java/moe/shizuku/manager/ui/screen/TerminalScreen.kt` — Updated
+- `manager/src/main/java/moe/shizuku/manager/ui/screen/SettingsScreen.kt` — Updated
+- `manager/src/main/java/moe/shizuku/manager/module/ModulesScreen.kt` — Updated
 
 ## Tests Passed
 - `:manager:compileDebugKotlin` - BUILD SUCCESSFUL
 - `:manager:testDebugUnitTest` - BUILD SUCCESSFUL (all tests pass)
-- `:manager:assembleDebug` - BUILD SUCCESSFUL, APK installed on tablet MBRKCEQGUKOJLV6X
 
 ## Tests Failed
 - None
 
 ## Not Completed
-- Phase 5: Screen Redesign remaining screens (SettingsScreen, AppsScreen, ModulesScreen, etc.)
+- Phase 5: Screen Redesign remaining screens (Debloater, Freezer, DeviceInfo, Power, etc.)
 - Phase 6: Motion and Interaction improvements
 - Phase 7: Quality audits (final)
 - Phase 8: Final Review
 
 ## What the Next Agent Must Inspect
-1. `docs/project-memory/CURRENT_STATE.md` - Full project state including current phase
-2. `docs/project-memory/MASTER_TODO.md` - All tasks with priorities and acceptance criteria
-3. `docs/project-memory/SESSION_HANDOFF.md` - This file
-4. `docs/uiux/DESIGN.md` - Design system reference for screen redesigns
+1. `docs/project-memory/CURRENT_STATE.md` - Full project state
+2. `docs/project-memory/COMPLETED_WORK.md` - What was completed
+3. `docs/project-memory/IN_PROGRESS.md` - Active tasks
+4. `docs/uiux/PHASE1_STUDY.md` - Design research findings
 5. `manager/src/main/java/moe/shizuku/manager/ui/theme/OmniTokens.kt` - Design tokens
-6. `manager/src/main/java/moe/shizuku/manager/ui/component/StatusIndicator.kt` - New components
-7. `manager/src/main/java/moe/shizuku/manager/ui/screen/HomeScreen.kt` - Reference for redesigned screen pattern
+6. `manager/src/main/java/moe/shizuku/manager/ui/component/` - Reusable components
+7. `docs/uiux/DESIGN.md` - Design system reference
 
 ## Exact Next Task
-**Phase 5, Task P5-02**: Redesign SettingsScreen.kt (1542 lines)
-- Read current SettingsScreen.kt to understand all functionality
-- Create redesigned version using OmniTokens and new components
-- Apply DESIGN.md principles: hairline borders, no shadows, single accent color, Inter typography
-- Preserve all existing functionality (theme, night mode, ADB, wireless debugging, etc.)
-- Build and test to verify no regressions
+Continue Phase 5: Screen Redesign
+- Apply Awesome Design MD principles to remaining screens:
+  - DebloaterScreen.kt
+  - FreezerScreen.kt
+  - DeviceInfoScreen.kt (already uses SegmentedCard which now has hairline borders)
+  - PowerScreen.kt
+  - ManageScreen.kt
+  - PermissionsScreen.kt
+  - ActivitiesScreen.kt
+  - AppDetailScreen.kt
+  - AppsScreen.kt (partially updated)
+  - Remaining 20+ screens
 
 ## Commands to Continue
 ```bash
@@ -67,9 +81,8 @@ cd /home/krishna/Downloads/tv/OmniShizuku
 ```
 
 ## Notes for Next Agent
-- SettingsScreen.kt is 1542 lines with complex business logic - do NOT rewrite in one go
-- Consider incremental approach: wrap existing functionality with new design system layout
-- Use OmniTokens for colors, typography, spacing
-- Use StatusIndicator, SectionHeading, EmptyState, ErrorState, LoadingState, ConfirmationDialogContent components
-- Follow DESIGN.md: dark-first, hairline borders, no shadows, single accent (#3F51B5)
-- XML Activities (NetworkFirewallActivity, BugReportDialogActivity) use old View system - leave as-is for now
+- The design system is now established: OmniTokens with hairline borders, single accent (brand indigo #3F51B5), tight radius (8-12px)
+- Key pattern: replace `tonalElevation` with hairline borders on AMOLED theme, use OmniTokens.shapeLarge/Medium instead of MaterialTheme.shapes.extraLarge
+- Use `OmniTokens.brandPrimary()` instead of `MaterialTheme.colorScheme.primary` for accent colors
+- Use `OmniTokens.bodyMedium()`, `OmniTokens.displayMedium()`, etc. for typography
+- XML Activities (NetworkFirewallActivity, BugReportDialogActivity) use old View system - leave as-is

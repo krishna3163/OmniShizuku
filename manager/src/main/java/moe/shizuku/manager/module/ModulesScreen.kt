@@ -26,6 +26,8 @@ import androidx.compose.animation.expandVertically
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.border
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -115,6 +117,8 @@ import moe.shizuku.manager.module.update.UpdateChecker
 import moe.shizuku.manager.ui.compose.ExpressiveSwitch
 import moe.shizuku.manager.ui.compose.ShizukuIcon
 import moe.shizuku.manager.ui.compose.ShizukuLazyScaffold
+import moe.shizuku.manager.ui.theme.LocalAmoledTheme
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.AiExplainUtil
 
 private val MODULE_MIME_TYPES = arrayOf(
@@ -537,10 +541,21 @@ private const val MAX_RECOMMAND_COMMAND_CHARS = 64 * 1024
 @Composable
 private fun EmptyModulesCard(onInstall: () -> Unit) {
     Surface(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.extraLarge,
-        color = MaterialTheme.colorScheme.surfaceContainer,
-        tonalElevation = 1.dp
+        modifier = Modifier
+            .fillMaxWidth()
+            .then(
+                if (LocalAmoledTheme.current) {
+                    Modifier.border(
+                        width = OmniTokens.hairlineWidth,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        shape = OmniTokens.shapeLarge
+                    )
+                } else {
+                    Modifier
+                }
+            ),
+        shape = OmniTokens.shapeLarge,
+        color = MaterialTheme.colorScheme.surfaceContainer
     ) {
         Column(
             modifier = Modifier.padding(18.dp),
@@ -548,12 +563,12 @@ private fun EmptyModulesCard(onInstall: () -> Unit) {
         ) {
             Text(
                 text = stringResource(R.string.modules_empty_title),
-                style = MaterialTheme.typography.titleMedium,
+                style = OmniTokens.displayMedium(),
                 fontWeight = FontWeight.SemiBold
             )
             Text(
                 text = stringResource(R.string.modules_empty_summary),
-                style = MaterialTheme.typography.bodyMedium,
+                style = OmniTokens.bodyMedium(),
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
             FilledTonalButton(onClick = onInstall) {
@@ -601,7 +616,7 @@ private fun ModuleCard(
     Surface(
         modifier = modifier
             .fillMaxWidth()
-            .clip(MaterialTheme.shapes.extraLarge)
+            .clip(OmniTokens.shapeLarge)
             .combinedClickable(
                 onClick = { expanded = !expanded },
                 onLongClick = {
@@ -609,10 +624,20 @@ private fun ModuleCard(
                     showTrustAction = !showTrustAction
                 }
             )
-            .animateContentSize(animationSpec = tween(280)),
-        shape = MaterialTheme.shapes.extraLarge,
-        color = containerColor,
-        tonalElevation = 1.dp
+            .animateContentSize(animationSpec = tween(280))
+            .then(
+                if (LocalAmoledTheme.current) {
+                    Modifier.border(
+                        width = OmniTokens.hairlineWidth,
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        shape = OmniTokens.shapeLarge
+                    )
+                } else {
+                    Modifier
+                }
+            ),
+        shape = OmniTokens.shapeLarge,
+        color = containerColor
     ) {
         Column {
             ModuleBanner(module)
@@ -986,7 +1011,7 @@ fun ModuleLiveConsoleDialog(
                 .padding(horizontal = 12.dp, vertical = 12.dp),
             shape = MaterialTheme.shapes.extraLarge,
             color = MaterialTheme.colorScheme.surfaceContainerHigh,
-            tonalElevation = 6.dp
+            border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor())
         ) {
             Column(
                 modifier = Modifier.fillMaxSize()

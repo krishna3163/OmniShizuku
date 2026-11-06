@@ -6,6 +6,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -46,7 +47,7 @@ fun ScreenSecurityScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Screen Security & DRM Unlock") },
+                title = { Column { Text("Screen Security & DRM"); Text("View supported capture/security controls. No universal bypass is provided.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -80,7 +81,7 @@ fun ScreenSecurityScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Outlined.CameraAlt, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                            Icon(Icons.Outlined.CameraAlt, contentDescription = null, tint = OmniTokens.brandPrimary())
                             Spacer(Modifier.width(8.dp))
                             Text("DRM & Banking Screenshots", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                         }
@@ -120,7 +121,7 @@ fun ScreenSecurityScreen(
                 ) {
                     Column(modifier = Modifier.weight(1f)) {
                         Row(verticalAlignment = Alignment.CenterVertically) {
-                            Icon(Icons.Outlined.Usb, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                            Icon(Icons.Outlined.Usb, contentDescription = null, tint = OmniTokens.brandPrimary())
                             Spacer(Modifier.width(8.dp))
                             Text("USB Debugging Switch", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                         }
@@ -155,7 +156,7 @@ fun ScreenSecurityScreen(
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(Icons.Outlined.Fingerprint, contentDescription = null, tint = MaterialTheme.colorScheme.primary)
+                        Icon(Icons.Outlined.Fingerprint, contentDescription = null, tint = OmniTokens.brandPrimary())
                         Spacer(Modifier.width(8.dp))
                         Text("Biometric Authentication Gate", fontWeight = FontWeight.Bold, fontSize = 15.sp)
                     }

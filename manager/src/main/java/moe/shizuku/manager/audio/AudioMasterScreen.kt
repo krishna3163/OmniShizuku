@@ -8,6 +8,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -44,7 +45,7 @@ fun AudioMasterScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Audio Stream Master") },
+                title = { Column { Text("Audio Stream Master"); Text("Control supported audio streams and volumes.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -71,7 +72,7 @@ fun AudioMasterScreen(
                     "STREAM VOLUME CHANNELS",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary
+                    color = OmniTokens.brandPrimary()
                 )
             }
 
@@ -117,7 +118,7 @@ fun AudioMasterScreen(
                     "DETECTED AUDIO OUTPUT HARDWARE",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = OmniTokens.brandPrimary(),
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }
@@ -137,7 +138,7 @@ fun AudioMasterScreen(
                         Icon(
                             Icons.Outlined.Speaker,
                             contentDescription = null,
-                            tint = MaterialTheme.colorScheme.primary
+                            tint = OmniTokens.brandPrimary()
                         )
                         Spacer(Modifier.width(12.dp))
                         Column {
@@ -154,7 +155,7 @@ fun AudioMasterScreen(
                     "CALL RECORDING & AUDIO STREAM TAPPER",
                     fontSize = 12.sp,
                     fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.primary,
+                    color = OmniTokens.brandPrimary(),
                     modifier = Modifier.padding(top = 8.dp)
                 )
             }

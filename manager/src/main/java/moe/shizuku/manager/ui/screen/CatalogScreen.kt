@@ -75,6 +75,7 @@ import moe.shizuku.manager.ui.component.PillButton
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.PillButtonQuiet
 import moe.shizuku.manager.ui.component.cardOutline
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.CustomTabsHelper
 
 /** What a catalog lists. */

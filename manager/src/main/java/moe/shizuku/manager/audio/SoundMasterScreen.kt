@@ -36,7 +36,7 @@ fun SoundMasterScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(stringResource(R.string.soundmaster)) },
+                title = { Column { Text(stringResource(R.string.soundmaster)); Text("Per-app and stream volume controls where supported.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")

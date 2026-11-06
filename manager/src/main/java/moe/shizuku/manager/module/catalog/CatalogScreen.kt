@@ -92,6 +92,7 @@ import moe.shizuku.manager.R
 import moe.shizuku.manager.module.AdbModuleManager
 import moe.shizuku.manager.module.ModuleSettings
 import moe.shizuku.manager.module.discovery.DiscoveredModule
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.module.discovery.ModuleDiscoveryManager
 import moe.shizuku.manager.module.update.ModuleInstaller
 import moe.shizuku.manager.ui.compose.ShizukuExpressiveTheme
@@ -392,7 +393,7 @@ private fun CatalogListScreen(
 
         if (!isLoading && modules.isEmpty() && error == null) {
             item {
-                Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLow, tonalElevation = 1.dp) {
+                Surface(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large, color = MaterialTheme.colorScheme.surfaceContainerLow, border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor())) {
                     Column(modifier = Modifier.padding(20.dp)) {
                         Text(stringResource(R.string.modules_catalog_empty), style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Medium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Spacer(modifier = Modifier.height(12.dp))
@@ -509,7 +510,7 @@ private fun ModuleDetailScreen(
         bottomBar = {
             Surface(
                 color = MaterialTheme.colorScheme.surfaceContainer,
-                tonalElevation = 3.dp
+                border = BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor())
             ) {
                 Row(
                     modifier = Modifier
@@ -663,7 +664,7 @@ private fun CatalogModuleCard(
         modifier = modifier.fillMaxWidth().clickable(onClick = onCardClick),
         shape = MaterialTheme.shapes.large,
         color = if (installed) MaterialTheme.colorScheme.surfaceContainerHigh else MaterialTheme.colorScheme.surfaceContainerLow,
-        tonalElevation = if (installed) 0.dp else 2.dp
+        border = if (installed) null else BorderStroke(OmniTokens.hairlineWidth, OmniTokens.hairlineColor())
     ) {
         Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(12.dp)) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp), verticalAlignment = Alignment.CenterVertically) {

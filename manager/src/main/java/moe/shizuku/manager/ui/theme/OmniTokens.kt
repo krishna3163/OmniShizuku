@@ -5,7 +5,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 /**
  * OmniShizuku design token system.
@@ -54,6 +56,12 @@ object OmniTokens {
     /** Status indicator: info / neutral. */
     @Composable fun statusInfoColor() = semanticInfo()
 
+    /** Hairline border color — used for card edges instead of shadows. */
+    @Composable fun hairlineColor() = MaterialTheme.colorScheme.outlineVariant
+
+    /** Strong hairline for dividers and separators. */
+    @Composable fun hairlineStrongColor() = MaterialTheme.colorScheme.outline
+
     // ---------------------------------------------------------------------------
     // Semantic typography tokens (all @Composable because they read MaterialTheme)
     // ---------------------------------------------------------------------------
@@ -85,6 +93,13 @@ object OmniTokens {
     /** Helper text, error messages — 11sp, weight 400. */
     @Composable fun captionStyle() = MaterialTheme.typography.labelSmall
 
+    /** Monospace typography for terminal and shell output. */
+    @Composable fun terminalTypography() = MaterialTheme.typography.bodyMedium.copy(
+        fontFamily = FontFamily.Monospace,
+        fontSize = 13.sp,
+        lineHeight = 18.sp
+    )
+
     // ---------------------------------------------------------------------------
     // Semantic spacing tokens (4px base unit) — non-Composable (dp values only)
     // ---------------------------------------------------------------------------
@@ -101,6 +116,7 @@ object OmniTokens {
 
     // ---------------------------------------------------------------------------
     // Semantic shape tokens — non-Composable
+    // Tight radius vocabulary (8-12px) per Awesome Design MD principles
     // ---------------------------------------------------------------------------
 
     val shapeNone = RoundedCornerShape(0.dp)
@@ -108,4 +124,26 @@ object OmniTokens {
     val shapeMedium = RoundedCornerShape(8.dp)
     val shapeLarge = RoundedCornerShape(12.dp)
     val shapeFull = CircleShape
+
+    /** Hairline border width — replaces box shadows for card edges. */
+    val hairlineWidth = 1.dp
+
+    // ---------------------------------------------------------------------------
+    // Semantic motion tokens — duration/easing per Awesome Design MD spec
+    // ---------------------------------------------------------------------------
+
+    /** Fast motion — 150ms, FastOutLinearIn. Toggles, chips, quick feedback. */
+    val motionFastMs = 150
+
+    /** Standard motion — 250ms, FastOutSlowIn. Screen transitions, dialogs. */
+    val motionStandardMs = 250
+
+    /** Slow motion — 350ms, FastOutSlowIn. Bottom sheets, drawers. */
+    val motionSlowMs = 350
+
+    /** Spring stiffness for gesture feedback. */
+    val motionSpringStiffness = 100f
+
+    /** Spring damping ratio for draggable elements. */
+    val motionSpringDamping = 1.0f
 }

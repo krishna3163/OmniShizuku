@@ -9,6 +9,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowBack
 import androidx.compose.material.icons.outlined.*
+import moe.shizuku.manager.ui.theme.OmniTokens
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -66,7 +67,17 @@ fun SystemUiTunerScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("SystemUI Tuner") },
+                title = {
+                    Column {
+                        Text("SystemUI Tuner")
+                        Text(
+                            "Adjust supported System UI settings. Device support varies.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1
+                        )
+                    }
+                },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Outlined.ArrowBack, contentDescription = "Back")
@@ -278,7 +289,7 @@ fun SystemUiTunerScreen(
                                             Text(
                                                 text = item.value,
                                                 style = MaterialTheme.typography.bodySmall,
-                                                color = MaterialTheme.colorScheme.primary,
+                                                color = OmniTokens.brandPrimary(),
                                                 maxLines = 2,
                                                 overflow = TextOverflow.Ellipsis
                                             )

@@ -58,6 +58,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.ui.component.PillButton
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.PillButtonQuiet
 import moe.shizuku.manager.R
@@ -160,7 +161,7 @@ fun PermissionsScreen(onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Text(stringResource(R.string.settings_permissions)) },
+            title = { Column { Text(stringResource(R.string.settings_permissions)); Text("Review runtime and app permissions where supported.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {
@@ -402,13 +403,13 @@ private fun PermissionRow(
                 modifier = Modifier
                     .size(40.dp)
                     .clip(MaterialTheme.shapes.medium)
-                    .background(MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)),
+                    .background(OmniTokens.brandPrimary().copy(alpha = 0.12f)),
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
                     icon,
                     contentDescription = null,
-                    tint = MaterialTheme.colorScheme.primary,
+                    tint = OmniTokens.brandPrimary(),
                     modifier = Modifier.size(22.dp)
                 )
             }
@@ -441,7 +442,7 @@ private fun PermissionRow(
                     Icon(
                         Icons.Rounded.CheckCircle,
                         contentDescription = stringResource(R.string.permissions_allowed),
-                        tint = MaterialTheme.colorScheme.primary,
+                        tint = OmniTokens.brandPrimary(),
                         modifier = Modifier.size(20.dp)
                     )
                     if (revertLabel != null && onRevert != null) {

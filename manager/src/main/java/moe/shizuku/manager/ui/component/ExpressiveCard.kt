@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import moe.shizuku.manager.ui.theme.LocalAmoledTheme
+import moe.shizuku.manager.ui.theme.OmniTokens
 
 /**
  * An action that explains itself: an icon on a tinted plate, what it does, and why it might
@@ -29,8 +30,8 @@ import moe.shizuku.manager.ui.theme.LocalAmoledTheme
  * for the choices that decide how the service is started, the icon carries the identity and
  * the body carries the trade, so the screen can be read at a glance.
  *
- * Shape and colour follow the rest of this app rather than the reference this came from:
- * the same large corner as the other cards, the same hairline outline on the pure black
+ * Shape and colour follow the rest of this app: the same tight corner as the other cards
+ * (8-12px per Awesome Design MD principles), the same hairline outline on the pure black
  * theme, where a card would otherwise be the same colour as the page.
  */
 @Composable
@@ -61,28 +62,28 @@ fun ExpressiveCard(
             .then(
                 if (LocalAmoledTheme.current) {
                     Modifier.border(
-                        width = 1.dp,
+                        width = OmniTokens.hairlineWidth,
                         color = MaterialTheme.colorScheme.outlineVariant,
-                        shape = MaterialTheme.shapes.large
+                        shape = OmniTokens.shapeMedium
                     )
                 } else {
                     Modifier
                 }
             ),
-        shape = MaterialTheme.shapes.large,
+        shape = OmniTokens.shapeMedium,
         color = MaterialTheme.colorScheme.surfaceContainerHigh
     ) {
         Row(
-            modifier = Modifier.padding(18.dp),
-            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
             // Centred against the whole card, not its first line: the body can run to
             // several lines, and an icon pinned to the top reads as belonging to that line
             // rather than to the action.
             verticalAlignment = Alignment.CenterVertically
         ) {
             Surface(
-                modifier = Modifier.size(44.dp),
-                shape = RoundedCornerShape(14.dp),
+                modifier = Modifier.size(40.dp),
+                shape = RoundedCornerShape(10.dp),
                 color = MaterialTheme.colorScheme.primaryContainer
             ) {
                 Box(contentAlignment = Alignment.Center) {
@@ -90,14 +91,14 @@ fun ExpressiveCard(
                         imageVector = icon,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                        modifier = Modifier.size(24.dp)
+                        modifier = Modifier.size(22.dp)
                     )
                 }
             }
 
             Column(
                 modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(6.dp)
+                verticalArrangement = Arrangement.spacedBy(4.dp)
             ) {
                 Text(
                     text = title,
@@ -108,7 +109,7 @@ fun ExpressiveCard(
                 if (!body.isNullOrBlank()) {
                     Text(
                         text = body,
-                        style = MaterialTheme.typography.bodyMedium,
+                        style = OmniTokens.bodyMedium(),
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }

@@ -78,6 +78,7 @@ import moe.shizuku.manager.ui.component.SegmentedColumn
 import moe.shizuku.manager.ui.component.SegmentedListItem
 import moe.shizuku.manager.ui.component.StatusChip
 import moe.shizuku.manager.ui.component.statusChipMinWidth
+import moe.shizuku.manager.ui.theme.OmniTokens
 import moe.shizuku.manager.utils.ShizukuStateMachine
 
 /** A destructive action waiting for a yes. */
@@ -324,7 +325,7 @@ fun AppDetailScreen(
                                                     color = if (op.mode == OpMode.DEFAULT) {
                                                         MaterialTheme.colorScheme.onSurfaceVariant
                                                     } else {
-                                                        MaterialTheme.colorScheme.primary
+                                                        OmniTokens.brandPrimary()
                                                     }
                                                 )
                                                 Spacer(modifier = Modifier.width(4.dp))
@@ -651,7 +652,7 @@ private fun SectionHeader(@StringRes title: Int) {
     Text(
         text = stringResource(title),
         style = MaterialTheme.typography.labelLarge,
-        color = MaterialTheme.colorScheme.primary,
+        color = OmniTokens.brandPrimary(),
         modifier = Modifier.padding(start = 16.dp, top = 20.dp, bottom = 4.dp, end = 16.dp)
     )
 }
