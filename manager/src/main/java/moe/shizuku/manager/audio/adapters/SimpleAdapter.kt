@@ -5,21 +5,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import moe.shizuku.manager.R
 
 /**
  * @author legendsayantan
  */
-class SimpleAdapter(private val dataList: List<String>,val onItemClick:(Int)->Unit) : RecyclerView.Adapter<SimpleAdapter.ViewHolder>() {
+class SimpleAdapter(private val dataList: List<String>, val onItemClick: (Int) -> Unit) : RecyclerView.Adapter<SimpleAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        val itemView = LayoutInflater.from(parent.context).inflate(android.R.layout.simple_list_item_1, parent, false)
+        val itemView = LayoutInflater.from(parent.context).inflate(R.layout.item_soundmaster_app, parent, false)
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = dataList[position]
         holder.textView.text = item
-        holder.textView.setOnClickListener { onItemClick(position) }
+        holder.itemView.setOnClickListener { onItemClick(position) }
     }
 
     override fun getItemCount(): Int {
@@ -27,6 +28,6 @@ class SimpleAdapter(private val dataList: List<String>,val onItemClick:(Int)->Un
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val textView: TextView = itemView.findViewById(android.R.id.text1)
+        val textView: TextView = itemView.findViewById(R.id.appTitle)
     }
 }

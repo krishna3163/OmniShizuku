@@ -4,6 +4,7 @@ import android.app.Dialog
 import android.content.Context
 import android.os.Handler
 import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
 import androidx.core.widget.doAfterTextChanged
 import androidx.recyclerview.widget.RecyclerView
@@ -31,18 +32,16 @@ class AppSelectionDialog(context: Context, val onSelection: (String) -> Unit) : 
         super.show()
         val list = findViewById<RecyclerView>(R.id.appSelection)
         val search = findViewById<TextInputEditText>(R.id.search)
+        val cancelButton = findViewById<Button>(R.id.cancelButton)
+        cancelButton?.setOnClickListener { dismiss() }
+
         val handler = Handler(context.mainLooper)
-        Toast.makeText(context, "Loading apps...", Toast.LENGTH_SHORT).show()
         Thread {
             loadApps(callback = { packageList ->
-                handler.post {
-                    Toast.makeText(context, "${packageList.size} apps found", Toast.LENGTH_LONG)
-                        .show()
-                }
                 val reloadApps: (String) -> Unit = { filter ->
                     val filteredMap = packageList.map { it to Utils.getAppNameFromPackage(context, it) }
-                        .filter { filter.isBlank() || it.second.contains(filter, true) }
-                    val adapter = SimpleAdapter(filteredMap.map { it.second }) { selectionIndex ->
+                        .filter { filter.isBlank() || it.second.contains(filter, true) || it.first.contains(filter, true) }
+                    val adapter = SimpleAdapter(filteredMap.map { "${it.second} (${it.first})" }) { selectionIndex ->
                         dismiss()
                         onSelection(filteredMap[selectionIndex].first)
                     }
