@@ -1,5 +1,7 @@
 package moe.shizuku.manager.ui
 
+import moe.shizuku.manager.audio.MixedAudioScreen
+
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
@@ -477,7 +479,7 @@ fun ShizukuApp() {
                             Detail.INTENTS -> IntentsScreen(onBack = { detail = null })
                             Detail.PERMISSIONS -> PermissionsScreen(onBack = { detail = null })
                             Detail.THEME_PATCHER -> ThemePatcherScreen(onBack = { detail = null })
-                            Detail.MIXED_AUDIO -> MixedAudioLauncher(onBack = { detail = null })
+                            Detail.MIXED_AUDIO -> MixedAudioScreen(onBack = { detail = null })
                             Detail.SOUND_MASTER -> SoundMasterScreen(onBack = { detail = null })
                             Detail.LOOKBACK -> LookbackLauncher(onBack = { detail = null })
                             Detail.UNIVERSAL_PIP -> UniversalPiPScreen(onBack = { detail = null })
