@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -689,7 +691,7 @@ fun LabsToggleScreen(
         )
 
         Box(modifier = Modifier.fillMaxSize().alpha(contentAlpha)) {
-            val listState = rememberLazyListState()
+            val listState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() }
             LazyColumn(
                 state = listState,
                 modifier = Modifier.fillMaxSize(),
