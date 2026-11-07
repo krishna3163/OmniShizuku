@@ -455,7 +455,7 @@
     <string name="settings_start_on_boot_adb_grant_failed"><![CDATA[Avtomatik ruxsat berish muvaffaqiyatsiz tugadi. Uni qo\'lda berish uchun ushbu buyrug\'ni kompyuterdan ijro eting:]]></string>
     <string name="settings_start_on_boot_adb_missing_permission_copy"><![CDATA[Ko\'chirish buyrug\'i]]></string>
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[Qanday ishlatish: 1. Qurilmani kompyuterga ulang (USB yoki simsiz xatoklarni tuzatish orqali). 2. Terminalda yuqoridagi maydondan buyrug\'ni ishga tushiring.]]></string>
-    <string name="permission_group_label"><![CDATA[Uchuvchi]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Root qobig\'ini ishga tushirish…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

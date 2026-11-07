@@ -542,7 +542,7 @@
     <string name="home_update_available_title"><![CDATA[Shevery 有可用更新: %s]]></string>
     <string name="home_update_available_body"><![CDATA[有新版本可用，点击更新。]]></string>
     <string name="shevery_update_check_failed"><![CDATA[检查更新失败：%s]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[正在启动 root 终端……]]></string>
     <string name="settings_restart_dialog_message_wifi_required"><![CDATA[首次重启时需要连接 Wi-Fi，因为 Shevery 必须先连接到当前的无线调试端口，然后才能将 ADB 切换到 5555。]]></string>

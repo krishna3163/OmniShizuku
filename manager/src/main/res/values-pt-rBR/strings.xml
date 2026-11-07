@@ -467,7 +467,7 @@ A função de exportação utiliza o SAF (Storage Access Framework). Há relatos
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[Como usar:
 1. Conecte o dispositivo a um computador (USB ou depuração sem fio).
 2. No terminal, execute o comando do campo acima.]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Iniciando o shell de root…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

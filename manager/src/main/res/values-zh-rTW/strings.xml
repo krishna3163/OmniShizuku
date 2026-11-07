@@ -473,7 +473,7 @@
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[使用方法：
 1. 將裝置連接至電腦（透過 USB 或無線除錯）。
 2. 在終端機中，執行上方欄位中的指令。]]></string>
-    <string name="permission_group_label"><![CDATA[謝維里]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@字串/權限標籤]]></string>
     <string name="starting_root_shell"><![CDATA[正在啟動 root 命令列介面……]]></string>
     <string name="settings_restart_dialog_message_wifi_required"><![CDATA[首次重新啟動時需要 Wi-Fi，因為 Shevery 必須先連線至當前的無線除錯埠，才能將 ADB 切換至 5555。]]></string>

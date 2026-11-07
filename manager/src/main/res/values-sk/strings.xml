@@ -243,7 +243,7 @@ Funkcia exportu využíva SAF (Storage Access Framework). Podľa správ MIUI nar
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Službu Shevery môžete spustiť hneď teraz.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Párovanie sa nepodarilo]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Skúsiť znova]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[prístup k Shevery]]></string>
     <string name="permission_description"><![CDATA[Povoľte aplikácii používať Shevery.]]></string>

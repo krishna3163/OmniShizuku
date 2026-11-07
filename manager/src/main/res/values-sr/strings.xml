@@ -231,7 +231,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Можете сада да покренете Shevery услугу.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Парiranje није успело]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Поново покушај]]></string>
-    <string name="permission_group_label"><![CDATA[Шевери]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@стринг/ознака_дозволе]]></string>
     <string name="permission_label"><![CDATA[приступ Шевери]]></string>
     <string name="permission_description"><![CDATA[Дозволите апликацији да користи Shevery.]]></string>

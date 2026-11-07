@@ -534,7 +534,7 @@
     <string name="terminal_tutorial_1_description"><![CDATA[اگر در پوشهٔ انتخاب‌شده فایل‌هایی با نام یکسان وجود داشته باشند، حذف خواهند شد.  عملکرد خروجی از SAF (چارچوب دسترسی به ذخیره‌سازی) استفاده می‌کند. گزارش شده است که MIUI عملکردهای SAF را مختل می‌کند. اگر از MIUI استفاده می‌کنید، ممکن است لازم باشد فایل را از APK شِوِری استخراج کنید یا از گیت‌هاب دانلود نمایید.]]></string>
     <string name="rish_description"><![CDATA[با %1$s، در هر اپلیکیشن ترمینال، می‌توانید به اجراهای شل Shevery متصل شده و با آن‌ها تعامل کنید.
 برای مشاهدهٔ راهنمای استفادهٔ دقیق از %1$s، ضربه بزنید.]]></string>
-    <string name="permission_group_label"><![CDATA[شِوِری]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[شروع پوستهٔ ریشه…]]></string>
     <string name="settings_restart_dialog_message_wifi_required"><![CDATA[برای اولین راه‌اندازی مجدد به وای‌فای نیاز است، زیرا Shevery باید قبل از تغییر پورت ADB به ۵۵۵۵ به پورت عیب‌یابی بی‌سیم فعلی متصل شود.]]></string>

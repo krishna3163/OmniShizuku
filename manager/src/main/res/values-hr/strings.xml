@@ -231,7 +231,7 @@ Nakon što proces uparivanja započne, moći ćete unijeti kod za uparivanje.]]>
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Možete sada pokrenuti Shevery uslugu.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Upairanje nije uspjelo]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Ponovi]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[pristup Shevery]]></string>
     <string name="permission_description"><![CDATA[Dopustite aplikaciji da koristi Shevery.]]></string>

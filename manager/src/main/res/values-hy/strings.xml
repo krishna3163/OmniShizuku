@@ -247,7 +247,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Դուք կարող եք հիմա սկսել Shevery ծառայությունը։]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Զուգավորումը ձախողվեց]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Նորից փորձել]]></string>
-    <string name="permission_group_label"><![CDATA[Շեվերի]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="starting_root_shell"><![CDATA[Սկսելով root shell…]]></string>
     <string name="lab_features_title"><![CDATA[Լաբորատորիայի առանձնահատկություններ]]></string>
     <string name="lab_features_summary"><![CDATA[Փորձարկման առանձնահատկություններ]]></string>

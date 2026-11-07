@@ -538,7 +538,7 @@ Ready for commands.]]></string>
     <string name="rish_description"><![CDATA[မည်သည့် terminal အက်ပ်တွင်မဆို %1$s ဖြင့် Shevery မှ ပြုလုပ်ထားသော shell များနှင့် ချိတ်ဆက်ကာ ဆက်သွယ်အသုံးပြုနိုင်ပါသည်။
 %1$s ၏ အသေးစိတ် အသုံးပြုနည်းကို ကြည့်ရန် ဒီမှာ နှိပ်ပါ။]]></string>
     <string name="about_view_source_code"><![CDATA[%s တွင် မူရင်းကုဒ်ကို ကြည့်ပါ။]]></string>
-    <string name="permission_group_label"><![CDATA[ရှီဗရီ]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_warning_template"><![CDATA[<b>%1$s</b> ကို %2$s ခွင့်ပြုပါသလား?]]></string>
     <string name="starting_root_shell"><![CDATA[ရုတ် shell စတင်နေပြီ…]]></string>

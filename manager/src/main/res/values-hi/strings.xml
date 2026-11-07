@@ -237,7 +237,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[आप अभी Shevery सेवा शुरू कर सकते हैं।]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[पेयरिंग विफल हो गई]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[दोबारा प्रयास करें]]></string>
-    <string name="permission_group_label"><![CDATA[शेवरी]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@स्ट्रिंग/अनुमति_लेबल]]></string>
     <string name="permission_label"><![CDATA[एक्सेस शेवरी]]></string>
     <string name="permission_description"><![CDATA[ऐप को Shevery का उपयोग करने की अनुमति दें।]]></string>

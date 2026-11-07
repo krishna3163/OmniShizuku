@@ -41,8 +41,8 @@
     <string name="dialog_cannot_open_browser_title"><![CDATA[Browser starten nicht möglich]]></string>
     <string name="start_with_root_failed"><![CDATA[Dienst starten nicht möglich, da keine Root-Rechte erteilt wurden oder das Gerät nicht gerootet ist.]]></string>
     <string name="starter"><![CDATA[Starter]]></string>
-    <string name="permission_description"><![CDATA[Der App erlauben, Shizuku zu verwenden.]]></string>
-    <string name="permission_label"><![CDATA[Shizuku-Zugriff]]></string>
+    <string name="permission_description"><![CDATA[Der App erlauben, OmniShizuku zu verwenden.]]></string>
+    <string name="permission_label"><![CDATA[OmniShizuku-Zugriff]]></string>
     <string name="notification_working"><![CDATA[Läuft…]]></string>
     <string name="notification_service_start_no_root"><![CDATA[Root-Rechte anfordern fehlgeschlagen.]]></string>
     <string name="notification_service_starting"><![CDATA[Shizuku-Dienst startetet…]]></string>
@@ -239,7 +239,7 @@
     <string name="service_stop_success"><![CDATA[Der Shevery-Dienst wurde eingestellt.]]></string>
     <string name="service_stop_still_running"><![CDATA[Der Dienst läuft noch.]]></string>
     <string name="service_stop_failed"><![CDATA[Shevery konnte nicht gestoppt werden: %1$s]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Root-Shell wird gestartet…]]></string>
     <string name="lab_features_title"><![CDATA[Laborausstattung]]></string>

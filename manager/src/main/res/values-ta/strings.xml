@@ -238,7 +238,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[நீங்கள் ஷெவரி சேவையை இப்போது தொடங்கலாம்.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[இணைப்புத் தோல்வியுற்றது]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[மீண்டும் முயற்சி]]></string>
-    <string name="permission_group_label"><![CDATA[ஷெவரி]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[அணுகல் ஷெவரி]]></string>
     <string name="permission_description"><![CDATA[ஷெவரி பயன்படுத்துவதற்கு செயலியை அனுமதிக்கவும்.]]></string>

@@ -227,7 +227,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[നിങ്ങൾക്ക് ഇപ്പോൾ ഷെവറി സേവനം ആരംഭിക്കാം.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[പെയറിംഗ് പരാജയപ്പെട്ടു]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[വീണ്ടും ശ്രമിക്കുക]]></string>
-    <string name="permission_group_label"><![CDATA[ഷെവെരി]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[ഷെവറിയിലേക്കുള്ള പ്രവേശനം]]></string>
     <string name="permission_description"><![CDATA[ഷെവറിയ ഉപയോഗിക്കാൻ ആപ്പിനെ അനുവദിക്കുക.]]></string>

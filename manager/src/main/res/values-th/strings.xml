@@ -257,7 +257,7 @@
     <string name="service_stop_success"><![CDATA[บริการ Shevery ได้หยุดให้บริการแล้ว]]></string>
     <string name="service_stop_still_running"><![CDATA[บริการยังคงทำงานอยู่]]></string>
     <string name="service_stop_failed"><![CDATA[ไม่สามารถหยุด Shevery ได้: %1$s]]></string>
-    <string name="permission_group_label"><![CDATA[เชเวรี่]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[กำลังเปิด root shell…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

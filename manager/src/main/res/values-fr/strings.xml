@@ -460,7 +460,7 @@ Prêt pour les commandes.]]></string>
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[Mode d\'emploi :
 1. Connectez l\'appareil à un ordinateur (via USB ou débogage sans fil).
 2. Dans le terminal, exécutez la commande indiquée dans le champ ci-dessus.]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Lancement du shell root…]]></string>
     <string name="settings_application"><![CDATA[Application]]></string>

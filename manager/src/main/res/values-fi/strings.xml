@@ -241,7 +241,7 @@ Vientitoiminto käyttää SAF:ää (Storage Access Framework). On raportoitu, et
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Voit aloittaa Shevery-palvelun käytön heti.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Yhdistäminen epäonnistui]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Yritä uudelleen]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[siirry Sheveryyn]]></string>
     <string name="permission_description"><![CDATA[Salli sovelluksen käyttää Sheveryä.]]></string>

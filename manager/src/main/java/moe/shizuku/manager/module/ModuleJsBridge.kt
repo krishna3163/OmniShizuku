@@ -22,7 +22,7 @@ class ModuleJsBridge(
         val latch = java.util.concurrent.CountDownLatch(1)
         var url: String? = null
         webView.post {
-            url = webView.url
+            url = webView.url ?: webView.originalUrl
             latch.countDown()
         }
         try {
@@ -32,18 +32,38 @@ class ModuleJsBridge(
         }
         val currentUrl = url ?: return false
         val uri = android.net.Uri.parse(currentUrl)
-        if (uri.scheme?.lowercase() != "file") {
-            return false
+        val scheme = uri.scheme?.lowercase()
+        val host = uri.host?.lowercase()
+
+        // Handle secure module scheme https://module.local/*
+        if (scheme == "https" && host == "module.local") {
+            val root = module.webRoot ?: return false
+            val path = uri.path.orEmpty()
+            return try {
+                val rootPath = root.canonicalPath
+                val decodedPath = java.net.URLDecoder.decode(path.removePrefix("/"), "UTF-8")
+                val target = if (decodedPath.isEmpty()) root else File(root, decodedPath)
+                val targetPath = target.canonicalPath
+                targetPath == rootPath || targetPath.startsWith(rootPath + File.separator)
+            } catch (e: Exception) {
+                false
+            }
         }
-        val cleanUrl = uri.path ?: return false
-        val root = module.webRoot ?: return false
-        return try {
-            val rootPath = root.canonicalPath
-            val filePath = File(cleanUrl).canonicalPath
-            filePath == rootPath || filePath.startsWith(rootPath + File.separator)
-        } catch (e: Exception) {
-            false
+
+        // Direct file:// scheme support
+        if (scheme == "file") {
+            val cleanUrl = uri.path ?: return false
+            val root = module.webRoot ?: return false
+            return try {
+                val rootPath = root.canonicalPath
+                val filePath = File(cleanUrl).canonicalPath
+                filePath == rootPath || filePath.startsWith(rootPath + File.separator)
+            } catch (e: Exception) {
+                false
+            }
         }
+
+        return false
     }
 
     @JavascriptInterface

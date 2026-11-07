@@ -460,7 +460,7 @@ Android 11未満ではパソコン接続が必要です。]]></string>
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[使用方法:
 1. デバイスをコンピュータに接続します（USB またはワイヤレスデバッグ）。
 2. ターミナルで、上の欄にあるコマンドを実行します。]]></string>
-    <string name="permission_group_label"><![CDATA[シェベリー]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[rootシェルを起動中…]]></string>
     <string name="settings_application"><![CDATA[アプリケーション]]></string>

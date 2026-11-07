@@ -549,7 +549,7 @@ Készen áll a parancsok fogadására.]]></string>
     <string name="settings_compat_stub_none"><![CDATA[Nincs elérhető csatorna (először indítsd el a Shevery-t)]]></string>
     <string name="rish_description"><![CDATA[A %1$s segítségével bármely terminálalkalmazásból csatlakozhat a Shevery által futtatott parancssorhoz, és ott műveleteket hajthat végre.
 <p>A %1$s részletes használatáról: érintse meg a dokumentum megtekintéséhez.]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[A root shell elindítása…]]></string>
     <string name="adb_pairing_tutorial_content_miui">Előfordulhat, hogy a MIUI-felhasználóknak át kell váltaniuk az értesítési stílust "Android"-ra a "Notification" - "Notification shade" közül a rendszerbeállításokban.</string>

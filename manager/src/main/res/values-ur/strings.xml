@@ -229,7 +229,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[آپ اب شیوری سروس شروع کر سکتے ہیں۔]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[جوڑنے میں ناکامی ہوئی]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[دوبارہ کوشش کریں]]></string>
-    <string name="permission_group_label"><![CDATA[شیوری]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[شیوری تک رسائی]]></string>
     <string name="permission_description"><![CDATA[ایپ کو Shevery استعمال کرنے کی اجازت دیں۔]]></string>

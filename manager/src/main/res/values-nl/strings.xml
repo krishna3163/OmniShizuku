@@ -243,7 +243,7 @@ De exportfunctie maakt gebruik van SAF (Storage Access Framework). Er is gemeld 
     <string name="notification_adb_pairing_succeed_text"><![CDATA[U kunt de Shevery-dienst nu starten.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Het koppelen is mislukt]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Opnieuw proberen]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[toegang tot Shevery]]></string>
     <string name="permission_description"><![CDATA[Geef de app toestemming om Shevery te gebruiken.]]></string>

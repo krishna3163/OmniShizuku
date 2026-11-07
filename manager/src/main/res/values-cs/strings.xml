@@ -239,7 +239,7 @@
     <string name="service_stop_success"><![CDATA[Služba Shevery byla ukončena.]]></string>
     <string name="service_stop_still_running"><![CDATA[služba stále běží]]></string>
     <string name="service_stop_failed"><![CDATA[Nepodařilo se zastavit Shevery: %1$s]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="starting_root_shell"><![CDATA[Spouštím rootový shell…]]></string>
     <string name="lab_features_title"><![CDATA[Vlastnosti laboratoře]]></string>
     <string name="lab_features_summary"><![CDATA[Experimentální funkce]]></string>

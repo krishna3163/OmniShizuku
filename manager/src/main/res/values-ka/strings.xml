@@ -231,7 +231,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[შეგიძლიათ ახლავე დაიწყოთ Shevery-ს სერვისი.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[წყვილება ვერ მოხერხდა]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[კვლავ ცდა]]></string>
-    <string name="permission_group_label"><![CDATA[შევერი]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[შეღწევა შივერი]]></string>
     <string name="permission_description"><![CDATA[მიეცით აპლიკაციას Shevery-ს გამოყენების უფლება.]]></string>

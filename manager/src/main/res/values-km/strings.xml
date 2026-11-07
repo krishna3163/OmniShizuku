@@ -542,7 +542,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="rish_description"><![CDATA[ជាមួយ %1$s នៅក្នុងកម្មវិធី terminal ណាមួយ អ្នកអាចភ្ជាប់ និងអន្តរកម្មជាមួយ shell ដែលដំណើរការដោយ Shevery។ 
 <p>អំពីការប្រើប្រាស់លម្អិត %1$s ចុចដើម្បីមើលឯកសារ។]]></string>
     <string name="about_view_source_code"><![CDATA[មើលកូដប្រភពនៅ %s]]></string>
-    <string name="permission_group_label"><![CDATA[សេវេរី]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_warning_template"><![CDATA[អនុញ្ញាតឲ្យ <b>%1$s</b> ទៅ %2$s?]]></string>
     <string name="starting_root_shell"><![CDATA[កំពុងចាប់ផ្តើមសែលឫស...]]></string>

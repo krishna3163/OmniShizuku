@@ -529,7 +529,7 @@
     <string name="settings_compat_stub_uninstalled"><![CDATA[Мураска калган калдык жок кылынды]]></string>
     <string name="settings_compat_stub_failed"><![CDATA[%2$s аркылуу мураска калган stubди %1$s кылуу мүмкүн болбоду: %3$s]]></string>
     <string name="settings_compat_stub_none"><![CDATA[Канал жок (алгач Sheveryди баштаңыз)]]></string>
-    <string name="permission_group_label"><![CDATA[Шевери]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Баштапкы root-командалык сап…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

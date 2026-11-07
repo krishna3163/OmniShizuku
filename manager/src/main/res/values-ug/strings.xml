@@ -542,7 +542,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="rish_description"><![CDATA[With %1$s, in any terminal app, you can connect to and interact with the shell runs by Shevery.
 <p>About the detailed usage %1$s, tap to view the document.]]></string>
     <string name="about_view_source_code"><![CDATA[٪s دىكى مەنبە كودىنى كۆرۈش]]></string>
-    <string name="permission_group_label"><![CDATA[شېۋېرى]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_warning_template"><![CDATA[<b>٪1$s</b> نى ٪2$s غا قويامسىز؟]]></string>
     <string name="starting_root_shell"><![CDATA[يىلتىز قېپى باشلىنىدۇ...]]></string>

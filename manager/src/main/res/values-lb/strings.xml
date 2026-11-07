@@ -231,7 +231,7 @@ Nodeems de Paarungsprozess ugefaangen huet, kënnt Dir de Pairing-Code aginn.]]>
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Dir kënnt de Shevery-Service elo ufänken.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[D\'Paarung huet net geklappt]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Nei probéieren]]></string>
-    <string name="permission_group_label"><![CDATA[Si huet]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[Zougang Shevery]]></string>
     <string name="permission_description"><![CDATA[Erlaabt der App, Shevery ze benotzen.]]></string>

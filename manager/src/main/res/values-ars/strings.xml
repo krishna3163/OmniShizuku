@@ -540,7 +540,7 @@ Ready for commands.]]></string>
     <string name="rish_description"><![CDATA[باستخدام %1$s، في أي تطبيق محطة طرفية، يمكنك الاتصال ببيئة التشغيل التي تديرها Shevery والتفاعل معها.
 <p>لمعرفة تفاصيل استخدام %1$s، انقر لعرض الوثيقة.]]></string>
     <string name="about_view_source_code"><![CDATA[عرض شفرة المصدر على %s]]></string>
-    <string name="permission_group_label"><![CDATA[شيفري]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_warning_template"><![CDATA[هل تسمح لـ <b>%1$s</b> بـ %2$s؟]]></string>
     <string name="starting_root_shell"><![CDATA[بدء تشغيل شل الجذر…]]></string>

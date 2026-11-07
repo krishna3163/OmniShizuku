@@ -595,7 +595,7 @@
     <string name="terminal_tutorial_1_description"><![CDATA[Если в выбранной папке есть файлы с таким же именем, они будут удалены.
 
 Функция экспорта использует SAF (Storage Access Framework). Сообщается, что MIUI нарушает работу функций SAF. Если вы используете MIUI, вам, возможно, придётся извлечь файл из APK-файла Shevery или скачать его с GitHub.]]></string>
-    <string name="permission_group_label"><![CDATA[Шевери]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s
 скопировано в буфер обмена.]]></string>

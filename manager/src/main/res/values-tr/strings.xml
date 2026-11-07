@@ -467,7 +467,7 @@ Dışa aktarma işlevi SAF’yi (Storage Access Framework) kullanır. MIUI’nin
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[Kullanım talimatları:
 1. Cihazı bir bilgisayara bağlayın (USB veya kablosuz hata ayıklama).
 2. Terminalde, yukarıdaki alandaki komutu çalıştırın.]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Root kabuğu başlatılıyor…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

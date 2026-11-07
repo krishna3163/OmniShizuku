@@ -540,7 +540,7 @@
 내보내기 기능은 SAF(Storage Access Framework)를 사용합니다. MIUI에서는 SAF의 기능이 제대로 작동하지 않는 것으로 알려져 있습니다. MIUI를 사용 중이라면 Shevery의 APK 파일에서 해당 파일을 추출하거나 GitHub에서 다운로드해야 할 수도 있습니다.]]></string>
     <string name="rish_description"><![CDATA[%1$s를 사용하면 어떤 터미널 앱에서든 Shevery가 실행하는 셸에 연결하여 상호 작용할 수 있습니다.
 <p>%1$s의 자세한 사용법에 대해서는 탭하여 문서를 확인하세요.]]></string>
-    <string name="permission_group_label"><![CDATA[셰버리]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[루트 셸을 시작합니다…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

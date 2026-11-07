@@ -241,7 +241,7 @@ Ekspordifunktsioon kasutab SAF-i (Storage Access Framework). On teatatud, et MIU
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Võite Shevery teenust kohe kasutama hakata.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Ühendamine ebaõnnestus]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Proovi uuesti]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[juurdepääs Sheveryle]]></string>
     <string name="permission_description"><![CDATA[Luba rakendusel kasutada Sheveryt.]]></string>

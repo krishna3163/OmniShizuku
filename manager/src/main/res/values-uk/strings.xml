@@ -459,7 +459,7 @@
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[Як користуватися:
 1. Підключіть пристрій до комп’ютера (через USB або бездротове налагодження).
 2. У терміналі виконайте команду з поля вище.]]></string>
-    <string name="permission_group_label"><![CDATA[Шевері]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Запуск оболонки з правами суперкористувача…]]></string>
     <string name="settings_restart_dialog_message_wifi_required"><![CDATA[Для першого перезапуску необхідне підключення до Wi-Fi, оскільки Shevery має підключитися до поточного порту бездротового налагодження, перш ніж перемкнути ADB на порт 5555.]]></string>

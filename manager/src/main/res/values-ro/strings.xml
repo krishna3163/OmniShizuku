@@ -257,7 +257,7 @@ Funcția de export utilizează SAF (Storage Access Framework). Se pare că MIUI 
     <string name="service_stop_success"><![CDATA[Serviciul Shevery a fost întrerupt.]]></string>
     <string name="service_stop_still_running"><![CDATA[serviciul funcționează în continuare]]></string>
     <string name="service_stop_failed"><![CDATA[Nu s-a reușit oprirea lui Shevery: %1$s]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Se pornește shell-ul de root…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

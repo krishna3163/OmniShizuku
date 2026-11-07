@@ -241,7 +241,7 @@ Eksportfunktionen bruger SAF (Storage Access Framework). Det forlyder, at MIUI f
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Du kan starte Shevery-tjenesten nu.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Parring mislykkedes]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Prøv igen]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[Gå til Shevery]]></string>
     <string name="permission_description"><![CDATA[Giv appen tilladelse til at bruge Shevery.]]></string>

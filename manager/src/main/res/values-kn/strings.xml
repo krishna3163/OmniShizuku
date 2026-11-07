@@ -542,7 +542,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="rish_description"><![CDATA[%1$s ನೊಂದಿಗೆ, ಯಾವುದೇ ಟರ್ಮಿನಲ್ ಆ್ಯಪ್ ನಲ್ಲಿ, ನೀವು ಶೆವೆರಿ ನಡೆಸುವ ಶೆಲ್ ಗೆ ಸಂಪರ್ಕಿಸಬಹುದು ಮತ್ತು ಸಂವಹನ ನಡೆಸಬಹುದು. 
 <p>%1$s ವಿವರವಾದ ಬಳಕೆಯ ಬಗ್ಗೆ, ದಾಖಲೆಯನ್ನು ವೀಕ್ಷಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ.]]></string>
     <string name="about_view_source_code"><![CDATA[%s ನಲ್ಲಿ ಮೂಲ ಕೋಡ್ ವೀಕ್ಷಿಸಿ]]></string>
-    <string name="permission_group_label"><![CDATA[ಶೆವ್]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_warning_template"><![CDATA[<b>%1$s ಅನ್ನು</b> %2$s ಗೆ ಅನುಮತಿಸಬೇಕೆ?]]></string>
     <string name="starting_root_shell"><![CDATA[ರೂಟ್ ಶೆಲ್ ಅನ್ನು ಪ್ರಾರಂಭಿಸಲಾಗುತ್ತಿದೆ...]]></string>

@@ -73,18 +73,18 @@ class ModuleWebViewActivity : AppActivity() {
                                 CookieManager.getInstance().setAcceptThirdPartyCookies(this, false)
                                 webViewClient = LocalModuleWebViewClient(module, webNetworkAllowed)
                                 if (exposeBridge) {
-                                    addJavascriptInterface(
-                                        ModuleJsBridge(
-                                            module,
-                                            webView = this,
-                                            commandReviewer = { request ->
-                                                runBlocking {
-                                                    confirmCommand(request)
-                                                }
+                                    val bridge = ModuleJsBridge(
+                                        module,
+                                        webView = this,
+                                        commandReviewer = { request ->
+                                            runBlocking {
+                                                confirmCommand(request)
                                             }
-                                        ),
-                                        "Shizuku"
+                                        }
                                     )
+                                    addJavascriptInterface(bridge, "Shizuku")
+                                    addJavascriptInterface(bridge, "Nightzuku")
+                                    addJavascriptInterface(bridge, "OmniShizuku")
                                 }
                                 loadUrl(LocalModuleWebViewClient.moduleUrl())
                             }

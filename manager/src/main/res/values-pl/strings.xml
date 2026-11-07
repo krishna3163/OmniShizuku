@@ -257,7 +257,7 @@ Funkcja eksportu korzysta z biblioteki SAF (Storage Access Framework). Istnieją
     <string name="service_stop_success"><![CDATA[Usługa Shevery została zawieszona.]]></string>
     <string name="service_stop_still_running"><![CDATA[usługa nadal działa]]></string>
     <string name="service_stop_failed"><![CDATA[Nie udało się zatrzymać Shevery: %1$s]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Uruchamianie powłoki root…]]></string>
     <string name="toast_copied_to_clipboard"><![CDATA[%s

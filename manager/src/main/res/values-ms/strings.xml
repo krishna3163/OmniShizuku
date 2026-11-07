@@ -231,7 +231,7 @@ Selepas proses penjodohan bermula, anda akan dapat memasukkan kod penjodohan.]]>
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Anda boleh memulakan perkhidmatan Shevery sekarang.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Pairing gagal]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Cuba semula]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@rentetan/label_izin]]></string>
     <string name="permission_label"><![CDATA[akses Shevery]]></string>
     <string name="permission_description"><![CDATA[Benarkan aplikasi menggunakan Shevery.]]></string>

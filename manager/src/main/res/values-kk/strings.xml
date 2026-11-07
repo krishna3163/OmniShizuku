@@ -453,7 +453,7 @@ Shevery-ді қайта іске қосу қажет болуы мүмкін.]]>
     <string name="settings_start_on_boot_adb_grant_failed"><![CDATA[Автоматты рұқсат беру сәтсіз аяқталды. Оны қолмен беру үшін осы пәрменді компьютерден орындаңыз:]]></string>
     <string name="settings_start_on_boot_adb_missing_permission_copy"><![CDATA[Команданы көшіру]]></string>
     <string name="settings_start_on_boot_adb_missing_permission_instruction"><![CDATA[Қалай пайдалану керек: 1. Құрылғыны компьютерге (USB немесе сымсыз түзету режимінде) қосыңыз. 2. Терминалда жоғарыдағы өрістен команданы іске қосыңыз.]]></string>
-    <string name="permission_group_label"><![CDATA[Шевери]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[Түпкі Shell-ді іске қосу…]]></string>
     <string name="settings_application"><![CDATA[Қолдану]]></string>

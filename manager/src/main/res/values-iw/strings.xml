@@ -542,7 +542,7 @@ has been copied to clipboard.]]></string>
 פונקציית הייצוא משתמשת ב-SAF (Storage Access Framework). דווח כי MIUI פוגעת בתפקוד ה-SAF. אם אתה משתמש ב-MIUI, ייתכן שתצטרך לחלץ את הקובץ מקובץ ה-apk של Shevery או להוריד אותו מ-GitHub.]]></string>
     <string name="rish_description"><![CDATA[באמצעות %1$s, בכל אפליקציית מסוף, תוכלו להתחבר ולבצע פעולות עם מעטפת הפקודה המופעלת על ידי Shevery.
 <p>למידע מפורט על השימוש ב-%1$s, לחצו כדי להציג את המסמך.]]></string>
-    <string name="permission_group_label"><![CDATA[שברי]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="starting_root_shell"><![CDATA[הפעלת מעטפת שורש…]]></string>
     <string name="settings_restart_dialog_message_wifi_required"><![CDATA[יש צורך בחיבור Wi-Fi בעת ההפעלה מחדש הראשונה, מכיוון ש-Shevery חייב להתחבר ליציאת האיתור באגים האלחוטית הנוכחית לפני שהוא מעביר את ADB ליציאה 5555.]]></string>

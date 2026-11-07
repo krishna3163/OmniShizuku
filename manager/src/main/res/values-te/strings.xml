@@ -229,7 +229,7 @@
     <string name="notification_adb_pairing_succeed_text"><![CDATA[మీరు ఇప్పుడు షెవరి సేవను ప్రారంభించవచ్చు.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[జత చేయడంలో విఫలమైంది]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[మళ్లీ ప్రయత్నించండి]]></string>
-    <string name="permission_group_label"><![CDATA[షేవరీ]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[శివెరీని యాక్సెస్ చేయండి]]></string>
     <string name="permission_description"><![CDATA[షెవరిని ఉపయోగించడానికి యాప్‌కు అనుమతించండి.]]></string>

@@ -155,8 +155,9 @@ fun ManageScreen(
         loading = true
         Log.d(AppConstants.TAG, "Manage: reading the installed packages")
         apps = withContext(Dispatchers.IO) {
-            @Suppress("DEPRECATION")
-            InstalledPackages.all(context, PackageManager.MATCH_UNINSTALLED_PACKAGES)
+            InstalledPackages.all(context, 0)
+                .filter { it.applicationInfo != null && (it.applicationInfo!!.flags and ApplicationInfo.FLAG_INSTALLED) != 0 }
+                .distinctBy { it.packageName }
         }
         loadedFor = version
         loading = false

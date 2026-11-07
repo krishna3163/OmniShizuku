@@ -244,7 +244,7 @@ Funkcija izvoza uporablja SAF (Storage Access Framework). Po poročilih naj bi M
     <string name="notification_adb_pairing_succeed_text"><![CDATA[Storitev Shevery lahko začnete uporabljati že zdaj.]]></string>
     <string name="notification_adb_pairing_failed_title"><![CDATA[Povezovanje ni uspelo]]></string>
     <string name="notification_adb_pairing_retry"><![CDATA[Ponovi poskus]]></string>
-    <string name="permission_group_label"><![CDATA[Shevery]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_label"><![CDATA[dostop do Sheveryja]]></string>
     <string name="permission_description"><![CDATA[Aplikaciji dovoli uporabo Shevery.]]></string>

@@ -542,7 +542,7 @@ You may need to restart Shevery for the operation to take effect.]]></string>
     <string name="rish_description"><![CDATA[بە ٪1$s، لە هەر کاربەرنامەیەکی تێرمیناڵدا، دەتوانیت پەیوەندی بکەیت و کارلێک لەگەڵ ئەو shell بکەیت کە لەلایەن Shevery بەڕێوە دەچێت. 
 <p>سەبارەت بە بەکارهێنانی وردەکاری ٪1$s، نەرم لێبدە بۆ بینینی بەڵگەنامەکە.]]></string>
     <string name="about_view_source_code"><![CDATA[سەیری کۆدی سەرچاوە بکە لە ٪s]]></string>
-    <string name="permission_group_label"><![CDATA[شێڤەری]]></string>
+    <string name="permission_group_label" translatable="false">OmniShizuku</string>
     <string name="permission_group_description"><![CDATA[@string/permission_label]]></string>
     <string name="permission_warning_template"><![CDATA[ڕێگەدان <b>بە ٪1$s</b> بۆ ٪2$s؟]]></string>
     <string name="starting_root_shell"><![CDATA[دەستپێکردنی توێکڵی ڕەگ...]]></string>
