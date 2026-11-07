@@ -875,7 +875,7 @@ private fun LabGridCard(
                         Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = null,
                         modifier = Modifier.size(18.dp),
-                        tint = OmniTokens.brandPrimary()
+                        tint = MaterialTheme.colorScheme.onSurfaceVariant
                     )
                 }
             }

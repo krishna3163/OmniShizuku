@@ -32,7 +32,7 @@ import moe.shizuku.manager.ui.theme.LocalAmoledTheme
 @Composable
 fun PillButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     content: @Composable RowScope.() -> Unit
 ) {
@@ -63,7 +63,7 @@ fun PillButton(
 @Composable
 fun PillButtonQuiet(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
     enabled: Boolean = true,
     colors: ButtonColors = ButtonDefaults.buttonColors(
         containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,

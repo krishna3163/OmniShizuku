@@ -26,8 +26,8 @@ object OmniTokens {
     // Semantic color tokens (all @Composable because they read MaterialTheme)
     // ---------------------------------------------------------------------------
 
-    /** Brand indigo #3F51B5 — primary CTAs, active states, selected tab icons. */
-    @Composable fun brandPrimary() = Color(0xFF3F51B5)
+    /** Dynamic Material 3 primary color token — honors dynamic/Material 3 theming. */
+    @Composable fun brandPrimary() = MaterialTheme.colorScheme.primary
 
     /** Success green — enabled states, successful operations. */
     @Composable fun semanticSuccess() = Color(0xFF4CAF50)
