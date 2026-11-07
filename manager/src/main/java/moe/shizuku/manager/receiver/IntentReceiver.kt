@@ -47,7 +47,6 @@ class IntentReceiver : BroadcastReceiver() {
 
         val command = intent.getStringExtra(EXTRA_COMMAND)
             ?: intent.getStringExtra(EXTRA_CMD)
-            ?: intent.data?.toString()
             ?: return
         val responseAction = intent.getStringExtra(EXTRA_RESPONSE)
 

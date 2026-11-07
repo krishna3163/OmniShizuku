@@ -367,7 +367,7 @@
 
         <receiver
             android:name=".receiver.IntentReceiver"
-            android:exported="true"
+            android:exported="false"
             android:enabled="true"
             android:label="@string/intent_shell">
             <intent-filter>
@@ -490,7 +490,7 @@
 
         <activity
             android:name=".quicktiles.QuickActionDialogActivity"
-            android:exported="true"
+            android:exported="false"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=""
@@ -502,7 +502,7 @@
 
         <activity
             android:name=".quicktiles.ShortcutActionActivity"
-            android:exported="true"
+            android:exported="false"
             android:excludeFromRecents="true"
             android:noHistory="true"
             android:taskAffinity=""
@@ -713,21 +713,21 @@
         <activity
             android:name=".audio.SoundMasterActivity"
             android:excludeFromRecents="true"
-            android:exported="true"
+            android:exported="false"
             android:label=""
             android:theme="@style/DialogActivityTheme" />
 
         <activity
             android:name=".audio.PipStarterActivity"
             android:excludeFromRecents="true"
-            android:exported="true"
+            android:exported="false"
             android:label=""
             android:theme="@style/DialogActivityTheme" />
 
         <receiver
             android:name=".audio.PipReceiver"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
 
         <service
             android:name=".audio.SoundMasterService"
@@ -741,9 +741,8 @@
             android:exported="false"
             android:label="Lab Features" />
 
-        <!-- Privileged File Provider (Shizuku-Next) -->
         <provider
-            android:name=".files.PrivilegedFileProvider"
+            android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
@@ -751,6 +750,13 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
+
+        <!-- Privileged File Provider (Shizuku-Next) -->
+        <provider
+            android:name=".files.PrivilegedFileProvider"
+            android:authorities="${applicationId}.files"
+            android:exported="false"
+            android:grantUriPermissions="true" />
 
         <provider
             android:name=".ShizukuManagerProvider"

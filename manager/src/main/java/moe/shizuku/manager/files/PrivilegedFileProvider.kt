@@ -35,8 +35,14 @@ class PrivilegedFileProvider : ContentProvider() {
         // this app offers needs it yet.
         if (mode != "r") throw FileNotFoundException("this provider only reads")
 
-        val path = uri.path?.removePrefix("/")?.takeIf { it.isNotEmpty() }
+        val rawPath = uri.path?.removePrefix("/")?.takeIf { it.isNotEmpty() }
             ?: throw FileNotFoundException("no path in $uri")
+
+        // Reject directory traversal attempts
+        if (rawPath.contains("..") || rawPath.contains("./")) {
+            throw FileNotFoundException("invalid path traversal in $uri")
+        }
+        val path = java.io.File("/$rawPath").canonicalPath.removePrefix("/")
 
         return try {
             PrivilegedFiles.openRead(path)
