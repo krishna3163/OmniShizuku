@@ -160,9 +160,15 @@ class RequestPermissionActivity : AppActivity() {
 
         // Protect critical privileged permission dialog from tapjacking and overlay attacks
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            window.setHideOverlayWindows(true)
+            try {
+                window.setHideOverlayWindows(true)
+            } catch (e: Throwable) {
+                android.util.Log.w("RequestPermissionActivity", "Failed to setHideOverlayWindows", e)
+            }
         }
-        window.decorView.filterTouchesWhenObscured = true
+        try {
+            window.decorView.filterTouchesWhenObscured = true
+        } catch (_: Throwable) {}
 
         val bundles = listOfNotNull(
             intent.extras,
