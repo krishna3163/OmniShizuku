@@ -488,6 +488,45 @@
             </intent-filter>
         </service>
 
+        <activity
+            android:name=".quicktiles.QuickActionDialogActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.QuickTileSettings.QuickActionsPopup">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".quicktiles.ShortcutActionActivity"
+            android:exported="true"
+            android:excludeFromRecents="true"
+            android:noHistory="true"
+            android:taskAffinity=""
+            android:theme="@style/Theme.QuickTileSettings.Transparent">
+            <intent-filter>
+                <action android:name="com.rbn.qtsettings.action.DNS_OFF" />
+                <action android:name="com.rbn.qtsettings.action.DNS_AUTO" />
+                <action android:name="com.rbn.qtsettings.action.DNS_CUSTOM" />
+                <action android:name="com.rbn.qtsettings.action.DNS_ADGUARD" />
+                <action android:name="com.rbn.qtsettings.action.DNS_CLOUDFLARE" />
+                <action android:name="com.rbn.qtsettings.action.DNS_QUAD9" />
+                <action android:name="com.rbn.qtsettings.action.USB_ON" />
+                <action android:name="com.rbn.qtsettings.action.USB_OFF" />
+                <action android:name="moe.shizuku.manager.action.DNS_OFF" />
+                <action android:name="moe.shizuku.manager.action.DNS_AUTO" />
+                <action android:name="moe.shizuku.manager.action.DNS_CLOUDFLARE" />
+                <action android:name="moe.shizuku.manager.action.DNS_ADGUARD" />
+                <action android:name="moe.shizuku.manager.action.DNS_QUAD9" />
+                <action android:name="moe.shizuku.manager.action.USB_ON" />
+                <action android:name="moe.shizuku.manager.action.USB_OFF" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".essentials.CaffeinateWakeLockService"
             android:enabled="true"
