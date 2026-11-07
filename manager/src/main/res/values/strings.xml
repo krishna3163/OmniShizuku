@@ -2386,4 +2386,31 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="enforcedoze_disabled_notif_title">EnforceDoze Disabled</string>
     <string name="enforcedoze_disabled_notif_text">EnforceDoze is currently disabled</string>
 
+    <!-- Settings Quick Settings Tiles -->
+    <string name="tile_action_not_found">No app found for this action</string>
+    <string name="tile_settings_search">Search Settings</string>
+    <string name="tile_settings_search_subtitle">Search device settings</string>
+    <string name="tile_settings_languages">Languages</string>
+    <string name="tile_settings_languages_subtitle">Language and input</string>
+    <string name="tile_settings_personal_dictionary">Personal Dictionary</string>
+    <string name="tile_settings_personal_dictionary_subtitle">Custom words dictionary</string>
+    <string name="tile_settings_privacy">Privacy</string>
+    <string name="tile_settings_privacy_subtitle">Privacy and permissions</string>
+    <string name="tile_settings_display">Display</string>
+    <string name="tile_settings_display_subtitle">Brightness and screen</string>
+    <string name="tile_settings_home_app">Home App</string>
+    <string name="tile_settings_home_app_subtitle">Default launcher</string>
+    <string name="tile_settings_notification_history">Notification History</string>
+    <string name="tile_settings_notification_history_subtitle">Recent notifications</string>
+    <string name="tile_settings_vpn">VPN</string>
+    <string name="tile_settings_vpn_subtitle">Virtual private network</string>
+    <string name="tile_settings_data_usage">Data Usage</string>
+    <string name="tile_settings_data_usage_subtitle">Cellular and Wi-Fi data</string>
+    <string name="tile_settings_cast">Screen Cast</string>
+    <string name="tile_settings_cast_subtitle">Wireless display</string>
+    <string name="tile_settings_connected_devices">Connected Devices</string>
+    <string name="tile_settings_connected_devices_subtitle">Bluetooth and pairing</string>
+    <string name="tile_settings_about_phone">About Phone</string>
+    <string name="tile_settings_about_phone_subtitle">Device status and software</string>
+
 </resources>
