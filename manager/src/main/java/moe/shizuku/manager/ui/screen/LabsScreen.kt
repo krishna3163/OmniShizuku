@@ -339,12 +339,18 @@ fun LabsScreen(
                 releaseUrl = "https://github.com/RBN-Apps/Quick-Tile-Settings/releases/latest"
             ),
             LabEntry(
-                R.string.lab_companion_shizuwall,
+                "ShizuWall Firewall",
                 Icons.Outlined.Security,
-                category = LabCategory.COMPANION_APPS,
-                searchTerms = "wallpaper security",
-                packageName = "com.arslan.shizuwall",
-                releaseUrl = "https://github.com/AhmetCanArslan/ShizuWall/releases/latest"
+                Detail.SHIZUWALL,
+                LabCategory.SYSTEM_CONTROLS,
+                "shizuwall firewall network block internet security socket trackers"
+            ),
+            LabEntry(
+                "Caffeinate",
+                Icons.Outlined.Coffee,
+                Detail.CAFFEINATE,
+                LabCategory.SYSTEM_CONTROLS,
+                "caffeinate keep screen awake display timeout"
             ),
             LabEntry(
                 "Theme Patcher", Icons.Outlined.ColorLens, Detail.THEME_PATCHER,

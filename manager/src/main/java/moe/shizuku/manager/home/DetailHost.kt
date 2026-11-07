@@ -169,6 +169,7 @@ fun DetailHost(
                     Detail.DFROOT -> moe.shizuku.manager.dfroot.DFRootScreen(onBack = onBack)
                     Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = onBack, onOpenDetail = onOpenDetail)
                     Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = onBack)
+                    Detail.SHIZUWALL -> moe.shizuku.manager.shizuwall.ShizuWallScreen(bottomPadding = 0.dp, onBack = onBack)
                 }
             }
         }
