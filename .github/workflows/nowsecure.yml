@@ -58,7 +58,7 @@ jobs:
 
       - name: Run NowSecure
         if: env.NOWSECURE_CONFIGURED == 'true'
-        uses: nowsecure/nowsecure-action@3b439db31b6dce857b09f5222fd13ffc3159ad26
+        uses: nowsecure/nowsecure-action@b25041e5215c666f096d8077359b75629b1364f3
         with:
           token: ${{ secrets.NS_TOKEN }}
           app_file: manager/build/outputs/apk/debug/manager-debug.apk
