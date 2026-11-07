@@ -467,6 +467,28 @@
         </service>
 
         <service
+            android:name=".quicktiles.UsbDebuggingTileService"
+            android:icon="@drawable/ic_usb_off"
+            android:label="USB Debugging"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
+            android:name=".quicktiles.AdvancedPrivateDnsTileService"
+            android:icon="@drawable/ic_dns_auto"
+            android:label="Private DNS (QS)"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+
+        <service
             android:name=".essentials.CaffeinateWakeLockService"
             android:enabled="true"
             android:exported="false"

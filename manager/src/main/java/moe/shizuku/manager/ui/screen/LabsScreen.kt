@@ -331,12 +331,11 @@ fun LabsScreen(
                 "dfroot dirtyfrag root cve-2026-43284 kernelsu su manager exploit"
             ),
             LabEntry(
-                R.string.lab_companion_quick_tiles,
+                "Quick Settings Tiles",
                 Icons.Outlined.Widgets,
-                category = LabCategory.COMPANION_APPS,
-                searchTerms = "quick settings tiles",
-                packageName = "com.rbn.qtsettings",
-                releaseUrl = "https://github.com/RBN-Apps/Quick-Tile-Settings/releases/latest"
+                Detail.QUICK_TILES,
+                LabCategory.SYSTEM_CONTROLS,
+                "quick settings tiles private dns usb debugging auto revert toggle"
             ),
             LabEntry(
                 "ShizuWall Firewall",

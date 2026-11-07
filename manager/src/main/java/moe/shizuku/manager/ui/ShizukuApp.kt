@@ -244,6 +244,9 @@ enum class Detail(
     /** ShizuWall native firewall controller and tracker scanner. */
     SHIZUWALL,
 
+    /** Quick Settings Tile customizer and auto-revert manager. */
+    QUICK_TILES,
+
     /** The community's module index, shown here only when there was no browser to open it in. */
     MORE_APPS;
 
@@ -492,6 +495,7 @@ fun ShizukuApp() {
                             Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = { detail = null }, onOpenDetail = { detail = it })
                             Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = { detail = null })
                             Detail.SHIZUWALL -> moe.shizuku.manager.shizuwall.ShizuWallScreen(bottomPadding = 0.dp, onBack = { detail = null })
+                            Detail.QUICK_TILES -> moe.shizuku.manager.quicktiles.QuickTileSettingsScreen(bottomPadding = 0.dp, onBack = { detail = null })
                         }
                     }
                 } else if (LocalTelevision.current) {

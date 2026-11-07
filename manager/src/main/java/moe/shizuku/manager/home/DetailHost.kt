@@ -170,6 +170,7 @@ fun DetailHost(
                     Detail.WALLYOU -> moe.shizuku.manager.wallyou.WallYouScreen(onBack = onBack, onOpenDetail = onOpenDetail)
                     Detail.WALLYOU_SETTINGS -> moe.shizuku.manager.wallyou.WallYouSettingsScreen(onBack = onBack)
                     Detail.SHIZUWALL -> moe.shizuku.manager.shizuwall.ShizuWallScreen(bottomPadding = 0.dp, onBack = onBack)
+                    Detail.QUICK_TILES -> moe.shizuku.manager.quicktiles.QuickTileSettingsScreen(bottomPadding = 0.dp, onBack = onBack)
                 }
             }
         }
