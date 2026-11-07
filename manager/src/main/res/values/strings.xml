@@ -1112,6 +1112,16 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="dfroot_title">DFRoot (CVE-2026-43284)</string>
     <string name="lab_companion_quick_tiles">Quick Settings tiles</string>
     <string name="lab_companion_shizuwall">ShizuWall firewall</string>
+    <string name="lab_mixed_audio">Mixed Audio</string>
+    <string name="lab_sound_master">SoundMaster</string>
+    <string name="lab_call_recording">Call Recording (ShizuCallRecorder)</string>
+    <string name="lab_dfroot">DFRoot (DirtyFrag Kernel Exploit)</string>
+    <string name="lab_quick_tiles">Quick Settings Tiles</string>
+    <string name="lab_shizuwall">ShizuWall Firewall</string>
+    <string name="lab_caffeinate">Caffeinate</string>
+    <string name="lab_theme_patcher">Theme Patcher</string>
+    <string name="lab_wallyou">WallYou Wallpapers</string>
+    <string name="lab_filter_active_now">Active now</string>
     <string name="lab_companion_open_failed">Could not open the companion app or its release page.</string>
     <string name="tab_firewall">Firewall</string>
     <string name="tab_autostart">Autostart</string>

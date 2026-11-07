@@ -88,6 +88,9 @@ import moe.shizuku.manager.ui.component.ScrollToTopButton
 import moe.shizuku.manager.ui.component.SegmentedCard
 import moe.shizuku.manager.ui.component.SegmentedListItem
 import moe.shizuku.manager.ui.televisionReturnFocus
+import moe.shizuku.manager.manage.ActiveFeaturesRegistry
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 
 /** The dot that says a feature named on a row is doing something. */
 private val ActiveDotSize = 10.dp
@@ -166,7 +169,7 @@ fun LabsScreen(
         essentialsHubUnlocked = DeveloperFeatures.isEssentialsHubUnlocked(context)
     }
     LaunchedEffect(refresh) {
-        active = withContext(Dispatchers.IO) { activeFeatures(context) }
+        active = withContext(Dispatchers.IO) { ActiveFeaturesRegistry.getActiveDetails(context) }
     }
     // The full Labs catalogue. Descriptive terms are indexed alongside the visible names so a
     // search can find common alternate names without adding duplicate entries to the list.
@@ -266,98 +269,98 @@ fun LabsScreen(
             ),
             LabEntry(
                 R.string.tab_carrier_tether, Icons.Outlined.WifiTethering, Detail.TETHER,
-                LabCategory.SYSTEM_CONTROLS, "hotspot tethering"
+                LabCategory.SYSTEM_CONTROLS, "hotspot tethering bypass proxy vpn"
             ),
             LabEntry(
-                "Mixed Audio", Icons.Outlined.GraphicEq, Detail.MIXED_AUDIO,
-                LabCategory.SYSTEM_CONTROLS, "mixed audio appops focus"
+                R.string.lab_mixed_audio, Icons.Outlined.GraphicEq, Detail.MIXED_AUDIO,
+                LabCategory.SYSTEM_CONTROLS, "mixed audio appops focus multiple stream volume"
             ),
             LabEntry(
-                "SoundMaster", Icons.Outlined.Tune, Detail.SOUND_MASTER,
-                LabCategory.SYSTEM_CONTROLS, "per app volume soundmaster"
+                R.string.lab_sound_master, Icons.Outlined.Tune, Detail.SOUND_MASTER,
+                LabCategory.SYSTEM_CONTROLS, "per app volume soundmaster routing mixer equalizer"
             ),
             LabEntry(
                 R.string.universalpip, Icons.Outlined.PictureInPicture, Detail.UNIVERSAL_PIP,
-                LabCategory.SYSTEM_CONTROLS, "force pip picture in picture virtual display"
+                LabCategory.SYSTEM_CONTROLS, "force pip picture in picture virtual display floating window"
             ),
             LabEntry(
                 R.string.tab_screen_security, Icons.Outlined.Security, Detail.SECURITY,
-                LabCategory.SYSTEM_CONTROLS, "screen capture protection secure"
+                LabCategory.SYSTEM_CONTROLS, "screen capture protection secure record screenshot drm restriction"
             ),
             LabEntry(
                 R.string.tab_autodnd, Icons.Outlined.DoNotDisturbOn, Detail.AUTODND,
-                LabCategory.SYSTEM_CONTROLS, "do not disturb notifications"
+                LabCategory.SYSTEM_CONTROLS, "do not disturb notifications zen mode silence alerts"
             ),
             LabEntry(
                 R.string.tab_optimizer, Icons.Outlined.Speed, Detail.OPTIMIZER,
-                LabCategory.APP_MANAGEMENT, "app optimization performance"
+                LabCategory.APP_MANAGEMENT, "app optimization performance axeron gaming beast fps booster"
             ),
             LabEntry(
                 R.string.tools_terminal, Icons.Outlined.Terminal, Detail.TERMINAL,
-                LabCategory.UTILITIES, "terminal command prompt"
+                LabCategory.UTILITIES, "terminal command prompt bash sh"
             ),
             LabEntry(
                 R.string.localshell, Icons.Outlined.Code, Detail.LOCAL_SHELL,
-                LabCategory.UTILITIES, "localshell raw adb command intentshell"
+                LabCategory.UTILITIES, "localshell raw adb command intentshell script"
             ),
             LabEntry(
                 R.string.intents_title, Icons.Outlined.Bolt, Detail.INTENTS,
-                LabCategory.UTILITIES, "intent activity broadcast"
+                LabCategory.UTILITIES, "intent activity broadcast fire component"
             ),
             LabEntry(
                 R.string.tools_stealth, Icons.Outlined.VisibilityOff, Detail.STEALTH,
-                LabCategory.UTILITIES, "hide shizuku root detection"
+                LabCategory.UTILITIES, "hide shizuku root detection bypass detection"
             ),
             LabEntry(
                 R.string.settings_permissions, Icons.Outlined.VerifiedUser, Detail.PERMISSIONS,
-                LabCategory.UTILITIES, "permission access grant"
+                LabCategory.UTILITIES, "permission access grant revoke manage"
             ),
             LabEntry(
                 R.string.lab_more_apps, Icons.Outlined.ShoppingBag, Detail.MORE_APPS,
-                LabCategory.UTILITIES, "more applications discover"
+                LabCategory.UTILITIES, "more applications discover shizuku store repository"
             ),
             LabEntry(
-                "Call Recording (ShizuCallRecorder Integration)",
+                R.string.lab_call_recording,
                 Icons.Outlined.Call,
                 Detail.CALL_RECORDING,
                 LabCategory.UTILITIES,
-                "call recording shizucallrecorder phone calls voice recorder audio"
+                "call recording shizucallrecorder phone calls voice recorder audio two-way"
             ),
             LabEntry(
-                "DFRoot (DirtyFrag Kernel Exploit)",
+                R.string.lab_dfroot,
                 Icons.Outlined.Security,
                 Detail.DFROOT,
                 LabCategory.SYSTEM_CONTROLS,
-                "dfroot dirtyfrag root cve-2026-43284 kernelsu su manager exploit"
+                "dfroot dirtyfrag root cve-2026-43284 kernelsu su manager exploit soft-root"
             ),
             LabEntry(
-                "Quick Settings Tiles",
+                R.string.lab_quick_tiles,
                 Icons.Outlined.Widgets,
                 Detail.QUICK_TILES,
                 LabCategory.SYSTEM_CONTROLS,
-                "quick settings tiles private dns usb debugging auto revert toggle"
+                "quick settings tiles private dns usb debugging auto revert toggle qs panel shortcut"
             ),
             LabEntry(
-                "ShizuWall Firewall",
+                R.string.lab_shizuwall,
                 Icons.Outlined.Security,
                 Detail.SHIZUWALL,
                 LabCategory.SYSTEM_CONTROLS,
-                "shizuwall firewall network block internet security socket trackers"
+                "shizuwall firewall network block internet security socket trackers iptables"
             ),
             LabEntry(
-                "Caffeinate",
+                R.string.lab_caffeinate,
                 Icons.Outlined.Coffee,
                 Detail.CAFFEINATE,
                 LabCategory.SYSTEM_CONTROLS,
-                "caffeinate keep screen awake display timeout"
+                "caffeinate keep screen awake display timeout wake lock awake tile"
             ),
             LabEntry(
-                "Theme Patcher", Icons.Outlined.ColorLens, Detail.THEME_PATCHER,
-                LabCategory.SYSTEM_CONTROLS, "theme patcher customization"
+                R.string.lab_theme_patcher, Icons.Outlined.ColorLens, Detail.THEME_PATCHER,
+                LabCategory.SYSTEM_CONTROLS, "theme patcher customization colors styles"
             ),
             LabEntry(
-                "WallYou Wallpapers", Icons.Outlined.Wallpaper, Detail.WALLYOU,
-                LabCategory.UTILITIES, "wallpaper wall you"
+                R.string.lab_wallyou, Icons.Outlined.Wallpaper, Detail.WALLYOU,
+                LabCategory.UTILITIES, "wallpaper wall you backgrounds customization"
             ),
         )
     }
@@ -375,8 +378,14 @@ fun LabsScreen(
     val visibleEntries = remember(entries, hiddenLabDetails) {
         entries.filterNot { it.detail in hiddenLabDetails }
     }
-    val displayEntries = remember(visibleEntries, context) {
-        visibleEntries.map { entry ->
+    var filterActiveOnly by rememberSaveable { mutableStateOf(false) }
+
+    val filteredByFilter = remember(visibleEntries, filterActiveOnly, active) {
+        if (!filterActiveOnly) visibleEntries
+        else visibleEntries.filter { it.detail != null && it.detail in active }
+    }
+    val displayEntries = remember(filteredByFilter, context) {
+        filteredByFilter.map { entry ->
             LabDisplayEntry(
                 entry = entry,
                 label = entry.labelString ?: if (entry.labelRes != 0) context.getString(entry.labelRes) else "",
@@ -457,6 +466,31 @@ fun LabsScreen(
                 null
             }
         )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 2.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            FilterChip(
+                selected = filterActiveOnly,
+                onClick = { filterActiveOnly = !filterActiveOnly },
+                label = { Text(stringResource(R.string.lab_filter_active_now)) },
+                leadingIcon = {
+                    Box(
+                        modifier = Modifier
+                            .size(8.dp)
+                            .background(ActiveGreen, CircleShape)
+                    )
+                },
+                colors = FilterChipDefaults.filterChipColors(
+                    selectedContainerColor = MaterialTheme.colorScheme.primaryContainer,
+                    selectedLabelColor = MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            )
+        }
 
         Box(
             modifier = Modifier
