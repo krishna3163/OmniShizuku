@@ -22,6 +22,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -49,6 +51,8 @@ fun DebloaterScreen(
 ) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
+    val focusManager = LocalFocusManager.current
+    val keyboardController = LocalSoftwareKeyboardController.current
 
     var apps by remember { mutableStateOf<List<DebloatApp>>(emptyList()) }
     var loading by remember { mutableStateOf(true) }
@@ -210,7 +214,11 @@ fun DebloaterScreen(
                     items(filteredApps, key = { it.packageName }) { app ->
                         DebloatAppCard(
                             app = app,
-                            onClick = { selectedApp = app }
+                            onClick = {
+                                focusManager.clearFocus()
+                                keyboardController?.hide()
+                                selectedApp = app
+                            }
                         )
                     }
                 }

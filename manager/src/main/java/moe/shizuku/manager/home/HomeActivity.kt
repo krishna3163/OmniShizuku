@@ -46,6 +46,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -397,6 +398,12 @@ abstract class HomeActivity : AppActivity() {
             val computListState = rememberSaveable(saver = LazyListState.Saver) {
                 LazyListState()
             }
+            val labsListState = rememberSaveable(saver = LazyListState.Saver) {
+                LazyListState()
+            }
+            val labsGridState = rememberSaveable(saver = LazyGridState.Saver) {
+                LazyGridState()
+            }
             val cachedModules = remember {
                 mutableStateOf<List<moe.shizuku.manager.module.AdbModule>>(emptyList(), neverEqualPolicy())
             }
@@ -689,6 +696,8 @@ abstract class HomeActivity : AppActivity() {
                                 )
                                 2 -> moe.shizuku.manager.ui.screen.LabsScreen(
                                     bottomPadding = 80.dp,
+                                    listState = labsListState,
+                                    gridState = labsGridState,
                                     onOpenDetail = { activeDetail = it }
                                 )
                                 3 -> moe.shizuku.manager.logs.ComputScreen(listState = computListState)

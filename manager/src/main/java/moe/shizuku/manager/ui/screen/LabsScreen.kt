@@ -24,8 +24,10 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.grid.LazyGridState
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.grid.rememberLazyGridState
@@ -126,7 +128,12 @@ private enum class LabCategory(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
+fun LabsScreen(
+    bottomPadding: Dp,
+    listState: LazyListState = rememberSaveable(saver = LazyListState.Saver) { LazyListState() },
+    gridState: LazyGridState = rememberSaveable(saver = LazyGridState.Saver) { LazyGridState() },
+    onOpenDetail: (Detail) -> Unit
+) {
     val context = LocalContext.current
     val prefs = remember {
         context.getSharedPreferences("labs_preferences", Context.MODE_PRIVATE)
@@ -350,24 +357,28 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         )
     }
 
-    val hiddenLabDetails = setOf(
-        Detail.ESSENTIALS,
-        Detail.SMART_PIXELS,
-        Detail.MEDIA_KEYS,
-        Detail.WATERMARK,
-        Detail.EDGE_LIGHTING,
-        Detail.ISLAND
-    )
-    val visibleEntries = entries.filterNot {
-        it.detail in hiddenLabDetails
-    }
-    val displayEntries = visibleEntries.map { entry ->
-        LabDisplayEntry(
-            entry = entry,
-            label = entry.labelString ?: if (entry.labelRes != 0) stringResource(entry.labelRes) else "",
-            categoryLabel = stringResource(entry.category.titleRes),
-            categoryDescription = stringResource(entry.category.descriptionRes)
+    val hiddenLabDetails = remember {
+        setOf(
+            Detail.ESSENTIALS,
+            Detail.SMART_PIXELS,
+            Detail.MEDIA_KEYS,
+            Detail.WATERMARK,
+            Detail.EDGE_LIGHTING,
+            Detail.ISLAND
         )
+    }
+    val visibleEntries = remember(entries, hiddenLabDetails) {
+        entries.filterNot { it.detail in hiddenLabDetails }
+    }
+    val displayEntries = remember(visibleEntries, context) {
+        visibleEntries.map { entry ->
+            LabDisplayEntry(
+                entry = entry,
+                label = entry.labelString ?: if (entry.labelRes != 0) context.getString(entry.labelRes) else "",
+                categoryLabel = context.getString(entry.category.titleRes),
+                categoryDescription = context.getString(entry.category.descriptionRes)
+            )
+        }
     }
     val searchItems = remember(displayEntries) {
         displayEntries.map { row ->
@@ -380,10 +391,12 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
             )
         }
     }
-    val filteredEntries = filterLabsSearchItems(searchItems, query).map { it.value }
-    val groupedEntries = filteredEntries
-        .groupBy { it.entry.category }
-        .toSortedMap(compareBy { it.ordinal })
+    val groupedEntries = remember(searchItems, query) {
+        val filteredEntries = filterLabsSearchItems(searchItems, query).map { it.value }
+        filteredEntries
+            .groupBy { it.entry.category }
+            .toSortedMap(compareBy { it.ordinal })
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
@@ -445,12 +458,13 @@ fun LabsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                 .fillMaxWidth()
                 .weight(1f)
         ) {
-            val listState = rememberLazyListState()
-            val gridState = rememberLazyGridState()
-
+            var lastQuery by rememberSaveable { mutableStateOf<String?>(null) }
             LaunchedEffect(query) {
-                listState.scrollToItem(0)
-                gridState.scrollToItem(0)
+                if (lastQuery != null && lastQuery != query) {
+                    listState.scrollToItem(0)
+                    gridState.scrollToItem(0)
+                }
+                lastQuery = query
             }
 
             if (isGridView) {
