@@ -33,10 +33,10 @@ fun TetherScreen(
     var state by remember { mutableStateOf<TetherSettingsState?>(null) }
     var loading by remember { mutableStateOf(true) }
     var actionInProgress by remember { mutableStateOf(false) }
-    var lastStatusMessage by remember { mutableStateOf<String?>(null) }
-    var isStatusError by remember { mutableStateOf(false) }
+    var showRootInfoDialog by remember { mutableStateOf(false) }
 
     val isShizukuRunning = TetherManager.isShizukuAvailable()
+    val isRoot = remember(isShizukuRunning) { TetherManager.isRootAvailable() }
 
     fun refresh() {
         loading = true
@@ -50,28 +50,54 @@ fun TetherScreen(
         refresh()
     }
 
+    val isBypassActive = state?.tetherDunRequired == "0" && state?.entitlementCheckState == "0"
+
     val scaffoldStatus = when {
         !isShizukuRunning -> LabToolStatus.Warning(
             title = "Shizuku Not Active",
-            message = "Shizuku service is not running. Tethering global settings require Shizuku or ADB shell privileges.",
+            message = "Shizuku service is not running. Carrier tethering global settings require Shizuku or ADB shell privileges.",
             icon = Icons.Outlined.WarningAmber
-        )
-        isStatusError && lastStatusMessage != null -> LabToolStatus.Error(
-            title = "Action Failed",
-            message = lastStatusMessage!!,
-            icon = Icons.Outlined.ErrorOutline
-        )
-        !isStatusError && lastStatusMessage != null -> LabToolStatus.Info(
-            title = "Status Update",
-            message = lastStatusMessage!!,
-            icon = Icons.Outlined.CheckCircle
         )
         else -> null
     }
 
+    if (showRootInfoDialog) {
+        AlertDialog(
+            onDismissRequest = { showRootInfoDialog = false },
+            icon = {
+                Icon(
+                    Icons.Outlined.Shield,
+                    contentDescription = null,
+                    tint = OmniTokens.brandPrimary()
+                )
+            },
+            title = {
+                Text(
+                    "Root Required for Kernel TTL",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.Bold
+                )
+            },
+            text = {
+                Text(
+                    "Kernel netfilter (iptables mangle) requires Linux Root privileges (UID 0).\n\n" +
+                    "OmniShizuku is currently running under Shizuku ADB Shell (UID 2000).\n\n" +
+                    "The Entitlement & DUN Bypass above is already active and works rootlessly without needing Root.",
+                    style = MaterialTheme.typography.bodyMedium,
+                    lineHeight = 20.sp
+                )
+            },
+            confirmButton = {
+                TextButton(onClick = { showRootInfoDialog = false }) {
+                    Text("Got it")
+                }
+            }
+        )
+    }
+
     LabToolScaffold(
         title = "Carrier Tethering",
-        description = "Configure supported tethering options. Carrier/device support varies. Manage DUN requirements and entitlement validation.",
+        description = "Configure carrier tethering entitlements, DUN requirements, and hotspot restrictions.",
         status = scaffoldStatus,
         onBack = onBack,
         bottomPadding = bottomPadding,
@@ -100,20 +126,49 @@ fun TetherScreen(
                 )
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Outlined.Info,
-                            contentDescription = null,
-                            tint = OmniTokens.brandPrimary(),
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Spacer(Modifier.width(8.dp))
-                        Text(
-                            "Carrier Entitlement Status",
-                            fontWeight = FontWeight.SemiBold,
-                            fontSize = 15.sp,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Outlined.Info,
+                                contentDescription = null,
+                                tint = OmniTokens.brandPrimary(),
+                                modifier = Modifier.size(20.dp)
+                            )
+                            Spacer(Modifier.width(8.dp))
+                            Text(
+                                "Carrier Entitlement Status",
+                                fontWeight = FontWeight.SemiBold,
+                                fontSize = 15.sp,
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+
+                        if (!loading) {
+                            Surface(
+                                shape = RoundedCornerShape(8.dp),
+                                color = if (isBypassActive) {
+                                    MaterialTheme.colorScheme.primaryContainer
+                                } else {
+                                    MaterialTheme.colorScheme.surfaceVariant
+                                }
+                            ) {
+                                Text(
+                                    text = if (isBypassActive) "Bypass Active" else "Default / Restricted",
+                                    fontSize = 11.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = if (isBypassActive) {
+                                        MaterialTheme.colorScheme.onPrimaryContainer
+                                    } else {
+                                        MaterialTheme.colorScheme.onSurfaceVariant
+                                    },
+                                    modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
+                                )
+                            }
+                        }
                     }
 
                     Spacer(Modifier.height(12.dp))
@@ -137,15 +192,18 @@ fun TetherScreen(
                     } else {
                         SettingValueRow(
                             label = "tether_dun_required",
-                            value = state?.tetherDunRequired ?: "Unknown"
+                            value = state?.tetherDunRequired ?: "Unknown",
+                            isHighlight = state?.tetherDunRequired == "0"
                         )
                         SettingValueRow(
                             label = "tether_entitlement_check_state",
-                            value = state?.entitlementCheckState ?: "Unknown"
+                            value = state?.entitlementCheckState ?: "Unknown",
+                            isHighlight = state?.entitlementCheckState == "0"
                         )
                         SettingValueRow(
                             label = "tether_supported",
-                            value = state?.tetherSupported ?: "Unknown"
+                            value = state?.tetherSupported ?: "Unknown",
+                            isHighlight = state?.tetherSupported == "1"
                         )
                     }
                 }
@@ -174,7 +232,7 @@ fun TetherScreen(
                                 color = MaterialTheme.colorScheme.onSurface
                             )
                             Text(
-                                "Shizuku Shell / ADB Privileges",
+                                "Shizuku Shell / ADB Privileges (Rootless)",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
@@ -184,7 +242,7 @@ fun TetherScreen(
                     Spacer(Modifier.height(10.dp))
 
                     Text(
-                        "Sets tether_dun_required to 0 and entitlement_check_state to 0 in Android global settings. This prevents carrier provision checks on supported networks.",
+                        "Disables carrier hotspot validation checks (DUN requirement and entitlement check) in Android global settings. Enables tethering without restrictions.",
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 18.sp
@@ -201,8 +259,6 @@ fun TetherScreen(
                                 actionInProgress = true
                                 scope.launch {
                                     val result = TetherManager.bypassCarrierRestrictions()
-                                    isStatusError = !result.success
-                                    lastStatusMessage = result.message
                                     Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
                                     refresh()
                                     actionInProgress = false
@@ -227,8 +283,6 @@ fun TetherScreen(
                                 actionInProgress = true
                                 scope.launch {
                                     val result = TetherManager.restoreDefaultRestrictions()
-                                    isStatusError = !result.success
-                                    lastStatusMessage = result.message
                                     Toast.makeText(context, result.message, Toast.LENGTH_SHORT).show()
                                     refresh()
                                     actionInProgress = false
@@ -250,25 +304,52 @@ fun TetherScreen(
                 colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
             ) {
                 Column(modifier = Modifier.padding(16.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Outlined.Speed,
-                            contentDescription = null,
-                            tint = OmniTokens.brandPrimary(),
-                            modifier = Modifier.size(22.dp)
-                        )
-                        Spacer(Modifier.width(10.dp))
-                        Column {
-                            Text(
-                                "TTL Hop-Limit Camouflage (TTL 64)",
-                                fontWeight = FontWeight.SemiBold,
-                                fontSize = 15.sp,
-                                color = MaterialTheme.colorScheme.onSurface
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            Icon(
+                                imageVector = Icons.Outlined.Speed,
+                                contentDescription = null,
+                                tint = OmniTokens.brandPrimary(),
+                                modifier = Modifier.size(22.dp)
                             )
+                            Spacer(Modifier.width(10.dp))
+                            Column {
+                                Text(
+                                    "TTL Hop-Limit Camouflage (TTL 64)",
+                                    fontWeight = FontWeight.SemiBold,
+                                    fontSize = 15.sp,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                                Text(
+                                    if (isRoot) "Kernel Netfilter / Root Active" else "Kernel Netfilter (Root Only)",
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+
+                        Surface(
+                            shape = RoundedCornerShape(8.dp),
+                            color = if (isRoot) {
+                                MaterialTheme.colorScheme.primaryContainer
+                            } else {
+                                MaterialTheme.colorScheme.surfaceVariant
+                            }
+                        ) {
                             Text(
-                                "Kernel Netfilter / Root Required",
-                                style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                text = if (isRoot) "Root (UID 0)" else "Root Required",
+                                fontSize = 11.sp,
+                                fontWeight = FontWeight.SemiBold,
+                                color = if (isRoot) {
+                                    MaterialTheme.colorScheme.onPrimaryContainer
+                                } else {
+                                    MaterialTheme.colorScheme.onSurfaceVariant
+                                },
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp)
                             )
                         }
                     }
@@ -276,7 +357,7 @@ fun TetherScreen(
                     Spacer(Modifier.height(10.dp))
 
                     Text(
-                        "Rewrites outgoing tether packets to TTL 64 so mobile carriers identify downstream client traffic as native phone traffic. Note: Modifying kernel iptables mangle tables requires Root permissions on Android 10+.",
+                        "Rewrites outgoing tether packet TTL to 64 so mobile carriers identify downstream client traffic as native device traffic. Note: Packet mangle requires Linux root privileges.",
                         fontSize = 13.sp,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         lineHeight = 18.sp
@@ -290,18 +371,26 @@ fun TetherScreen(
                     ) {
                         FilledTonalButton(
                             onClick = {
-                                actionInProgress = true
-                                scope.launch {
-                                    val result = TetherManager.applyTtlBypass(64)
-                                    isStatusError = !result.success
-                                    lastStatusMessage = result.message
-                                    Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
-                                    actionInProgress = false
+                                if (!isRoot) {
+                                    showRootInfoDialog = true
+                                } else {
+                                    actionInProgress = true
+                                    scope.launch {
+                                        val result = TetherManager.applyTtlBypass(64)
+                                        Toast.makeText(context, result.message, Toast.LENGTH_LONG).show()
+                                        actionInProgress = false
+                                    }
                                 }
                             },
                             enabled = isShizukuRunning && !actionInProgress
                         ) {
-                            Text("Apply TTL 64 Rule")
+                            Icon(
+                                if (isRoot) Icons.Outlined.Check else Icons.Outlined.Info,
+                                contentDescription = null,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Spacer(Modifier.width(6.dp))
+                            Text(if (isRoot) "Apply TTL 64 Rule" else "View Root Requirement")
                         }
                     }
                 }
@@ -311,7 +400,7 @@ fun TetherScreen(
 }
 
 @Composable
-private fun SettingValueRow(label: String, value: String) {
+private fun SettingValueRow(label: String, value: String, isHighlight: Boolean = false) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -329,14 +418,22 @@ private fun SettingValueRow(label: String, value: String) {
         Spacer(Modifier.width(8.dp))
         Surface(
             shape = RoundedCornerShape(6.dp),
-            color = MaterialTheme.colorScheme.surfaceVariant
+            color = if (isHighlight) {
+                MaterialTheme.colorScheme.primaryContainer
+            } else {
+                MaterialTheme.colorScheme.surfaceVariant
+            }
         ) {
             Text(
                 text = value,
                 fontFamily = FontFamily.Monospace,
                 fontSize = 12.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                color = if (isHighlight) {
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                } else {
+                    MaterialTheme.colorScheme.onSurfaceVariant
+                },
                 modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
             )
         }

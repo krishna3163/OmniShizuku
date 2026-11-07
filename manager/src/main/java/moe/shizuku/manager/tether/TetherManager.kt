@@ -21,6 +21,14 @@ object TetherManager {
 
     fun isShizukuAvailable(): Boolean = Shizuku.pingBinder()
 
+    fun isRootAvailable(): Boolean {
+        return try {
+            Shizuku.pingBinder() && Shizuku.getUid() == 0
+        } catch (_: Throwable) {
+            false
+        }
+    }
+
     suspend fun getTetherState(): TetherSettingsState = withContext(Dispatchers.IO) {
         val dun = runShellCommand("settings get global tether_dun_required")?.trim()
         val ent = runShellCommand("settings get global tether_entitlement_check_state")?.trim()
