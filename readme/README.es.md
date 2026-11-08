@@ -2,12 +2,12 @@
 
 <img src="../manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
 
-# OmniShizuku
+#OmniShizuku
 
-**Un fork potente y repleto de funciones de Shizuku con módulos mejorados, interfaz moderna y capacidades extendidas de control del sistema.**
+**Una bifurcación potente y rica en funciones de Shizuku con módulos mejorados, interfaz de usuario moderna y capacidades extendidas de control del sistema.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163%2FOmniShizuku-blue?logo=github&style=for-the-badge)](https://github.com/krishna3163/OmniShizuku)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](../LICENSE)
+[![Licencia: Apache-2.0](https://img.shields.io/badge/Licencia-Apache%202.0-blue.svg?style=for-the-badge)](../LICENSE)
 [![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android&style=for-the-badge)](https://developer.android.com)
 [![API](https://img.shields.io/badge/API%20Level-21%2B-brightgreen?style=for-the-badge)](https://developer.android.com/guide/topics/manifest/uses-sdk-element)
 [![Shizuku](https://img.shields.io/badge/Powered%20by-Shizuku%20API-orange?style=for-the-badge)](https://github.com/RikkaApps/Shizuku)
@@ -18,283 +18,283 @@
 
 ---
 
-## 📖 Tabla de Contenidos
+## 📖 Tabla de contenidos
 
-- [Overview](#-overview)
-- [Screenshots](#-screenshots)
-- [Why Use OmniShizuku?](#-why-use-omnishizuku)
-- [Key Features](#-key-features)
-  - [Labs - Advanced System Tools (40 Tools)](#labs---advanced-system-tools)
-  - [Modules System](#modules-system)
-  - [Call Recording (ShizuCallRecorder Integration)](#call-recording-shizucallrecorder-integration)
-  - [AI & Developer Features](#ai--developer-features)
-  - [UI/UX Enhancements](#uiux-enhancements)
-- [Feature Comparison](#-feature-comparison-with-other-shizuku-forks)
-- [System Requirements](#-system-requirements)
-- [Installation](#-installation)
-- [Getting Started](#-getting-started)
-- [Building from Source](#-building-from-source)
-- [Architecture & Security](#-architecture--security)
-- [Permissions Explained](#-permissions-explained)
-- [Contributing](#-contributing)
-- [Credits & Acknowledgments](#-credits--acknowledgments)
-- [License](#-license)
-- [Support](#-support)
+- [Descripción general](#-descripción general)
+- [Capturas de pantalla](#-capturas de pantalla)
+- [¿Por qué usar OmniShizuku?](#-por qué-usar-omnishizuku)
+- [Características clave](#-características clave)
+  - [Labs - Herramientas avanzadas del sistema (40 herramientas)](#labs---advanced-system-tools)
+  - [Sistema de módulos](#modules-system)
+  - [Grabación de llamadas (integración de ShizuCallRecorder)](#call-recording-shizucallrecorder-integration)
+  - [AI y funciones para desarrolladores](#ai--developer-features)
+  - [Mejoras de UI/UX](#uiux-mejoras)
+- [Comparación de funciones] (#-comparación-de-funciones-con-otras-bifurcaciones-shizuku)
+- [Requisitos del sistema](#-requisitos-del-sistema)
+- [Instalación](#-instalación)
+- [Comenzando](#-empezando)
+- [Construyendo desde la fuente](#-construcción-desde-la-fuente)
+- [Arquitectura y seguridad](#-arquitectura--seguridad)
+- [Permisos explicados](#-permisos-explicados)
+- [Contribuyendo](#-contribuyendo)
+- [Créditos y Agradecimientos](#-créditos--agradecimientos)
+- [Licencia](#-licencia)
+- [Soporte](#-soporte)
 
 ---
 
-## 🔍 Descripción General
+## 🔍 Descripción general
 
-**OmniShizuku** is an extensively enhanced, open-source fork of the original [Shizuku](https://github.com/RikkaApps/Shizuku) project. It extends Shizuku's powerful system-level API access by combining it with a vast collection of practical utilities, system tweaks, privacy controls, and an intuitive modern interface.
+**OmniShizuku** es una bifurcación de código abierto ampliamente mejorada del proyecto original [Shizuku](https://github.com/RikkaApps/Shizuku). Amplía el potente acceso API a nivel de sistema de Shizuku combinándolo con una amplia colección de utilidades prácticas, ajustes del sistema, controles de privacidad y una interfaz moderna e intuitiva.
 
 🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
-Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take full control of their Android device without requiring full root access in most cases - leveraging Shizuku's ADB/root bridging capabilities. From display customization and battery optimization to app management, debloating, call recording, and advanced automation, OmniShizuku is your all-in-one system utility suite.
+Creado con **Material Design 3 Expressive**, OmniShizuku permite a los usuarios tomar el control total de su dispositivo Android sin necesidad de acceso completo a la raíz en la mayoría de los casos, aprovechando las capacidades de puente raíz/ADB de Shizuku. Desde personalización de pantalla y optimización de la batería hasta administración de aplicaciones, eliminación de descargas, grabación de llamadas y automatización avanzada, OmniShizuku es su conjunto de utilidades de sistema todo en uno.
 
 ---
 
-## 📸 Capturas de Pantalla
+## 📸 Capturas de pantalla
 
-| **Home & Status** | **App Permissions** | **ADB Modules** | **Labs Catalog** | **Comput (Terminal & AI)** | **Settings** |
+| **Inicio y estado** | **Permisos de aplicaciones** | **Módulos ADB** | **Catálogo de laboratorios** | **Computación (Terminal e IA)** | **Configuración** |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | <img src="../screenshots/home.png" width="165" alt="Home Screen" /> | <img src="../screenshots/manage_apps.png" width="165" alt="Manage Authorized Apps" /> | <img src="../screenshots/modules.png" width="165" alt="ADB Modules" /> | <img src="../screenshots/labs.png" width="165" alt="Labs Catalog" /> | <img src="../screenshots/comput.png" width="165" alt="Comput Console" /> | <img src="../screenshots/settings.png" width="165" alt="Settings Screen" /> |
-| Real-time service status & wireless ADB pairing | Whitelist mode, granular permissions & session-only access | Magisk/KernelSU-style ZIP module installer & manager | 39+ powerful system controls & tweaks | Privileged shell terminal with Gemini/AI generation | Device Owner, backups, automation & security config |
+| Estado del servicio en tiempo real y emparejamiento ADB inalámbrico | Modo de lista blanca, permisos granulares y acceso solo por sesión | Instalador y administrador del módulo ZIP estilo Magisk/KernelSU | Más de 39 potentes controles y ajustes del sistema | Terminal shell privilegiado con generación Gemini/AI | Propietario del dispositivo, copias de seguridad, automatización y configuración de seguridad |
 
 ---
 
-### 🔬 Featured Labs & System Capabilities
+### 🔬 Laboratorios destacados y capacidades del sistema
 
-| **System Controls & Power Tools** | **Native ShizuWall Firewall** |
+| **Controles del sistema y herramientas eléctricas** | **Firewall nativo ShizuWall** |
 |:---:|:---:|
 | <img src="../screenshots/labs_tools.png" width="260" alt="Labs System Tools" /> | <img src="../screenshots/shizuwall.png" width="260" alt="ShizuWall Firewall" /> |
-| Enforce Doze, Mixed Audio, Private DNS, Screen Security & DFRoot | Zero-VPN native firewall with tracker scanner & appop rules |
+| Enforce Doze, audio mixto, DNS privado, seguridad de pantalla y DFRoot | Firewall nativo Zero-VPN con escáner de seguimiento y reglas de aplicación |
 
 ---
 
-## 💡 ¿Por qué usar OmniShizuku?
+## 💡 ¿Por qué utilizar OmniShizuku?
 
-- **All-in-One Solution** - No need for multiple root/ADB apps. Everything from debloating to display tweaks in one place.
-- **No Root Required** - Works with Shizuku via Wireless ADB (Android 11+) or ADB, making it accessible to a wider audience.
-- **Modern & Intuitive UI** - Clean Material 3 Expressive interface with smooth animations, dynamic theming, and optimized layouts for phones, tablets, TVs and Wear OS.
-- **Actively Enhanced** - Regular updates with new features, bug fixes, and improvements beyond the original Shizuku.
-- **Privacy-Focused** - Granular control over app permissions, appops, hiding features, and system-level restrictions.
-- **Safe & Reversible** - Most changes are reversible, with backup/restore capabilities for debloating and module management.
-- **Extensible Module System** - Community-driven modules with built-in catalog, discovery, and installation support.
-- **Enterprise-Grade Stability** - Defensive coding practices, crash handling, timeout safeguards, and OEM compatibility fixes.
-
----
-
-## ✨ Características Principales
-
-### Labs - Herramientas Avanzadas del Sistema
-
-El catálogo de Labs alberga 40 herramientas a nivel de sistema organizadas limpiamente en Gestión de Aplicaciones, Controles del Sistema y Utilidades:
-
-#### 📱 Gestión de Aplicaciones (8 Herramientas)
-| Feature | Description |
-| --- | --- |
-| **App Ops** | Granular control over hidden app permissions, runtime op gates, and background privileges. |
-| **Firewall** | Network-level app firewall blocking Wi-Fi and mobile data per application without consuming a VPN slot. |
-| **Autostart** | Restrict applications from waking up or starting services automatically at device boot. |
-| **Hiding Modes** | Hide Developer Options, USB/Wireless Debugging, Accessibility services, Private DNS, and VPN states from detection. |
-| **Force Dark Mode** | System-wide forced dark theme across third-party applications, even without native dark theme support. |
-| **Universal Debloater (UAD)** | Community safety-ranked package debloater with safety ratings, explanations, and 1-tap restore. |
-| **App Freezer** | Instantly freeze and suspend background applications to reclaim RAM and halt battery drain. |
-| **Axeron Gaming Optimizer** | System-level performance tuning, game boost, animation tweaks, and process optimizations. |
-
-#### ⚙️ Controles del Sistema (18 Herramientas)
-| Feature | Description |
-| --- | --- |
-| **Power Menu** | Privileged reboot to System, Recovery, Bootloader/Fastboot, Safe Mode, or instant power off. |
-| **Display Tweaker** | Override display resolution, modify screen density (DPI), and force custom refresh rates. |
-| **Wi-Fi Passwords** | View, copy, and export saved Wi-Fi network credentials directly via privileged shell. |
-| **SystemUI Tuner** | Customize status bar icon visibility, battery icon styles, clock seconds, and immersive navigation. |
-| **Enforce Doze (Deep Sleep)** | Force immediate aggressive Doze deep sleep mode whenever the screen turns off. |
-| **Private DNS Controller** | Switch between encrypted DNS providers (Cloudflare, AdGuard, Quad9, Google, NextDNS, Custom) with auto-revert timers. |
-| **Audio Stream Master** | Independent fine-grained volume sliders for Media, Ring, Alarm, Call, Voice, and System audio streams. |
-| **Carrier Tethering** | Bypass carrier entitlement checks and restrictions on Wi-Fi hotspot and USB tethering. |
-| **Mixed Audio** | Multi-app concurrent audio playback bypass (prevent background apps from pausing when another app plays audio). |
-| **SoundMaster** | Per-app audio focus and volume routing mixer. |
-| **Universal Picture-in-Picture** | Force any unsupported app into Picture-in-Picture (PiP) mode using virtual display projection. |
-| **Screen Security & DRM** | Bypass `FLAG_SECURE` restrictions to allow screenshots and screen recording in secure/banking apps. |
-| **Auto DND (Zen Mode)** | Automated Do Not Disturb rules based on foreground app focus, custom schedules, and triggers. |
-| **DFRoot (DirtyFrag Exploit)** | Built-in privilege escalation helper using CVE-2026-43284 for supported kernel versions. |
-| **Quick Settings Tiles** | Interactive manager and setup suite for 18 custom Quick Settings tiles. |
-| **ShizuWall Firewall** | Advanced firewall interface featuring an integrated tracker & telemetry scanner and socket monitor. |
-| **Caffeinate** | Keep device screen awake with a tile and persistent notification for reading or navigation. |
-| **Theme Patcher** | System-level accent colors, font styling, and UI theme modifications. |
-
-#### 🛠️ Utilidades (14 Herramientas)
-| Feature | Description |
-| --- | --- |
-| **Shell** | Interactive privileged command-line terminal with real-time streaming output. |
-| **Log Viewer** | Real-time system logcat viewer with tag, package, level filtering, and export capabilities. |
-| **Device Info** | Comprehensive hardware, kernel, battery health, thermal sensors, and SoC dashboard. |
-| **Activities Launcher** | Inspect and launch exported, unexported, or hidden Android activities and intents. |
-| **Files** | Privileged filesystem browser with read/write access to protected `/data` and app directories. |
-| **App Installer Pro** | Privileged package installer supporting APK, APKS split bundles, and XAPK formats. |
-| **Terminal Apps** | Quick switcher and launcher for external terminal emulators. |
-| **LocalShell** | Standalone local shell interface. |
-| **Intents** | Fire custom explicit or implicit system intents, broadcast receivers, and services. |
-| **Stealth Mode** | Anti-detection measures to prevent target apps from detecting Shizuku, root, or debugging state. |
-| **Permissions Manager** | Overview and revocation/granting of elevated permissions across all installed packages. |
-| **Shizuku Store** | Built-in catalog to discover and download open-source apps built for Shizuku. |
-| **Call Recording (ShizuCallRecorder)** | Native two-way call recording powered by privileged shell audio capture. |
-| **WallYou Wallpapers** | In-app wallpaper browser, fetcher, and wallpaper switcher. |
-
-### Modules System
-
-OmniShizuku features a powerful, extensible module system inspired by Magisk/KernelSU modules but designed for Shizuku-based mods:
-
-- **Module Catalog** - Browse community modules from a curated GitHub-based catalog with search, filtering, and sorting.
-- **Module Discovery** - Automatic discovery of modules from GitHub repositories tagged with `shevery-modules` or official sources.
-- **One-Tap Installation** - Download, verify, and install modules directly from the app with progress tracking.
-- **Module Manager** - Enable, disable, update, and remove installed modules with ease.
-- **WebUI Support** - Many modules include web-based configuration interfaces accessible from within the app.
-- **Module Scripts** - Execute install, uninstall, service, and boot scripts with proper logging and error handling.
-- **Update Checker** - Automatic update detection for installed modules from their GitHub releases.
-- **Safe Installation** - Validation of module structure, props, and scripts before installation.
-- **Cross-Platform UI** - Optimized module screens for phones, tablets, TVs, and Wear OS.
-
-### Call Recording (ShizuCallRecorder Integration)
-
-Built-in support for call recording through Shizuku's privileged access:
-
-- **Shell-Based Recording Engine** - Uses privileged shell services for reliable audio capture.
-- **Foreground Service** - Persistent recording service with proper notifications.
-- **InCallService Integration** - Automatic call detection and recording management.
-- **Recording Management** - View, play, rename, and delete recordings with an intuitive UI.
-- **Configurable Options** - Customize recording format, codec, source, and storage location.
-- **AIDL Interfaces** - Secure IPC between app components for recording control.
-- **Permission Handling** - Proper runtime permission management for call recording requirements.
-- **Background Operation** - Reliable recording even with app in background.
-
-### AI & Developer Features
-
-- **AI Manager** - Integrated AI capabilities with support for multiple providers (configurable in settings).
-- **Developer Options** - Advanced developer tools, debugging utilities, and experimental features.
-- **Bug Report System** - Built-in bug reporting with logs, device info, and crash reports.
-- **Labs Reapply** - Reapply persistent lab modifications after updates or reboots.
-- **Device Info Dashboard** - Comprehensive device information with detailed hardware, software, and system properties.
-- **Log Viewer** - Real-time logcat viewer with filtering and search capabilities.
-
-### UI/UX Enhancements
-
-- **Material 3 Expressive Design** - Latest Material Design with dynamic color theming (Material You) support.
-- **Multi-Form Factor Support** - Optimized for phones, tablets, foldables, Android TV, and Wear OS.
-- **Dark Mode & AMOLED Black** - Full dark theme support with pure black option for AMOLED displays.
-- **Smooth Animations** - Polished transitions, lazy motion blur optimization, and fluid interactions.
-- **Adaptive Layouts** - Responsive UI that adapts to screen sizes and orientations.
-- **Localization** - Extensive multi-language support (English, Hindi, Spanish, French, Chinese, Russian, Japanese, Arabic, Kazakh, and more).
-- **Accessibility** - Wireless ADB Auto-PIN with accessibility service support (opt-in only).
-- **Performance Optimized** - Lazy loading, bounded data fetching, timeout safeguards, and efficient memory usage.
-- **Crash Resilience** - Defensive binder access, uncaught exception handling, and graceful degradation on OEM-specific issues.
+- **Solución todo en uno**: no se necesitan múltiples aplicaciones raíz/ADB. Todo, desde la eliminación hasta la visualización de ajustes en un solo lugar.
+- **No se requiere raíz**: funciona con Shizuku a través de ADB inalámbrico (Android 11+) o ADB, lo que lo hace accesible a un público más amplio.
+- **UI moderna e intuitiva** - Clean Materia 3 Interfaz expresiva con animaciones fluidas, temas dinámicos y diseños optimizados para teléfonos, tabletas, televisores y Wear OS.
+- **Mejorado activamente**: actualizaciones periódicas con nuevas funciones, correcciones de errores y mejoras más allá del Shizuku original.
+- **Centrado en la privacidad**: control granular sobre permisos de aplicaciones, aplicaciones, funciones de ocultación y restricciones a nivel del sistema.
+- **Seguro y reversible**: la mayoría de los cambios son reversibles, con capacidades de respaldo/restauración para la eliminación y administración de módulos.
+- **Sistema de módulos extensibles**: módulos impulsados por la comunidad con soporte de catálogo, descubrimiento e instalación integrados.
+- **Estabilidad de nivel empresarial**: prácticas de codificación defensivas, manejo de fallas, protecciones de tiempo de espera y correcciones de compatibilidad OEM.
 
 ---
 
-## 📊 Comparación con otros forks de Shizuku
+## ✨ Características clave
 
-| Feature | **OmniShizuku** | **Shizuku (Original)** | **Shizuku Next** | **Xhizuku** | **Shevery** | **ShizukuPlus** | **Stellar** |
+### Laboratorios: herramientas avanzadas del sistema
+
+El catálogo de Labs alberga 40 herramientas a nivel de sistema categorizadas claramente en administración de aplicaciones, controles del sistema y utilidades:
+
+#### 📱 Gestión de aplicaciones (8 herramientas)
+| Característica | Descripción |
+| --- | --- |
+| **Operaciones de aplicaciones** | Control granular sobre permisos ocultos de aplicaciones, puertas de operaciones de tiempo de ejecución y privilegios en segundo plano. |
+| **Cortafuegos** | Firewall de aplicaciones a nivel de red que bloquea Wi-Fi y datos móviles por aplicación sin consumir una ranura VPN. |
+| **Inicio automático** | Restrinja las aplicaciones para que no se activen o inicien servicios automáticamente al iniciar el dispositivo. |
+| **Modos de ocultación** | Oculte las opciones de desarrollador, la depuración USB/inalámbrica, los servicios de accesibilidad, el DNS privado y los estados de VPN para que no sean detectados. |
+| **Forzar modo oscuro** | Tema oscuro forzado en todo el sistema en aplicaciones de terceros, incluso sin soporte nativo para temas oscuros. |
+| **Desinflador Universal (UAD)** | Eliminador de paquetes con clasificación de seguridad de la comunidad con calificaciones de seguridad, explicaciones y restauración con 1 toque. |
+| **Congelador de aplicaciones** | Congele y suspenda instantáneamente aplicaciones en segundo plano para recuperar RAM y detener el consumo de batería. |
+| **Optimizador de juegos Axeron** | Ajuste del rendimiento a nivel del sistema, mejora del juego, ajustes de animación y optimizaciones de procesos. |
+
+#### ⚙️ Controles del sistema (18 herramientas)
+| Característica | Descripción |
+| --- | --- |
+| **Menú de encendido** | Reinicio privilegiado en Sistema, Recuperación, Cargador de arranque/Arranque rápido, Modo seguro o apagado instantáneo. |
+| **Ajustador de pantalla** | Anule la resolución de la pantalla, modifique la densidad de la pantalla (DPI) y fuerce frecuencias de actualización personalizadas. |
+| **Contraseñas de Wi-Fi** | Vea, copie y exporte las credenciales de red Wi-Fi guardadas directamente a través de un shell privilegiado. |
+| **Sintonizador de interfaz de usuario del sistema** | Personalice la visibilidad de los íconos de la barra de estado, los estilos de los íconos de la batería, los segundos del reloj y la navegación inmersiva. |
+| **Hacer cumplir el sueño (sueño profundo)** | Fuerce el modo de suspensión profunda Doze agresivo e inmediato cada vez que se apague la pantalla. |
+| **Controlador DNS privado** | Cambie entre proveedores de DNS cifrados (Cloudflare, AdGuard, Quad9, Google, NextDNS, Custom) con temporizadores de reversión automática. |
+| **Maestro de transmisión de audio** | Controles deslizantes de volumen independientes y detallados para transmisiones de audio de medios, timbres, alarmas, llamadas, voz y sistema. |
+| **Anclaje del operador** | Evite las verificaciones y restricciones de derechos de operador en puntos de acceso Wi-Fi y anclaje a red USB. |
+| **Audio mixto** | Omisión de reproducción de audio simultánea de múltiples aplicaciones (evita que las aplicaciones en segundo plano se detengan cuando otra aplicación reproduce audio). |
+| **Maestro de sonido** | Mezclador de enrutamiento de volumen y enfoque de audio por aplicación. |
+| **Imagen en imagen universal** | Fuerce cualquier aplicación no compatible al modo Imagen en imagen (PiP) mediante proyección de pantalla virtual. |
+| **Seguridad de pantalla y DRM** | Evite las restricciones de `FLAG_SECURE` para permitir capturas de pantalla y grabaciones de pantalla en aplicaciones bancarias/seguras. |
+| **DND automático (modo Zen)** | Reglas automatizadas de No molestar basadas en el enfoque de la aplicación en primer plano, horarios personalizados y activadores. |
+| **DFRoot (Explotación DirtyFrag)** | Ayudante de escalada de privilegios integrado que utiliza CVE-2026-43284 para versiones de kernel compatibles. |
+| **Azulejos de configuración rápida** | Administrador interactivo y conjunto de configuración para 18 mosaicos de configuración rápida personalizados. |
+| **Cortafuegos ShizuWall** | Interfaz de firewall avanzada que incluye un rastreador y escáner de telemetría integrados y un monitor de enchufe. |
+| **Cafeinado** | Mantenga la pantalla del dispositivo activa con un mosaico y una notificación persistente para lectura o navegación. |
+| **Parcheador de temas** | Colores de acento a nivel del sistema, estilos de fuente y modificaciones del tema de la interfaz de usuario. |
+
+#### 🛠️ Utilidades (14 herramientas)
+| Característica | Descripción |
+| --- | --- |
+| **Concha** | Terminal interactivo de línea de comandos privilegiado con salida de streaming en tiempo real. |
+| **Visor de registros** | Visor logcat del sistema en tiempo real con capacidades de exportación, filtrado de niveles, etiquetas y paquetes. |
+| **Información del dispositivo** | Hardware completo, kernel, estado de la batería, sensores térmicos y panel de SoC. |
+| **Lanzador de actividades** | Inspeccione y ejecute actividades e intenciones de Android exportadas, no exportadas u ocultas. |
+| **Archivos** | Explorador de sistema de archivos privilegiado con acceso de lectura/escritura a `/data` y directorios de aplicaciones protegidos. |
+| **Instalador de aplicaciones Pro** | Instalador de paquetes privilegiado que admite formatos APK, paquetes divididos APKS y XAPK. |
+| **Aplicaciones de terminal** | Conmutador rápido y lanzador para emuladores de terminales externos. |
+| **Shell local** | Interfaz de shell local independiente. |
+| **Intentos** | Active intenciones de sistema, receptores de transmisión y servicios personalizados, explícitos o implícitos. |
+| **Modo sigiloso** | Medidas antidetección para evitar que las aplicaciones de destino detecten Shizuku, raíz o estado de depuración. |
+| **Administrador de permisos** | Descripción general y revocación/concesión de permisos elevados en todos los paquetes instalados. |
+| **Tienda Shizuku** | Catálogo integrado para descubrir y descargar aplicaciones de código abierto creadas para Shizuku. |
+| **Grabación de llamadas (ShizuCallRecorder)** | Grabación nativa de llamadas bidireccionales impulsada por captura de audio de shell privilegiada. |
+| **Fondos de pantalla de WallYou** | Navegador, buscador y conmutador de fondos de pantalla en la aplicación. |
+
+### Sistema de módulos
+
+OmniShizuku presenta un sistema de módulos potente y extensible inspirado en los módulos Magisk/KernelSU pero diseñado para mods basados en Shizuku:
+
+- **Catálogo de módulos**: explore los módulos de la comunidad desde un catálogo seleccionado basado en GitHub con búsqueda, filtrado y clasificación.
+- **Descubrimiento de módulos**: descubrimiento automático de módulos de repositorios de GitHub etiquetados con "shevery-modules" o fuentes oficiales.
+- **Instalación con un solo toque**: descargue, verifique e instale módulos directamente desde la aplicación con seguimiento del progreso.
+- **Administrador de módulos**: habilite, deshabilite, actualice y elimine módulos instalados con facilidad.
+- **Soporte WebUI**: muchos módulos incluyen interfaces de configuración basadas en web a las que se puede acceder desde la aplicación.
+- **Secuencias de comandos de módulo**: ejecute secuencias de comandos de instalación, desinstalación, servicio y arranque con registro y manejo de errores adecuados.
+- **Update Checker**: detección automática de actualizaciones para módulos instalados desde sus versiones de GitHub.
+- **Instalación segura** - Validación de la estructura del módulo, accesorios y scripts antes de la instalación.
+- **UI multiplataforma**: pantallas de módulos optimizadas para teléfonos, tabletas, televisores y Wear OS.
+
+### Grabación de llamadas (integración ShizuCallRecorder)
+
+Soporte integrado para grabación de llamadas a través del acceso privilegiado de Shizuku:
+
+- **Motor de grabación basado en Shell**: utiliza servicios de Shell privilegiados para una captura de audio confiable.
+- **Servicio en primer plano**: servicio de grabación persistente con notificaciones adecuadas.
+- **Integración de InCallService** - Detección automática de llamadas y gestión de grabaciones.
+- **Administración de grabaciones**: vea, reproduzca, cambie el nombre y elimine grabaciones con una interfaz de usuario intuitiva.
+- **Opciones configurables**: personalice el formato de grabación, el códec, la fuente y la ubicación de almacenamiento.
+- **Interfaces AIDL**: IPC segura entre los componentes de la aplicación para el control de la grabación.
+- **Manejo de permisos**: gestión adecuada de permisos en tiempo de ejecución para los requisitos de grabación de llamadas.
+- **Operación en segundo plano** - Grabación confiable incluso con la aplicación en segundo plano.
+
+### Funciones de IA y desarrolladores
+
+- **AI Manager**: capacidades de IA integradas con soporte para múltiples proveedores (configurables en la configuración).
+- **Opciones de desarrollador**: herramientas avanzadas para desarrolladores, utilidades de depuración y funciones experimentales.
+- **Sistema de informe de errores**: informe de errores integrado con registros, información del dispositivo e informes de fallos.
+- **Reaplicación de laboratorios**: vuelva a aplicar modificaciones de laboratorio persistentes después de actualizaciones o reinicios.
+- **Panel de información del dispositivo**: información completa del dispositivo con propiedades detalladas de hardware, software y sistema.
+- **Visor de registros**: visor de logcat en tiempo real con capacidades de filtrado y búsqueda.
+
+### Mejoras en la interfaz de usuario/UX
+
+- **Materia 3 Expressive Design** - El último diseño de materiales compatible con temas de colores dinámicos (Material You).
+- **Compatibilidad con factores de forma múltiples**: optimizado para teléfonos, tabletas, dispositivos plegables, Android TV y Wear OS.
+- **Modo oscuro y negro AMOLED**: compatibilidad total con temas oscuros con opción de negro puro para pantallas AMOLED.
+- **Animaciones fluidas**: transiciones pulidas, optimización del desenfoque de movimiento lento e interacciones fluidas.
+- **Diseños adaptables**: interfaz de usuario responsiva que se adapta a los tamaños y orientaciones de la pantalla.
+- **Localización** - Amplia compatibilidad con varios idiomas (inglés, hindi, español, francés, chino, ruso, japonés, árabe, kazajo y más).
+- **Accesibilidad**: PIN automático ADB inalámbrico con soporte de servicio de accesibilidad (solo suscripción voluntaria).
+- **Rendimiento optimizado**: carga diferida, recuperación de datos limitada, protección de tiempo de espera y uso eficiente de la memoria.
+- **Resiliencia ante fallos**: acceso defensivo a carpetas, manejo de excepciones no detectadas y degradación elegante en problemas específicos de OEM.
+
+---
+
+## 📊 Comparación de características con otras horquillas Shizuku
+
+| Característica | **OmniShizuku** | **Shizuku (Original)** | **Shizuku Siguiente** | **Xhizuku** | **Shevery** | **ShizukuPlus** | **Estelar** |
 | --- | :------------: | :--------------------: | :------------: | :--------: | :--------: | :------------: | :--------: |
-| **Base Functionality** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Wireless ADB / TCP Mode** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Root Support** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Dhizuku Support** | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
-| **Autostart** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Module System** | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Labs Advanced Tools (40 Tools)** | ✅ | ❌ | Partial | Partial | Partial | ❌ | Partial |
-| **App Debloater (UAD)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **App Freezer** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Firewall (Zero-VPN)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Quick Settings Tiles Suite (18 tiles)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **ShizuWall Native Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Tracker & Telemetry Scanner** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Caffeinate Screen Stay-Awake** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Private DNS Auto-Revert & Cycles** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **DFRoot (Kernel Exploit Helper)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **WallYou Dynamic Wallpapers** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Universal Picture-in-Picture** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Display Tweaker** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Call Recording** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Theme Patcher** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Built-in Terminal** | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
-| **AI Integration** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Material 3 Expressive** | ✅ | ❌ | Material 3 | Material 3 | Material 3 | ❌ | ❌ |
-| **TV/Wear OS Support** | ✅ | Partial | Partial | Partial | ❌ | ❌ | ❌ |
-| **Onboarding Flow** | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Stealth Features** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Wireless ADB Auto-PIN** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **License** | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | MPL-2.0 |
+| **Funcionalidad básica** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Modo ADB/TCP inalámbrico** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Soporte raíz** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Soporte de Dhizuku** | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
+| **Inicio automático** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Sistema de módulo** | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| **Herramientas avanzadas de Labs (40 herramientas)** | ✅ | ❌ | Parcial | Parcial | Parcial | ❌ | Parcial |
+| **Desinflador de aplicaciones (UAD)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Congelador de aplicaciones** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Cortafuegos (VPN cero)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Configuración rápida Tiles Suite (18 mosaicos)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Firewall nativo ShizuWall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Rastreador y escáner de telemetría** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Pantalla con cafeína para permanecer despierto** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Ciclos y reversión automática de DNS privado** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **DFRoot (ayuda para explotar el kernel)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Fondos de pantalla dinámicos de WallYou** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Imagen en imagen universal** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Ajustador de pantalla** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Grabación de llamadas** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Parcheador de temas** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Terminal incorporada** | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
+| **Integración de IA** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **Materia 3 Expresivo** | ✅ | ❌ | Materia 3 | Materia 3 | Materia 3 | ❌ | ❌ |
+| **Compatibilidad con TV/Wear OS** | ✅ | Parcial | Parcial | Parcial | ❌ | ❌ | ❌ |
+| **Flujo de incorporación** | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Funciones sigilosas** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **PIN automático ADB inalámbrico** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Licencia** | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | MPL-2.0 |
 
-*Comparison is based on publicly available features at the time of writing. Features may change over time.*
+*La comparación se basa en funciones disponibles públicamente al momento de escribir este artículo. Las características pueden cambiar con el tiempo.*
 
 ---
 
-## 📱 Requisitos del Sistema
+## 📱 Requisitos del sistema
 
-| Component | Requirement |
+| Componente | Requisito |
 | --- | --- |
-| **Android Version** | Android 5.0 (Lollipop) API 21 or higher |
-| **Architecture** | arm64-v8a, armeabi-v7a, x86, x86_64 |
-| **Shizuku** | Shizuku service must be running (via Wireless Debugging, ADB over USB, or Root) |
-| **Permissions** | Shizuku permission grant required for most features |
-| **Storage** | ~50-80 MB for installation (varies by features) |
-| **Optional** | Accessibility service for Wireless ADB Auto-PIN feature |
+| **Versión de Android** | Android 5.0 (Lollipop) API 21 o superior |
+| **Arquitectura** | arm64-v8a, armeabi-v7a, x86, x86_64 |
+| **Shizuku** | El servicio Shizuku debe estar ejecutándose (a través de depuración inalámbrica, ADB a través de USB o raíz) |
+| **Permisos** | Se requiere concesión de permiso de Shizuku para la mayoría de las funciones |
+| **Almacenamiento** | ~50-80 MB para instalación (varía según las características) |
+| **Opcional** | Servicio de accesibilidad para la función Wireless ADB Auto-PIN |
 
 ---
 
 ## 📥 Instalación
 
-### From GitHub Releases (Recommended)
+### De las versiones de GitHub (recomendado)
 
-1. Go to the [Releases page](https://github.com/krishna3163/OmniShizuku/releases)
-2. Download the latest `manager-debug.apk` or `manager-release.apk`
-3. Install the APK on your Android device
-4. Follow the setup process
+1. Vaya a la [página de lanzamientos] (https://github.com/krishna3163/OmniShizuku/releases)
+2. Descargue la última versión `manager-debug.apk` o `manager-release.apk`
+3. Instala el APK en tu dispositivo Android
+4. Sigue el proceso de configuración
 
-### Via ADB
+### Vía BAsD
 
 ```bash
 adb install -r OmniShizuku.apk
 ```
 
-### Important Notes
+### Notas importantes
 
-- If you have the original Shizuku installed, you can usually install OmniShizuku alongside it, or replace it. Check compatibility for your use case.
-- Some features require specific Android versions or device capabilities.
-- For call recording features, additional permissions may be required depending on Android version.
+- Si tiene instalado el Shizuku original, generalmente puede instalar OmniShizuku junto con él o reemplazarlo. Verifique la compatibilidad para su caso de uso.
+- Algunas funciones requieren versiones específicas de Android o capacidades del dispositivo.
+- Para las funciones de grabación de llamadas, es posible que se requieran permisos adicionales según la versión de Android.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Empezando
 
-1. **Install OmniShizuku** - Download and install the APK
-2. **Setup Shizuku** - Start Shizuku service via Wireless Debugging (Android 11+) or ADB/Root
-3. **Grant Permission** - Open OmniShizuku and grant Shizuku permission when prompted
-4. **Explore** - Navigate through Home, Apps, Modules, Labs, and Settings tabs
-5. **Customize** - Head to Essentials Hub or Labs to enable features you need
-6. **Stay Safe** - Read feature descriptions before applying system-level changes
+1. **Instalar OmniShizuku** - Descargue e instale el APK
+2. **Configurar Shizuku**: inicie el servicio Shizuku mediante depuración inalámbrica (Android 11+) o ADB/Root
+3. **Conceder permiso**: abre OmniShizuku y concede permiso a Shizuku cuando se te solicite.
+4. **Explorar**: navegue por las pestañas Inicio, Aplicaciones, Módulos, Laboratorios y Configuración.
+5. **Personalizar**: dirígete a Essentials Hub o Labs para habilitar las funciones que necesitas
+6. **Manténgase seguro**: lea las descripciones de las funciones antes de aplicar cambios a nivel del sistema
 
-**For Wireless Debugging (Android 11+):**
-- Go to `Settings > Developer Options > Wireless debugging` and pair with OmniShizuku or Shizuku
+**Para depuración inalámbrica (Android 11+):**
+- Vaya a `Configuración > Opciones de desarrollador > Depuración inalámbrica` y vincúlelo con OmniShizuku o Shizuku
 
-**For ADB (via PC):**
+**Para ADB (a través de PC):**
 ```bash
 adb shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh
 ```
-*(Or use the appropriate start command for your setup)*
+*(O utilice el comando de inicio apropiado para su configuración)*
 
 ---
 
-## 🔨 Compilación desde el Código Fuente
+## 🔨 Construyendo desde la fuente
 
-### Prerequisites
+### Requisitos previos
 
-- [Android Studio](https://developer.android.com/studio) (latest stable) or [Android SDK](https://developer.android.com/studio#command-tools)
-- [JDK 17](https://adoptium.net/) or higher
+- [Android Studio](https://developer.android.com/studio) (última versión estable) o [Android SDK](https://developer.android.com/studio#command-tools)
+- [JDK 17](https://adoptium.net/) o superior
 - [Git](https://git-scm.com/)
-- Gradle (wrapper included)
+- Gradle (envoltorio incluido)
 
-### Clone and Build
+### Clonar y construir
 
 ```bash
 # Clone the repository
@@ -311,124 +311,124 @@ cd OmniShizuku
 ./gradlew :manager:installDebug
 ```
 
-The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug.apk`
+El APK de depuración estará ubicado en: `manager/build/outputs/apk/debug/manager-debug.apk`
 
-### Build Requirements
+### Requisitos de construcción
 
-- `compileSdk`: 36
+- `compilarSdk`: 36
 - `minSdk`: 21
-- `targetSdk`: 36
-- Kotlin with Jetpack Compose
-- R8/ProGuard for release builds
+- `objetivoSdk`: 36
+- Kotlin con Jetpack Compose
+- R8/ProGuard para versiones de lanzamiento
 
 ---
 
-## 🔐 Arquitectura y Seguridad
+## 🔐 Arquitectura y seguridad
 
-### Security Measures
+### Medidas de seguridad
 
-- **Defensive Programming** - Null-safe binder access, try-catch blocks around critical operations, and graceful fallbacks
-- **Permission Scoping** - Minimal permission usage with runtime permission requests where necessary
-- **Secure IPC** - AIDL interfaces for inter-process communication with proper service binding
-- **No Telemetry** - No analytics, tracking, or data collection
-- **Open Source** - Fully transparent, auditable codebase
-- **Reversible Changes** - Most modifications can be undone through the app
-- **Validation** - Module validation, package verification, and safe installation practices
-- **OEM Compatibility** - Special handling for Realme, OPPO, Xiaomi, OnePlus and other OEMs with aggressive battery optimization
+- **Programación defensiva**: acceso a carpetas con seguridad nula, bloques try-catch alrededor de operaciones críticas y respaldos elegantes
+- **Alcance de permisos**: uso mínimo de permisos con solicitudes de permisos en tiempo de ejecución cuando sea necesario
+- **IPC seguro**: interfaces AIDL para comunicación entre procesos con enlace de servicio adecuado
+- **Sin telemetría**: sin análisis, seguimiento ni recopilación de datos
+- **Código abierto**: código base auditable y totalmente transparente
+- **Cambios reversibles**: la mayoría de las modificaciones se pueden deshacer a través de la aplicación
+- **Validación**: validación de módulos, verificación de paquetes y prácticas de instalación segura
+- **Compatibilidad OEM** - Manejo especial para Realme, OPPO, Xiaomi, OnePlus y otros OEM con optimización agresiva de la batería
 
-### Architecture Highlights
+### Aspectos destacados de la arquitectura
 
-- **MVVM Pattern** - Clean separation of concerns with ViewModels and UI state
-- **Jetpack Compose** - Modern declarative UI framework
-- **Kotlin Coroutines** - Asynchronous operations with proper lifecycle handling
-- **Room/Preferences** - Local data persistence
-- **Hilt/Dagger** - Dependency injection (where applicable)
-- **Modular Design** - Feature modules for better organization and maintainability
+- **Patrón MVVM**: separación clara de preocupaciones con ViewModels y el estado de la interfaz de usuario
+- **Jetpack Compose**: marco de interfaz de usuario declarativo moderno
+- **Kotlin Coroutines**: operaciones asincrónicas con manejo adecuado del ciclo de vida
+- **Habitación/Preferencias** - Persistencia de datos locales
+- **Hilt/Dagger** - Inyección de dependencia (cuando corresponda)
+- **Diseño modular**: módulos de funciones para una mejor organización y mantenibilidad
 
 ---
 
-## 🔑 Explicación de Permisos
+## 🔑 Permisos explicados
 
-| Permission | Purpose | Required For |
+| Permiso | Propósito | Requerido para |
 | --- | --- | --- |
-| `QUERY_ALL_PACKAGES` | List and manage installed apps | App Ops, Debloater, Freezer, Modules |
-| `READ_EXTERNAL_STORAGE` / `MANAGE_EXTERNAL_STORAGE` | File access | File Explorer, APK installation |
-| `POST_NOTIFICATIONS` | Show notifications | Services, Caffeinate, Recording |
-| `FOREGROUND_SERVICE` | Run background services | Call recording, ShizuWall, Caffeinate |
-| `READ_PHONE_STATE`, `RECORD_AUDIO` | Call detection and recording | ShizuCallRecorder |
-| `BIND_ACCESSIBILITY_SERVICE` | Auto-fill Wireless ADB PIN | Wireless ADB Auto-PIN (opt-in) |
-| `PACKAGE_USAGE_STATS` | Usage data access | Some optimization features |
-| `REQUEST_INSTALL_PACKAGES` | Install APKs | Package Installer Pro |
-| `SYSTEM_ALERT_WINDOW` | Overlay display | Universal PiP, Screen Overlays |
+| `QUERY_ALL_PACKAGES` | Enumerar y administrar aplicaciones instaladas | App Ops, Debloater, Freezer, Módulos |
+| `READ_EXTERNAL_STORAGE` / `MANAGE_EXTERNAL_STORAGE` | Acceso a archivos | Explorador de archivos, instalación de APK |
+| `POST_NOTIFICACIONES` | Mostrar notificaciones | Servicios, Caffeinate, Grabación |
+| `SERVICIO_ANTERIOR` | Ejecutar servicios en segundo plano | Grabación de llamadas, ShizuWall, Caffeinate |
+| `READ_PHONE_STATE`, `RECORD_AUDIO` | Detección y grabación de llamadas. | ShizuCallRecorder |
+| `BIND_ACCESSIBILITY_SERVICE` | PIN ADB inalámbrico de autocompletar | PIN automático ADB inalámbrico (optar) |
+| `PACKAGE_USAGE_STATS` | Acceso a datos de uso | Algunas características de optimización |
+| `REQUEST_INSTALL_PACKAGES` | Instalar APK | Instalador de paquetes Pro |
+| `SYSTEM_ALERT_WINDOW` | Pantalla superpuesta | PiP universal, superposiciones de pantalla |
 
-*Most permissions are only requested when needed for specific features.*
+*La mayoría de los permisos solo se solicitan cuando son necesarios para funciones específicas.*
 
 ---
 
-## 🤝 Contribuciones
+## 🤝 Contribuyendo
 
-Contributions are welcome! Whether it's bug reports, feature requests, documentation improvements, or code contributions.
+¡Las contribuciones son bienvenidas! Ya sean informes de errores, solicitudes de funciones, mejoras de documentación o contribuciones de código.
 
-### How to Contribute
+### Cómo contribuir
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
+1. **Bifurcar** el repositorio
+2. **Crear** una rama de funciones (`git checkout -b feature/AmazingCaracterística`)
+3. **Confirma** tus cambios (`git commit -m 'Agrega alguna característica increíble'`)
+4. **Empujar** a la rama (`git push origin feature/AmazingCaracterística`)
+5. **Abrir** una solicitud de extracción
 
-### Guidelines
+### Directrices
 
-- Follow existing code style and conventions
-- Write clear commit messages
-- Test your changes thoroughly
-- Update documentation if needed
-- For major features, open an issue first to discuss
+- Siga el estilo y las convenciones del código existente
+- Escribe mensajes de confirmación claros
+- Pruebe sus cambios a fondo
+- Actualizar la documentación si es necesario
+- Para conocer las características principales, primero abra un problema para discutirlo
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more details.
 
 ---
 
-## 🙏 Créditos y Agradecimientos
+## 🙏 Créditos y agradecimientos
 
-### Core Projects
+### Proyectos principales
 
-- **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** - The original project that made all of this possible. Huge thanks to Rikka and all contributors.
-- **[Dhizuku](https://github.com/iamr0s/Dhizuku)** - For Dhizuku API integration support.
+- **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** - El proyecto original que hizo todo esto posible. Muchas gracias a Rikka y a todos los contribuyentes.
+- **[Dhizuku](https://github.com/iamr0s/Dhizuku)** - Para soporte de integración de API de Dhizuku.
 
-### Communities & Inspirations
+### Comunidades e inspiraciones
 
-- **[Universal Android Debloater (UAD)](https://github.com/0x192/universal-android-debloater)** - Safety rankings and debloating methodology
-- **[LSPosed](https://github.com/LSPosed/LSPosed)** - Inspiration for module system concepts
-- **[Magisk](https://github.com/topjohnwu/Magisk)** - Module system architecture inspiration
-- **[KernelSU](https://github.com/tiann/KernelSU)** - Modern root solution inspiration
+- **[Universal Android Debloater (UAD)](https://github.com/0x192/universal-android-debloater)** - Clasificaciones de seguridad y metodología de eliminación
+- **[LSPosed](https://github.com/LSPosed/LSPosed)** - Inspiración para conceptos de sistemas modulares
+- **[Magisk](https://github.com/topjohnwu/Magisk)** - Inspiración en la arquitectura del sistema del módulo
+- **[KernelSU](https://github.com/tiann/KernelSU)** - Inspiración de solución raíz moderna
 
-### Module Developers & Integrations
+### Integraciones y desarrolladores de módulos
 
-- **[kitsumed/ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder)** - Call recording functionality integration
-- **[RBN-Apps/Quick-Tile-Settings](https://github.com/RBN-Apps/Quick-Tile-Settings)** - Companion app integration
-- **[AhmetCanArslan/ShizuWall](https://github.com/AhmetCanArslan/ShizuWall)** - Companion app integration
-- **[Shevery Modules Community](https://github.com/topics/shevery-modules)** - Community module ecosystem
+- **[kitsumed/ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder)** - Integración de la funcionalidad de grabación de llamadas
+- **[RBN-Apps/Quick-Tile-Settings](https://github.com/RBN-Apps/Quick-Tile-Settings)** - Integración de la aplicación complementaria
+- **[AhmetCanArslan/ShizuWall](https://github.com/AhmetCanArslan/ShizuWall)** - Integración de la aplicación complementaria
+- **[Comunidad de módulos Shevery](https://github.com/topics/shevery-modules)** - Ecosistema de módulos comunitarios
 
-### Special Thanks
+### agradecimiento especial
 
-A heartfelt thank you to:
+Un sincero agradecimiento a:
 
-- **The Shizuku Community** - For continuous support, feedback, and testing
-- **All Contributors** - Everyone who has reported bugs, suggested features, submitted PRs, or helped improve OmniShizuku
-- **Translators** - For making OmniShizuku accessible in multiple languages
-- **Beta Testers** - For helping catch bugs and ensuring stability
-- **OEM Community** - For sharing device-specific workarounds and fixes
+- **La comunidad Shizuku**: para soporte, comentarios y pruebas continuos
+- **Todos los colaboradores**: todos los que informaron errores, sugirieron funciones, enviaron relaciones públicas o ayudaron a mejorar OmniShizuku.
+- **Traductores** - Por hacer que OmniShizuku sea accesible en varios idiomas
+- **Probadores Beta**: para ayudar a detectar errores y garantizar la estabilidad
+- **Comunidad OEM**: para compartir soluciones y correcciones específicas del dispositivo
 
-### Why Choose OmniShizuku?
+### ¿Por qué elegir OmniShizuku?
 
-OmniShizuku stands apart by combining the power of Shizuku with a comprehensive suite of practical tools in one beautifully designed app. Instead of juggling multiple apps for debloating, tweaking, optimizing, and managing your device, OmniShizuku brings everything together with a cohesive experience. Whether you're a casual user looking to disable bloatware or a power user seeking deep system customization, OmniShizuku provides the tools you need with safety, reversibility, and ease of use at its core.
+OmniShizuku se distingue por combinar el poder de Shizuku con un conjunto completo de herramientas prácticas en una aplicación bellamente diseñada. En lugar de hacer malabares con varias aplicaciones para desbloquear, ajustar, optimizar y administrar su dispositivo, OmniShizuku reúne todo en una experiencia coherente. Ya sea que sea un usuario ocasional que busca desactivar bloatware o un usuario avanzado que busca una personalización profunda del sistema, OmniShizuku proporciona las herramientas que necesita con seguridad, reversibilidad y facilidad de uso como esencia.
 
 ---
 
 ## 📄 Licencia
 
-This project is licensed under the **Apache License 2.0**. See the [LICENSE](../LICENSE) file for full details.
+This project is licensed under the **Apache Licencia 2.0**. See the [LICENSE](../LICENSE) file for full details.
 
 ```
 Copyright 2024-2026 krishna3163
@@ -450,17 +450,17 @@ limitations under the License.
 
 ## 💬 Soporte
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/krishna3163/OmniShizuku/issues)
-- **GitHub Discussions**: [Ask questions and share ideas](https://github.com/krishna3163/OmniShizuku/discussions)
-- **Documentation**: Check the README in your preferred language
-- **Source Code**: [github.com/krishna3163/OmniShizuku](https://github.com/krishna3163/OmniShizuku)
+- **Problemas de GitHub**: [Informar errores o solicitar funciones](https://github.com/krishna3163/OmniShizuku/issues)
+- **Discusiones de GitHub**: [Haga preguntas y comparta ideas](https://github.com/krishna3163/OmniShizuku/discussions)
+- **Documentación**: Consulta el archivo README en tu idioma preferido
+- **Código fuente**: [github.com/krishna3163/OmniShizuku](https://github.com/krishna3163/OmniShizuku)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [krishna3163](https://github.com/krishna3163) and the amazing OmniShizuku community**
+**Hecho con ❤️ por [krishna3163](https://github.com/krishna3163) y la increíble comunidad OmniShizuku**
 
-*If you find OmniShizuku useful, please consider giving it a ⭐ on GitHub!*
+*Si encuentra útil OmniShizuku, ¡considere darle un ⭐ en GitHub!*
 
 </div>

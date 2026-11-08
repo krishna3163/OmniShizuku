@@ -2,12 +2,12 @@
 
 <img src="../manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
 
-# OmniShizuku
+# OmniŞidzuku
 
-**Jaqsartylğan modulderi, zamanaui interfeisi jäne keñeýtilgen jüýelik basqaru mümkindikteri bar Shizuku jobasynyñ quatty forki.**
+**Jaqsartylğan modulderi, zamanaui interfeisi jäne keñeitilgen jüieni basqaru mümkindikteri bar quatty, mümkindikteri mol Shizuku şanyşqysy.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163%2FOmniShizuku-blue?logo=github&style=for-the-badge)](https://github.com/krishna3163/OmniShizuku)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](../LICENSE)
+[![Litsenziya: Apache-2.0](https://img.shields.io/badge/Litsenziya-Apache%202.0-blue.svg?style=for-the-badge)](../LICENSE)
 [![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android&style=for-the-badge)](https://developer.android.com)
 [![API](https://img.shields.io/badge/API%20Level-21%2B-brightgreen?style=for-the-badge)](https://developer.android.com/guide/topics/manifest/uses-sdk-element)
 [![Shizuku](https://img.shields.io/badge/Powered%20by-Shizuku%20API-orange?style=for-the-badge)](https://github.com/RikkaApps/Shizuku)
@@ -20,281 +20,281 @@
 
 ## 📖 Mazmūny
 
-- [Overview](#-overview)
-- [Screenshots](#-screenshots)
-- [Why Use OmniShizuku?](#-why-use-omnishizuku)
-- [Key Features](#-key-features)
-  - [Labs - Advanced System Tools (40 Tools)](#labs---advanced-system-tools)
-  - [Modules System](#modules-system)
-  - [Call Recording (ShizuCallRecorder Integration)](#call-recording-shizucallrecorder-integration)
-  - [AI & Developer Features](#ai--developer-features)
-  - [UI/UX Enhancements](#uiux-enhancements)
-- [Feature Comparison](#-feature-comparison-with-other-shizuku-forks)
-- [System Requirements](#-system-requirements)
-- [Installation](#-installation)
-- [Getting Started](#-getting-started)
-- [Building from Source](#-building-from-source)
-- [Architecture & Security](#-architecture--security)
-- [Permissions Explained](#-permissions-explained)
-- [Contributing](#-contributing)
-- [Credits & Acknowledgments](#-credits--acknowledgments)
-- [License](#-license)
-- [Support](#-support)
+- [Şolu](#-şolu)
+- [Skrinşottar](#-skrinşottar)
+- [OmniShizuku ne üşin qajet?](#-why-use-omnishizuku)
+- [Negizgi mümkindikter](#-kilt-mümkindikter)
+  - [Zerthana - Keñeitilgen jüielik qūraldar (40 Qūral)](#labs---advanced-jüie qūraldary)
+  - [Modulder jüiesi](#modules-jüie)
+  - [Qoñyraulardy jazu (ShizuCallRecorder Integration)](#call-recording-shizucallrecorder-integration)
+  - [AI jäne äzirleuşi mümkindikteri](#ai--äzirleuşi mümkindikteri)
+  - [UI/UX jaqsartulary](#uiux-jetildiruler)
+- [Mümkindikterdi salystyru](#-funktsiyany-basqa-şizuku-şanyşqylarymen-salystyru)
+- [Jüie talaptary](#-jüie talaptary)
+- [Ornatu](#-ornatu)
+- [Bastau](#-bastau)
+- [Qūrylys közinen](#-Building-from-source)
+- [Arhitektura jäne qauipsizdik](#-arhitektura--qauipsizdik)
+- [Rūqsattar tüsindirildi](#-rūqsattar-tüsindirildi)
+- [Üles qosu](# üles qosu)
+- [Nesieler jäne alğys](#-kreditter--aqpyndamalar)
+- [Litsenziya](#-litsenziya)
+- [Qoldau](#-qoldau)
 
 ---
 
 ## 🔍 Şolu
 
-**OmniShizuku** is an extensively enhanced, open-source fork of the original [Shizuku](https://github.com/RikkaApps/Shizuku) project. It extends Shizuku's powerful system-level API access by combining it with a vast collection of practical utilities, system tweaks, privacy controls, and an intuitive modern interface.
+**OmniSidzuku** — tüpnūsqa [Shizuku](https://github.com/RikkaApps/Shizuku) jobasynyñ keñeitilgen, aşyq kody bar şanyşqysy. Ol praktikalyq utilitalardyñ keñ jiyntyğymen, jüielik tüzetulermen, qūpiyalylyqty basqaru elementterimen jäne intuitivti zamanaui interfeispen biriktiru arqyly Shizuku-nyñ quatty jüielik deñgeidegi API qoljetimdiligin keñeitedi.
 
 🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
-Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take full control of their Android device without requiring full root access in most cases - leveraging Shizuku's ADB/root bridging capabilities. From display customization and battery optimization to app management, debloating, call recording, and advanced automation, OmniShizuku is your all-in-one system utility suite.
+**Material Design 3 Expressive** kömegimen jasalğan OmniShizuku paidalanuşylarğa köp jağdaida tolyq tübirlik qatynasty qajet etpei-aq Android qūrylğysyn tolyq basqaruğa mümkindik beredi - Shizuku-nyñ ADB/root köpirlik mümkindikterin paidalanady. Displeidi teñşeu men batareyany oñtailandyrudan qoldanbalardy basqaruğa, delotatsiyağa, qoñyraulardy jazuğa jäne keñeitilgen avtomattandyruğa deiin OmniShizuku sizdiñ barlyğy bir jüiedegi utilitalar jiyntyğy bolyp tabylady.
 
 ---
 
 ## 📸 Skrinşottar
 
-| **Home & Status** | **App Permissions** | **ADB Modules** | **Labs Catalog** | **Comput (Terminal & AI)** | **Settings** |
+| **Üi jäne küi** | **Qoldanba rūqsattary** | **ADB modulderi** | **Zerthana katalogy** | **Kompyuter (Terminal jäne AI)** | **Parametrler** |
 |:---:|:---:|:---:|:---:|:---:|:---:|
 | <img src="../screenshots/home.png" width="165" alt="Home Screen" /> | <img src="../screenshots/manage_apps.png" width="165" alt="Manage Authorized Apps" /> | <img src="../screenshots/modules.png" width="165" alt="ADB Modules" /> | <img src="../screenshots/labs.png" width="165" alt="Labs Catalog" /> | <img src="../screenshots/comput.png" width="165" alt="Comput Console" /> | <img src="../screenshots/settings.png" width="165" alt="Settings Screen" /> |
-| Real-time service status & wireless ADB pairing | Whitelist mode, granular permissions & session-only access | Magisk/KernelSU-style ZIP module installer & manager | 39+ powerful system controls & tweaks | Privileged shell terminal with Gemini/AI generation | Device Owner, backups, automation & security config |
+| Naqty uaqyttağy qyzmet küii jäne symsyz ADB jūptauy | Aq tizim rejimi, egjei-tegjeili rūqsattar jäne tek seans üşin rūqsat | Magisk/KernelSU stilindegi ZIP moduliniñ ornatuşysy jäne menedjeri | 39+ quatty jüielik basqaru elementteri jäne tüzetuler | Gemini/AI generatsiyasy bar artyqşylyqty qabyq terminaly | Qūrylğy iesi, saqtyq köşirmeler, avtomattandyru jäne qauipsizdik konfiguratsiyasy |
 
 ---
 
-### 🔬 Featured Labs & System Capabilities
+### 🔬 Tañdauly zerthanalar jäne jüie mümkindikteri
 
-| **System Controls & Power Tools** | **Native ShizuWall Firewall** |
+| **Jüielik basqaru elementteri jäne elektr qūraldary** | **Native ShizuWall brandmauer** |
 |:---:|:---:|
 | <img src="../screenshots/labs_tools.png" width="260" alt="Labs System Tools" /> | <img src="../screenshots/shizuwall.png" width="260" alt="ShizuWall Firewall" /> |
-| Enforce Doze, Mixed Audio, Private DNS, Screen Security & DFRoot | Zero-VPN native firewall with tracker scanner & appop rules |
+| Doze, aralas audio, jeke DNS, ekran qauipsizdigi jäne DFRoot funktsiyalaryn oryndañyz | Treker skaneri jäne qoldanba erejeleri bar nöldik VPN jergilikti brandmauer |
 
 ---
 
-## 💡 Nelikten OmniShizuku tañdau kerek?
+## 💡 Nelikten OmniShizuku paidalanu kerek?
 
-- **All-in-One Solution** - No need for multiple root/ADB apps. Everything from debloating to display tweaks in one place.
-- **No Root Required** - Works with Shizuku via Wireless ADB (Android 11+) or ADB, making it accessible to a wider audience.
-- **Modern & Intuitive UI** - Clean Material 3 Expressive interface with smooth animations, dynamic theming, and optimized layouts for phones, tablets, TVs and Wear OS.
-- **Actively Enhanced** - Regular updates with new features, bug fixes, and improvements beyond the original Shizuku.
-- **Privacy-Focused** - Granular control over app permissions, appops, hiding features, and system-level restrictions.
-- **Safe & Reversible** - Most changes are reversible, with backup/restore capabilities for debloating and module management.
-- **Extensible Module System** - Community-driven modules with built-in catalog, discovery, and installation support.
-- **Enterprise-Grade Stability** - Defensive coding practices, crash handling, timeout safeguards, and OEM compatibility fixes.
+- **Barlyğy bir şeşim** - Birneşe tübirlik/ADB qoldanbalarynyñ qajeti joq. Deblotatsiyadan bastap būrmalardy körsetuge deiin barlyğy bir jerde.
+- **Tübir qajet emes** - Wireless ADB (Android 11+) nemese ADB arqyly Shizuku-men jūmys isteidi, būl ony keñirek auditoriyağa qoljetimdi etedi.
+- **Zamanaui jäne intuitivtik UI** - Clean Material 3 Telefondar, planşetter, teledidarlar jäne Wear OJ üşin tegis animatsiyalary, dinamikalyq taqyryptary jäne oñtailandyrylğan maketteri bar ekspressivti interfeis.
+- **Belsendi jetildirilgen** - Jaña mümkindiktermen, qatelerdi tüzetumen jäne bastapqy Shizuku-dan tys jaqsartularmen tūraqty jañartular.
+- **Qūpiyalylyqqa bağyttalğan** - qoldanba rūqsattaryn, qoldanbalardy, jasyru mümkindikterin jäne jüie deñgeiindegi şekteulerdi egjei-tegjeili basqaru.
+- **Qauipsiz jäne qaitymdy** - Özgeristerdiñ köpşiligi qaitymdy, delotatsiyağa jäne moduldi basqaruğa arnalğan saqtyq köşirme/qalpyna keltiru mümkindikteri bar.
+- **Keñeitiletin modul jüiesi** - kiristirilgen katalog, tabu jäne ornatu qoldauy bar qauymdastyq basqaratyn modulder.
+- **Käsiporyn deñgeiindegi tūraqtylyq** - qorğanystyq kodtau täjiribeleri, apatty öñdeu, kütu uaqytynan qorğau şaralary jäne OEM üilesimdiligin tüzetu.
 
 ---
 
 ## ✨ Negizgi mümkindikter
 
-### Labs - Keñeýtilgen jüýelik qūraldar
+### Zerthana - Jetildirilgen jüielik qūraldar
 
-Labs katalogı qoldanbalardy basqaru, jüýeni basqaru jäne utilitalarğa bölingen 40 jüýelik qūraldy qamtidy:
+Labs katalogynda qoldanbalardy basqaru, jüielik basqaru elementteri jäne utilitalar arasynda taza türde sanattalğan jüie deñgeiindegi 40 qūral bar:
 
 #### 📱 Qoldanbalardy basqaru (8 qūral)
-| Feature | Description |
+| Erekşelik | Sipattama |
 | --- | --- |
-| **App Ops** | Granular control over hidden app permissions, runtime op gates, and background privileges. |
-| **Firewall** | Network-level app firewall blocking Wi-Fi and mobile data per application without consuming a VPN slot. |
-| **Autostart** | Restrict applications from waking up or starting services automatically at device boot. |
-| **Hiding Modes** | Hide Developer Options, USB/Wireless Debugging, Accessibility services, Private DNS, and VPN states from detection. |
-| **Force Dark Mode** | System-wide forced dark theme across third-party applications, even without native dark theme support. |
-| **Universal Debloater (UAD)** | Community safety-ranked package debloater with safety ratings, explanations, and 1-tap restore. |
-| **App Freezer** | Instantly freeze and suspend background applications to reclaim RAM and halt battery drain. |
-| **Axeron Gaming Optimizer** | System-level performance tuning, game boost, animation tweaks, and process optimizations. |
+| **Qoldanba äreketteri** | Jasyryn qoldanba rūqsattaryn, jūmys uaqytynyñ operatsiyalyq şlyuzderin jäne fondyq artyqşylyqtardy egjei-tegjeili basqaru. |
+| **Brandmauer** | Jeli deñgeiindegi qoldanba brandmaueri VPN ūyaşyğyn paidalanbai bir qoldanbağa Wi-Fi jäne mobildi derekterdi bloktaidy. |
+| **Avtomatty qosu** | Qūrylğyny jükteu kezinde qoldanbalardyñ oyatuyn nemese qyzmetterdi avtomatty türde bastauyn şekteñiz. |
+| **Jasyru rejimderi** | Äzirleuşi optsiyalaryn, USB/symsyz jöndeu, Arnaiy mümkindikter qyzmetterin, Jeke DNS jäne VPN küilerin anyqtaudan jasyryñyz. |
+| **Küşti qarañğy rejim** | Tüpnūsqa qarañğy taqyryp qoldauynsyz bolsa da, üşinşi tarap qoldanbalarynda jüie boiynşa mäjbürli qarañğy taqyryp. |
+| **Ämbebap Debloater (UAD)** | Qauipsizdik reitingteri, tüsiniktemeleri jäne 1 ret türtu arqyly qalpyna keltirui bar qauymdastyqtyñ qauipsizdik deñgeiindegi bumanyñ debloatory. |
+| **Qoldanbaly mūzdatqyş** | JJQ qalpyna keltiru jäne batareyanyñ tausyluyn toqtatu üşin fondyq qoldanbalardy dereu toqtatyñyz jäne toqtatyñyz. |
+| **Axeron oiyn oñtailandyrğyşy** | Jüie deñgeiindegi önimdilikti retteu, oiyndy küşeitu, animatsiyany özgertu jäne protsesti oñtailandyru. |
 
-#### ⚙️ Jüýeni basqaru (18 qūral)
-| Feature | Description |
+#### ⚙️ Jüieni basqaru elementteri (18 qūral)
+| Erekşelik | Sipattama |
 | --- | --- |
-| **Power Menu** | Privileged reboot to System, Recovery, Bootloader/Fastboot, Safe Mode, or instant power off. |
-| **Display Tweaker** | Override display resolution, modify screen density (DPI), and force custom refresh rates. |
-| **Wi-Fi Passwords** | View, copy, and export saved Wi-Fi network credentials directly via privileged shell. |
-| **SystemUI Tuner** | Customize status bar icon visibility, battery icon styles, clock seconds, and immersive navigation. |
-| **Enforce Doze (Deep Sleep)** | Force immediate aggressive Doze deep sleep mode whenever the screen turns off. |
-| **Private DNS Controller** | Switch between encrypted DNS providers (Cloudflare, AdGuard, Quad9, Google, NextDNS, Custom) with auto-revert timers. |
-| **Audio Stream Master** | Independent fine-grained volume sliders for Media, Ring, Alarm, Call, Voice, and System audio streams. |
-| **Carrier Tethering** | Bypass carrier entitlement checks and restrictions on Wi-Fi hotspot and USB tethering. |
-| **Mixed Audio** | Multi-app concurrent audio playback bypass (prevent background apps from pausing when another app plays audio). |
-| **SoundMaster** | Per-app audio focus and volume routing mixer. |
-| **Universal Picture-in-Picture** | Force any unsupported app into Picture-in-Picture (PiP) mode using virtual display projection. |
-| **Screen Security & DRM** | Bypass `FLAG_SECURE` restrictions to allow screenshots and screen recording in secure/banking apps. |
-| **Auto DND (Zen Mode)** | Automated Do Not Disturb rules based on foreground app focus, custom schedules, and triggers. |
-| **DFRoot (DirtyFrag Exploit)** | Built-in privilege escalation helper using CVE-2026-43284 for supported kernel versions. |
-| **Quick Settings Tiles** | Interactive manager and setup suite for 18 custom Quick Settings tiles. |
-| **ShizuWall Firewall** | Advanced firewall interface featuring an integrated tracker & telemetry scanner and socket monitor. |
-| **Caffeinate** | Keep device screen awake with a tile and persistent notification for reading or navigation. |
-| **Theme Patcher** | System-level accent colors, font styling, and UI theme modifications. |
+| **Quat mäziri** | Jüiege, qalpyna keltiruge, jükteuşi/jyldam jükteuge, qauipsiz rejimge artyqşylyqty qaita jükteu nemese lezde öşiru. |
+| **Displei tvikeri** | Displei ajyratymdylyğyn qaita anyqtau, ekran tyğyzdyğyn (DPI) özgertu jäne teñşeletin jañartu jiiligin mäjbürleu. |
+| **Wi-Fi qūpiya sözderi** | Saqtalğan Wi-Fi jelisiniñ tirkelgi derekterin artyqşylyqty qabyq arqyly tikelei qarañyz, köşiriñiz jäne eksporttañyz. |
+| **SystemUI tyuner** | Küi jolağy belgişesiniñ körinuin, batareya belgişesiniñ mänerlerin, sağat sekundtaryn jäne immersivti şarlaudy teñşeñiz. |
+| **Enforce Doze (tereñ ūiqy)** | Ekran öşkende birden agressivti Doze tereñ ūiqy rejimin mäjbürleñiz. |
+| **Jeke DNS kontrolleri** | Avtomatty qaitaru taimerleri bar şifrlanğan DNS provaiderleri (Cloudflare, AdGuard, Quad9, Google, NextDNS, Custom) arasynda auysyñyz. |
+| **Audio ağynynyñ şeberi** | Media, Qoñyrau, Dabyl, Qoñyrau, Dauys jäne Jüie audio ağyndary üşin täuelsiz ūsaq tüiirşikti dybys syrğytpalary. |
+| **Tasymaldauşy bailanystyru** | Wi-Fi hotspotyna jäne USB bailanystyruğa qatysty tasymaldauşynyñ qūqyqtaryn tekseruler men şekteulerdi ainalyp ötiñiz. |
+| **Aralas audio** | Köp qoldanbaly bir mezgilde dybysty oinatudy ainalyp ötu (basqa qoldanba dybysty oinatqanda fondyq qoldanbalardyñ kidirtuine jol bermeu). |
+| **SoundMaster** | Är qoldanbağa arnalğan dybys fokusy jäne dybys deñgeiin bağyttau aralastyrğyşy. |
+| **Ämbebap suret-surettegi suret** | Virtualdy displei proektsiyasyn paidalanyp, kez kelgen qoldau körsetilmeitin qoldanbany «Surettegi suret» (PiP) rejimine küştep engiziñiz. |
+| **Ekran qauipsizdigi jäne DRM** | Qauipsiz/banktik qoldanbalarda skrinşottar men ekrandy jazuğa rūqsat beru üşin `FLAG_SECURE` şekteulerin ainalyp ötiñiz. |
+| **Avto DND (Zen rejimi)** | Mazalamau rejiminiñ avtomattandyrylğan erejeleri aldyñğy qatardağy qoldanba fokusyna, retteletin kestelerge jäne triggerlerge negizdelgen. |
+| **DFRoot (DirtyFrag Exploit)** | Qoldau körsetiletin yadro nūsqalary üşin CVE-2026-43284 qoldanatyn kiristirilgen artyqşylyqty arttyru kömekşisi. |
+| **Jyldam parametrler taqtaişalary** | 18 retteletin jyldam parametrler taqtasyna arnalğan interaktivti basqaruşy jäne ornatu jinağy. |
+| **ShizuWall brandmauer** | Biriktirilgen treker jäne telemetriya skaneri jäne ūyaşyq monitory bar keñeitilgen brandmauer interfeisi. |
+| **Kofeinat** | Oqu nemese navigatsiya üşin taqta jäne tūraqty habarlandyru arqyly qūrylğy ekranyn sergek ūstañyz. |
+| **Taqyryp patcheri** | Jüie deñgeiindegi ekpin tüsteri, qarip stili jäne UI taqyrybynyñ modifikatsiyalary. |
 
-#### 🛠️ Utilitalar (14 qūral)
-| Feature | Description |
+#### 🛠️ Utilitalar (14 Qūral)
+| Erekşelik | Sipattama |
 | --- | --- |
-| **Shell** | Interactive privileged command-line terminal with real-time streaming output. |
-| **Log Viewer** | Real-time system logcat viewer with tag, package, level filtering, and export capabilities. |
-| **Device Info** | Comprehensive hardware, kernel, battery health, thermal sensors, and SoC dashboard. |
-| **Activities Launcher** | Inspect and launch exported, unexported, or hidden Android activities and intents. |
-| **Files** | Privileged filesystem browser with read/write access to protected `/data` and app directories. |
-| **App Installer Pro** | Privileged package installer supporting APK, APKS split bundles, and XAPK formats. |
-| **Terminal Apps** | Quick switcher and launcher for external terminal emulators. |
-| **LocalShell** | Standalone local shell interface. |
-| **Intents** | Fire custom explicit or implicit system intents, broadcast receivers, and services. |
-| **Stealth Mode** | Anti-detection measures to prevent target apps from detecting Shizuku, root, or debugging state. |
-| **Permissions Manager** | Overview and revocation/granting of elevated permissions across all installed packages. |
-| **Shizuku Store** | Built-in catalog to discover and download open-source apps built for Shizuku. |
-| **Call Recording (ShizuCallRecorder)** | Native two-way call recording powered by privileged shell audio capture. |
-| **WallYou Wallpapers** | In-app wallpaper browser, fetcher, and wallpaper switcher. |
+| **Şell** | Naqty uaqyttağy ağyndyq şyğysy bar interaktivti artyqşylyqty pärmen joly terminaly. |
+| **Jurnaldy qarau qūraly** | Teg, buma, deñgeidi süzu jäne eksporttau mümkindikteri bar naqty uaqyttağy jüielik logkat qarau qūraly. |
+| **Qūrylğy aqparaty** | Keşendi apparattyq qūral, yadro, batareya densaulyğy, jylu sensorlary jäne SoC baqylau taqtasy. |
+| **Äreketterdi iske qosu qūraly** | Eksporttalğan, eksporttalmağan nemese jasyryn Android äreketteri men nietterin tekseriñiz jäne iske qosyñyz. |
+| **Faildar** | Qorğalğan `/data` jäne qoldanba katalogtaryna oqu/jazu rūqsaty bar artyqşylyqty faildyq jüie şolğyşy. |
+| **App Installer Pro** | APK, APKS bölingen bumalaryn jäne XAPK pişimderin qoldaityn artyqşylyqty paket ornatuşysy. |
+| **Terminal qoldanbalary** | Syrtqy terminal emulyatorlary üşin jyldam auystyrğyş jäne iske qosqyş. |
+| **LocalShell** | Jeke jergilikti qabyq interfeisi. |
+| **Nietter** | Arnauly aiqyn nemese jasyryn jüie nietterin, taratylatyn qabyldağyştardy jäne qyzmetterdi örteu. |
+| **Jasyryn rejim** | Maqsatty qoldanbalardyñ Shizuku, tübir nemese jöndeu küiin anyqtauyna jol bermeu üşin anyqtauğa qarsy şaralar. |
+| **Rūqsattar menedjeri** | Barlyq ornatylğan paketter boiynşa joğary rūqsattardy şolu jäne qaitaryp alu/beru. |
+| **Şidzuku dükeni** | Shizuku üşin jasalğan aşyq bastapqy qoldanbalardy tabuğa jäne jüktep aluğa arnalğan kiristirilgen katalog. |
+| **Qoñyraudy jazu (ShizuCallRecorder)** | Artyqşylyqty qabyqşa audio tüsiru arqyly quattalğan jergilikti eki jaqty qoñyrau jazbasy. |
+| **WallYou tūsqağazdary** | Qoldanbadağy tūsqağaz brauzeri, alu jäne tūsqağaz auystyrğyşy. |
 
-### Modules System
+### Modulder jüiesi
 
-OmniShizuku features a powerful, extensible module system inspired by Magisk/KernelSU modules but designed for Shizuku-based mods:
+OmniShizuku Magisk/KernelSU modulderinen şabyttandyrylğan, biraq Şizuku negizindegi modderge arnalğan quatty, keñeitiletin modul jüiesin ūsynady:
 
-- **Module Catalog** - Browse community modules from a curated GitHub-based catalog with search, filtering, and sorting.
-- **Module Discovery** - Automatic discovery of modules from GitHub repositories tagged with `shevery-modules` or official sources.
-- **One-Tap Installation** - Download, verify, and install modules directly from the app with progress tracking.
-- **Module Manager** - Enable, disable, update, and remove installed modules with ease.
-- **WebUI Support** - Many modules include web-based configuration interfaces accessible from within the app.
-- **Module Scripts** - Execute install, uninstall, service, and boot scripts with proper logging and error handling.
-- **Update Checker** - Automatic update detection for installed modules from their GitHub releases.
-- **Safe Installation** - Validation of module structure, props, and scripts before installation.
-- **Cross-Platform UI** - Optimized module screens for phones, tablets, TVs, and Wear OS.
+- **Modul katalogy** - izdeu, süzu jäne sūryptau arqyly tañdalğan GitHub negizindegi katalogtan qauymdastyq modulderin şolyñyz.
+- **Moduldi tabu** - `shevery-modules` nemese resmi derekközdermen belgilengen GitHub repozitariilerinen modulderdi avtomatty türde tabu.
+- **Bir ret türtu arqyly ornatu** - oryndalu barysyn baqylau arqyly modulderdi tikelei qoldanbadan jüktep alyñyz, tekseriñiz jäne ornatyñyz.
+- **Modul menedjeri** - ornatylğan modulderdi oñai qosu, öşiru, jañartu jäne joyu.
+- **WebUI qoldauy** - Köptegen modulder qoldanbanyñ işinen qol jetimdi veb-negizdelgen konfiguratsiya interfeisterin qamtidy.
+- **Modul stsenariileri** - dūrys tirkeu jäne qatelerdi öñdeu arqyly ornatu, joyu, qyzmet körsetu jäne jükteu stsenariilerin oryndañyz.
+- **Jañartulardy tekseru qūraly** - GitHub şyğarylymdarynan ornatylğan modulder üşin avtomatty jañartudy anyqtau.
+- **Qauipsiz ornatu** - ornatu aldynda modul qūrylymyn, tirekterdi jäne stsenariilerdi tekseru.
+- **Cross-Platform UI** - telefondar, planşetter, teledidarlar jäne Wear OS üşin oñtailandyrylğan modul ekrandary.
 
-### Call Recording (ShizuCallRecorder Integration)
+### Qoñyraulardy jazu (ShizuCallRecorder integratsiyasy)
 
-Built-in support for call recording through Shizuku's privileged access:
+Şidzuku artyqşylyqty qatynasy arqyly qoñyraudy jazuğa kiristirilgen qoldau:
 
-- **Shell-Based Recording Engine** - Uses privileged shell services for reliable audio capture.
-- **Foreground Service** - Persistent recording service with proper notifications.
-- **InCallService Integration** - Automatic call detection and recording management.
-- **Recording Management** - View, play, rename, and delete recordings with an intuitive UI.
-- **Configurable Options** - Customize recording format, codec, source, and storage location.
-- **AIDL Interfaces** - Secure IPC between app components for recording control.
-- **Permission Handling** - Proper runtime permission management for call recording requirements.
-- **Background Operation** - Reliable recording even with app in background.
+- **Shell-based Recording Engine** - senimdi audio tüsiru üşin artyqşylyqty qabyq qyzmetterin paidalanady.
+- **Foreground Service** - Tiisti habarlandyrulary bar tūraqty jazu qyzmeti.
+- **InCallService Integration** - Qoñyraulardy avtomatty türde anyqtau jäne jazudy basqaru.
+- **Jazudy basqaru** - intuitivti UI kömegimen jazbalardy qarañyz, oinatyñyz, atyn özgertiñiz jäne joiyñyz.
+- **Konfiguratsiyalanatyn optsiyalar** - Jazu pişimin, kodekti, közdi jäne saqtau ornyn teñşeñiz.
+- **AIDL interfeisteri** - jazudy basqaru üşin qoldanba qūramdastary arasyndağy qauipsiz IPC.
+- **Rūqsatty öñdeu** - Qoñyraudy jazu talaptary üşin rūqsatty oryndau uaqytyn dūrys basqaru.
+- **Fondyq jūmys** - fondyq rejimde qoldanba arqyly da senimdi jazu.
 
-### AI & Developer Features
+### AI jäne äzirleuşi mümkindikteri
 
-- **AI Manager** - Integrated AI capabilities with support for multiple providers (configurable in settings).
-- **Developer Options** - Advanced developer tools, debugging utilities, and experimental features.
-- **Bug Report System** - Built-in bug reporting with logs, device info, and crash reports.
-- **Labs Reapply** - Reapply persistent lab modifications after updates or reboots.
-- **Device Info Dashboard** - Comprehensive device information with detailed hardware, software, and system properties.
-- **Log Viewer** - Real-time logcat viewer with filtering and search capabilities.
+- **AI Manager** - Birneşe provaiderlerge qoldau körsetetin biriktirilgen AI mümkindikteri (parametrlerde konfiguratsiyalanady).
+- **Äzirleuşi optsiyalary** - äzirleuşiniñ keñeitilgen qūraldary, jöndeu utilitalary jäne eksperimenttik mümkindikter.
+- **Qate turaly esep beru jüiesi** - jurnaldar, qūrylğy aqparaty jäne būzylu esepteri bar kiristirilgen qate turaly esep beru.
+- **Labs Reapply** - Jañartulardan nemese qaita jükteuden keiin tūraqty zerthanalyq özgertulerdi qaita qoldanyñyz.
+- **Qūrylğy aqparatynyñ baqylau taqtasy** - egjei-tegjeili apparattyq qūral, bağdarlamalyq qūral jäne jüie sipattary bar qūrylğy turaly tolyq aqparat.
+- **Jurnaldy qarau qūraly** - süzu jäne izdeu mümkindikteri bar naqty uaqyttağy logkat qarau qūraly.
 
-### UI/UX Enhancements
+### UI/UX jaqsartulary
 
-- **Material 3 Expressive Design** - Latest Material Design with dynamic color theming (Material You) support.
-- **Multi-Form Factor Support** - Optimized for phones, tablets, foldables, Android TV, and Wear OS.
-- **Dark Mode & AMOLED Black** - Full dark theme support with pure black option for AMOLED displays.
-- **Smooth Animations** - Polished transitions, lazy motion blur optimization, and fluid interactions.
-- **Adaptive Layouts** - Responsive UI that adapts to screen sizes and orientations.
-- **Localization** - Extensive multi-language support (English, Hindi, Spanish, French, Chinese, Russian, Japanese, Arabic, Kazakh, and more).
-- **Accessibility** - Wireless ADB Auto-PIN with accessibility service support (opt-in only).
-- **Performance Optimized** - Lazy loading, bounded data fetching, timeout safeguards, and efficient memory usage.
-- **Crash Resilience** - Defensive binder access, uncaught exception handling, and graceful degradation on OEM-specific issues.
+- **3-materialdyñ mänerli dizainy** - dinamikalyq tüs taqyryby (Material You) qoldauy bar soñğy material dizainy.
+- **Köp formaly faktordy qoldau** - telefondar, planşetter, jinalmaly qūrylğylar, Android TV jäne Wear OS üşin oñtailandyrylğan.
+- **Qara rejim jäne AMOLED qara** - AMOLED displeileri üşin taza qara optsiyasy bar tolyq qarañğy taqyrypty qoldau.
+- **Tegis animatsiyalar** - jyltyratylğan auysular, jalqau qozğalysty būlyñğyr oñtailandyru jäne sūiyqtyqpen ärekettesu.
+- **Beiimdeletin ornalasular** - ekran ölşemderi men bağdarlaryna beiimdeletin jauap beretin paidalanuşy interfeisi.
+- **Lokalizatsiya** - köp tildi keñ qoldau (ağylşyn, hindi, ispan, frantsuz, qytai, orys, japon, arab, qazaq jäne t.b.).
+- **Arnaiy mümkindikter** - Arnaiy mümkindikter qyzmetin qoldauy bar symsyz ADB Auto-PIN kody (tek qosylu üşin).
+- **Önimdilik oñtailandyrylğan** - Jalqau jükteu, şektelgen derekterdi alu, kütu uaqytynan qorğau şaralary jäne jadty tiimdi paidalanu.
+- **Crash Resilience** - Qorğanys bailanystyrğyşqa qol jetkizu, ūstalmağan erekşelikterdi öñdeu jäne OEM-arnaiy mäselelerde äsem degradatsiya.
 
 ---
 
-## 📊 Basqa Shizuku forkterimen salystyru
+## 📊 Basqa Şidzuku şanyşqylarymen mümkindikterdi salystyru
 
-| Feature | **OmniShizuku** | **Shizuku (Original)** | **Shizuku Next** | **Xhizuku** | **Shevery** | **ShizukuPlus** | **Stellar** |
+| Erekşelik | **OmniSidzuku** | **Şidzuku (tüpnūsqa)** | **Şidzuku Kelesi** | **Hidzuku** | **Şeveri** | **ShizukuPlus** | **Jūldyz** |
 | --- | :------------: | :--------------------: | :------------: | :--------: | :--------: | :------------: | :--------: |
-| **Base Functionality** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Wireless ADB / TCP Mode** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Root Support** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Dhizuku Support** | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
-| **Autostart** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
-| **Module System** | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Labs Advanced Tools (40 Tools)** | ✅ | ❌ | Partial | Partial | Partial | ❌ | Partial |
+| **Negizgi funktsionaldyq** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Symsyz ADB / TCP rejimi** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Tübirlik qoldau** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Dhizuku qoldauy** | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
+| **Avtomatty qosu** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| **Modul jüiesi** | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
+| **Labs Advanced Tools (40 Qūral)** | ✅ | ❌ | Işinara | Işinara | Işinara | ❌ | Işinara |
 | **App Debloater (UAD)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **App Freezer** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Firewall (Zero-VPN)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Quick Settings Tiles Suite (18 tiles)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Qoldanbaly mūzdatqyş** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Brandmauer (nöldik VPN)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Jyldam parametrler taqtaişalary jiyntyğy (18 plitka)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **ShizuWall Native Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Tracker & Telemetry Scanner** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Caffeinate Screen Stay-Awake** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Private DNS Auto-Revert & Cycles** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **DFRoot (Kernel Exploit Helper)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **WallYou Dynamic Wallpapers** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Universal Picture-in-Picture** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Display Tweaker** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Call Recording** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Theme Patcher** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Built-in Terminal** | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
-| **AI Integration** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
-| **Material 3 Expressive** | ✅ | ❌ | Material 3 | Material 3 | Material 3 | ❌ | ❌ |
-| **TV/Wear OS Support** | ✅ | Partial | Partial | Partial | ❌ | ❌ | ❌ |
-| **Onboarding Flow** | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
-| **Stealth Features** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Wireless ADB Auto-PIN** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **License** | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | MPL-2.0 |
+| **Treker jäne telemetriya skaneri** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Kofeindi ekran sergek bolu** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Jeke DNS avtomatty türde qaitaru jäne tsiklder** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **DFRoot (yadrony paidalanu kömekşisi)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **WallYou dinamikalyq tūsqağazdary** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Ämbebap suret-surettegi suret** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Displei tvikeri** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Qoñyraudy jazu** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Taqyryp patcheri** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Kiristirilgen terminal** | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
+| **AI integratsiyasy** | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ |
+| **3-material Ekspressivti** | ✅ | ❌ | Material 3 | Material 3 | Material 3 | ❌ | ❌ |
+| **TV/Wear OS qoldauy** | ✅ | Işinara | Işinara | Işinara | ❌ | ❌ | ❌ |
+| **Oquşy ağyny** | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ |
+| **Stealth mümkindikteri** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Symsyz ADB avtomatty PIN kody** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Litsenziya** | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | Apache-2.0 | MPL-2.0 |
 
-*Comparison is based on publicly available features at the time of writing. Features may change over time.*
+*Salystyru jazu kezinde jalpyğa qoljetimdi mümkindikterge negizdelgen. Mümkindikter uaqyt öte özgerui mümkin.*
 
 ---
 
-## 📱 Jüýelik talaptar
+## 📱 Jüie talaptary
 
-| Component | Requirement |
+| Qūramdas | Talap |
 | --- | --- |
-| **Android Version** | Android 5.0 (Lollipop) API 21 or higher |
-| **Architecture** | arm64-v8a, armeabi-v7a, x86, x86_64 |
-| **Shizuku** | Shizuku service must be running (via Wireless Debugging, ADB over USB, or Root) |
-| **Permissions** | Shizuku permission grant required for most features |
-| **Storage** | ~50-80 MB for installation (varies by features) |
-| **Optional** | Accessibility service for Wireless ADB Auto-PIN feature |
+| **Android nūsqasy** | Android 5.0 (Lollipop) API 21 nemese odan joğary |
+| **Säulet** | arm64-v8a, armeabi-v7a, x86, x86_64 |
+| **Sidzuku** | Shizuku qyzmeti jūmys istep tūruy kerek (symsyz jöndeu, USB arqyly ADB nemese Root arqyly) |
+| **Rūqsattar** | Köptegen mümkindikter üşin Shizuku rūqsat berui qajet |
+| **Saqtau** | Ornatu üşin ~50-80 MB (mümkindikter boiynşa özgeredi) |
+| **Qosymşa** | Wireless ADB Auto-PIN mümkindigine arnalğan arnaiy mümkindikter qyzmeti |
 
 ---
 
 ## 📥 Ornatu
 
-### From GitHub Releases (Recommended)
+### GitHub şyğarylymdarynan (ūsynylady)
 
-1. Go to the [Releases page](https://github.com/krishna3163/OmniShizuku/releases)
-2. Download the latest `manager-debug.apk` or `manager-release.apk`
-3. Install the APK on your Android device
-4. Follow the setup process
+1. [Şyğarylymdar betine](https://github.com/krishna3163/OmniShizuku/releases) ötiñiz.
+2. Eñ soñğy `manager-debug.apk` nemese `manager-release.apk` jüktep alyñyz
+3. Android qūrylğyñyzğa APK ornatyñyz
+4. Ornatu protsesin oryndañyz
 
-### Via ADB
+### ADB arqyly
 
 ```bash
 adb install -r OmniShizuku.apk
 ```
 
-### Important Notes
+### Mañyzdy eskertpeler
 
-- If you have the original Shizuku installed, you can usually install OmniShizuku alongside it, or replace it. Check compatibility for your use case.
-- Some features require specific Android versions or device capabilities.
-- For call recording features, additional permissions may be required depending on Android version.
+- Tüpnūsqa Shizuku ornatylğan bolsa, ädette onyñ janyna OmniShizuku ornatuğa nemese ony auystyruğa bolady. Paidalanu jağdaiyñyz üşin üilesimdilikti tekseriñiz.
+- Keibir mümkindikter arnaiy Android nūsqalaryn nemese qūrylğy mümkindikterin qajet etedi.
+- Qoñyraudy jazu mümkindikteri üşin Android nūsqasyna bailanysty qosymşa rūqsattar qajet boluy mümkin.
 
 ---
 
-## 🚀 Getting Started
+## 🚀 Jūmysty bastau
 
-1. **Install OmniShizuku** - Download and install the APK
-2. **Setup Shizuku** - Start Shizuku service via Wireless Debugging (Android 11+) or ADB/Root
-3. **Grant Permission** - Open OmniShizuku and grant Shizuku permission when prompted
-4. **Explore** - Navigate through Home, Apps, Modules, Labs, and Settings tabs
-5. **Customize** - Head to Essentials Hub or Labs to enable features you need
-6. **Stay Safe** - Read feature descriptions before applying system-level changes
+1. **OmniShizuku ornatu** - APK jüktep alyñyz jäne ornatyñyz
+2. **Sizukuyu ornatu** - Symsyz jöndeu (Android 11+) nemese ADB/Root arqyly Shizuku qyzmetin iske qosyñyz
+3. **Rūqsat beru** - OmniShizuku aşyñyz jäne sūralğan kezde Şizuku rūqsatyn beriñiz
+4. **Zertteu** - Üi, qoldanbalar, modulder, zerthanalar jäne parametrler qoiyndylary arqyly şarlau
+5. **Teñşeu** - qajet mümkindikterdi qosu üşin Essentials Hub nemese Labs bölimine ötiñiz
+6. **Qauipsiz bolyñyz** - jüie deñgeiindegi özgeristerdi qoldanbas būryn mümkindik sipattamalaryn oqyñyz
 
-**For Wireless Debugging (Android 11+):**
-- Go to `Settings > Developer Options > Wireless debugging` and pair with OmniShizuku or Shizuku
+**Symsyz jöndeu üşin (Android 11+):**
+- «Parametrler > Äzirleuşi optsiyalary > Symsyz jöndeu» tarmağyna ötip, OmniShizuku nemese Shizuku arqyly jūptañyz.
 
-**For ADB (via PC):**
+**ADB üşin (DK arqyly):**
 ```bash
 adb shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.sh
 ```
-*(Or use the appropriate start command for your setup)*
+*(Nemese ornatuyñyzğa säikes bastau pärmenin paidalanyñyz)*
 
 ---
 
-## 🔨 Bastapqy kodtan qūrastypu
+## 🔨 Derekközden ğimarat
 
-### Prerequisites
+### Alğy şarttar
 
-- [Android Studio](https://developer.android.com/studio) (latest stable) or [Android SDK](https://developer.android.com/studio#command-tools)
-- [JDK 17](https://adoptium.net/) or higher
+- [Android Studio](https://developer.android.com/studio) (soñğy tūraqty) nemese [Android SDK](https://developer.android.com/studio#command-tools)
+- [JDK 17](https://adoptium.net/) nemese odan joğary
 - [Git](https://git-scm.com/)
-- Gradle (wrapper included)
+- Gradle (qaptama kiredi)
 
-### Clone and Build
+### Klondau jäne qūrastyru
 
 ```bash
 # Clone the repository
@@ -311,124 +311,124 @@ cd OmniShizuku
 ./gradlew :manager:installDebug
 ```
 
-The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug.apk`
+Tüzetu APK myna jerde ornalasady: `manager/build/outputs/apk/debug/manager-debug.apk`
 
-### Build Requirements
+### Qūrylymğa qoiylatyn talaptar
 
 - `compileSdk`: 36
 - `minSdk`: 21
 - `targetSdk`: 36
-- Kotlin with Jetpack Compose
-- R8/ProGuard for release builds
+- Kotlin Jetpack Compose kömegimen
+- Şyğarylym qūrastyrularyna arnalğan R8/ProGuard
 
 ---
 
 ## 🔐 Arhitektura jäne qauipsizdik
 
-### Security Measures
+### Qauipsizdik şaralary
 
-- **Defensive Programming** - Null-safe binder access, try-catch blocks around critical operations, and graceful fallbacks
-- **Permission Scoping** - Minimal permission usage with runtime permission requests where necessary
-- **Secure IPC** - AIDL interfaces for inter-process communication with proper service binding
-- **No Telemetry** - No analytics, tracking, or data collection
-- **Open Source** - Fully transparent, auditable codebase
-- **Reversible Changes** - Most modifications can be undone through the app
-- **Validation** - Module validation, package verification, and safe installation practices
-- **OEM Compatibility** - Special handling for Realme, OPPO, Xiaomi, OnePlus and other OEMs with aggressive battery optimization
+- **Qorğanys bağdarlamalau** - nöldik qauipsiz bailanystyrğyşqa qol jetkizu, mañyzdy operatsiyalardyñ ainalasyndağy bloktardy ūstap alu jäne keremet qalpyna keltiruler
+- **Rūqsattar auqymyn anyqtau** - qajet bolğan jağdaida oryndau uaqytynyñ rūqsat sūraularymen minimaldy rūqsatty paidalanu
+- **Secure IPC** - tiisti qyzmettik bailanystyrumen protsessaralyq bailanysqa arnalğan AIDL interfeisteri
+- **Telemetriya joq** - analitika, baqylau nemese derekterdi jinau joq
+- **Aşyq bastapqy kod** - Tolyğymen möldir, tekseriletin kodtyq baza
+- **Qaitarylatyn özgerister** - özgertulerdiñ köpşiligin qoldanba arqyly joyuğa bolady
+- **Validatsiya** - moduldi tekseru, paketti tekseru jäne qauipsiz ornatu täjiribeleri
+- **OEM üilesimdiligi** - Realme, OPPO, Xiaomi, OnePlus jäne batareyany agressivti oñtailandyruy bar basqa OEM qūrylğylaryna arnalğan arnaiy öñdeu
 
-### Architecture Highlights
+### Arhitekturanyñ mañyzdy sätteri
 
-- **MVVM Pattern** - Clean separation of concerns with ViewModels and UI state
-- **Jetpack Compose** - Modern declarative UI framework
-- **Kotlin Coroutines** - Asynchronous operations with proper lifecycle handling
-- **Room/Preferences** - Local data persistence
-- **Hilt/Dagger** - Dependency injection (where applicable)
-- **Modular Design** - Feature modules for better organization and maintainability
+- **MVVM ülgisi** - ViewModels jäne UI küiimen alañdauşylyqtardy taza bölu
+- **Jetpack Compose** - Qazirgi deklarativti UI qūrylymy
+- **Kotlin Coroutines** - ömirlik tsikldi dūrys öñdeumen asinhrondy operatsiyalar
+- **Bölme/Parametrler** - Jergilikti derekter tūraqtylyğy
+- **Töbe/qanjar** - täueldilik inektsiyasy (qoldanylatyn jerde)
+- **Moduldik dizain** - jaqsyraq ūiymdastyruğa jäne tehnikalyq qyzmet körsetuge arnalğan mümkindik modulderi
 
 ---
 
-## 🔑 Rūqsattar tüsindirmesi
+## 🔑 Rūqsattar tüsindirildi
 
-| Permission | Purpose | Required For |
+| Rūqsat | Maqsat | üşin qajet |
 | --- | --- | --- |
-| `QUERY_ALL_PACKAGES` | List and manage installed apps | App Ops, Debloater, Freezer, Modules |
-| `READ_EXTERNAL_STORAGE` / `MANAGE_EXTERNAL_STORAGE` | File access | File Explorer, APK installation |
-| `POST_NOTIFICATIONS` | Show notifications | Services, Caffeinate, Recording |
-| `FOREGROUND_SERVICE` | Run background services | Call recording, ShizuWall, Caffeinate |
-| `READ_PHONE_STATE`, `RECORD_AUDIO` | Call detection and recording | ShizuCallRecorder |
-| `BIND_ACCESSIBILITY_SERVICE` | Auto-fill Wireless ADB PIN | Wireless ADB Auto-PIN (opt-in) |
-| `PACKAGE_USAGE_STATS` | Usage data access | Some optimization features |
-| `REQUEST_INSTALL_PACKAGES` | Install APKs | Package Installer Pro |
-| `SYSTEM_ALERT_WINDOW` | Overlay display | Universal PiP, Screen Overlays |
+| `QUERY_ALL_PACKAGES` | Ornatylğan qoldanbalardy tizimdeñiz jäne basqaryñyz | App Ops, Debloater, mūzdatqyş, modulder |
+| `READ_EXTERNAL_STORAGE` / `SYRTQY_SAQTAUDY BASQARU` | Failğa qol jetkizu | File Explorer, APK ornatu |
+| `POST_NOTIFICATIONS` | Habarlandyrulardy körsetu | Qyzmetter, Kofeinat, Jazu |
+| `FOREGROUND_SERVICE` | Fondyq qyzmetterdi iske qosyñyz | Qoñyraulardy jazu, ShizuWall, Kofeinat |
+| `READ_PHONE_STATE`, `RECORD_AUDIO` | Qoñyraudy anyqtau jäne jazu | ShizuCallRecorder |
+| `BIND_ACCESSIBILITY_SERVICE` | Symsyz ADB PIN kodyn avtomatty türde toltyru | Symsyz ADB avtomatty PIN kody (qosu) |
+| `PACKAGE_USAGE_STATS` | Qoldanu derekterine qol jetkizu | Keibir oñtailandyru mümkindikteri |
+| `REQUEST_INSTALL_PACKAGES` | APK faildaryn ornatyñyz | Package Installer Pro |
+| `SYSTEM_ALERT_WINDOW` | Üstindegi displei | Ämbebap PiP, ekran qabattary |
 
-*Most permissions are only requested when needed for specific features.*
+*Rūqsattardyñ köpşiligi naqty mümkindikter üşin qajet bolğanda ğana sūralady.*
 
 ---
 
-## 🤝 Jobağa üles qosu
+## 🤝 Üles qosu
 
-Contributions are welcome! Whether it's bug reports, feature requests, documentation improvements, or code contributions.
+Ülester qūptalady! Qate turaly esepter, mümkindik sūraulary, qūjattamany jaqsartu nemese kod ülesteri.
 
-### How to Contribute
+### Qalai üles qosuğa bolady
 
-1. **Fork** the repository
-2. **Create** a feature branch (`git checkout -b feature/AmazingFeature`)
-3. **Commit** your changes (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** to the branch (`git push origin feature/AmazingFeature`)
-5. **Open** a Pull Request
+1. **Şanyşqy** repozitorii
+2. **Funktsiya tarmağyn jasau** (`git checkout -b feature/AmazingErekşelik`)
+3. **Özgeristerdi oryndañyz** (`git commit -m 'Biraz keremet mümkindik qosu'')
+4. **Būtaqqa iteriñiz** (`git push source funktsiyasy/AmazingErekşelik`)
+5. **Aşu** tartu sūrauyn
 
-### Guidelines
+### Ädistemelik nūsqaular
 
-- Follow existing code style and conventions
-- Write clear commit messages
-- Test your changes thoroughly
-- Update documentation if needed
-- For major features, open an issue first to discuss
+- Qoldanystağy kod stili men konventsiyalardy oryndañyz
+- Anyq mindetteme habarlamalaryn jazyñyz
+- Özgeristerdi mūqiyat tekseriñiz
+- Qajet bolsa, qūjattamany jañartyñyz
+- Negizgi mümkindikter üşin aldymen talqylau üşin mäseleni aşyñyz
 
 See [CONTRIBUTING.md](../CONTRIBUTING.md) for more details.
 
 ---
 
-## 🙏 Alğystar men autorlar
+## 🙏 Nesieler jäne alğystar
 
-### Core Projects
+### Negizgi jobalar
 
-- **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** - The original project that made all of this possible. Huge thanks to Rikka and all contributors.
-- **[Dhizuku](https://github.com/iamr0s/Dhizuku)** - For Dhizuku API integration support.
+- **[RikkaApps/Shizuku](https://github.com/RikkaApps/Shizuku)** - Mūnyñ bärin jasauğa mümkindik bergen tüpnūsqa joba. Rikkağa jäne barlyq üles qosqandarğa ülken rahmet.
+- **[Dhizuku](https://github.com/iamr0s/Dhizuku)** - Dhizuku API integratsiyasyn qoldau üşin.
 
-### Communities & Inspirations
+### Qauymdastyqtar jäne şabyt
 
-- **[Universal Android Debloater (UAD)](https://github.com/0x192/universal-android-debloater)** - Safety rankings and debloating methodology
-- **[LSPosed](https://github.com/LSPosed/LSPosed)** - Inspiration for module system concepts
-- **[Magisk](https://github.com/topjohnwu/Magisk)** - Module system architecture inspiration
-- **[KernelSU](https://github.com/tiann/KernelSU)** - Modern root solution inspiration
+- **[Ämbebap Android Debloater (UAD)](https://github.com/0x192/universal-android-debloater)** - Qauipsizdik reitingileri jäne delotatsiya ädistemesi
+- **[LSPosed](https://github.com/LSPosed/LSPosed)** - Modul jüiesiniñ tūjyrymdamalary üşin şabyt
+- **[Magisk](https://github.com/topjohnwu/Magisk)** - Modul jüiesiniñ säuleti şabyty
+- **[KernelSU](https://github.com/tiann/KernelSU)** - Zamanaui tübirlik şeşimniñ şabyty
 
-### Module Developers & Integrations
+### Modul äzirleuşileri jäne integratsiyalary
 
-- **[kitsumed/ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder)** - Call recording functionality integration
-- **[RBN-Apps/Quick-Tile-Settings](https://github.com/RBN-Apps/Quick-Tile-Settings)** - Companion app integration
-- **[AhmetCanArslan/ShizuWall](https://github.com/AhmetCanArslan/ShizuWall)** - Companion app integration
-- **[Shevery Modules Community](https://github.com/topics/shevery-modules)** - Community module ecosystem
+- **[kitsumed/ShizuCallRecorder](https://github.com/kitsumed/ShizuCallRecorder)** - Qoñyraulardy jazu funktsiyalaryn biriktiru
+- **[RBN-Apps/Quick-Tile-Settings](https://github.com/RBN-Apps/Quick-Tile-Settings)** - Seriktes qoldanbalardy biriktiru
+- **[AhmetCanArslan/ShizuWall](https://github.com/AhmetCanArslan/ShizuWall)** - seriktes qoldanba integratsiyasy
+- **[Shevery Modules qauymdastyğy](https://github.com/topics/shevery-modules)** - Qauymdastyq moduliniñ ekojüiesi
 
-### Special Thanks
+### Arnaiy rahmet
 
-A heartfelt thank you to:
+Şyn jürekten alğys aitamyz:
 
-- **The Shizuku Community** - For continuous support, feedback, and testing
-- **All Contributors** - Everyone who has reported bugs, suggested features, submitted PRs, or helped improve OmniShizuku
-- **Translators** - For making OmniShizuku accessible in multiple languages
-- **Beta Testers** - For helping catch bugs and ensuring stability
-- **OEM Community** - For sharing device-specific workarounds and fixes
+- **Sidzuku qauymdastyğy** - üzdiksiz qoldau, keri bailanys jäne testileu üşin
+- **Barlyq üles qosuşylar** - qateler turaly habarlağan, ūsynylğan mümkindikter, PR jibergen nemese OmniShizuku-ny jaqsartuğa kömektesken ärbir adam
+- **Audarmaşylar** - OmniShizuku qoldanbasyn birneşe tilde qoljetimdi etu üşin
+- **Beta testerler** - qatelerdi anyqtauğa jäne tūraqtylyqty qamtamasyz etuge kömektesu üşin
+- **OEM qauymdastyğy** - qūrylğyğa qatysty uaqytşa şeşimder men tüzetulerdi ortaq paidalanu üşin
 
-### Why Choose OmniShizuku?
+### Nelikten OmniShizuku tañdau kerek?
 
-OmniShizuku stands apart by combining the power of Shizuku with a comprehensive suite of practical tools in one beautifully designed app. Instead of juggling multiple apps for debloating, tweaking, optimizing, and managing your device, OmniShizuku brings everything together with a cohesive experience. Whether you're a casual user looking to disable bloatware or a power user seeking deep system customization, OmniShizuku provides the tools you need with safety, reversibility, and ease of use at its core.
+OmniShizuku bir ädemi jobalanğan qoldanbada Shizuku quatyn praktikalyq qūraldardyñ jan-jaqty jiyntyğymen biriktiru arqyly erekşelenedi. OmniShizuku qūrylğyñyzdy öñdeu, retteu, oñtailandyru jäne basqaru üşin birneşe qoldanbalardy jonglerlik etudiñ ornyna, barlyğyn birtūtas täjiribemen biriktiredi. Siz bloatware bağdarlamasyn öşirgisi keletin kezdeisoq paidalanuşy bolsañyz da, jüieni tereñ baptaudy izdeitin quatty paidalanuşy bolsañyz da, OmniShizuku sizge qajetti qūraldardy qauipsizdik, qaitarymdylyq jäne paidalanudyñ qarapaiymdylyğymen qamtamasyz etedi.
 
 ---
 
 ## 📄 Litsenziya
 
-This project is licensed under the **Apache License 2.0**. See the [LICENSE](../LICENSE) file for full details.
+This project is licensed under the **Apache Litsenziya 2.0**. See the [LICENSE](../LICENSE) file for full details.
 
 ```
 Copyright 2024-2026 krishna3163
@@ -450,17 +450,17 @@ limitations under the License.
 
 ## 💬 Qoldau
 
-- **GitHub Issues**: [Report bugs or request features](https://github.com/krishna3163/OmniShizuku/issues)
-- **GitHub Discussions**: [Ask questions and share ideas](https://github.com/krishna3163/OmniShizuku/discussions)
-- **Documentation**: Check the README in your preferred language
-- **Source Code**: [github.com/krishna3163/OmniShizuku](https://github.com/krishna3163/OmniShizuku)
+- **GitHub mäseleleri**: [Qateler turaly habarlau nemese mümkindikterdi sūrau](https://github.com/krishna3163/OmniShizuku/issues)
+- **GitHub talqylaulary**: [Sūraqtar qoiyñyz jäne ideyalarmen bölisiñiz](https://github.com/krishna3163/OmniShizuku/discussions)
+- **Qūjattama**: README parametrin qalağan tiliñizde tekseriñiz
+- **Derekköz kody**: [github.com/krishna3163/OmniShizuku](https://github.com/krishna3163/OmniShizuku)
 
 ---
 
 <div align="center">
 
-**Made with ❤️ by [krishna3163](https://github.com/krishna3163) and the amazing OmniShizuku community**
+**[krishna3163](https://github.com/krishna3163) jäne tañğajaiyp OmniShizuku qauymdastyğy ❤️ arqyly jasalğan**
 
-*If you find OmniShizuku useful, please consider giving it a ⭐ on GitHub!*
+*Eger OmniShizuku paidaly dep tapsañyz, GitHub saitynda ⭐ bağasyn beriñiz!*
 
 </div>
