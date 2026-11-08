@@ -136,7 +136,7 @@ configurations.named('composeMappingProducerClasspath') {
 }
 
 dependencies {
-    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0-rc02'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.11.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0-rc02'
     implementation platform('com.google.firebase:firebase-bom:34.19.0')
     implementation 'com.google.firebase:firebase-crashlytics'
