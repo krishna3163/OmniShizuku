@@ -23,5 +23,5 @@ dependencies {
     compileOnly 'androidx.annotation:annotation:1.6.0'
     compileOnly libs.hidden.stub
     implementation 'commons-cli:commons-cli:1.11.0'
-    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:4.3'
+    implementation 'org.lsposed.hiddenapibypass:hiddenapibypass:6.2'
 }
