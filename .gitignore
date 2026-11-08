@@ -27,10 +27,15 @@ tsconfig.tsbuildinfo
 /tmp/
 .backup_plus_server/
 
-# Design and scratch docs
+# Design, scratch and internal tracking docs
 DESIGN.md
 design.md
 *.design.md
+PONYTAIL.md
+ponytail.md
+remaining.md
+*.scratch.*
+scratch/
 
 # Web / Vercel artifacts
 /app/
