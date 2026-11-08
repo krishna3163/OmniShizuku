@@ -1,21 +1,10 @@
-# OmniShizuku
-
-OmniShizuku — bũl Shizuku, ADB jäne Dhizuku jumys procesterine arnalğan bastapqy kody aşyq Android utilitası. Ol qūrylğyny basqaru, avtomattandyru, oñtaılandyru jäne t.b. arnalğan modülderi bar Shizuku qyzmeti arqyly jüielik deñgeıdegi API qatynasyn qamtamasyz etedi.
-
-[![GitHub](https://img.shields.io/badge/GitHub-krishna3163/OmniShizuku-blue?logo=github)](https://github.com/krishna3163/OmniShizuku)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](../LICENSE)
-[![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android)](https://developer.android.com)
-
-🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
-
----
 <div align="center">
 
 <img src="../manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
 
 # OmniShizuku
 
-**A powerful, feature-rich fork of Shizuku with enhanced modules, modern UI, and extended system control capabilities.**
+**Jaqsartylğan modulderi, zamanaui interfeisi jäne keñeýtilgen jüýelik basqaru mümkindikteri bar Shizuku jobasynyñ quatty forki.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163%2FOmniShizuku-blue?logo=github&style=for-the-badge)](https://github.com/krishna3163/OmniShizuku)
 [![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](../LICENSE)
@@ -25,177 +14,17 @@ OmniShizuku — bũl Shizuku, ADB jäne Dhizuku jumys procesterine arnalğan bas
 
 🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 
-## Mümkindikter
-
-### Negizgi modülder haby (Essentials Hub)
-- **Dynamic Island** — Tikeleı media, batareya jäne habarlandyrularğa arnalğan kamera oıyğynyñ qalqyma overleıi
-- **Smart Pixels (AMOLED quatyn ünemdeu)** — Ekran energiyasyn 15–44% ünemdeu üşin OLED subpiksel torynyñ 25–75%-yn öşiredi
-- **Displeı baptauyşy (Display Tweaker)** — Ajyratymdylyqty, ekran tyğyzdyğyn (DPI) jäne jañaru jiiligin qaıta anyqtau
-- **Mäjbürli qarañğy rejim (Force Dark Mode)** — Barlyq ornatylğan qoldanbalarda qarañğy taqyrypty mäjbürlep qoldanu
-- **Batareya ortalyğy jäne qorğauşysy** — Batareyanyñ küıin, zaryadtau tsikldaryn, temperaturasyn naqty ýaqytta qadağalau jäne ūzaq qyzmet etuin qorğau
-- **Qalta rejiminiñ saqşysy (Pocket Mode Guard)** — Jaqyndau jäne jaryq sensorlary arqyly qaltada kezdeısoq basyludan qorğau
-- **Ekran qauipsizdigi jäne DRM bũğattauyn aşu** — Bank jäne striming qoldanbalarynda skrinşot jasau üşin FLAG_SECURE şekteuin aınalyp ötu
-- **Rūqsathtar jäne AppOps** — Artyqşylyqty rūqsathtardy basqaru jäne fondyq qyzmetterdi şekteu
-- **SystemUI rettegişi** — Küi jolağy belgişeleriniñ qara tizimi, batareya belgişesiniñ stilderi jäne immersivti rejim
-- **Axeron oıyn jäne processor oñtaılandyrğyşy** — Önimdilik profilderi, nöldik animatsiya kidirisi jäne keshti tazalau
-- **Mäjbürli Doze rejimi** — Ekran öşken kezde tereñ ūıqy rejimin (deep idle) avtomattandyrylğan türde küşeiytu
-- **Keñeıtilgen quat basqaru elementteri** — Shell arqyly qaıta iske qosu, recovery, bootloader, söndiru jäne ūıqy batyrmasy
-- **Jeke DNS rettegişi** — VPN qajet etpeıtin şifrlanğan DNS parametrleri (Cloudflare, AdGuard, Quad9, Google)
-- **Operator şekteulerin aınalyp ötu** — Operator bũğattağan internet taratudy (hotspot) aşu
-- **Saqtalğan Wi-Fi qūpiya sözderi** — Qūrylğyda saqtalğan Wi-Fi jelileri men qūpiya sözderin oqu jäne körsetu
-- **Shut Up! Media dybysyn öşiru** — Är qoldanba üşin bölek media dybysyn öşiru
-- **Audio ağyndaryn basqaru** — Är arnanyñ dybys deñgeıin bölek basqaru
-- **Dybys tüımelerimen trek auystyru** — Ekran öşiruli kezde dybys deñgeıi batyrmalary arqyly änderdi auystyru
-- **Habarlandyru jiegiñ jaryğy** — Habarlandyru tüsken kezde ekran jiekterindegi neon jarqyly
-- **Avtomatty mazalamaú rejimi (Zen Mode)** — Avtomattandyrylğan keste boıynşa «Mazalamaú» rejimin qosu
-- **Caffeinate** — Toqtatu habarlandyruy jäne jyldam parametrler plitkasy arqyly ekrandy öşpeitin küıde saqtau
-- **Fotosuret sutañbasy jäne EXIF studiyasy** — Leica klassikalyq jaqtauy jäne Hasselblad stili, naqty ýaqyttağy EXIF jolağy
-- **Ämbebap Android tazartqyşy (UAD)** — Qauymdastyq qauipsizdik reıtingi boıynşa qajetsiz qoldanbalardy öşiru jäne 1 türtu arqyly qalpyna keltiru
-- **Qoldanbalardy qatyruşy (App Freezer)** — Fondyq bağdarlamalardy joımaı-aq lezde mūzdatu
-- **Artyqşylyqty faıl şolğyşy** — Qorğalğan jüielik faıldar men qaltalardy köru
-- **Paket ornatuşy Pro** — Bölip jasalğan APKs, APKS, XAPK paketterin ornatu
-
-### Qosymşa kiriktirilgen modülder
-- **Theme Patcher** — Jüie taqyrybyn özgertu jäne baptau
-- **Sound Master** — Keñeıtilgen dybysty baptau
-- **Mixed Audio** — Dybys ağyndaryn aralastyru jäne bağyttau
-- **LookBack** — Ekrandy beınege tüsiru jäne jyldam köru
-- **Universal PiP** — Kez kelgen qoldanba üşin «Suret işindegi suret» rejimi
-- **Intent Shell** — Intentter arqyly shell komandalaryn oryndau
-- **Local Shell** — Kiristirilgen terminal emulyatory
-
-### Symsyz ADB avtomatty PIN kody (Qoljetimdilik)
-- **Öşiruli (Off)** — Jūptastyru PIN kodyn qolmen engizu
-- **Qolmen (Manual)** — Menedjer sūhbat terezesi paıda bolğan kezde eskertedi
-- **Avtomatty (Automatic)** — Qoljetimdilik qyzmeti saqtalğan PIN kodty «Qūrylğymen jūptastyru» terezesine avtomatty türde engizedi
-- Tek paıdalanuşy tañdauymen — Baptaularda qosqanğa deıin fonda eşteñe jūmys istemeıdi
-
-### Önimdilik pen turaqtylyq
-- **Ünemdi qozğalys bulyñğyrlyğy (Lazy motion blur)** — Kadrlardy tañdau tek ekrandy aınaldyru kezinde ğana oryndalady, processor jüktemesin ünemdeıdi
-- **Crashlytics jäne ūstalmağan qateler öñdeuşisi** — Qoldanba kenet jabylyp qalmaı, qatelikter jurnaldarda tolyq saqtalady
-- **Qorğanysty Shizuku Binder qabyğy** — Null-qauipsiz baılanys Realme jäne basqa OEM qūrylğylarynda NPE qatelerin boldyrmaıdy
-- **DeviceInfo şekteuli jüktelui** — dumpsys sūraularyna 20 sekundyq taım-aut qoıylyp, jüie qatyp qalmaı alynğan derekter körsetiledi
-
-### Alğaşqy iske qosu nusqaulyğy
-- 6 eskertu ekrany (artyqşylyqtar, Device Owner äserleri, Root qauipteri, üşinşi tarap äreketteri, litsenziya, bank qoldanbalarynyñ eskertuleri)
-- 5 sekundyq keri sanaq taımeri jäne «Oqydym jäne kelisemin» qūsqabelgisi bar kelisim
-- Tildi tañdau (jüielik + 12 til)
-- Taqyrypty tañdau (jüie boıynşa / qarañğy / aşyq / AMOLED taza qara / jüie tüsi)
-- Belsendiru ädisi (symsyz jöndeu / root / kompyuterge qosylu)
+</div>
 
 ---
 
-## Basqa Shizuku forktarymen salystyru
-
-| Joba | Avtoqosylu | TCP rejimi | Dhizuku | Modülderdi qoldau | Jasyryn rejim | Terminal | AI integratsiyasy | Expressive UI | Bastapqy nusqaulyq | Litsenziya |
-|---------|-----------|----------|---------|----------------|---------|----------|----------------|---------------|------------|---------|
-| **OmniShizuku** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Apache-2.0 |
-| Porter | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
-| shevery | ✅ | ✅ | ✅ | ✅ | ❌ | ✅ | ✅ | Material 3 | ❌ | Apache-2.0 |
-| Shizako | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
-| Shizuku (thedjchi forky) | ✅ | ✅ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
-| Shizuku Next | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | Material 3 | ❌ | Apache-2.0 |
-| ShizukuPlus | ✅ | ✅ | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
-| Stellar | ✅ | ✅ | ❌ | ❌ | ❌ | ✅ | ❌ | ❌ | ❌ | MPL-2.0 |
-| Xhizuku | ✅ | ✅ | ❌ | ✅ | ❌ | ❌ | ❌ | Material 3 Expressive | ✅ | Apache-2.0 |
-
----
-
-## Talaptar
-
-- Android 5.0 (API 21) nemese odan joğary
-- Jūmys istep tūrğan Shizuku qyzmeti (symsyz jöndeu, root nemese ADB arqyly)
-- Qoldanbağa berilgen Shizuku rūqsathtyğy
-
----
-
-## Ornatu
-
-1. APK faılyn [GitHub Releases](https://github.com/krishna3163/OmniShizuku/releases) böliminen jüktep ornatyñyz
-2. Qūrylğyñyzda Shizuku qyzmetin qosyñyz (symsyz jöndeu nemese ADB)
-3. OmniShizuku qoldanbasyna Shizuku rūqsatyn beriñiz
-4. Alğaş ret iske qosqanda, bastapqy baptau qadamdaryn ayaqtañyz
-
----
-
-## Bastapqy kodtan qurastyru
-
-```bash
-git clone git@github.com:krishna3163/OmniShizuku.git
-cd OmniShizuku
-./gradlew :manager:assembleDebug
-```
-
-Qūrastyrylğan debag APK faıly myna mekenjaıda bolady: `manager/build/outputs/apk/debug/manager-debug.apk`.
-
----
-
-## Üles qosuşylar men alğystar
-
-GitHub jelisinde OmniShizuku jobasyna üles qosqan barlyq jandarğa alğys aıtamyz:
-
-- **krishna3163** — Joba jetekşisi jäne negizgi äzirleuşi (Maintainer & Lead Developer)
-
-Sondaı-aq kelesi bastapqy kody aşyq jobalarğa şynaıy rızaşylyğymyzdy bildiremiz:
-
-- **Shizuku** (rikkaw) — Negizgi Shizuku freımvorki jäne Binder API
-- **Dhizuku** — Device Owner qyzmetimen integratsiya
-- **shevery** — Material 3 dızaıny, avtoqosylu, TCP rejimi, modülder qoldauy, terminal jäne jandy intellekt
-- **Shizuku Next** — Avtomatty jūptastyru, iske qosu ädisin tañdau, watchdog jäne App-Ops/brandmauer menedjeri
-- **Essentials (sameerasw)** — Negizgi paıdaly modülder (Dynamic Island, Smart Pixels, Caffeinate jäne t.b.)
-- **App Ops** — Rūqsathtardy basqaru ülgileri
-- **Active Launcher** — Avtomattandyru tañbalary
-- **EnforceDoze** — Doze ūıqy rejimin avtomattandyru täsilderi
-- **Xhizuku** — Material 3 Expressive interfeısi, baptau şeberi jäne server monıtory
-- **Stellar** — Qarapayım terminal şeşimi
-- **ShizukuPlus** — Äzirleuşilerge arnalğan keñeıtilgen API
-- **Porter** — Yqşam Shizuku fork ülgisi
-- **Shizako** — Tikeleı auystyru menedjeriniñ arhitekturalyq anyqtamasy
-- **DFRoot (diabl0w)** — Kiristirilgen mümkindik retindegi DirtyFrag (CVE-2026-43284) yadro eksploıtynyñ integratsiyasy (GPL-2.0)
-
----
-
-## Jyldam parametrler taqtalary (Quick Settings Tiles)
-
-OmniShizuku habarlandyru perdesine arnalğan jyldam baptau belgişelerin ūsynady:
-- Caffeinate (ekrandy qosuly saqtau)
-- Symsyz ADB auystyryp-qosqyşy
-- Shizuku serverin iske qosu / toqtatu
-- Jasyryn rejimdi (Stealth) qosu/öşiru
-
-Olardy qosu üşin habarlandyru taqtasyn tömen tüsirip, öñdeu qaryndaş belgişesin türtiñiz.
-
----
-
-## Qauipsizdik
-
-Būl qoldanba Shizuku arqyly joğary jüielik artyqşylyqtardy sūraıdy. Ony jauapkerşilikpen paıdalanyñyz:
-
-- Senimsiz nemese beıtanys qoldanbalarğa rūqsat bermeñiz
-- Symsyz jöndeu jäne ADB jüieniñ osal interfeısterin jelige aşady
-- Root rūqsaty Android qauipsizdik ülgisin aınalyp ötedi
-- Qūrylğy iesi (Device Owner) rejimi belgili bir şekteuler äkelui mümkin (zauyttyq qalpyna keltiruge tyıyım salu, qoldanbalardy öşirudi şekteu)
-
-Tolyq aqparatty birinşi iske qosu kezindegi eskertulerden oqyñyz.
-
----
-
-## Litsenziya
-
-Apache License 2.0 boıynşa litsenziyalanğan. Tolyq aqparatty [LICENSE](../LICENSE) faılynan qarañyz.
-
----
-
-## Jauapkerşilikten bas tartu
-
-OmniShizuku «sol küıinde» (as-is), eşqandaı tikeleı nemese janama kepildiksiz ūsynylady. Barlyq täuekelderdi paıdalanuşy öz moınyna alady. Biz derekterdiñ joğaluyna, qūrylğy kepildiginiñ küşin joyuyna nemese üşinşi tarap qoldanbalarynyñ äreketine jauapty emespiz.
-## 📖 Table of Contents
+## 📖 Mazmūny
 
 - [Overview](#-overview)
+- [Screenshots](#-screenshots)
 - [Why Use OmniShizuku?](#-why-use-omnishizuku)
 - [Key Features](#-key-features)
-  - [Essentials Hub](#essentials-hub)
-  - [Labs - Advanced System Tools](#labs---advanced-system-tools)
+  - [Labs - Advanced System Tools (40 Tools)](#labs---advanced-system-tools)
   - [Modules System](#modules-system)
   - [Call Recording (ShizuCallRecorder Integration)](#call-recording-shizucallrecorder-integration)
   - [AI & Developer Features](#ai--developer-features)
@@ -214,15 +43,34 @@ OmniShizuku «sol küıinde» (as-is), eşqandaı tikeleı nemese janama kepildi
 
 ---
 
-## 🔍 Overview
+## 🔍 Şolu
 
 **OmniShizuku** is an extensively enhanced, open-source fork of the original [Shizuku](https://github.com/RikkaApps/Shizuku) project. It extends Shizuku's powerful system-level API access by combining it with a vast collection of practical utilities, system tweaks, privacy controls, and an intuitive modern interface.
 
+🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take full control of their Android device without requiring full root access in most cases - leveraging Shizuku's ADB/root bridging capabilities. From display customization and battery optimization to app management, debloating, call recording, and advanced automation, OmniShizuku is your all-in-one system utility suite.
 
 ---
 
-## 💡 Why Use OmniShizuku?
+## 📸 Skrinşottar
+
+| **Home & Status** | **App Permissions** | **ADB Modules** | **Labs Catalog** | **Comput (Terminal & AI)** | **Settings** |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="../screenshots/home.png" width="165" alt="Home Screen" /> | <img src="../screenshots/manage_apps.png" width="165" alt="Manage Authorized Apps" /> | <img src="../screenshots/modules.png" width="165" alt="ADB Modules" /> | <img src="../screenshots/labs.png" width="165" alt="Labs Catalog" /> | <img src="../screenshots/comput.png" width="165" alt="Comput Console" /> | <img src="../screenshots/settings.png" width="165" alt="Settings Screen" /> |
+| Real-time service status & wireless ADB pairing | Whitelist mode, granular permissions & session-only access | Magisk/KernelSU-style ZIP module installer & manager | 39+ powerful system controls & tweaks | Privileged shell terminal with Gemini/AI generation | Device Owner, backups, automation & security config |
+
+---
+
+### 🔬 Featured Labs & System Capabilities
+
+| **System Controls & Power Tools** | **Native ShizuWall Firewall** |
+|:---:|:---:|
+| <img src="../screenshots/labs_tools.png" width="260" alt="Labs System Tools" /> | <img src="../screenshots/shizuwall.png" width="260" alt="ShizuWall Firewall" /> |
+| Enforce Doze, Mixed Audio, Private DNS, Screen Security & DFRoot | Zero-VPN native firewall with tracker scanner & appop rules |
+
+---
+
+## 💡 Nelikten OmniShizuku tañdau kerek?
 
 - **All-in-One Solution** - No need for multiple root/ADB apps. Everything from debloating to display tweaks in one place.
 - **No Root Required** - Works with Shizuku via Wireless ADB (Android 11+) or ADB, making it accessible to a wider audience.
@@ -235,59 +83,63 @@ Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take 
 
 ---
 
-## ✨ Key Features
+## ✨ Negizgi mümkindikter
 
-### Essentials Hub
+### Labs - Keñeýtilgen jüýelik qūraldar
 
-The Essentials Hub is OmniShizuku's crown jewel - a curated collection of powerful, everyday utilities:
+Labs katalogı qoldanbalardy basqaru, jüýeni basqaru jäne utilitalarğa bölingen 40 jüýelik qūraldy qamtidy:
 
+#### 📱 Qoldanbalardy basqaru (8 qūral)
 | Feature | Description |
 | --- | --- |
-| **Dynamic Island** | A floating punch-hole pill overlay inspired by iOS Dynamic Island. Displays live media playback, battery status, alerts, and more with smooth animations. |
-| **Smart Pixels (AMOLED Saver)** | Intelligently disables 25%, 50%, or 75% of OLED subpixels to drastically reduce power consumption on AMOLED displays, saving 15-44% battery life. |
-| **Display Tweaker** | Override screen resolution, change display density (DPI), adjust refresh rate, and fine-tune display parameters beyond stock limitations. |
-| **Force Dark Mode** | Forces dark theme across all applications, even those that don't natively support dark mode. |
-| **Battery Center & Guard** | Comprehensive battery monitoring with real-time health data, cycle count estimation, temperature tracking, charging stats, and intelligent longevity protection. |
-| **Pocket Mode Guard** | Uses proximity and light sensors to prevent accidental touches when the device is in your pocket, bag, or face-down. |
-| **Screen Security & DRM Unlock** | Bypass `FLAG_SECURE` to take screenshots and screen recordings in banking apps, DRM-protected content, and apps that normally block them. |
-| **Caffeinate** | Keep your screen awake indefinitely with a persistent notification and Quick Settings tile. Perfect for reading, navigation, or presentations. |
-| **Photo Watermark & EXIF Studio** | Add luxurious watermarks with Leica and Hasselblad-style frames. View, edit, and manage EXIF metadata with a beautiful live preview. |
-| **Notification Edge Lighting** | Stunning neon edge glow animations that illuminate the screen edges when notifications arrive. Fully customizable colors and effects. |
-| **Auto DND (Zen Mode)** | Automate Do Not Disturb based on time schedules, location, events, or custom triggers. |
-| **Pocket Mode, Shut Up! & More** | Per-app media muting, volume key track skipping when screen is off, and intelligent audio controls. |
+| **App Ops** | Granular control over hidden app permissions, runtime op gates, and background privileges. |
+| **Firewall** | Network-level app firewall blocking Wi-Fi and mobile data per application without consuming a VPN slot. |
+| **Autostart** | Restrict applications from waking up or starting services automatically at device boot. |
+| **Hiding Modes** | Hide Developer Options, USB/Wireless Debugging, Accessibility services, Private DNS, and VPN states from detection. |
+| **Force Dark Mode** | System-wide forced dark theme across third-party applications, even without native dark theme support. |
+| **Universal Debloater (UAD)** | Community safety-ranked package debloater with safety ratings, explanations, and 1-tap restore. |
+| **App Freezer** | Instantly freeze and suspend background applications to reclaim RAM and halt battery drain. |
+| **Axeron Gaming Optimizer** | System-level performance tuning, game boost, animation tweaks, and process optimizations. |
 
-### Labs - Advanced System Tools
-
-Labs houses powerful system-level utilities for advanced users and power users:
-
+#### ⚙️ Jüýeni basqaru (18 qūral)
 | Feature | Description |
 | --- | --- |
-| **App Ops Manager** | Granular control over app permissions and AppOps. Revoke or grant hidden permissions with precision. |
-| **App Freezer** | Instantly freeze background apps to save battery and RAM. Frozen apps won't run until unfrozen. |
-| **Universal Android Debloater (UAD)** | Community safety-ranked package debloating with detailed descriptions. Safely remove bloatware with easy restore functionality. |
-| **Firewall** | Network-level app firewall to block Wi-Fi and mobile data per app without VPN dependencies. |
-| **Autostart Manager** | Control which apps can start automatically on boot, improving boot time and reducing background activity. |
-| **Hide Apps/Features** | Hide developer options, USB/Wireless debugging, accessibility services, private DNS, and VPN from other apps/system detection. |
-| **Force Dark (Advanced)** | System-wide force dark with additional customization options. |
-| **Activity Launcher** | Launch hidden activities, exported components, and internal app activities directly. |
-| **Advanced Power Controls** | Reboot to system, recovery, bootloader/fastboot, safe mode, or shutdown directly from the app via privileged shell. |
-| **Display Tweaker (Labs)** | Deep display configuration including resolution scaling, DPI changes, and refresh rate forcing. |
-| **Saved Wi-Fi Passwords** | View saved Wi-Fi networks and their passwords (where accessible via system APIs). |
-| **Privileged File Explorer** | Browse, view, and manage files in protected system directories with shell-level access. |
-| **Package Installer Pro** | Install split APKs (APKS), XAPK files, and multiple APK bundles with advanced installation options. |
-| **SystemUI Tuner** | Customize status bar icons, battery icon styles, clock position, network indicators, and enable immersive mode tweaks. |
-| **Enforce Doze** | Force aggressive Doze mode on screen off for maximum battery savings on compatible devices. |
-| **Private DNS Controller** | Quick-switch between encrypted DNS providers (Cloudflare, AdGuard, Quad9, Google, NextDNS, and custom). |
-| **Carrier Tethering Bypass** | Bypass carrier restrictions on mobile hotspot/tethering functionality. |
-| **Audio Stream Master** | Independent volume control for all audio streams with fine-grained precision. |
-| **Network Firewall (Advanced)** | Enhanced firewall controls with persistent rules and per-app data/Wi-Fi restrictions. |
-| **Screen Security** | Global control over `FLAG_SECURE` for screenshot/recording permissions. |
-| **Auto DND Scheduler** | Time-based and event-based Do Not Disturb automation. |
-| **Axeron Gaming & CPU Optimizer** | Performance profiles, animation scaling tweaks, zero-latency optimizations, and cache trimming for gaming. |
-| **Terminal Emulator** | Built-in terminal with Shizuku shell access for direct command execution. |
-| **Intent Shell** | Execute shell commands via Android Intents for automation and external app integration. |
-| **Stealth Mode** | Advanced hiding and stealth capabilities for enhanced privacy. |
-| **Permissions Manager** | Centralized privileged permission management. |
+| **Power Menu** | Privileged reboot to System, Recovery, Bootloader/Fastboot, Safe Mode, or instant power off. |
+| **Display Tweaker** | Override display resolution, modify screen density (DPI), and force custom refresh rates. |
+| **Wi-Fi Passwords** | View, copy, and export saved Wi-Fi network credentials directly via privileged shell. |
+| **SystemUI Tuner** | Customize status bar icon visibility, battery icon styles, clock seconds, and immersive navigation. |
+| **Enforce Doze (Deep Sleep)** | Force immediate aggressive Doze deep sleep mode whenever the screen turns off. |
+| **Private DNS Controller** | Switch between encrypted DNS providers (Cloudflare, AdGuard, Quad9, Google, NextDNS, Custom) with auto-revert timers. |
+| **Audio Stream Master** | Independent fine-grained volume sliders for Media, Ring, Alarm, Call, Voice, and System audio streams. |
+| **Carrier Tethering** | Bypass carrier entitlement checks and restrictions on Wi-Fi hotspot and USB tethering. |
+| **Mixed Audio** | Multi-app concurrent audio playback bypass (prevent background apps from pausing when another app plays audio). |
+| **SoundMaster** | Per-app audio focus and volume routing mixer. |
+| **Universal Picture-in-Picture** | Force any unsupported app into Picture-in-Picture (PiP) mode using virtual display projection. |
+| **Screen Security & DRM** | Bypass `FLAG_SECURE` restrictions to allow screenshots and screen recording in secure/banking apps. |
+| **Auto DND (Zen Mode)** | Automated Do Not Disturb rules based on foreground app focus, custom schedules, and triggers. |
+| **DFRoot (DirtyFrag Exploit)** | Built-in privilege escalation helper using CVE-2026-43284 for supported kernel versions. |
+| **Quick Settings Tiles** | Interactive manager and setup suite for 18 custom Quick Settings tiles. |
+| **ShizuWall Firewall** | Advanced firewall interface featuring an integrated tracker & telemetry scanner and socket monitor. |
+| **Caffeinate** | Keep device screen awake with a tile and persistent notification for reading or navigation. |
+| **Theme Patcher** | System-level accent colors, font styling, and UI theme modifications. |
+
+#### 🛠️ Utilitalar (14 qūral)
+| Feature | Description |
+| --- | --- |
+| **Shell** | Interactive privileged command-line terminal with real-time streaming output. |
+| **Log Viewer** | Real-time system logcat viewer with tag, package, level filtering, and export capabilities. |
+| **Device Info** | Comprehensive hardware, kernel, battery health, thermal sensors, and SoC dashboard. |
+| **Activities Launcher** | Inspect and launch exported, unexported, or hidden Android activities and intents. |
+| **Files** | Privileged filesystem browser with read/write access to protected `/data` and app directories. |
+| **App Installer Pro** | Privileged package installer supporting APK, APKS split bundles, and XAPK formats. |
+| **Terminal Apps** | Quick switcher and launcher for external terminal emulators. |
+| **LocalShell** | Standalone local shell interface. |
+| **Intents** | Fire custom explicit or implicit system intents, broadcast receivers, and services. |
+| **Stealth Mode** | Anti-detection measures to prevent target apps from detecting Shizuku, root, or debugging state. |
+| **Permissions Manager** | Overview and revocation/granting of elevated permissions across all installed packages. |
+| **Shizuku Store** | Built-in catalog to discover and download open-source apps built for Shizuku. |
+| **Call Recording (ShizuCallRecorder)** | Native two-way call recording powered by privileged shell audio capture. |
+| **WallYou Wallpapers** | In-app wallpaper browser, fetcher, and wallpaper switcher. |
 
 ### Modules System
 
@@ -339,7 +191,7 @@ Built-in support for call recording through Shizuku's privileged access:
 
 ---
 
-## 📊 Feature Comparison with Other Shizuku Forks
+## 📊 Basqa Shizuku forkterimen salystyru
 
 | Feature | **OmniShizuku** | **Shizuku (Original)** | **Shizuku Next** | **Xhizuku** | **Shevery** | **ShizukuPlus** | **Stellar** |
 | --- | :------------: | :--------------------: | :------------: | :--------: | :--------: | :------------: | :--------: |
@@ -349,14 +201,19 @@ Built-in support for call recording through Shizuku's privileged access:
 | **Dhizuku Support** | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
 | **Autostart** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Module System** | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Essentials Hub** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Labs/Advanced Tools** | ✅ | ❌ | Partial | Partial | Partial | ❌ | Partial |
+| **Labs Advanced Tools (40 Tools)** | ✅ | ❌ | Partial | Partial | Partial | ❌ | Partial |
 | **App Debloater (UAD)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **App Freezer** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Firewall (Zero-VPN)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Quick Settings Tiles Suite (18 tiles)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **ShizuWall Native Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Tracker & Telemetry Scanner** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Caffeinate Screen Stay-Awake** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Private DNS Auto-Revert & Cycles** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **DFRoot (Kernel Exploit Helper)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **WallYou Dynamic Wallpapers** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Universal Picture-in-Picture** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Display Tweaker** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Dynamic Island** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Smart Pixels** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Call Recording** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Theme Patcher** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Built-in Terminal** | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
@@ -372,7 +229,7 @@ Built-in support for call recording through Shizuku's privileged access:
 
 ---
 
-## 📱 System Requirements
+## 📱 Jüýelik talaptar
 
 | Component | Requirement |
 | --- | --- |
@@ -385,7 +242,7 @@ Built-in support for call recording through Shizuku's privileged access:
 
 ---
 
-## 📥 Installation
+## 📥 Ornatu
 
 ### From GitHub Releases (Recommended)
 
@@ -428,7 +285,7 @@ adb shell sh /storage/emulated/0/Android/data/moe.shizuku.privileged.api/start.s
 
 ---
 
-## 🔨 Building from Source
+## 🔨 Bastapqy kodtan qūrastypu
 
 ### Prerequisites
 
@@ -466,7 +323,7 @@ The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug
 
 ---
 
-## 🔐 Architecture & Security
+## 🔐 Arhitektura jäne qauipsizdik
 
 ### Security Measures
 
@@ -490,25 +347,25 @@ The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug
 
 ---
 
-## 🔑 Permissions Explained
+## 🔑 Rūqsattar tüsindirmesi
 
 | Permission | Purpose | Required For |
 | --- | --- | --- |
 | `QUERY_ALL_PACKAGES` | List and manage installed apps | App Ops, Debloater, Freezer, Modules |
 | `READ_EXTERNAL_STORAGE` / `MANAGE_EXTERNAL_STORAGE` | File access | File Explorer, APK installation |
 | `POST_NOTIFICATIONS` | Show notifications | Services, Caffeinate, Recording |
-| `FOREGROUND_SERVICE` | Run background services | Call recording, Dynamic Island, Caffeinate |
+| `FOREGROUND_SERVICE` | Run background services | Call recording, ShizuWall, Caffeinate |
 | `READ_PHONE_STATE`, `RECORD_AUDIO` | Call detection and recording | ShizuCallRecorder |
 | `BIND_ACCESSIBILITY_SERVICE` | Auto-fill Wireless ADB PIN | Wireless ADB Auto-PIN (opt-in) |
 | `PACKAGE_USAGE_STATS` | Usage data access | Some optimization features |
 | `REQUEST_INSTALL_PACKAGES` | Install APKs | Package Installer Pro |
-| `SYSTEM_ALERT_WINDOW` | Overlay display | Dynamic Island, Edge Lighting |
+| `SYSTEM_ALERT_WINDOW` | Overlay display | Universal PiP, Screen Overlays |
 
 *Most permissions are only requested when needed for specific features.*
 
 ---
 
-## 🤝 Contributing
+## 🤝 Jobağa üles qosu
 
 Contributions are welcome! Whether it's bug reports, feature requests, documentation improvements, or code contributions.
 
@@ -532,7 +389,7 @@ See [CONTRIBUTING.md](../CONTRIBUTING.md) for more details.
 
 ---
 
-## 🙏 Credits & Acknowledgments
+## 🙏 Alğystar men autorlar
 
 ### Core Projects
 
@@ -569,7 +426,7 @@ OmniShizuku stands apart by combining the power of Shizuku with a comprehensive 
 
 ---
 
-## 📄 License
+## 📄 Litsenziya
 
 This project is licensed under the **Apache License 2.0**. See the [LICENSE](../LICENSE) file for full details.
 
@@ -591,7 +448,7 @@ limitations under the License.
 
 ---
 
-## 💬 Support
+## 💬 Qoldau
 
 - **GitHub Issues**: [Report bugs or request features](https://github.com/krishna3163/OmniShizuku/issues)
 - **GitHub Discussions**: [Ask questions and share ideas](https://github.com/krishna3163/OmniShizuku/discussions)
