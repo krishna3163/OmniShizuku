@@ -3,10 +3,10 @@
 OmniShizuku 是一个用于 Shizuku、ADB 和 Dhizuku 工作流的开源 Android 实用工具。它通过 Shizuku 服务提供系统级 API 访问，包含设备管理、自动化、系统优化等强大功能模块。
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163/OmniShizuku-blue?logo=github)](https://github.com/krishna3163/OmniShizuku)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](../LICENSE)
 [![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android)](https://developer.android.com)
 
-🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
+🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 
 ---
 
@@ -167,7 +167,7 @@ OmniShizuku 提供了以下下拉面板快捷开关：
 
 ## 开源协议
 
-本项目采用 Apache License 2.0 协议开源。详细内容请参阅 [LICENSE](LICENSE)。
+本项目采用 Apache License 2.0 协议开源。详细内容请参阅 [LICENSE](../LICENSE)。
 
 ---
 

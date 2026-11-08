@@ -1,88 +1,93 @@
+# OmniShizuku
+
+OmniShizuku は、Shizuku、ADB、および Dhizuku ワークフロー向けに設計されたオープンソースの Android ユーティリティです。Shizuku サービスを介してシステムレベルの API アクセスを提供し、デバイス管理、自動化、各種最適化などの強力なモジュールを搭載しています。
+
+[![GitHub](https://img.shields.io/badge/GitHub-krishna3163/OmniShizuku-blue?logo=github)](https://github.com/krishna3163/OmniShizuku)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](../LICENSE)
+[![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android)](https://developer.android.com)
+
+🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
+
+---
 <div align="center">
 
-<img src="manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
+<img src="../manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
 
 # OmniShizuku
 
 **A powerful, feature-rich fork of Shizuku with enhanced modules, modern UI, and extended system control capabilities.**
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163%2FOmniShizuku-blue?logo=github&style=for-the-badge)](https://github.com/krishna3163/OmniShizuku)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](../LICENSE)
 [![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android&style=for-the-badge)](https://developer.android.com)
 [![API](https://img.shields.io/badge/API%20Level-21%2B-brightgreen?style=for-the-badge)](https://developer.android.com/guide/topics/manifest/uses-sdk-element)
 [![Shizuku](https://img.shields.io/badge/Powered%20by-Shizuku%20API-orange?style=for-the-badge)](https://github.com/RikkaApps/Shizuku)
 
-🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [日本語](./README.ja.md) • [العربية](./README.ar.md)
+🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 
-</div>
+## 主な機能
 
-🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
+### エッセンシャルズ・ハブ (Essentials Hub)
+- **ダイナミック・アイランド (Dynamic Island)** — パンチホール周囲にメディア再生、バッテリー、通知を表示するフローティングピル
+- **スマートピクセル (Smart Pixels - AMOLED 省電力)** — OLED サブピクセルの 25–75% を無効化し、画面の消費電力を 15–44% 削減
+- **ディスプレイ微調整 (Display Tweaker)** — 解像度、画面密度 (DPI)、リフレッシュレートの上書き
+- **強制ダークモード (Force Dark Mode)** — インストール済み全アプリでダークテーマを強制適用
+- **バッテリーセンター＆ガード (Battery Center & Guard)** — リアルタイムのバッテリー健全性、充電サイクル、温度、長寿命保護
+- **ポケットモード・ガード (Pocket Mode Guard)** — 近接・照度センサーによるポケット内での誤タッチ防止
+- **画面セキュリティ＆DRM解除 (Screen Security & DRM Unlock)** — FLAG_SECURE を回避し、銀行やストリーミングアプリでのスクリーンショットを許可
+- **権限＆AppOps管理 (Permissions & AppOps)** — 特権権限の制御およびバックグラウンドサービスの制限
+- **SystemUIチューナー (SystemUI Tuner)** — ステータスバーアイコンの非表示、バッテリーアイコンのスタイル変更、没入モード
+- **Axeron ゲーム＆CPUオプティマイザ (Axeron Gaming & CPU Optimizer)** — パフォーマンスプロファイル、アニメーション遅延ゼロ化、キャッシュクリーン
+- **強制Dozeモード (Enforce Doze)** — 画面オフ時にディープアイドル・スタンバイを積極的に自動化
+- **高度な電源制御 (Advanced Power Controls)** — シェル経由での再起動、リカバリー、ブートローダー、シャットダウン、スリープ
+- **プライベートDNSコントローラー (Private DNS Controller)** — VPN不要の暗号化DNSプリセット (Cloudflare, AdGuard, Quad9, Google)
+- **テザリング制限の回避 (Carrier Tethering Bypass)** — キャリアによって制限されたテザリング・ホットスポットを解除
+- **保存済みWi-Fiパスワード表示 (Saved Wi-Fi Passwords)** — 端末に保存されているWi-Fiアクセスポイントとパスワードを表示
+- **アプリ別メディアミュート (Shut Up! Media Muter)** — 特定のアプリ起動時にメディア音声を自動ミュート
+- **オーディオストリームマスター (Audio Stream Master)** — 各オーディオチャンネルの音量を個別に独立制御
+- **音量ボタンでの曲送り (Volume Key Track Skipper)** — 画面オフ時に音量ボタンで音楽トラックをスキップ
+- **通知エッジライティング (Notification Edge Lighting)** — 通知受信時にディスプレイの縁をネオングローアニメーションで点灯
+- **自動おやすみモード (Auto DND - Zen Mode)** — アプリのフォーカスやスケジュールに基づいたサイレントモードの自動化
+- **スリープ防止 (Caffeinate)** — 通知やクイック設定タイルから画面を常に点灯状態に維持
+- **写真透かし＆EXIFスタジオ (Photo Watermark & EXIF Studio)** — 高級ライカ風フレームやハッセルブラッド風ブランドロゴとライブEXIF情報付与
+- **ユニバーサルAndroidデブロート (UAD)** — コミュニティ安全評価に基づく不要アプリの一括削除と1タップ復元
+- **アプリフリーザー (App Freezer)** — アンインストールすることなくバックグラウンドアプリを即座に凍結
+- **特権ファイルブラウザ (Privileged File Explorer)** — 保護されたシステムディレクトリの参照
+- **パッケージインストーラーPro (Package Installer Pro)** — 分割APK (Split APKs, APKS, XAPK) の直接インストール
 
----
+### 追加統合モジュール (Additional Integrated Modules)
+- **テーマパッチャー (Theme Patcher)** — システムテーマのカスタマイズ
+- **サウンドマスター (Sound Master)** — 高度なオーディオ設定
+- **ミックスオーディオ (Mixed Audio)** — 複数音源のミキシングおよびルーティング
+- **ルックバック (LookBack)** — 画面の録画およびクイック再生
+- **ユニバーサルPiP (Universal PiP)** — すべてのアプリでピクチャーインピクチャーを有効化
+- **インテントシェル (Intent Shell)** — インテントブロードキャストを介したシェルコマンド実行
+- **ローカルシェル (Local Shell)** — アプリ内蔵のターミナルエミュレータ
 
-## 📖 Table of Contents
+### ワイヤレスADB自動PIN入力 (アクセシビリティ)
+- **オフ (Off)** — ペアリングPINを手動で入力
+- **手動 (Manual)** — ペアリングダイアログ表示時にアプリが通知
+- **自動 (Automatic)** — ユーザー補助サービスが「デバイスとペア設定」ダイアログに保存済みPINを自動入力
+- 完全オプトイン制 — 設定画面で明示的に有効化するまでバックグラウンドで動作することはありません
 
-### Centro de Esenciales
-- **Dynamic Island** — Overlay de píldora flotante para medios en vivo, batería y alertas
-- **Smart Pixels (Ahorrador AMOLED)** — Deshabilita el 25–75% de la cuadrícula de subpíxeles OLED para ahorrar 15–44% de energía de pantalla
-- **Display Tweaker** — Modificación de resolución, densidad de pantalla (DPI) y tasa de refresco
-- **Forzar Modo Oscuro** — Fuerza temas oscuros en todas las aplicaciones instaladas
-- **Centro y Guardia de Batería** — Salud de batería en tiempo real, conteo de ciclos, temperatura y guardia de longevidad
-- **Guardia de Modo Bolsillo** — Protección de sensor de proximidad y luz contra toques accidentales en el bolsillo
-- **Seguridad de Pantalla y Desbloqueo DRM** — Evita FLAG_SECURE para permitir capturas de pantalla en aplicaciones bancarias y de streaming
-- **Permisos y AppOps** — Controlador de permisos privilegiados y límites de servicios en segundo plano
-- **Ajustes de SystemUI** — Lista negra de iconos de barra de estado, estilos de icono de batería y modo inmersivo
-- **Optimizador de Juegos y CPU Axeron** — Perfiles de rendimiento, latencia de animación cero y optimización de caché
-- **Forzar Doze** — Automatización agresiva de reposo profundo en espera al apagar la pantalla
-- **Controles de Energía Avanzados** — Reinicio, recovery, bootloader, apagado y tecla de suspensión a través de shell
-- **Controlador de DNS Privado** — Ajustes preestablecidos de DNS cifrado sin VPN (Cloudflare, AdGuard, Quad9, Google)
-- **Evadir Restricciones de Zona Wi-Fi** — Desbloquea el punto de acceso restringido por el operador
-- **Contraseñas Wi-Fi Guardadas** — Lee y muestra puntos de acceso Wi-Fi guardados y contraseñas
-- **Shut Up! Silenciador de Medios** — Silenciamiento de audio multimedia por aplicación
-- **Control Maestro de Flujos de Audio** — Control de volumen independiente para diferentes canales
-- **Saltar Pistas con Botones de Volumen** — Salta canciones usando los botones de volumen con la pantalla apagada
-- **Iluminación de Bordes de Notificación** — Animación de brillo de neón en los bordes de la pantalla al recibir notificaciones
-- **Auto DND (Modo Zen)** — Programación automatizada del modo No Molestar
-- **Caffeinate** — Mantiene la pantalla encendida con notificación persistente y mosaico en Ajustes Rápidos
-- **Estudio de Marca de Agua y EXIF** — Marco elegante estilo Leica y marca minimalista Hasselblad con tira EXIF en vivo
-- **Debloater Universal de Android (UAD)** — Eliminación de aplicaciones según niveles de seguridad de la comunidad y restauración con un toque
-- **Congelador de Aplicaciones** — Congela instantáneamente aplicaciones en segundo plano
-- **Explorador de Archivos Privilegiado** — Explora rutas protegidas del sistema
-- **Instalador de Paquetes Pro** — Instala paquetes divididos APKs, APKS y XAPK
+### パフォーマンスと安定性
+- **遅延モーションブラー (Lazy motion blur)** — スクロール時のみサンプリングループを動作させ、フレーム毎の無駄なCPU消費を排除
+- **Crashlytics + 未処理例外ハンドラ** — 突然のクラッシュ時にもサイレント終了せず詳細なログを記録
+- **防御的Shizuku Binderラッパー** — Null安全なバインダーアクセスにより、Realmeや各社OEM製端末でのNPEクラッシュを防止
+- **DeviceInfoのタイムアウト制御** — dumpsysクエリに20秒のタイムアウトを設け、スピナーが無限ループすることなく取得済みデータを表示
 
-### Módulos Integrados Adicionales
-- **Theme Patcher** — Personalización del tema del sistema
-- **Sound Master** — Control avanzado de audio
-- **Mixed Audio** — Mezcla y enrutamiento de audio
-- **LookBack** — Grabación y reproducción de pantalla
-- **Universal PiP** — Picture-in-picture para cualquier aplicación
-- **Intent Shell** — Comandos de shell mediante intents
-- **Local Shell** — Emulador de terminal integrado
-
-### Auto-PIN de ADB Inalámbrico (Accesibilidad)
-- **Desactivado** — Escribe el PIN de emparejamiento manualmente
-- **Manual** — El administrador te notifica cuando aparece el diálogo
-- **Automático** — El servicio de accesibilidad ingresa el PIN almacenado en el diálogo "Vincular con dispositivo"
-- Exclusivamente opt-in — no se ejecuta nada hasta que lo habilites en Ajustes
-
-### Rendimiento y Estabilidad
-- **Lazy motion blur** — Los bucles de muestreo de fotogramas solo se ejecutan al desplazarse, eliminando el gasto de CPU por fotograma
-- **Crashlytics + manejador no capturado** — Los bloqueos se registran detalladamente en lugar de cerrar la app silenciosamente
-- **Binder Shizuku defensivo** — Acceso a binder seguro contra valores nulos para prevenir fallos NPE en dispositivos Realme y OEM
-- **Carga acotada de DeviceInfo** — Tiempo de espera de 20s en consultas dumpsys, mostrando información parcial en lugar de bloquearse
-
-### Configuración Inicial de Primer Inicio
-- 6 pantallas de aviso legal (privilegios, efectos del propietario del dispositivo, riesgos de root, comportamiento de terceros, licencia, advertencias de apps bancarias)
-- Acuerdo con temporizador de cuenta regresiva de 5 segundos y casilla de verificación "He leído y acepto"
-- Selección de idioma (sistema + 12 idiomas)
-- Selección de tema (seguir al sistema / oscuro / claro / noche negra AMOLED / color del sistema)
-- Método de activación (depuración inalámbrica / root / conectar a una computadora)
+### 初回起動オンボーディング
+- 6つの免責事項画面（特権権限、デバイス管理者機能の影響、Rootリスク、サードパーティ動作、ライセンス、銀行アプリ警告）
+- 5秒のカウントダウンタイマーと「上記を読み同意します」チェックボックスによる同意確認
+- 言語選択（システム言語 + 12言語）
+- テーマ選択（システム追従 / ダーク / ライト / AMOLEDブラック / システムダイナミックカラー）
+- 有効化方法の案内（ワイヤレスデバッグ / Root / PC接続）
 
 ---
 
-## Comparación con Otros Forks de Shizuku
+## 他のShizukuフォークとの機能比較
 
-| Proyecto | Inicio Automático | Modo TCP | Dhizuku | Soporte de Módulos | Sigilo (Stealth) | Terminal | Integración IA | UI Expresiva | Bienvenida | Licencia |
+| プロジェクト | 自動起動 | TCPモード | Dhizuku | モジュール対応 | ステルス機能 | ターミナル | AI統合 | Expressive UI | オンボーディング | ライセンス |
 |---------|-----------|----------|---------|----------------|---------|----------|----------------|---------------|------------|---------|
 | **OmniShizuku** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | Apache-2.0 |
 | Porter | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ | Apache-2.0 |
@@ -96,11 +101,96 @@
 
 ---
 
-## Requisitos
+## 動作環境
 
-- Android 5.0 (API 21) o superior
-- Servicio Shizuku en ejecución (vía depuración inalámbrica, root o ADB)
-- Permiso de Shizuku concedido a la aplicación
+- Android 5.0 (API 21) 以上
+- Shizuku サービスが動作していること（ワイヤレスデバッグ、Root、またはADB経由）
+- 本アプリに Shizuku の権限が付与されていること
+
+---
+
+## インストール手順
+
+1. [GitHub Releases](https://github.com/krishna3163/OmniShizuku/releases) から最新の APK をダウンロードしてインストールします
+2. 端末で Shizuku を有効化します（ワイヤレスデバッグまたはPC ADB経由）
+3. OmniShizuku に Shizuku の利用権限を許可します
+4. 初回起動時に、画面に表示される初期セットアップウィザードを完了します
+
+---
+
+## ソースコードからのビルド
+
+```bash
+git clone git@github.com:krishna3163/OmniShizuku.git
+cd OmniShizuku
+./gradlew :manager:assembleDebug
+```
+
+ビルドされたデバッグAPKは `manager/build/outputs/apk/debug/manager-debug.apk` に生成されます。
+
+---
+
+## コントリビューターと謝辞
+
+GitHub 上で OmniShizuku に貢献してくださったすべての方々に感謝いたします：
+
+- **krishna3163** — メンテナー 兼 リード開発者 (Maintainer & Lead Developer)
+
+また、OmniShizuku の設計に多大な影響とインスピレーションを与え、一部のコードやAPIが統合されている以下のオープンソースプロジェクトに深く感謝いたします：
+
+- **Shizuku** (rikkaw) — コアとなるShizukuフレームワークおよびBinder API
+- **Dhizuku** — Device Owner サービスの統合
+- **shevery** — Material 3デザイン、自動起動、TCPモード、モジュール機能、ターミナル、AI統合
+- **Shizuku Next** — 自動ペアリング、起動方式選択、ウォッチドッグ、App-Ops/ファイアウォール管理
+- **Essentials (sameerasw)** — エッセンシャル機能モジュール（Dynamic Island、Smart Pixels、Caffeinate など）
+- **App Ops** — 権限管理の設計パターン
+- **Active Launcher** — 自動化ショートカット機能
+- **EnforceDoze** — Dozeスリープ自動化パターン
+- **Xhizuku** — Material 3 Expressive UI、初回導入ウィザード、サーバー監視機能
+- **Stellar** — 軽量ターミナル実装
+- **ShizukuPlus** — 開発者向け拡張APIサーフェス
+- **Porter** — 最小限のShizukuフォーク設計リファレンス
+- **Shizako** — ドロップイン置換マネージャーのリファレンス
+- **DFRoot (diabl0w)** — 組み込み機能としての DirtyFrag (CVE-2026-43284) カーネルエクスプロイト統合 (GPL-2.0)
+
+---
+
+## クイック設定タイル
+
+OmniShizuku には以下のクイック設定パネル用タイルが含まれています：
+- Caffeinate（画面のスリープ防止）
+- ワイヤレスADB切り替え
+- Shizuku サーバーの起動 / 停止
+- ステルスモード切り替え
+
+通知シェードを下に引き下げ、鉛筆アイコン（編集）をタップしてタイルを追加してください。
+
+---
+
+## セキュリティに関する注意
+
+本アプリは Shizuku を介して高いシステム権限を要求します。安全のため責任を持ってご利用ください：
+
+- 信頼できないサードパーティ製アプリには権限を与えないでください
+- ワイヤレスデバッグやADBは端末の内部システムインターフェースを外部に露出させます
+- Root権限は Android 本来のセキュリティサンドボックスをバイパスします
+- デバイス管理者（Device Owner）モードはシステム制限（初期化制限やアプリのアンインストール制限など）を伴う場合があります
+
+詳細は初回起動時の免責事項をご確認ください。
+
+---
+
+## ライセンス
+
+本ソフトウェアは Apache License 2.0 の下で公開されています。詳細は [LICENSE](../LICENSE) をご覧ください。
+
+---
+
+## 免責事項
+
+OmniShizuku は現状有姿（as-is）で提供され、いかなる明示または黙示の保証も行いません。自己責任のもとでご使用ください。データの損失、端末保証の無効化、またはサードパーティ製アプリの異常動作について、開発者は一切の責任を負いません。
+## 📖 Table of Contents
+
 - [Overview](#-overview)
 - [Why Use OmniShizuku?](#-why-use-omnishizuku)
 - [Key Features](#-key-features)
@@ -251,10 +341,6 @@ Built-in support for call recording through Shizuku's privileged access:
 
 ## 📊 Feature Comparison with Other Shizuku Forks
 
-1. Descarga e instala el APK desde [GitHub Releases](https://github.com/krishna3163/OmniShizuku/releases)
-2. Habilita Shizuku en tu dispositivo (depuración inalámbrica o ADB)
-3. Concede permisos de Shizuku a OmniShizuku
-4. En el primer inicio, completa el asistente de configuración inicial
 | Feature | **OmniShizuku** | **Shizuku (Original)** | **Shizuku Next** | **Xhizuku** | **Shevery** | **ShizukuPlus** | **Stellar** |
 | --- | :------------: | :--------------------: | :------------: | :--------: | :--------: | :------------: | :--------: |
 | **Base Functionality** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
@@ -368,44 +454,6 @@ cd OmniShizuku
 ./gradlew :manager:installDebug
 ```
 
-El APK de depuración se encontrará en `manager/build/outputs/apk/debug/manager-debug.apk`.
-
----
-
-## Colaboradores y Créditos
-
-Agradecemos a todos los que han contribuido con OmniShizuku en GitHub:
-
-- **krishna3163** — Mantenedor y Desarrollador Principal
-
-También agradecemos a los siguientes proyectos de código abierto cuyos aportes, ideas y APIs inspiraron o se integraron en OmniShizuku:
-
-- **Shizuku** (rikkaw) — Framework base de Shizuku y API de Binder
-- **Dhizuku** — Integración del servicio Dhizuku
-- **shevery** — Diseño Material 3, inicio automático, modo TCP, soporte de módulos, terminal, integración de IA
-- **Shizuku Next** — Emparejamiento automático, selección de método de inicio, watchdog, gestor de app-ops/firewall
-- **Essentials (sameerasw)** — Módulos esenciales de funciones (Dynamic Island, Smart Pixels, Caffeinate, etc.)
-- **App Ops** — Patrones de gestión de permisos
-- **Active Launcher** — Atajos de automatización
-- **EnforceDoze** — Patrones de automatización para el modo Doze
-- **Xhizuku** — Interfaz Material 3 Expressive, asistente de bienvenida, monitor del servidor
-- **Stellar** — Implementación simple de terminal
-- **ShizukuPlus** — Superficie de API ampliada para desarrolladores
-- **Porter** — Referencia de fork minimalista de Shizuku
-- **Shizako** — Referencia de reemplazo directo de gestor
-- **DFRoot (diabl0w)** — Integración del exploit de kernel DirtyFrag (CVE-2026-43284) (GPL-2.0) como funcionalidad integrada
-
----
-
-## Mosaicos de Ajustes Rápidos
-
-OmniShizuku incluye mosaicos de Ajustes Rápidos para:
-- Caffeinate (mantener pantalla activa)
-- Conmutador de ADB inalámbrico
-- Iniciar / detener servidor Shizuku
-- Conmutador de modo oculto (Stealth)
-
-Añádelos desplegando el panel de notificaciones y tocando el icono del lápiz de edición.
 The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug.apk`
 
 ### Build Requirements
@@ -422,14 +470,6 @@ The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug
 
 ### Security Measures
 
-Esta aplicación requiere privilegios elevados del sistema a través de Shizuku. Úsala de forma responsable:
-
-- No otorgues acceso a aplicaciones no confiables
-- La depuración inalámbrica y ADB exponen interfaces del sistema
-- El acceso root elude el modelo de seguridad de Android
-- El modo de propietario del dispositivo (Device Owner) puede tener efectos secundarios (restricciones de restablecimiento de fábrica, límites de desinstalación de apps)
-
-Consulta el aviso legal del primer inicio para obtener todos los detalles.
 - **Defensive Programming** - Null-safe binder access, try-catch blocks around critical operations, and graceful fallbacks
 - **Permission Scoping** - Minimal permission usage with runtime permission requests where necessary
 - **Secure IPC** - AIDL interfaces for inter-process communication with proper service binding
@@ -488,7 +528,7 @@ Contributions are welcome! Whether it's bug reports, feature requests, documenta
 - Update documentation if needed
 - For major features, open an issue first to discuss
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more details.
 
 ---
 
@@ -531,7 +571,7 @@ OmniShizuku stands apart by combining the power of Shizuku with a comprehensive 
 
 ## 📄 License
 
-This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for full details.
+This project is licensed under the **Apache License 2.0**. See the [LICENSE](../LICENSE) file for full details.
 
 ```
 Copyright 2024-2026 krishna3163
@@ -566,5 +606,4 @@ limitations under the License.
 
 *If you find OmniShizuku useful, please consider giving it a ⭐ on GitHub!*
 
-OmniShizuku se proporciona "tal cual", sin garantías de ningún tipo. Úsalo bajo tu propia responsabilidad. No nos hacemos responsables de pérdidas de datos, anulación de garantías ni del comportamiento de aplicaciones de terceros.
 </div>

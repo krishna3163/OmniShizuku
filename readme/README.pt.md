@@ -3,10 +3,10 @@
 O OmniShizuku é um utilitário de código aberto para Android focado em fluxos de trabalho com Shizuku, ADB e Dhizuku. Ele oferece acesso a APIs em nível de sistema por meio do serviço Shizuku, com módulos avançados para gerenciamento de dispositivos, automações, otimizações e muito mais.
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163/OmniShizuku-blue?logo=github)](https://github.com/krishna3163/OmniShizuku)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](../LICENSE)
 [![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android)](https://developer.android.com)
 
-🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
+🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 
 ---
 
@@ -167,7 +167,7 @@ Consulte o aviso legal inicial para obter todos os detalhes.
 
 ## Licença
 
-Distribuído sob a licença Apache 2.0. Veja [LICENSE](LICENSE) para mais informações.
+Distribuído sob a licença Apache 2.0. Veja [LICENSE](../LICENSE) para mais informações.
 
 ---
 

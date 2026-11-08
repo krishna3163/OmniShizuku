@@ -1,23 +1,23 @@
 <div align="center">
 
 OmniShizuku एक ओपन-सोर्स एंड्रॉइड यूटिलिटी है जो Shizuku, ADB, और Dhizuku वर्कफ़्लो के लिए है। यह Shizuku सेवा के माध्यम से सिस्टम-लेवल API एक्सेस प्रदान करता है, जिसमें डिवाइस प्रबंधन, ऑटोमेशन, ऑप्टिमाइज़ेशन, और बहुत कुछ शामिल है।
-<img src="manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
+<img src="../manager/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" width="128" height="128" alt="OmniShizuku Logo">
 
 # ओमनीशिज़ुकु
 
 **उन्नत मॉड्यूल, आधुनिक यूआई और विस्तारित सिस्टम नियंत्रण क्षमताओं के साथ शिज़ुकु का एक शक्तिशाली, सुविधा संपन्न कांटा।**
 
 [![GitHub](https://img.shields.io/badge/GitHub-krishna3163%2FOmniShizuku-blue?logo=github&style=for-the-badge)](https://github.com/krishna3163/OmniShizuku)
-[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](LICENSE)
+[![License: Apache-2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=for-the-badge)](../LICENSE)
 [![Android](https://img.shields.io/badge/Android-5.0%2B-green?logo=android&style=for-the-badge)](https://developer.android.com)
 [![API](https://img.shields.io/badge/API%20Level-21%2B-brightgreen?style=for-the-badge)](https://developer.android.com/guide/topics/manifest/uses-sdk-element)
 [![Shizuku](https://img.shields.io/badge/Powered%20by-Shizuku%20API-orange?style=for-the-badge)](https://github.com/RikkaApps/Shizuku)
 
-🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [日本語](./README.ja.md) • [العربية](./README.ar.md)
+🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 
 </div>
 
-🌐 **Documentation available in:** [English](./README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
+🌐 **Documentation available in:** [English](../README.md) • [हिन्दी](./README.hi.md) • [Español](./README.es.md) • [Français](./README.fr.md) • [中文（简体）](./README.zh.md) • [中文（繁體）](./README.zh_tw.md) • [Русский](./README.ru.md) • [العربية](./README.ar.md) • [日本語](./README.ja.md) • [Português](./README.pt.md) • [Қазақша](./README.kk.md) • [Qazaqşa](./README.kk-Latn.md)
 
 ---
 
@@ -25,7 +25,7 @@ OmniShizuku एक ओपन-सोर्स एंड्रॉइड यूट�
 
 | **होम और स्थिति (Home & Status)** | **ADB मॉड्यूल्स (ADB Modules)** | **लैब्स और ट्वीक्स (Labs & Tweaks)** | **कंप्यूट (Terminal & AI)** | **सेटिंग्स (Settings)** |
 |:---:|:---:|:---:|:---:|:---:|
-| <img src="screenshots/home.png" width="190" alt="Home Screen" /> | <img src="screenshots/modules.png" width="190" alt="ADB Modules" /> | <img src="screenshots/labs.png" width="190" alt="Labs Screen" /> | <img src="screenshots/comput.png" width="190" alt="Comput Console" /> | <img src="screenshots/settings.png" width="190" alt="Settings Screen" /> |
+| <img src="../screenshots/home.png" width="190" alt="Home Screen" /> | <img src="../screenshots/modules.png" width="190" alt="ADB Modules" /> | <img src="../screenshots/labs.png" width="190" alt="Labs Screen" /> | <img src="../screenshots/comput.png" width="190" alt="Comput Console" /> | <img src="../screenshots/settings.png" width="190" alt="Settings Screen" /> |
 | लाइव सेवा स्थिति, वायरलेस ADB और सिस्टम डायग्नोस्टिक्स | Magisk/KernelSU-शैली ZIP मॉड्यूल इंस्टॉलर और मैनेजर | AppOps, डेब्लोटर, ऐप फ्रीज़र और सिस्टम नियंत्रण | AI इंटीग्रेशन के साथ इंटरैक्टिव शेल टर्मिनल | डिवाइस ओनर, ऑटोमेशन, बैकअप और सुरक्षा कॉन्फ़िगरेशन |
 
 ---
@@ -445,7 +445,7 @@ OmniShizuku में इनके लिए क्विक सेटिंग�
 
 ## लाइसेंस (License)
 
-Apache License 2.0। विवरण के लिए [LICENSE](LICENSE) देखें।
+Apache License 2.0। विवरण के लिए [LICENSE](../LICENSE) देखें।
 
 ---
 
@@ -526,7 +526,7 @@ Contributions are welcome! Whether it's bug reports, feature requests, documenta
 - यदि आवश्यक हो तो दस्तावेज़ अद्यतन करें
 - प्रमुख विशेषताओं के लिए, चर्चा के लिए पहले एक मुद्दा खोलें
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for more details.
+See [CONTRIBUTING.md](../CONTRIBUTING.md) for more details.
 
 ---
 
@@ -569,7 +569,7 @@ OmniShizuku stands apart by combining the power of Shizuku with a comprehensive 
 
 ## 📄 लाइसेंस
 
-This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for full details.
+This project is licensed under the **Apache License 2.0**. See the [LICENSE](../LICENSE) file for full details.
 
 ```
 Copyright 2024-2026 krishna3163
