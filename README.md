@@ -55,10 +55,19 @@ Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take 
 
 ## 📸 Screenshots
 
-| **Home & Status** | **ADB Modules** | **Labs & Tweaks** | **Comput (Terminal & AI)** | **Settings** |
-|:---:|:---:|:---:|:---:|:---:|
-| <img src="screenshots/home.png" width="190" alt="Home Screen" /> | <img src="screenshots/modules.png" width="190" alt="ADB Modules" /> | <img src="screenshots/labs.png" width="190" alt="Labs Screen" /> | <img src="screenshots/comput.png" width="190" alt="Comput Console" /> | <img src="screenshots/settings.png" width="190" alt="Settings Screen" /> |
-| Real-time service status, Wireless ADB pairing & diagnostics | Magisk/KernelSU-style ZIP module installer & manager | App ops, debloater, freezer, display & power tweaks | Interactive shell terminal with AI provider integration | Device Owner, automation, backups & security config |
+| **Home & Status** | **App Permissions** | **ADB Modules** | **Labs Catalog** | **Comput (Terminal & AI)** | **Settings** |
+|:---:|:---:|:---:|:---:|:---:|:---:|
+| <img src="screenshots/home.png" width="165" alt="Home Screen" /> | <img src="screenshots/manage_apps.png" width="165" alt="Manage Authorized Apps" /> | <img src="screenshots/modules.png" width="165" alt="ADB Modules" /> | <img src="screenshots/labs.png" width="165" alt="Labs Catalog" /> | <img src="screenshots/comput.png" width="165" alt="Comput Console" /> | <img src="screenshots/settings.png" width="165" alt="Settings Screen" /> |
+| Real-time service status & wireless ADB pairing | Whitelist mode, granular permissions & session-only access | Magisk/KernelSU-style ZIP module installer & manager | 39+ powerful system controls & tweaks | Privileged shell terminal with Gemini/AI generation | Device Owner, backups, automation & security config |
+
+---
+
+### 🔬 Featured Labs & System Capabilities
+
+| **System Controls & Power Tools** | **Native ShizuWall Firewall** |
+|:---:|:---:|
+| <img src="screenshots/labs_tools.png" width="260" alt="Labs System Tools" /> | <img src="screenshots/shizuwall.png" width="260" alt="ShizuWall Firewall" /> |
+| Enforce Doze, Mixed Audio, Private DNS, Screen Security & DFRoot | Zero-VPN native firewall with tracker scanner & appop rules |
 
 ---
 
@@ -194,6 +203,14 @@ Built-in support for call recording through Shizuku's privileged access:
 | **App Debloater (UAD)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **App Freezer** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Quick Settings Tiles Suite (18 tiles)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **ShizuWall Native Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Tracker & Telemetry Scanner** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Caffeinate Screen Stay-Awake** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Private DNS Auto-Revert & Cycles** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **DFRoot (Kernel Exploit Helper)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **WallYou Dynamic Wallpapers** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Interactive Picture-in-Picture** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Display Tweaker** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Dynamic Island** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Smart Pixels** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
