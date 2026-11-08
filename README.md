@@ -24,8 +24,7 @@
 - [Screenshots](#-screenshots)
 - [Why Use OmniShizuku?](#-why-use-omnishizuku)
 - [Key Features](#-key-features)
-  - [Essentials Hub](#essentials-hub)
-  - [Labs - Advanced System Tools](#labs---advanced-system-tools)
+  - [Labs - Advanced System Tools (40 Tools)](#labs---advanced-system-tools)
   - [Modules System](#modules-system)
   - [Call Recording (ShizuCallRecorder Integration)](#call-recording-shizucallrecorder-integration)
   - [AI & Developer Features](#ai--developer-features)
@@ -86,57 +85,61 @@ Built with **Material Design 3 Expressive**, OmniShizuku empowers users to take 
 
 ## ✨ Key Features
 
-### Essentials Hub
-
-The Essentials Hub is OmniShizuku's crown jewel - a curated collection of powerful, everyday utilities:
-
-| Feature | Description |
-| --- | --- |
-| **Dynamic Island** | A floating punch-hole pill overlay inspired by iOS Dynamic Island. Displays live media playback, battery status, alerts, and more with smooth animations. |
-| **Smart Pixels (AMOLED Saver)** | Intelligently disables 25%, 50%, or 75% of OLED subpixels to drastically reduce power consumption on AMOLED displays, saving 15-44% battery life. |
-| **Display Tweaker** | Override screen resolution, change display density (DPI), adjust refresh rate, and fine-tune display parameters beyond stock limitations. |
-| **Force Dark Mode** | Forces dark theme across all applications, even those that don't natively support dark mode. |
-| **Battery Center & Guard** | Comprehensive battery monitoring with real-time health data, cycle count estimation, temperature tracking, charging stats, and intelligent longevity protection. |
-| **Pocket Mode Guard** | Uses proximity and light sensors to prevent accidental touches when the device is in your pocket, bag, or face-down. |
-| **Screen Security & DRM Unlock** | Bypass `FLAG_SECURE` to take screenshots and screen recordings in banking apps, DRM-protected content, and apps that normally block them. |
-| **Caffeinate** | Keep your screen awake indefinitely with a persistent notification and Quick Settings tile. Perfect for reading, navigation, or presentations. |
-| **Photo Watermark & EXIF Studio** | Add luxurious watermarks with Leica and Hasselblad-style frames. View, edit, and manage EXIF metadata with a beautiful live preview. |
-| **Notification Edge Lighting** | Stunning neon edge glow animations that illuminate the screen edges when notifications arrive. Fully customizable colors and effects. |
-| **Auto DND (Zen Mode)** | Automate Do Not Disturb based on time schedules, location, events, or custom triggers. |
-| **Pocket Mode, Shut Up! & More** | Per-app media muting, volume key track skipping when screen is off, and intelligent audio controls. |
-
 ### Labs - Advanced System Tools
 
-Labs houses powerful system-level utilities for advanced users and power users:
+The Labs catalog houses 40 system-level tools categorized cleanly across App Management, System Controls, and Utilities:
 
+#### 📱 App Management (8 Tools)
 | Feature | Description |
 | --- | --- |
-| **App Ops Manager** | Granular control over app permissions and AppOps. Revoke or grant hidden permissions with precision. |
-| **App Freezer** | Instantly freeze background apps to save battery and RAM. Frozen apps won't run until unfrozen. |
-| **Universal Android Debloater (UAD)** | Community safety-ranked package debloating with detailed descriptions. Safely remove bloatware with easy restore functionality. |
-| **Firewall** | Network-level app firewall to block Wi-Fi and mobile data per app without VPN dependencies. |
-| **Autostart Manager** | Control which apps can start automatically on boot, improving boot time and reducing background activity. |
-| **Hide Apps/Features** | Hide developer options, USB/Wireless debugging, accessibility services, private DNS, and VPN from other apps/system detection. |
-| **Force Dark (Advanced)** | System-wide force dark with additional customization options. |
-| **Activity Launcher** | Launch hidden activities, exported components, and internal app activities directly. |
-| **Advanced Power Controls** | Reboot to system, recovery, bootloader/fastboot, safe mode, or shutdown directly from the app via privileged shell. |
-| **Display Tweaker (Labs)** | Deep display configuration including resolution scaling, DPI changes, and refresh rate forcing. |
-| **Saved Wi-Fi Passwords** | View saved Wi-Fi networks and their passwords (where accessible via system APIs). |
-| **Privileged File Explorer** | Browse, view, and manage files in protected system directories with shell-level access. |
-| **Package Installer Pro** | Install split APKs (APKS), XAPK files, and multiple APK bundles with advanced installation options. |
-| **SystemUI Tuner** | Customize status bar icons, battery icon styles, clock position, network indicators, and enable immersive mode tweaks. |
-| **Enforce Doze** | Force aggressive Doze mode on screen off for maximum battery savings on compatible devices. |
-| **Private DNS Controller** | Quick-switch between encrypted DNS providers (Cloudflare, AdGuard, Quad9, Google, NextDNS, and custom). |
-| **Carrier Tethering Bypass** | Bypass carrier restrictions on mobile hotspot/tethering functionality. |
-| **Audio Stream Master** | Independent volume control for all audio streams with fine-grained precision. |
-| **Network Firewall (Advanced)** | Enhanced firewall controls with persistent rules and per-app data/Wi-Fi restrictions. |
-| **Screen Security** | Global control over `FLAG_SECURE` for screenshot/recording permissions. |
-| **Auto DND Scheduler** | Time-based and event-based Do Not Disturb automation. |
-| **Axeron Gaming & CPU Optimizer** | Performance profiles, animation scaling tweaks, zero-latency optimizations, and cache trimming for gaming. |
-| **Terminal Emulator** | Built-in terminal with Shizuku shell access for direct command execution. |
-| **Intent Shell** | Execute shell commands via Android Intents for automation and external app integration. |
-| **Stealth Mode** | Advanced hiding and stealth capabilities for enhanced privacy. |
-| **Permissions Manager** | Centralized privileged permission management. |
+| **App Ops** | Granular control over hidden app permissions, runtime op gates, and background privileges. |
+| **Firewall** | Network-level app firewall blocking Wi-Fi and mobile data per application without consuming a VPN slot. |
+| **Autostart** | Restrict applications from waking up or starting services automatically at device boot. |
+| **Hiding Modes** | Hide Developer Options, USB/Wireless Debugging, Accessibility services, Private DNS, and VPN states from detection. |
+| **Force Dark Mode** | System-wide forced dark theme across third-party applications, even without native dark theme support. |
+| **Universal Debloater (UAD)** | Community safety-ranked package debloater with safety ratings, explanations, and 1-tap restore. |
+| **App Freezer** | Instantly freeze and suspend background applications to reclaim RAM and halt battery drain. |
+| **Axeron Gaming Optimizer** | System-level performance tuning, game boost, animation tweaks, and process optimizations. |
+
+#### ⚙️ System Controls (18 Tools)
+| Feature | Description |
+| --- | --- |
+| **Power Menu** | Privileged reboot to System, Recovery, Bootloader/Fastboot, Safe Mode, or instant power off. |
+| **Display Tweaker** | Override display resolution, modify screen density (DPI), and force custom refresh rates. |
+| **Wi-Fi Passwords** | View, copy, and export saved Wi-Fi network credentials directly via privileged shell. |
+| **SystemUI Tuner** | Customize status bar icon visibility, battery icon styles, clock seconds, and immersive navigation. |
+| **Enforce Doze (Deep Sleep)** | Force immediate aggressive Doze deep sleep mode whenever the screen turns off. |
+| **Private DNS Controller** | Switch between encrypted DNS providers (Cloudflare, AdGuard, Quad9, Google, NextDNS, Custom) with auto-revert timers. |
+| **Audio Stream Master** | Independent fine-grained volume sliders for Media, Ring, Alarm, Call, Voice, and System audio streams. |
+| **Carrier Tethering** | Bypass carrier entitlement checks and restrictions on Wi-Fi hotspot and USB tethering. |
+| **Mixed Audio** | Multi-app concurrent audio playback bypass (prevent background apps from pausing when another app plays audio). |
+| **SoundMaster** | Per-app audio focus and volume routing mixer. |
+| **Universal Picture-in-Picture** | Force any unsupported app into Picture-in-Picture (PiP) mode using virtual display projection. |
+| **Screen Security & DRM** | Bypass `FLAG_SECURE` restrictions to allow screenshots and screen recording in secure/banking apps. |
+| **Auto DND (Zen Mode)** | Automated Do Not Disturb rules based on foreground app focus, custom schedules, and triggers. |
+| **DFRoot (DirtyFrag Exploit)** | Built-in privilege escalation helper using CVE-2026-43284 for supported kernel versions. |
+| **Quick Settings Tiles** | Interactive manager and setup suite for 18 custom Quick Settings tiles. |
+| **ShizuWall Firewall** | Advanced firewall interface featuring an integrated tracker & telemetry scanner and socket monitor. |
+| **Caffeinate** | Keep device screen awake with a tile and persistent notification for reading or navigation. |
+| **Theme Patcher** | System-level accent colors, font styling, and UI theme modifications. |
+
+#### 🛠️ Utilities (14 Tools)
+| Feature | Description |
+| --- | --- |
+| **Shell** | Interactive privileged command-line terminal with real-time streaming output. |
+| **Log Viewer** | Real-time system logcat viewer with tag, package, level filtering, and export capabilities. |
+| **Device Info** | Comprehensive hardware, kernel, battery health, thermal sensors, and SoC dashboard. |
+| **Activities Launcher** | Inspect and launch exported, unexported, or hidden Android activities and intents. |
+| **Files** | Privileged filesystem browser with read/write access to protected `/data` and app directories. |
+| **App Installer Pro** | Privileged package installer supporting APK, APKS split bundles, and XAPK formats. |
+| **Terminal Apps** | Quick switcher and launcher for external terminal emulators. |
+| **LocalShell** | Standalone local shell interface. |
+| **Intents** | Fire custom explicit or implicit system intents, broadcast receivers, and services. |
+| **Stealth Mode** | Anti-detection measures to prevent target apps from detecting Shizuku, root, or debugging state. |
+| **Permissions Manager** | Overview and revocation/granting of elevated permissions across all installed packages. |
+| **Shizuku Store** | Built-in catalog to discover and download open-source apps built for Shizuku. |
+| **Call Recording (ShizuCallRecorder)** | Native two-way call recording powered by privileged shell audio capture. |
+| **WallYou Wallpapers** | In-app wallpaper browser, fetcher, and wallpaper switcher. |
 
 ### Modules System
 
@@ -198,11 +201,10 @@ Built-in support for call recording through Shizuku's privileged access:
 | **Dhizuku Support** | ✅ | ❌ | ❌ | ❌ | ✅ | ✅ | ❌ |
 | **Autostart** | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
 | **Module System** | ✅ | ❌ | ❌ | ✅ | ✅ | ❌ | ❌ |
-| **Essentials Hub** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Labs/Advanced Tools** | ✅ | ❌ | Partial | Partial | Partial | ❌ | Partial |
+| **Labs Advanced Tools (40 Tools)** | ✅ | ❌ | Partial | Partial | Partial | ❌ | Partial |
 | **App Debloater (UAD)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **App Freezer** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Firewall (Zero-VPN)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Quick Settings Tiles Suite (18 tiles)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **ShizuWall Native Firewall** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Tracker & Telemetry Scanner** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
@@ -210,10 +212,8 @@ Built-in support for call recording through Shizuku's privileged access:
 | **Private DNS Auto-Revert & Cycles** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **DFRoot (Kernel Exploit Helper)** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **WallYou Dynamic Wallpapers** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Interactive Picture-in-Picture** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
+| **Universal Picture-in-Picture** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Display Tweaker** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Dynamic Island** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
-| **Smart Pixels** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Call Recording** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Theme Patcher** | ✅ | ❌ | ❌ | ❌ | ❌ | ❌ | ❌ |
 | **Built-in Terminal** | ✅ | ❌ | ✅ | ❌ | ✅ | ❌ | ✅ |
@@ -354,12 +354,12 @@ The debug APK will be located at: `manager/build/outputs/apk/debug/manager-debug
 | `QUERY_ALL_PACKAGES` | List and manage installed apps | App Ops, Debloater, Freezer, Modules |
 | `READ_EXTERNAL_STORAGE` / `MANAGE_EXTERNAL_STORAGE` | File access | File Explorer, APK installation |
 | `POST_NOTIFICATIONS` | Show notifications | Services, Caffeinate, Recording |
-| `FOREGROUND_SERVICE` | Run background services | Call recording, Dynamic Island, Caffeinate |
+| `FOREGROUND_SERVICE` | Run background services | Call recording, ShizuWall, Caffeinate |
 | `READ_PHONE_STATE`, `RECORD_AUDIO` | Call detection and recording | ShizuCallRecorder |
 | `BIND_ACCESSIBILITY_SERVICE` | Auto-fill Wireless ADB PIN | Wireless ADB Auto-PIN (opt-in) |
 | `PACKAGE_USAGE_STATS` | Usage data access | Some optimization features |
 | `REQUEST_INSTALL_PACKAGES` | Install APKs | Package Installer Pro |
-| `SYSTEM_ALERT_WINDOW` | Overlay display | Dynamic Island, Edge Lighting |
+| `SYSTEM_ALERT_WINDOW` | Overlay display | Universal PiP, Screen Overlays |
 
 *Most permissions are only requested when needed for specific features.*
 
