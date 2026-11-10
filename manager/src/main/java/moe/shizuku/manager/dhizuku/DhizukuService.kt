@@ -16,15 +16,16 @@ class DhizukuService(private val context: Context) : IDhizukuService.Stub() {
 
     override fun runCommand(command: String?) {
         command?.let {
+            var process: Process? = null
             try {
                 Log.d(TAG, "Executing command: $it")
-                val process = Runtime.getRuntime().exec(arrayOf("sh", "-c", it))
+                process = Runtime.getRuntime().exec(arrayOf("sh", "-c", it))
                 try {
                     process.outputStream.close()
                 } catch (_: Exception) {}
                 val stdoutThread = Thread {
                     try {
-                        process.inputStream.use { stream ->
+                        process?.inputStream?.use { stream ->
                             val buffer = ByteArray(1024)
                             while (stream.read(buffer) != -1) { }
                         }
@@ -32,7 +33,7 @@ class DhizukuService(private val context: Context) : IDhizukuService.Stub() {
                 }
                 val stderrThread = Thread {
                     try {
-                        process.errorStream.use { stream ->
+                        process?.errorStream?.use { stream ->
                             val buffer = ByteArray(1024)
                             while (stream.read(buffer) != -1) { }
                         }
@@ -40,15 +41,17 @@ class DhizukuService(private val context: Context) : IDhizukuService.Stub() {
                 }
                 stdoutThread.start()
                 stderrThread.start()
-                Thread {
-                    try {
-                        process.waitFor()
-                        stdoutThread.join()
-                        stderrThread.join()
-                    } catch (_: Exception) {}
-                }.start()
+                try {
+                    process?.waitFor()
+                    stdoutThread.join(5000)
+                    stderrThread.join(5000)
+                } catch (_: Exception) {}
             } catch (e: Exception) {
                 Log.e(TAG, "Failed to execute command", e)
+            } finally {
+                try {
+                    process?.destroy()
+                } catch (_: Exception) {}
             }
         }
     }

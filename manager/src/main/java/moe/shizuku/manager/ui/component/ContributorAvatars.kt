@@ -88,7 +88,9 @@ internal object ContributorAvatars {
         // view this turns a forty-kilobyte download into a three-kilobyte one, over a hundred
         // times.
         val sized = requestedSize(url, targetPx)
-        val connection = (URL(sized).openConnection() as HttpURLConnection).apply {
+        val connection = (URL(sized).openConnection() as? HttpURLConnection)
+            ?: return false
+        connection.apply {
             connectTimeout = CONNECT_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS
             requestMethod = "GET"

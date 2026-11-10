@@ -149,7 +149,9 @@ internal object ContributorCredits {
         }
 
     private fun download(): String {
-        val connection = (URL(SNAPSHOT_URL).openConnection() as HttpURLConnection).apply {
+        val connection = (URL(SNAPSHOT_URL).openConnection() as? HttpURLConnection)
+            ?: error("snapshot fetch returned a non-HTTP connection")
+        connection.apply {
             connectTimeout = CONNECT_TIMEOUT_MS
             readTimeout = READ_TIMEOUT_MS
             requestMethod = "GET"
