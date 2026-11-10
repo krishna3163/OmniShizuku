@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.os.IBinder
 import android.os.RemoteException
 import android.os.ServiceManager
+import android.util.Log
 import moe.shizuku.common.util.InstalledPackagesCompat
 import rikka.hidden.compat.PackageManagerApis
 import rikka.hidden.compat.PermissionManagerApis
@@ -210,7 +211,9 @@ object ShizukuSystemApis {
             try {
                 val pm = getPackageManager()
                 return invokeCompat(getPackageInfoMethod, pm, packageName, flags, userId) as? PackageInfo
-            } catch (t: Throwable) {}
+            } catch (t: Throwable) {
+                Log.w("ShizukuSystemApis", "getPackageInfo reflection fallback failed", t)
+            }
             return null
         }
     }
@@ -223,7 +226,9 @@ object ShizukuSystemApis {
             try {
                 val pm = getPackageManager()
                 return invokeCompat(getApplicationInfoMethod, pm, packageName, flags, userId) as? ApplicationInfo
-            } catch (t: Throwable) {}
+            } catch (t: Throwable) {
+                Log.w("ShizukuSystemApis", "getApplicationInfo reflection fallback failed", t)
+            }
             return null
         }
     }
@@ -245,7 +250,9 @@ object ShizukuSystemApis {
                     invokeCompat(method, pm, permName, pkgName, userId) as? Int
                         ?: PackageManager.PERMISSION_DENIED
                 }
-            } catch (t: Throwable) {}
+            } catch (t: Throwable) {
+                Log.w("ShizukuSystemApis", "checkPermission reflection fallback failed", t)
+            }
             return PackageManager.PERMISSION_DENIED
         } catch (tr: RemoteException) {
             throw RuntimeException(tr.message, tr)

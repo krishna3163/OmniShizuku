@@ -412,7 +412,7 @@ fun HomeScreen(bottomPadding: Dp) {
 
                 // Status section heading
                 item(key = "status_heading", contentType = "heading") {
-                    SectionHeading(text = "Status")
+                    SectionHeading(text = stringResource(R.string.home_section_status))
                 }
 
                 // Status card
@@ -426,7 +426,7 @@ fun HomeScreen(bottomPadding: Dp) {
 
                 // Server actions section heading
                 item(key = "actions_heading", contentType = "heading") {
-                    SectionHeading(text = "Server Actions")
+                    SectionHeading(text = stringResource(R.string.home_section_actions))
                 }
 
                 // Server action buttons
@@ -459,7 +459,7 @@ fun HomeScreen(bottomPadding: Dp) {
 
                 // Start methods section heading
                 item(key = "methods_heading", contentType = "heading") {
-                    SectionHeading(text = "Start Methods")
+                    SectionHeading(text = stringResource(R.string.home_section_methods))
                 }
 
                 // Start methods card
@@ -573,7 +573,7 @@ fun HomeScreen(bottomPadding: Dp) {
 
                 // Device details section heading
                 item(key = "device_heading", contentType = "heading") {
-                    SectionHeading(text = "Device Details")
+                    SectionHeading(text = stringResource(R.string.home_section_device))
                 }
 
                 // Device details
@@ -630,19 +630,20 @@ fun HomeScreen(bottomPadding: Dp) {
                         DiagnosticsCard(
                             text = diagnostics,
                             onCopy = {
-                                val clipboard = context.getSystemService(Context.CLIPBOARD_SERVICE)
-                                    as ClipboardManager
-                                clipboard.setPrimaryClip(
-                                    ClipData.newPlainText(
-                                        context.getString(R.string.diagnostics_title),
-                                        diagnostics
+                                val clipboard = context.getSystemService(ClipboardManager::class.java)
+                                if (clipboard != null) {
+                                    clipboard.setPrimaryClip(
+                                        ClipData.newPlainText(
+                                            context.getString(R.string.diagnostics_title),
+                                            diagnostics
+                                        )
                                     )
-                                )
-                                Toast.makeText(
-                                    context,
-                                    R.string.diagnostics_copied,
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                    Toast.makeText(
+                                        context,
+                                        R.string.diagnostics_copied,
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
                         )
                     }
@@ -650,7 +651,7 @@ fun HomeScreen(bottomPadding: Dp) {
 
                 // Live metrics section heading
                 item(key = "metrics_heading", contentType = "heading") {
-                    SectionHeading(text = "Live Metrics")
+                    SectionHeading(text = stringResource(R.string.home_section_metrics))
                 }
 
                 // Live metrics
@@ -660,7 +661,7 @@ fun HomeScreen(bottomPadding: Dp) {
 
                 // Support coffee section heading
                 item(key = "support_heading", contentType = "heading") {
-                    SectionHeading(text = "Support")
+                    SectionHeading(text = stringResource(R.string.home_section_support))
                 }
 
                 // Support coffee

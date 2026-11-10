@@ -64,7 +64,7 @@ fun IntentsScreen(onBack: () -> Unit) {
 
     Column(modifier = Modifier.fillMaxSize()) {
         TopAppBar(
-            title = { Column { Text(stringResource(R.string.intents_title)); Text("Build and send supported intents. Review before execution.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
+            title = { Column { Text(stringResource(R.string.intents_title)); Text(stringResource(R.string.intents_subtitle), style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1) } },
             windowInsets = WindowInsets(0.dp, 0.dp, 0.dp, 0.dp),
             navigationIcon = {
                 IconButton(onClick = onBack) {

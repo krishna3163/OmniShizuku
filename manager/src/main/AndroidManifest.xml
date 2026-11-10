@@ -846,7 +846,7 @@
 
         <activity
             android:name=".themepatcher.ThemePatcherActivity"
-            android:exported="true" />
+            android:exported="false" />
 
         <service
             android:name=".themepatcher.ThemePatcherService"

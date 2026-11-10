@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Build
 import android.provider.Settings
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.ShizukuSettings
@@ -354,9 +355,10 @@ object EnforceDozeManager {
                     return sorted[sorted.lastKey()]?.packageName
                 }
             }
-        } catch (e: Exception) {
-        }
-        return null
+} catch (e: Exception) {
+                Log.w("EnforceDozeManager", "getMostRecentApp reflection failed", e)
+            }
+            return null
     }
 
     fun isCharging(context: Context): Boolean {

@@ -85,6 +85,7 @@ class InstallZipModuleActivity : Activity() {
 
     private fun copyToCache(uri: Uri): File? {
         val target = File(cacheDir, "shared_module_${System.currentTimeMillis()}.zip")
+        var oversized = false
         return try {
             val input = if (uri.scheme.equals("file", ignoreCase = true)) {
                 val filePath = uri.path ?: return null
@@ -94,13 +95,31 @@ class InstallZipModuleActivity : Activity() {
                     // Refuse reading private internal application directories
                     return null
                 }
+                if (file.length() > MAX_ZIP_SIZE_BYTES) return null
                 file.inputStream()
             } else {
                 contentResolver.openInputStream(uri)
             } ?: return null
 
             input.use { source ->
-                target.outputStream().use { output -> source.copyTo(output) }
+                target.outputStream().use { output ->
+                    val buffer = ByteArray(8 * 1024)
+                    var total = 0L
+                    while (true) {
+                        val read = source.read(buffer)
+                        if (read < 0) break
+                        total += read
+                        if (total > MAX_ZIP_SIZE_BYTES) {
+                            oversized = true
+                            return@use
+                        }
+                        output.write(buffer, 0, read)
+                    }
+                }
+            }
+            if (oversized) {
+                target.delete()
+                return null
             }
             if (!isLikelyZipFile(target)) {
                 target.delete()
@@ -111,6 +130,10 @@ class InstallZipModuleActivity : Activity() {
             target.delete()
             null
         }
+    }
+
+    companion object {
+        private const val MAX_ZIP_SIZE_BYTES = 256L * 1024 * 1024 // 256 MB
     }
 
     private fun isLikelyZipFile(file: File): Boolean {

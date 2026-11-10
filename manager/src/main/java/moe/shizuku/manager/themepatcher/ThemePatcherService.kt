@@ -154,6 +154,8 @@ class ThemePatcherService : Service() {
                     }
                 }
             }
+        } else {
+            handler.post { done("") }
         }
     }
 

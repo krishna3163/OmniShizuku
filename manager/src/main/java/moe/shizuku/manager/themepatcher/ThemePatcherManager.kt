@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import moe.shizuku.manager.utils.runShellCommand
@@ -238,7 +239,10 @@ object ThemePatcherManager {
             } else {
                 context.startService(serviceIntent)
             }
-        } catch (_: Exception) {}
+        } catch (ex: Exception) {
+                Log.w("ThemePatcherManager", "Failed to start ThemePatcherService", ex)
+                return false
+            }
 
         return true
     }

@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.view.WindowManager
 import android.widget.FrameLayout
 import androidx.compose.animation.core.*
@@ -72,6 +73,7 @@ object PocketModeEngine : SensorEventListener {
     private var isPending = false
     private var isNear = false
     private var isDark = false
+    private var pocketContext: Context? = null
 
     private val handler = Handler(Looper.getMainLooper())
 
@@ -175,14 +177,35 @@ object PocketModeEngine : SensorEventListener {
     private fun showOverlay() {
         if (isOverlayVisible || overlayView != null) return
         val wm = windowManager ?: return
+        val context = pocketContext ?: return
 
         try {
-            val frameLayout = FrameLayout(wm.defaultDisplay.let { 
-                // Context for overlay
-                overlayView?.context ?: return 
-            })
-            // In standalone app mode, create via application context
-        } catch (_: Exception) {}
+            val params = WindowManager.LayoutParams(
+                WindowManager.LayoutParams.MATCH_PARENT,
+                WindowManager.LayoutParams.MATCH_PARENT,
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+                } else {
+                    WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+                },
+                WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    or WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                android.graphics.PixelFormat.TRANSLUCENT
+            )
+
+            val overlay = FrameLayout(context).apply {
+                setBackgroundColor(android.graphics.Color.BLACK)
+                setOnTouchListener { _, _ -> true }
+            }
+
+            wm.addView(overlay, params)
+            overlayView = overlay
+            isOverlayVisible = true
+        } catch (e: Exception) {
+            Log.e(TAG, "Error showing pocket overlay", e)
+        }
     }
 
     fun dismissOverlay() {

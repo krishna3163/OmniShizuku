@@ -6,8 +6,10 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.os.Build
 import android.os.IBinder
 import android.view.WindowManager
+import android.graphics.PixelFormat
 
 class PocketModeService : Service(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
@@ -32,7 +34,66 @@ class PocketModeService : Service(), SensorEventListener {
     override fun onBind(intent: Intent?): IBinder? = null
     
     override fun onSensorChanged(event: SensorEvent?) {
-        // Pocket mode detection logic
+        event?.let { sensorEvent ->
+            if (sensorEvent.sensor.type == Sensor.TYPE_PROXIMITY) {
+                val maxRange = proximity?.maximumRange ?: 5f
+                val isNear = sensorEvent.values[0] < maxRange
+                
+                if (isNear) {
+                    showPocketOverlay()
+                } else {
+                    hidePocketOverlay()
+                }
+            }
+        }
+    }
+
+    private fun showPocketOverlay() {
+        val wm = getSystemService(WINDOW_SERVICE) as? WindowManager ?: return
+        if (overlayView != null) return
+
+        val params = WindowManager.LayoutParams(
+            WindowManager.LayoutParams.MATCH_PARENT,
+            WindowManager.LayoutParams.MATCH_PARENT,
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
+            } else {
+                WindowManager.LayoutParams.TYPE_SYSTEM_ALERT
+            },
+            WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                or WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                or WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                or WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            android.graphics.PixelFormat.TRANSLUCENT
+        )
+
+        val overlay = FrameLayout(this).apply {
+            setBackgroundColor(android.graphics.Color.BLACK)
+            setOnTouchListener { _, _ -> true }
+        }
+
+        try {
+            wm.addView(overlay, params)
+            overlayView = overlay
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun hidePocketOverlay() {
+        val wm = getSystemService(WINDOW_SERVICE) as? WindowManager ?: return
+        overlayView?.let { view ->
+            try {
+                wm.removeView(view)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+            overlayView = null
+        }
+    }
+
+    companion object {
+        private var overlayView: FrameLayout? = null
     }
     
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
