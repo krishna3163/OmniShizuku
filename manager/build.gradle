@@ -2,8 +2,6 @@ import com.android.build.gradle.internal.tasks.CompileArtProfileTask
 
 plugins {
     id('com.android.application')
-    id('com.google.gms.google-services')
-    id('com.google.firebase.crashlytics')
     id('org.jetbrains.kotlin.plugin.compose')
     id('org.jetbrains.kotlin.plugin.serialization')
     id('dev.rikka.tools.refine')

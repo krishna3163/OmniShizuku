@@ -76,13 +76,15 @@ class ShizukuApplication : Application() {
 
         // Last-resort safety net: catch any uncaught throwable that escapes the UI thread so the
         // process is reported or logged rather than dying silently.
-        Thread.setDefaultUncaughtExceptionHandler { _, throwable ->
+        val previousHandler = Thread.getDefaultUncaughtExceptionHandler()
+        Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
             Log.e("ShizukuCrash", "Uncaught exception", throwable)
             try {
                 FirebaseCrashlytics.getInstance().recordException(throwable)
             } catch (e: Throwable) {
                 // Ignore if Crashlytics is unavailable
             }
+            previousHandler?.uncaughtException(thread, throwable)
         }
 
         moe.shizuku.manager.service.WatchdogManager.init(this)
