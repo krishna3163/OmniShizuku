@@ -71,6 +71,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.SmartToy
 import androidx.compose.material.icons.rounded.Stop
 import androidx.compose.material.icons.rounded.Terminal
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -431,8 +432,8 @@ fun ComputScreen(
                     try { stderrPfd.close() } catch (ignore: Exception) {}
                     124
                 }
-                stdoutThread.join(1000)
-                stderrThread.join(1000)
+                stdoutThread.join(3000)
+                stderrThread.join(3000)
 
                 val cancelled = cancelRequested.get()
                 val resString = buildString {
@@ -452,7 +453,7 @@ fun ComputScreen(
                     }
                     if (isEmpty()) append(context.getString(R.string.comput_command_no_output))
                 }
-                val hasFailed = !cancelled && ((!finished || exitCode != 0) || stderrText.isNotBlank())
+                val hasFailed = !cancelled && (!finished || exitCode != 0)
                 Pair(resString, hasFailed)
             } catch (e: Exception) {
                 Pair("[E] Shell execution failed: ${e.message}", true)
@@ -991,43 +992,72 @@ fun ComputScreen(
 
             if (lastFailed) {
                 item {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Button(
-                            onClick = {
-                                command = "agy fix"
-                                runShellCommand("agy fix")
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.errorContainer,
-                                contentColor = MaterialTheme.colorScheme.onErrorContainer
-                            ),
-                            shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.weight(1f)
+                    val isBinderAlive = Shizuku.pingBinder()
+                    if (isBinderAlive) {
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            Icon(Icons.Rounded.AutoAwesome, contentDescription = null, modifier = Modifier.size(16.dp))
-                            Spacer(Modifier.width(6.dp))
-                            Text("AGY Auto-Fix", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                        }
+                            Button(
+                                onClick = {
+                                    command = "agy fix"
+                                    runShellCommand("agy fix")
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Icon(Icons.Rounded.AutoAwesome, contentDescription = null, modifier = Modifier.size(16.dp))
+                                Spacer(Modifier.width(6.dp))
+                                Text("AGY Auto-Fix", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                            }
 
-                        Button(
-                            onClick = {
-                                val bugCmd = "agy bug-report Command '$lastRunCommand' failed"
-                                command = bugCmd
-                                runShellCommand(bugCmd)
-                            },
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
-                                contentColor = MaterialTheme.colorScheme.onSurface
-                            ),
+                            Button(
+                                onClick = {
+                                    val bugCmd = "agy bug-report Command '$lastRunCommand' failed"
+                                    command = bugCmd
+                                    runShellCommand(bugCmd)
+                                },
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = MaterialTheme.colorScheme.surfaceContainerHighest,
+                                    contentColor = MaterialTheme.colorScheme.onSurface
+                                ),
+                                shape = RoundedCornerShape(12.dp),
+                                modifier = Modifier.weight(1f)
+                            ) {
+                                Text("Report Bug", fontSize = 12.sp)
+                            }
+                        }
+                    } else {
+                        Surface(
                             shape = RoundedCornerShape(12.dp),
-                            modifier = Modifier.weight(1f)
+                            color = MaterialTheme.colorScheme.errorContainer.copy(alpha = 0.6f),
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp)
                         ) {
-                            Text("Report Bug", fontSize = 12.sp)
+                            Row(
+                                modifier = Modifier.padding(12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.spacedBy(10.dp)
+                            ) {
+                                Icon(
+                                    Icons.Rounded.Warning,
+                                    contentDescription = null,
+                                    tint = MaterialTheme.colorScheme.error,
+                                    modifier = Modifier.size(20.dp)
+                                )
+                                Text(
+                                    text = androidx.compose.ui.res.stringResource(R.string.comput_error_not_running),
+                                    style = MaterialTheme.typography.bodySmall,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                            }
                         }
                     }
                 }

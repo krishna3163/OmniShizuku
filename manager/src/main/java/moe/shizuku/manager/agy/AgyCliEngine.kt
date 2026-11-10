@@ -173,8 +173,66 @@ object AgyCliEngine {
 
             // "agy bug-report <description>" or "agy issue"
             subcmd in listOf("bug-report", "report-bug", "issue", "report") -> {
-                val issueDesc = if (args.isNotBlank()) args else "User reported issue from OmniShizuku AGY Shell"
-                val (errLogs, _) = executeShell("logcat -d -t 50 *:E")
+                val isShizukuActive = Shizuku.pingBinder()
+
+                // If Shizuku is not running and user provided no description, guide them to start Shizuku
+                if (!isShizukuActive && args.isBlank()) {
+                    val inactiveNotice = buildString {
+                        appendLine("⚠️ [Privileged OmniShizuku Service Inactive]")
+                        appendLine("──────────────────────────────────────────")
+                        appendLine("Shizuku service is not running on this device.")
+                        appendLine("Privileged shell commands and automated diagnostics require the Shizuku server.")
+                        appendLine()
+                        appendLine("To start OmniShizuku:")
+                        appendLine("  1. Wireless Debugging (Android 11+)")
+                        appendLine("  2. Connect to PC via USB ADB (Android 6.0+)")
+                        appendLine("  3. Root access (if device is rooted)")
+                        appendLine()
+                        appendLine("If you are reporting an issue with starting/pairing Shizuku itself, describe the problem:")
+                        appendLine("  agy bug-report <describe problem>")
+                    }
+                    return@withContext Pair(inactiveNotice, false)
+                }
+
+                // If user typed 'agy bug-report' without arguments, prompt for a description
+                if (args.isBlank()) {
+                    val promptHelp = buildString {
+                        appendLine("📋 [AGY Bug Reporter]")
+                        appendLine("──────────────────────────────────────────")
+                        appendLine("To submit a bug report with system diagnostics, please provide a description:")
+                        appendLine("  agy bug-report <description of the problem>")
+                        appendLine()
+                        appendLine("Example:")
+                        appendLine("  agy bug-report Command failed with permission denied")
+                        appendLine("  agy bug-report Wireless pairing disconnects on Samsung")
+                        appendLine()
+                        appendLine("Tip: Run 'agy fix' for automated AI error diagnosis and repair.")
+                    }
+                    return@withContext Pair(promptHelp, false)
+                }
+
+                val issueDesc = args.trim()
+                val (rawErrLogs, _) = if (isShizukuActive) {
+                    executeShell("logcat -d -t 50 *:E")
+                } else {
+                    Pair("Notice: Shizuku service was not active at the time of report.", false)
+                }
+
+                val emptyOutputMsg = runCatching { context.getString(moe.shizuku.manager.R.string.comput_command_no_output) }.getOrDefault("Command completed with no output.")
+                val notRunningMsg = runCatching { context.getString(moe.shizuku.manager.R.string.comput_error_not_running) }.getOrDefault("Error: Privileged OmniShizuku Service is not running. Please start the service first.")
+
+                val cleanLogs = rawErrLogs.trim()
+                val sanitizedLogs = if (
+                    cleanLogs.isBlank() ||
+                    cleanLogs == emptyOutputMsg ||
+                    cleanLogs.contains(notRunningMsg) ||
+                    cleanLogs.startsWith("[E] Shizuku service is not running") ||
+                    cleanLogs.startsWith("[E] Execution failed")
+                ) {
+                    if (isShizukuActive) "No recent fatal crash errors recorded." else "Notice: Shizuku service was not active at the time of report."
+                } else {
+                    cleanLogs.takeLast(2000)
+                }
 
                 val reportBody = buildString {
                     appendLine("### Description")
@@ -184,12 +242,12 @@ object AgyCliEngine {
                     appendLine("- **Device**: ${Build.MANUFACTURER} ${Build.MODEL} (${Build.DEVICE})")
                     appendLine("- **Android**: ${Build.VERSION.RELEASE} (SDK ${Build.VERSION.SDK_INT})")
                     appendLine("- **OmniShizuku Version**: ${BuildConfig.VERSION_NAME} (${BuildConfig.VERSION_CODE})")
-                    appendLine("- **Shizuku Running**: ${Shizuku.pingBinder()}")
+                    appendLine("- **Shizuku Running**: $isShizukuActive")
                     appendLine("- **Architecture**: ${Build.SUPPORTED_ABIS.joinToString(", ")}")
                     appendLine()
                     appendLine("### Recent Error Logs")
                     appendLine("```")
-                    appendLine(errLogs.takeLast(2000).trim().ifBlank { "No recent fatal crash errors recorded." })
+                    appendLine(sanitizedLogs)
                     appendLine("```")
                 }
 
@@ -378,8 +436,8 @@ object AgyCliEngine {
 
             val finished = remote.waitForTimeout(15L, java.util.concurrent.TimeUnit.SECONDS.name)
             val exitCode = if (finished) remote.exitValue() else { remote.destroy(); 124 }
-            stdoutThread.join(1000)
-            stderrThread.join(1000)
+            stdoutThread.join(3000)
+            stderrThread.join(3000)
 
             val output = buildString {
                 if (stdoutText.isNotBlank()) append(stdoutText.trim())
@@ -392,7 +450,7 @@ object AgyCliEngine {
                     append("[Process exited with code $exitCode]")
                 }
             }
-            val failed = (!finished || exitCode != 0 || stderrText.isNotBlank())
+            val failed = (!finished || exitCode != 0)
             Pair(output, failed)
         } catch (e: Exception) {
             Pair("[E] Execution failed: ${e.message}", true)

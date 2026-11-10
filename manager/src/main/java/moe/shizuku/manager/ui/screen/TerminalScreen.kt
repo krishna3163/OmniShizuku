@@ -411,37 +411,40 @@ private fun EmbeddedAgyTerminal(modifier: Modifier = Modifier) {
 
         // Failure Action Row
         if (lastFailed) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                Button(
-                    onClick = {
-                        commandInput = "agy fix"
-                        runCmd("agy fix")
-                    },
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.errorContainer,
-                        contentColor = MaterialTheme.colorScheme.onErrorContainer
-                    ),
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.weight(1f)
+            val isBinderAliveNow = Shizuku.pingBinder()
+            if (isBinderAliveNow) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
                 ) {
-                    Icon(Icons.Rounded.AutoAwesome, contentDescription = null, modifier = Modifier.size(16.dp))
-                    Spacer(Modifier.width(6.dp))
-                    Text("AGY Auto-Fix", fontSize = 12.sp, fontWeight = FontWeight.Bold)
-                }
+                    Button(
+                        onClick = {
+                            commandInput = "agy fix"
+                            runCmd("agy fix")
+                        },
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.errorContainer,
+                            contentColor = MaterialTheme.colorScheme.onErrorContainer
+                        ),
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(Icons.Rounded.AutoAwesome, contentDescription = null, modifier = Modifier.size(16.dp))
+                        Spacer(Modifier.width(6.dp))
+                        Text("AGY Auto-Fix", fontSize = 12.sp, fontWeight = FontWeight.Bold)
+                    }
 
-                OutlinedButton(
-                    onClick = {
-                        val reportCmd = "agy bug-report Command '$lastExecutedCmd' failed"
-                        commandInput = reportCmd
-                        runCmd(reportCmd)
-                    },
-                    shape = RoundedCornerShape(12.dp),
-                    modifier = Modifier.weight(1f)
-                ) {
-                    Text("Report Bug", fontSize = 12.sp)
+                    OutlinedButton(
+                        onClick = {
+                            val reportCmd = "agy bug-report Command '$lastExecutedCmd' failed"
+                            commandInput = reportCmd
+                            runCmd(reportCmd)
+                        },
+                        shape = RoundedCornerShape(12.dp),
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Text("Report Bug", fontSize = 12.sp)
+                    }
                 }
             }
         }
