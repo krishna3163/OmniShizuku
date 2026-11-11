@@ -1,0 +1,30 @@
+---
+- ignore-rules:
+    - android_logging
+    - android_kotlin_logging
+    - hardcoded_username
+    - hardcoded_api_key
+    - android_kotlin_hardcoded
+    - google_api_key
+    - android_task_hijacking2
+    - android_safetynet_api
+    - android_safetynet
+    - android_ssl_pinning
+    - android_certificate_pinning
+    - android_certificate_transparency
+    - android_tapjacking
+    - android_detect_tapjacking
+    - android_prevent_screenshot
+    - android_kotlin_sha1
+    - android_kotlin_rsa_no_oaep
+    - android_kotlin_sql_raw_query
+    - android_kotlin_pending_intent_not_immutable
+    - android_kotlin_intent_redirection
+    - android_kotlin_command_injection
+    - command_injection
+    - android_kotlin_webview_set_allow_file_access
+    - android_kotlin_webview
+    - android_manifest_insecure_minsdk_warning
+    - android_manifest_allow_backup
+    - android_manifest_debugging_enabled
+    - android_manifest_missing_explicit_allow_backup
