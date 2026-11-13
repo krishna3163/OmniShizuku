@@ -15,6 +15,17 @@
 - Validation is currently blocked before compilation because the configured
   `com.android.library` plugin `9.5.0-rc01` is unavailable from the active repositories.
 
+## CI and APK Verification Foundation (2026-11-13)
+
+- Fixed the GitHub APK workflow's error masking around SDK setup, debug keystore
+  creation, APK signature verification, and release cleanup.
+- Fixed the source compilation blockers found in the failed GitHub runs:
+  imported `FrameLayout` and implemented the current Dhizuku AIDL listener methods
+  with explicit unsupported-operation behavior.
+- Added a real Compose instrumentation smoke test and an API 35 emulator workflow.
+- Added testing strategy, matrix, security, compatibility, device, CI diagnosis,
+  coverage, and release-verification documentation.
+
 ## Phase 2 Audio Profiles (2026-11-13)
 
 - Added `SoundProfileManager` with real AudioManager-backed Normal, Silent,

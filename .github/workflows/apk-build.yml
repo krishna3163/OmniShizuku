@@ -12,7 +12,8 @@ concurrency:
   group: apk-build-${{ github.ref }}
   cancel-in-progress: false
 
-permissions: read-all
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -58,12 +59,12 @@ jobs:
 
       - name: Setup Android SDK & Preview Components
         run: |
+          set -euo pipefail
           SDKMANAGER="$ANDROID_SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
-          yes 2>/dev/null | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
-          yes 2>/dev/null | "$SDKMANAGER" --channel=3 --licenses > /dev/null 2>&1 || true
-          # Keep the pipeline's status equal to sdkmanager's status so missing SDK packages fail CI.
           set +o pipefail
-          yes 2>/dev/null | "$SDKMANAGER" --channel=3 \
+          yes 2>/dev/null | "$SDKMANAGER" --licenses > /dev/null 2>&1
+          set -o pipefail
+          "$SDKMANAGER" --channel=3 \
             "platforms;android-37.1" \
             "build-tools;37.0.0" \
             "ndk;29.0.14206865"
@@ -92,10 +93,12 @@ jobs:
         if: env.TRUSTED_CONTEXT != 'true' || env.HAS_KEYSTORE != 'true'
         run: |
           mkdir -p ~/.android ~/.config/.android
-          keytool -genkeypair -v -keystore ~/.android/debug.keystore \
-            -storepass android -alias androiddebugkey -keypass android \
-            -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 10000 || true
-          cp -f ~/.android/debug.keystore ~/.config/.android/debug.keystore 2>/dev/null || true
+          if [ ! -f ~/.android/debug.keystore ]; then
+            keytool -genkeypair -v -keystore ~/.android/debug.keystore \
+              -storepass android -alias androiddebugkey -keypass android \
+              -dname "CN=Android Debug,O=Android,C=US" -keyalg RSA -keysize 2048 -validity 10000
+          fi
+          cp -f ~/.android/debug.keystore ~/.config/.android/debug.keystore
 
       - name: Run manager unit tests
         env:
@@ -124,15 +127,13 @@ jobs:
           find . -name "*.apk" 2>/dev/null || true
 
       - name: Verify APK signature
-        if: always()
+        if: success()
         run: |
-          APK=$(find out/apk manager/build/outputs/apk/debug -name "*.apk" 2>/dev/null | head -n1)
-          if [ -n "$APK" ] && [ -f "$APK" ]; then
-            APKSIGNER=$(ls -d "$ANDROID_SDK_ROOT"/build-tools/*/apksigner 2>/dev/null | sort -V | tail -n1)
-            if [ -n "$APKSIGNER" ]; then
-              "$APKSIGNER" verify --print-certs "$APK" || true
-            fi
-          fi
+          APK=$(find manager/build/outputs/apk/debug -maxdepth 1 -name "*.apk" -print -quit)
+          test -n "$APK" && test -f "$APK"
+          APKSIGNER="$ANDROID_SDK_ROOT/build-tools/37.0.0/apksigner"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
 
       - name: Upload build logs
         if: always()
@@ -143,7 +144,7 @@ jobs:
           if-no-files-found: ignore
 
       - name: Upload debug APK as Artifact
-        if: always()
+        if: success()
         uses: actions/upload-artifact@4cec3d8aa04e39d1a68397de0c4cd6fb9dce8ec1 # v4.6.1
         with:
           name: omnishizuku-debug-apk
@@ -179,19 +180,13 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          echo "Cleaning up all old releases so only v1.0.0 exists..."
-          for tag in $(gh release list --limit 100 --json tagName -q '.[].tagName' 2>/dev/null || true); do
-            echo "Deleting old release: $tag"
-            gh release delete "$tag" --yes --cleanup-tag=false || true
-          done
-
       - name: Publish to GitHub Releases
         env:
           GH_TOKEN: ${{ github.token }}
           OMNI_VERSION_NAME: ${{ needs.build.outputs.version }}
         run: |
           mkdir -p release-assets
-          DEBUG_APK=$(find debug-apk -maxdepth 1 -type f -name '*.apk' -print -quit 2>/dev/null || true)
+          DEBUG_APK=$(find debug-apk -maxdepth 1 -type f -name '*.apk' -print -quit)
           if [ -z "$DEBUG_APK" ]; then
             echo "::error::Debug APK was not generated; refusing to publish an empty release."
             exit 1
@@ -217,9 +212,9 @@ jobs:
 
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
             echo "Release '$RELEASE_TAG' exists. Updating APK assets..."
-            for asset in $(gh release view "$RELEASE_TAG" --json assets -q '.assets[].name' 2>/dev/null || true); do
+            for asset in $(gh release view "$RELEASE_TAG" --json assets -q '.assets[].name'); do
               if [ "$asset" != "$APK_NAME" ]; then
-                gh release delete-asset "$RELEASE_TAG" "$asset" --yes || true
+                gh release delete-asset "$RELEASE_TAG" "$asset" --yes
               fi
             done
             if [[ "$RELEASE_TAG" == *-dev ]]; then
@@ -239,9 +234,9 @@ jobs:
           git tag -f latest "$GITHUB_SHA"
           git push origin refs/tags/latest --force
           if gh release view latest >/dev/null 2>&1; then
-            for asset in $(gh release view latest --json assets -q '.assets[].name' 2>/dev/null || true); do
+            for asset in $(gh release view latest --json assets -q '.assets[].name'); do
               if [ "$asset" != "$LATEST_APK_NAME" ]; then
-                gh release delete-asset latest "$asset" --yes || true
+                gh release delete-asset latest "$asset" --yes
               fi
             done
             gh release edit latest \
