@@ -265,4 +265,9 @@ public class ShizukuConfigManager extends ConfigManager {
         HandlerKt.getWorkerHandler().removeCallbacks(mWriteRunner);
         HandlerKt.getWorkerHandler().post(mWriteRunner);
     }
+
+    public synchronized void flush() {
+        HandlerKt.getWorkerHandler().removeCallbacks(mWriteRunner);
+        write(config);
+    }
 }

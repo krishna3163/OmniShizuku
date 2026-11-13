@@ -253,6 +253,9 @@ public class ShizukuService extends Service<ShizukuUserServiceManager, ShizukuCl
             heartbeatRunnable = null;
         }
         NightDog.stop();
+        if (configManager != null) {
+            configManager.flush();
+        }
         System.exit(0);
     }
 
