@@ -103,16 +103,6 @@ enum class RecordingFailure(val code: Int) {
 }
 
 /**
- * Recording session states.
- */
-enum class RecordingState {
-    IDLE,
-    RECORDING,
-    PAUSED,
-    STOPPED
-}
-
-/**
  * Call direction for metadata.
  */
 enum class CallDirection {

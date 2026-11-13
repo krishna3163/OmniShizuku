@@ -106,24 +106,23 @@ fun CallRecorderScreen(onBack: () -> Unit = {}) {
 @Composable
 fun RecordingControlsScreen() {
     val context = LocalContext.current
-    var isRecording by remember { mutableStateOf(false) }
-    var durationSeconds by remember { mutableIntStateOf(0) }
-    val scope = rememberCoroutineScope()
+    val sessionState by RecordingStateHolder.sessionState
+    val durationMs by RecordingStateHolder.durationMs
+    val lastError by RecordingStateHolder.lastError
+    val isActive = RecordingStateHolder.isRecording || sessionState == RecordingSessionState.Starting || sessionState == RecordingSessionState.Stopping
 
-    LaunchedEffect(isRecording) {
-        if (isRecording) {
-            durationSeconds = 0
-            while (isRecording) {
-                delay(1000)
-                durationSeconds += 1
-            }
-        } else {
-            durationSeconds = 0
-        }
+    val totalSeconds = (durationMs / 1000).toInt()
+    val minutes = totalSeconds / 60
+    val seconds = totalSeconds % 60
+
+    val statusText = when (sessionState) {
+        RecordingSessionState.Idle -> "Ready to Record"
+        RecordingSessionState.Starting -> "Starting..."
+        RecordingSessionState.Recording -> "Recording Active"
+        RecordingSessionState.Paused -> "Recording Paused"
+        RecordingSessionState.Stopping -> "Stopping..."
+        is RecordingSessionState.Error -> "Recording Error"
     }
-
-    val minutes = durationSeconds / 60
-    val seconds = durationSeconds % 60
 
     Column(
         modifier = Modifier
@@ -136,7 +135,11 @@ fun RecordingControlsScreen() {
             modifier = Modifier.size(180.dp),
             shape = RoundedCornerShape(40.dp),
             colors = CardDefaults.cardColors(
-                containerColor = if (isRecording) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceContainerHigh
+                containerColor = when (sessionState) {
+                    RecordingSessionState.Recording, RecordingSessionState.Paused -> MaterialTheme.colorScheme.errorContainer
+                    is RecordingSessionState.Error -> MaterialTheme.colorScheme.errorContainer
+                    else -> MaterialTheme.colorScheme.surfaceContainerHigh
+                }
             )
         ) {
             Column(
@@ -147,17 +150,24 @@ fun RecordingControlsScreen() {
                 verticalArrangement = Arrangement.Center
             ) {
                 Icon(
-                    imageVector = if (isRecording) Icons.Outlined.Stop else Icons.Outlined.Mic,
+                    imageVector = when (sessionState) {
+                        RecordingSessionState.Recording, RecordingSessionState.Paused -> Icons.Outlined.Stop
+                        is RecordingSessionState.Error -> Icons.Outlined.ErrorOutline
+                        else -> Icons.Outlined.Mic
+                    },
                     contentDescription = null,
                     modifier = Modifier.size(56.dp),
-                    tint = if (isRecording) MaterialTheme.colorScheme.error else OmniTokens.brandPrimary()
+                    tint = when (sessionState) {
+                        RecordingSessionState.Recording, RecordingSessionState.Paused, is RecordingSessionState.Error -> MaterialTheme.colorScheme.error
+                        else -> OmniTokens.brandPrimary()
+                    }
                 )
                 Spacer(modifier = Modifier.height(12.dp))
                 Text(
-                    text = if (isRecording) "Recording Active" else "Ready to Record",
+                    text = statusText,
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = if (isRecording) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurface
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -172,7 +182,7 @@ fun RecordingControlsScreen() {
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        if (isRecording) {
+        if (isActive) {
             LinearProgressIndicator(
                 modifier = Modifier
                     .fillMaxWidth(0.8f)
@@ -182,41 +192,58 @@ fun RecordingControlsScreen() {
             Spacer(modifier = Modifier.height(6.dp))
         }
 
+        if (sessionState is RecordingSessionState.Error && !lastError.isNullOrBlank()) {
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(
+                text = lastError ?: "",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.error
+            )
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
+
+        val buttonLabel = when (sessionState) {
+            RecordingSessionState.Starting -> "Starting..."
+            RecordingSessionState.Stopping -> "Stopping..."
+            RecordingSessionState.Recording, RecordingSessionState.Paused -> "Stop Recording"
+            else -> "Start Recording"
+        }
+        val showStop = RecordingStateHolder.isRecording || sessionState == RecordingSessionState.Starting || sessionState == RecordingSessionState.Stopping
 
         Button(
             onClick = {
-                val action = if (isRecording) {
-                    "com.krishna.omnishizuku.action.STOP_RECORDING"
+                val action = if (showStop) {
+                    RecordingForegroundService.ACTION_STOP
                 } else {
-                    "com.krishna.omnishizuku.action.START_RECORDING"
+                    RecordingForegroundService.ACTION_START
                 }
                 val intent = Intent(context, RecordingForegroundService::class.java).setAction(action)
                 try {
-                    if (isRecording) {
+                    if (showStop) {
                         context.startService(intent)
                     } else {
                         context.startForegroundService(intent)
                     }
-                    isRecording = !isRecording
                 } catch (e: Exception) {
                     Toast.makeText(context, "Service error: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
             },
+            enabled = sessionState != RecordingSessionState.Starting && sessionState != RecordingSessionState.Stopping,
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .height(52.dp),
             colors = ButtonDefaults.buttonColors(
-                containerColor = if (isRecording) MaterialTheme.colorScheme.error else OmniTokens.brandPrimary()
+                containerColor = if (showStop) MaterialTheme.colorScheme.error else OmniTokens.brandPrimary()
             )
         ) {
             Icon(
-                imageVector = if (isRecording) Icons.Outlined.Stop else Icons.Outlined.FiberManualRecord,
+                imageVector = if (showStop) Icons.Outlined.Stop else Icons.Outlined.FiberManualRecord,
                 contentDescription = null,
                 modifier = Modifier.size(20.dp)
             )
             Spacer(modifier = Modifier.width(8.dp))
-            Text(if (isRecording) "Stop Recording" else "Start Recording")
+            Text(buttonLabel)
         }
     }
 }

@@ -46,16 +46,14 @@ import moe.shizuku.manager.utils.SettingsPage
 import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.createChannelCompat
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
+import moe.shizuku.manager.service.HidingWatchService
 import moe.shizuku.manager.utils.Diag
 
 class WatchdogService : Service() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
-    private var pendingRestart = false
-
-    /** Set while the user owes a notification that an outage is over. */
-    @Volatile
-    private var awaitingRecovery = false
+    private val recoveryState = AtomicReference(WatchdogRecoveryState.IDLE)
 
     /** Only one restart at a time, and not one every few seconds for the same outage. */
     private val restartInFlight = AtomicBoolean(false)
@@ -69,46 +67,43 @@ class WatchdogService : Service() {
      */
     private val breaker = StartCircuitBreaker(BREAKER_MAX_ATTEMPTS, BREAKER_WINDOW_MS)
 
+    private fun transition(event: WatchdogRecoveryEvent): WatchdogRecoveryState =
+        recoveryState.updateAndGet { WatchdogRecoveryMachine.reduce(it, event) }
+
+    private fun isPendingOrRestarting(): Boolean = when (recoveryState.get()) {
+        WatchdogRecoveryState.PENDING_RESTART, WatchdogRecoveryState.RESTARTING -> true
+        else -> false
+    }
+
+    private fun markAwaitingRecovery() {
+        if (recoveryState.get() == WatchdogRecoveryState.GAVE_UP) return
+        transition(WatchdogRecoveryEvent.CrashDetected)
+    }
+
     private val stateListener: (ShizukuStateMachine.State) -> Unit = { state ->
-        // Deliberately not cleared when the server is seen running again: the binder that
-        // reports that is the sticky one, and during a replacement it arrives while the old
-        // server is still up, an instant before the death the mark was set for. Clearing
-        // there wiped the mark and the death came through as a crash after all. The mark
-        // carries its own deadline, so a stale one drops itself.
         when (state) {
             ShizukuStateMachine.State.CRASHED ->
-                // Three ways for this to be somebody's decision rather than a crash: the
-                // server is being replaced, or it was stopped on purpose, or a start that
-                // asked for it is already on its way. Reporting any of those as a crash and
-                // starting again over the top of it is what made a deliberate restart look
-                // like Shizuku falling over, twice.
                 when {
                     WatchdogGuard.consumeExpectedDeath() ->
                         Diag.debug(TAG, "Server went down as expected, nothing to report")
 
-                    ShizukuSettings.getManuallyStopped() ->
+                    ShizukuSettings.getManuallyStopped() -> {
                         Diag.debug(TAG, "Server was stopped on purpose, nothing to report")
+                        transition(WatchdogRecoveryEvent.ManualStop)
+                    }
 
                     else -> {
                         Diag.warn(TAG, "Server died: reporting it and starting it again")
                         showCrashNotification()
-                        awaitingRecovery = true
+                        markAwaitingRecovery()
                         attemptRestart()
                     }
                 }
 
             ShizukuStateMachine.State.RUNNING -> {
-                // Server is back, so there is nothing left for the screen-on retry to do,
-                // and any outage the user was told about is over.
-                pendingRestart = false
-                // A server that came back - however it came back - is proof the breaker was
-                // counting failures that were not permanent, so the count starts over. The
-                // reset is unconditional on purpose: a server that is up now may have come back
-                // while the breaker was open, and a count left standing would stop the next
-                // genuine crash from being recovered.
+                val prev = recoveryState.getAndSet(WatchdogRecoveryState.IDLE)
                 resetBreaker()
-                if (awaitingRecovery) {
-                    awaitingRecovery = false
+                if (prev == WatchdogRecoveryState.AWAITING_RECOVERY || prev == WatchdogRecoveryState.GAVE_UP) {
                     showRecoveryNotification()
                 }
             }
@@ -117,59 +112,28 @@ class WatchdogService : Service() {
         }
     }
 
-    /**
-     * Screen-on receiver: when the user turns the screen on after a crash, trigger
-     * a fresh restart. Crash-time restart attempts frequently fail (mDNS / wireless
-     * debugging don't work with the screen off) and WorkManager then accumulates
-     * exponential backoff, making the restart indefinitely slow.
-     *
-     * One of two triggers now, and it was the only one: see [startRecoveryLoop] for what
-     * happened to every server that died while the phone was already awake.
-     */
     private val screenOnReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             if (intent.action != Intent.ACTION_USER_PRESENT) return
-            if (pendingRestart) {
+            if (isPendingOrRestarting()) {
                 Diag.debug(TAG, "Screen unlocked with pending restart retrying now")
                 attemptRestart()
             } else {
-                // Self-heal on unlock: catches deaths whose CRASHED transition was
-                // never observed (e.g. the manager process was dead at the time).
                 checkServerAndRestartIfDead()
             }
         }
     }
 
-    /**
-     * Event-based crash detection alone is not enough: the CRASHED transition is
-     * lost if the manager process was dead when the server died, and the state
-     * machine boots as STOPPED after every process restart. So whenever the
-     * watchdog (re)starts, on screen unlock, and on the recovery loop's own timer,
-     * probe whether the server is actually running and restart it if not, unless the
-     * user stopped it on purpose (manual stop sets the suppression flag; any start
-     * request or a confirmed RUNNING state clears it).
-     */
     private fun checkServerAndRestartIfDead() {
         serviceScope.launch {
-            // Grace period so a sticky binder delivered right after process start
-            // can flip the state to RUNNING before we probe it.
             delay(BINDER_GRACE_MS)
             if (ShizukuSettings.getManuallyStopped()) return@launch
-            // With start on boot off and a server that has not run in this boot, "not running"
-            // is not a crash: it is the state the user chose for a reboot. Wait for a start to
-            // make this a server worth keeping alive; see [ShizukuSettings.isWatchdogStartAllowed].
             if (!ShizukuSettings.isWatchdogStartAllowed()) {
                 Diag.debug(TAG, "Server not started since boot and start on boot is off; not starting it")
                 return@launch
             }
-            // A replacement is in flight: the old server being gone right now is the point
-            // of it, and starting another one would race it.
             if (WatchdogGuard.isExpectingDeath()) return@launch
             when (ShizukuStateMachine.get()) {
-                // A start/stop appears to be in flight. Give it ample time to
-                // resolve instead of skipping outright a state stuck at
-                // STARTING/STOPPING from a silently failed operation would
-                // otherwise disable this check forever.
                 ShizukuStateMachine.State.STARTING,
                 ShizukuStateMachine.State.STOPPING -> {
                     delay(IN_FLIGHT_GRACE_MS)
@@ -184,33 +148,12 @@ class WatchdogService : Service() {
         }
     }
 
-    /**
-     * The recovery that does not wait for an unlock, and the reason it exists.
-     *
-     * The unlock trigger is a real signal - mDNS and wireless debugging genuinely do not work
-     * with the screen off - but it was the only retry there was, and that is not enough. A
-     * server that dies while the phone is in the user's hand, being used, is never unlocked, so
-     * nothing retried it and Shizuku stayed down until the app was opened; the start-up probe
-     * inside this service is what made opening the app look like the only cure.
-     *
-     * Reported from the device and reproduced: with the manager open and the server killed, the
-     * watchdog's own attempt collapsed and the log said only "leaving the retry armed", waiting
-     * for an unlock that was never going to come.
-     *
-     * So the same probe runs on a timer for as long as the watchdog is up. It is cheap - one
-     * binder ping - it skips everything a deliberate stop or an in-flight replacement skips, and
-     * [attemptRestart] keeps its own cooldown, so a server that cannot come back yet is retried
-     * rather than nagged.
-     */
     private fun startRecoveryLoop() {
         serviceScope.launch {
             while (isActive) {
                 delay(RECOVERY_POLL_MS)
                 if (ShizukuSettings.getManuallyStopped()) continue
-                // Nothing to recover until the server has run in this boot, when start on boot
-                // is off; the state listener wakes this loop up once it does.
                 if (!ShizukuSettings.isWatchdogStartAllowed()) continue
-                // The local answer first because it is free; the probe below asks the binder.
                 if (ShizukuStateMachine.isRunning()) continue
                 checkServerAndRestartIfDead()
             }
@@ -223,13 +166,6 @@ class WatchdogService : Service() {
             return
         }
 
-        // The boot gate: start on boot off and no run yet in this boot means the server is down
-        // because nobody asked for it, and starting it here would be a boot start by another name.
-        //
-        // And the unlock: every restart here ends in WorkManager or in a direct TCP connection
-        // that a reboot has already taken away, and neither is there before the first unlock. The
-        // process can be this early because the app is direct-boot aware. Waited out rather than
-        // tried; the unlock hook starts the watchdog again, and its probe comes back here.
         when (decideStartNow(
             applicationContext.isUserUnlockedCompat(),
             ShizukuSettings.isWatchdogStartAllowed(),
@@ -244,53 +180,35 @@ class WatchdogService : Service() {
                 Diag.debug(TAG, "Restart attempt skipped: the server has not run since boot")
                 return
             }
-            // The watchdog does not ask for the start that can be made before the unlock (it passes
-            // no such method), so START_LOCKED is not an answer it gets; it waits like the rest.
             StartNowDecision.DEFER_UNTIL_UNLOCK, StartNowDecision.START_LOCKED -> {
                 Diag.debug(TAG, "Restart deferred until the user is unlocked${BootTimeline.suffix()}")
-                pendingRestart = true
+                if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
                 return
             }
         }
 
-        // The breaker is open, so the last [BREAKER_MAX_ATTEMPTS] starts all failed. Trying
-        // again is what the user was watching happen, so this is where it stops: the notice
-        // has been posted, and the way back is a start they asked for themselves.
         if (breaker.open) {
             Diag.debug(TAG, "Restart attempt skipped: the breaker is open")
+            transition(WatchdogRecoveryEvent.BreakerOpened)
             return
         }
 
-        // A list is holding the debugging toggle off for an app the user has open. A start could
-        // not work - it needs that very toggle - and the attempt would write the toggle back on,
-        // which is the opposite of what the list is for. Waited out rather than tried: the watch
-        // asks for a start itself the moment nothing is hidden any more.
         if (HidingWatchService.holding()) {
             Diag.debug(TAG, "Restart attempt skipped: hiding is holding the debugging toggle off")
-            pendingRestart = true
+            if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
             return
         }
 
-        // A start of ours is running right now, and that start is the one that has to find the
-        // port: a no-network attempt is given minutes for it, while this poll comes around every
-        // thirty seconds and forces a start by cancelling the queued work. The attempt in flight
-        // was therefore thrown away thirty seconds in, time after time, and the window it needed
-        // never arrived. Waited on rather than replaced, with the retry left armed for its end.
-        // On every release, not only the one that needs the longest window: at a boot the boot
-        // receiver's start and this one arrive within seconds of each other, and the second one
-        // replacing the first is what put two starters on the phone, the later one killing the
-        // earlier one's server. A start still inside its STARTING grace counts the same.
         if (AdbStartRun.startInProgress()) {
             Diag.debug(TAG, "Restart attempt skipped: a start is already in flight")
-            pendingRestart = true
+            if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
             return
         }
 
-        // The binder listener and the unlock probe can land here for the same outage, and a
-        // restart that keeps failing must not turn into a start every few seconds.
         val now = SystemClock.elapsedRealtime()
         if (now - lastRestartAt < RESTART_COOLDOWN_MS) {
             Diag.debug(TAG, "Restart attempt skipped: one was made moments ago")
+            if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
             return
         }
         if (!restartInFlight.compareAndSet(false, true)) {
@@ -299,8 +217,12 @@ class WatchdogService : Service() {
         }
         lastRestartAt = now
         recordAttempt(now)
+        if (recoveryState.get() == WatchdogRecoveryState.GAVE_UP) {
+            restartInFlight.set(false)
+            return
+        }
+        recoveryState.set(WatchdogRecoveryState.RESTARTING)
 
-        // Cancel any prior WorkManager attempt so we don't inherit exponential backoff
         WorkManager.getInstance(applicationContext).cancelUniqueWork(AdbStartWorker.UNIQUE_WORK_NAME)
 
         serviceScope.launch {
@@ -309,18 +231,12 @@ class WatchdogService : Service() {
                 val usbMethod =
                     ShizukuSettings.getStartMethod() == ShizukuSettings.StartMethod.USB
                 if (usbMethod && tcpPort > 0 && EnvironmentUtils.isUsbDebuggingEnabled()) {
-                    // Direct TCP restart for the USB method fastest path, no mDNS
-                    // needed. A wireless setup must restart over TLS below: taking the
-                    // classic port here is what made a wireless setup come back
-                    // reporting itself as USB debugging after a crash.
-                    pendingRestart = false
+                    recoveryState.compareAndSet(WatchdogRecoveryState.RESTARTING, WatchdogRecoveryState.AWAITING_RECOVERY)
                     AdbStarter.startAdb(applicationContext, tcpPort)
                     Starter.waitForBinder()
                     AdbStarter.logStartedPids(tcpPort)
                 } else {
-                    // mDNS-based restart via WorkManager. Mark pending so the
-                    // screen-on receiver can retry if this attempt fails.
-                    pendingRestart = true
+                    if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
                     ShizukuReceiverStarter.start(
                         applicationContext,
                         forceStart = true,
@@ -329,9 +245,7 @@ class WatchdogService : Service() {
                 }
             } catch (e: Exception) {
                 Diag.warn(TAG, "Direct restart failed, falling back", e)
-                pendingRestart = true
-                // The direct start left the state at STARTING, and a start inside its grace is
-                // one the fallback would be told it can join. It has failed, so it is said so.
+                if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
                 if (ShizukuStateMachine.markStartFailed() != ShizukuStateMachine.State.RUNNING) {
                     ShizukuReceiverStarter.start(
                         applicationContext,
@@ -343,38 +257,22 @@ class WatchdogService : Service() {
                 restartInFlight.set(false)
             }
 
-            // A start reports success as soon as the binder appears, and the interesting case
-            // is the one that appears and then goes away again, so the restart is checked
-            // rather than trusted: until the server is actually there, the retry stays armed.
-            //
-            // Counted from when the start ends, not from when it was asked for: through the
-            // worker the request returns at once, and at a boot finding the port takes several
-            // seconds, the start itself a few more, and the server another handful to answer.
-            // A fixed wait from the request judged all of that too early and called a server
-            // that was seconds from appearing a failure.
             delay(RECOVERY_CHECK_MS)
             awaitStartEnd()
-            // And then the server's own time to come up, which the log puts at 6 to 12 seconds
-            // after the starter reports it started.
             withTimeoutOrNull(SERVER_BOOT_GRACE_MS) {
                 ShizukuStateMachine.asFlow().first { it == ShizukuStateMachine.State.RUNNING }
             }
             ShizukuStateMachine.update()
             if (ShizukuStateMachine.isRunning()) {
-                pendingRestart = false
-            } else if (!ShizukuSettings.getManuallyStopped()) {
+                transition(WatchdogRecoveryEvent.Reset)
+            } else if (!ShizukuSettings.getManuallyStopped() && recoveryState.get() != WatchdogRecoveryState.GAVE_UP) {
                 Diag.warn(TAG, "Restart did not bring the server back, leaving the retry armed")
-                pendingRestart = true
+                transition(WatchdogRecoveryEvent.RestartDeferred)
+                markAwaitingRecovery()
             }
         }
     }
 
-    /**
-     * Waits for the start in progress to end, one second at a time, up to a limit.
-     *
-     * The limit is the longest a start is allowed to take: a no-network start is given
-     * the worker's forced-discovery timeout to find a port, so it gets more than the rest.
-     */
     private suspend fun awaitStartEnd() {
         val limit =
             if (ShizukuSettings.getForceWirelessDebugging()) FORCED_IN_FLIGHT_GRACE_MS
@@ -386,16 +284,9 @@ class WatchdogService : Service() {
         }
     }
 
-    /**
-     * Counts one restart attempt, and says so when it is the one that opens the breaker.
-     *
-     * Attempts from any trigger count, including a user's own tap. Five deliberate retries in a
-     * row inside one window would have to mean four of them failed within twenty seconds of each
-     * other, so the breaker is not going to open under somebody who is simply trying again.
-     */
     private fun recordAttempt(now: Long) {
         if (!breaker.record(now)) return
-        pendingRestart = false
+        transition(WatchdogRecoveryEvent.BreakerOpened)
         Diag.warn(
             TAG,
             "Giving up: $BREAKER_MAX_ATTEMPTS starts in under " +
@@ -404,10 +295,10 @@ class WatchdogService : Service() {
         showGaveUpNotification()
     }
 
-    /** A server that is running again clears the count, and re-arms the breaker with it. */
     private fun resetBreaker() {
         breaker.reset()
     }
+
 
     override fun onCreate() {
         super.onCreate()
@@ -475,7 +366,7 @@ class WatchdogService : Service() {
 
     override fun onDestroy() {
         serviceScope.cancel()
-        pendingRestart = false
+        transition(WatchdogRecoveryEvent.Reset)
         ShizukuStateMachine.removeListener(stateListener)
         runCatching { unregisterReceiver(screenOnReceiver) }
         isRunning.set(false)
@@ -782,3 +673,8 @@ class WatchdogService : Service() {
         fun isRunning(): Boolean = isRunning.get()
     }
 }
+
+
+
+
+

@@ -1,4 +1,4 @@
-package moe.shizuku.manager.callrecorder
+﻿package moe.shizuku.manager.callrecorder
 
 import android.os.ParcelFileDescriptor
 import android.os.Process
@@ -8,6 +8,7 @@ import java.nio.ByteOrder
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
 /**
@@ -19,7 +20,9 @@ class ShellRecordingEngine {
         private const val TAG = "SCR:ShellRecordingEngine"
     }
 
-    private val recordingActive = AtomicBoolean(false)
+    private enum class EngineState { IDLE, STARTING, RECORDING, PAUSED, STOPPING, ERROR }
+
+    private val state = AtomicReference(EngineState.IDLE)
     private val recordingPaused = AtomicBoolean(false)
 
     private var outputFile: ParcelFileDescriptor? = null
@@ -29,9 +32,9 @@ class ShellRecordingEngine {
     private var primaryCapture: AudioRecordCapture? = null
     private var secondaryCapture: AudioRecordCapture? = null
 
-    private var captureThread: Thread? = null
-    private var encoderThread: Thread? = null
-    private var encoder: AudioEncoder? = null
+    @Volatile private var captureThread: Thread? = null
+    @Volatile private var encoderThread: Thread? = null
+    @Volatile private var encoder: AudioEncoder? = null
 
     // 2 seconds buffer pool (100 frames at 20ms each)
     private val poolSize = 100
@@ -39,9 +42,9 @@ class ShellRecordingEngine {
     private val readyQueue = ArrayBlockingQueue<AudioFrame>(poolSize)
 
     private val shutdownHook = Thread({
-        if (recordingActive.get()) {
+        if (isActiveState()) {
             Log.w(TAG, "Shell process dying unexpectedly with active session. Finalizing recording...")
-            stop()
+            stopInternal(notifyStopped = false)
         }
     }, "CallRecorder-ShutdownHook")
 
@@ -55,14 +58,21 @@ class ShellRecordingEngine {
         var secondaryRead: Int = 0
     }
 
-    fun isRecording(): Boolean = recordingActive.get()
+    fun isRecording(): Boolean = isActiveState()
+
+    private fun isActiveState(): Boolean = when (state.get()) {
+        EngineState.STARTING, EngineState.RECORDING, EngineState.PAUSED, EngineState.STOPPING -> true
+        else -> false
+    }
 
     fun start(outputFile: ParcelFileDescriptor, plan: RecordingPlan, callback: IRecordingCallback) {
         synchronized(this) {
-            if (!recordingActive.compareAndSet(false, true)) {
-                Log.w(TAG, "start() ignored: recording is already active")
+            val cur = state.get()
+            if (cur != EngineState.IDLE && cur != EngineState.ERROR) {
+                Log.w(TAG, "start() ignored: engine state=$cur")
                 return
             }
+            state.set(EngineState.STARTING)
 
             try {
                 this.outputFile = outputFile
@@ -103,12 +113,14 @@ class ShellRecordingEngine {
                 }
 
                 runCatching { Runtime.getRuntime().addShutdownHook(shutdownHook) }
+                state.set(EngineState.RECORDING)
                 callback.onRecordingStarted()
                 Log.i(TAG, "Native audio capture and encoding pipelines started successfully")
             } catch (t: Throwable) {
                 Log.e(TAG, "Failed to start recording session", t)
+                state.set(EngineState.ERROR)
                 runCatching { callback.onRecordingFailure(1, t.message ?: "Failed to start capture") }
-                stop()
+                stopInternal(notifyStopped = false)
             }
         }
     }
@@ -120,7 +132,11 @@ class ShellRecordingEngine {
         val trashSecondary = secondary?.let { ByteBuffer.allocateDirect(AudioConfig.BLOCK_SIZE_BYTES).order(ByteOrder.nativeOrder()) }
 
         try {
-            while (recordingActive.get()) {
+            while (true) {
+                val s = state.get()
+                if (s == EngineState.IDLE || s == EngineState.ERROR) break
+                if (s == EngineState.STOPPING) break
+
                 val frame = emptyQueue.poll(5, TimeUnit.MILLISECONDS)
                 val pBuf = frame?.primaryBuffer ?: trashPrimary
                 val sBuf = frame?.secondaryBuffer ?: trashSecondary
@@ -146,25 +162,25 @@ class ShellRecordingEngine {
                     }
                 }
 
-                if (frame == null) {
-                    // Encoder lagging, frame dropped to prevent overflow
-                    continue
-                }
+                if (frame == null) continue
 
-                if (recordingPaused.get()) {
-                    emptyQueue.put(frame)
+                if (recordingPaused.get() || state.get() == EngineState.PAUSED) {
+                    emptyQueue.offer(frame)
                     continue
                 }
 
                 frame.primaryRead = primaryRead
                 frame.secondaryRead = secondaryRead
-                readyQueue.put(frame)
+                if (!readyQueue.offer(frame, 5, TimeUnit.MILLISECONDS)) {
+                    emptyQueue.offer(frame)
+                }
             }
         } catch (t: Throwable) {
-            if (recordingActive.get()) {
+            if (isActiveState()) {
                 Log.e(TAG, "Capture loop exception", t)
+                state.set(EngineState.ERROR)
                 runCatching { recordingCallback?.onRecordingFailure(2, "Capture read failure") }
-                stop()
+                stopInternal(notifyStopped = false)
             }
         }
     }
@@ -181,7 +197,11 @@ class ShellRecordingEngine {
         var blocksProcessed = 0L
 
         try {
-            while (recordingActive.get() || !readyQueue.isEmpty()) {
+            while (true) {
+                val s = state.get()
+                val active = s == EngineState.STARTING || s == EngineState.RECORDING || s == EngineState.PAUSED || s == EngineState.STOPPING
+                if (!active && readyQueue.isEmpty()) break
+
                 val frame = readyQueue.poll(100, TimeUnit.MILLISECONDS) ?: continue
 
                 blocksProcessed++
@@ -196,7 +216,7 @@ class ShellRecordingEngine {
                 )
 
                 if (processedBytes <= 0) {
-                    emptyQueue.put(frame)
+                    emptyQueue.offer(frame)
                     continue
                 }
 
@@ -209,7 +229,6 @@ class ShellRecordingEngine {
                 encoder?.encode(outputBuffer, presentationTimeUs)
                 clock.advance(frameCount.toLong())
 
-                // Report progress every 50 blocks (approx 1 second)
                 if (blocksProcessed % AudioConfig.LOG_INTERVAL_BLOCKS == 0L) {
                     val durationMs = presentationTimeUs / 1000L
                     val fileSizeBytes = blocksProcessed * processedBytes
@@ -218,18 +237,22 @@ class ShellRecordingEngine {
                     }
                 }
 
-                emptyQueue.put(frame)
+                emptyQueue.offer(frame)
             }
         } catch (t: Throwable) {
             Log.e(TAG, "Encoder loop exception", t)
-            runCatching { recordingCallback?.onRecordingFailure(3, "Encoder failure") }
-            stop()
+            if (isActiveState()) {
+                state.set(EngineState.ERROR)
+                runCatching { recordingCallback?.onRecordingFailure(3, "Encoder failure") }
+                stopInternal(notifyStopped = false)
+            }
         }
     }
 
     fun pause() {
         synchronized(this) {
-            if (recordingActive.get() && recordingPaused.compareAndSet(false, true)) {
+            if (state.compareAndSet(EngineState.RECORDING, EngineState.PAUSED)) {
+                recordingPaused.set(true)
                 Log.i(TAG, "Recording paused")
                 runCatching { recordingCallback?.onRecordingPaused() }
             }
@@ -238,7 +261,8 @@ class ShellRecordingEngine {
 
     fun resume() {
         synchronized(this) {
-            if (recordingActive.get() && recordingPaused.compareAndSet(true, false)) {
+            if (state.compareAndSet(EngineState.PAUSED, EngineState.RECORDING)) {
+                recordingPaused.set(false)
                 Log.i(TAG, "Recording resumed")
                 runCatching { recordingCallback?.onRecordingResumed() }
             }
@@ -246,15 +270,22 @@ class ShellRecordingEngine {
     }
 
     fun stop() {
+        stopInternal(notifyStopped = true)
+    }
+
+    private fun stopInternal(notifyStopped: Boolean) {
         synchronized(this) {
-            val wasActive = recordingActive.compareAndSet(true, false)
-            if (!wasActive && primaryCapture == null && encoder == null) return
+            val prev = state.getAndSet(EngineState.STOPPING)
+            if (prev == EngineState.IDLE && primaryCapture == null && encoder == null && outputFile == null) {
+                state.set(EngineState.IDLE)
+                return
+            }
 
             Log.i(TAG, "Stopping recording session...")
+            recordingPaused.set(false)
 
             runCatching { primaryCapture?.stop() }
             primaryCapture = null
-
             runCatching { secondaryCapture?.stop() }
             secondaryCapture = null
 
@@ -278,11 +309,22 @@ class ShellRecordingEngine {
             runCatching { outputFile?.close() }
             outputFile = null
 
-            recordingPaused.set(false)
+            emptyQueue.clear()
+            readyQueue.clear()
+
             runCatching { Runtime.getRuntime().removeShutdownHook(shutdownHook) }
-            runCatching { recordingCallback?.onRecordingStopped() }
-            recordingCallback = null
-            Log.i(TAG, "Recording stopped and resources released")
+
+            val wasError = prev == EngineState.ERROR
+            if (notifyStopped && !wasError) {
+                runCatching { recordingCallback?.onRecordingStopped() }
+            }
+            if (!wasError) {
+                state.set(EngineState.IDLE)
+                recordingCallback = null
+            } else {
+                state.set(EngineState.ERROR)
+            }
+            Log.i(TAG, "Recording stopped and resources released (prev=$prev)")
         }
     }
 }

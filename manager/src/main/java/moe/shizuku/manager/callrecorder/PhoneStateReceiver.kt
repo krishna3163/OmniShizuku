@@ -61,7 +61,7 @@ class CallDetectionOrchestrator private constructor(private val context: Context
                 }
             }
             TelephonyManager.EXTRA_STATE_IDLE -> {
-                if (RecordingStateHolder.isRecording.value) {
+                if (RecordingStateHolder.isRecording) {
                     stopRecording()
                 }
                 currentCallData = null

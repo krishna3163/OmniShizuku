@@ -1,4 +1,4 @@
-package moe.shizuku.manager.adb
+﻿package moe.shizuku.manager.adb
 
 import android.os.Build
 import android.util.Log
@@ -178,29 +178,57 @@ class AdbPairingClient(private val host: String, private val port: Int, private 
     private val peerInfo: PeerInfo = PeerInfo(PeerInfo.Type.ADB_RSA_PUB_KEY.value, key.adbPublicKey)
     private lateinit var pairingContext: PairingContext
     private var state: State = State.Ready
+    private var protoState: AdbPairingState = AdbPairingState.READY
+
+    private fun syncProto(newState: State) {
+        state = newState
+        protoState = when (newState) {
+            State.Ready -> AdbPairingState.READY
+            State.ExchangingMsgs -> AdbPairingState.EXCHANGING_MSGS
+            State.ExchangingPeerInfo -> AdbPairingState.EXCHANGING_PEER_INFO
+            State.Stopped -> AdbPairingState.STOPPED
+        }
+    }
 
     fun start(): Boolean {
-        setupTlsConnection()
-
-        state = State.ExchangingMsgs
-
-        if (!doExchangeMsgs()) {
-            state = State.Stopped
+        if (!AdbPairingStateMachine.canStart(protoState) || state != State.Ready) {
+            Log.w(TAG, "start() ignored in state=$state")
             return false
         }
+        return try {
+            setupTlsConnection()
 
-        state = State.ExchangingPeerInfo
+            protoState = AdbPairingStateMachine.onStart(protoState)
+            syncProto(State.ExchangingMsgs)
+            if (!doExchangeMsgs()) {
+                protoState = AdbPairingStateMachine.onMsgsExchanged(protoState, false)
+                syncProto(State.Stopped)
+                return false
+            }
+            protoState = AdbPairingStateMachine.onMsgsExchanged(protoState, true)
 
-        if (!doExchangePeerInfo()) {
-            state = State.Stopped
-            return false
+            syncProto(State.ExchangingPeerInfo)
+            if (!doExchangePeerInfo()) {
+                protoState = AdbPairingStateMachine.onPeerInfoExchanged(protoState, false)
+                syncProto(State.Stopped)
+                return false
+            }
+
+            protoState = AdbPairingStateMachine.onPeerInfoExchanged(protoState, true)
+            syncProto(State.Stopped)
+            true
+        } catch (t: Throwable) {
+            Log.e(TAG, "Pairing failed", t)
+            protoState = AdbPairingStateMachine.onClose(protoState)
+            syncProto(State.Stopped)
+            false
+        } finally {
+            runCatching { close() }
         }
-
-        state = State.Stopped
-        return true
     }
 
     private fun setupTlsConnection() {
+        if (state != State.Ready) throw IllegalStateException("Invalid state before TLS setup: $state")
         socket = Socket(host, port)
         socket.tcpNoDelay = true
 
@@ -218,13 +246,13 @@ class AdbPairingClient(private val host: String, private val port: Int, private 
         pairCodeBytes.copyInto(passwordBytes)
         keyMaterial.copyInto(passwordBytes, pairCodeBytes.size)
 
-        val pairingContext = PairingContext.create(passwordBytes)
-        checkNotNull(pairingContext) { "Unable to create PairingContext." }
-        this.pairingContext = pairingContext
+        val ctx = PairingContext.create(passwordBytes)
+            ?: throw IllegalStateException("Unable to create PairingContext.")
+        pairingContext = ctx
     }
 
-    private fun createHeader(type: PairingPacketHeader.Type, payloadSize: Int): PairingPacketHeader {
-        return PairingPacketHeader(kCurrentKeyHeaderVersion, type.value, payloadSize)
+    private fun createHeader(type: PairingPacketHeader.Type, payload: Int): PairingPacketHeader {
+        return PairingPacketHeader(kCurrentKeyHeaderVersion, type.value, payload)
     }
 
     private fun readHeader(): PairingPacketHeader? {
@@ -237,17 +265,15 @@ class AdbPairingClient(private val host: String, private val port: Int, private 
     private fun writeHeader(header: PairingPacketHeader, payload: ByteArray) {
         val buffer = ByteBuffer.allocate(kPairingPacketHeaderSize).order(ByteOrder.BIG_ENDIAN)
         header.writeTo(buffer)
-
         outputStream.write(buffer.array())
         outputStream.write(payload)
         Log.d(TAG, "write payload, size=${payload.size}")
     }
 
     private fun doExchangeMsgs(): Boolean {
+        if (state != State.ExchangingMsgs) return false
         val msg = pairingContext.msg
-        val size = msg.size
-
-        val ourHeader = createHeader(PairingPacketHeader.Type.SPAKE2_MSG, size)
+        val ourHeader = createHeader(PairingPacketHeader.Type.SPAKE2_MSG, msg.size)
         writeHeader(ourHeader, msg)
 
         val theirHeader = readHeader() ?: return false
@@ -261,9 +287,9 @@ class AdbPairingClient(private val host: String, private val port: Int, private 
     }
 
     private fun doExchangePeerInfo(): Boolean {
+        if (state != State.ExchangingPeerInfo) return false
         val buf = ByteBuffer.allocate(kMaxPeerInfoSize).order(ByteOrder.BIG_ENDIAN)
         peerInfo.writeTo(buf)
-
         val outbuf = pairingContext.encrypt(buf.array()) ?: return false
 
         val ourHeader = createHeader(PairingPacketHeader.Type.PEER_INFO, outbuf.size)
@@ -272,36 +298,25 @@ class AdbPairingClient(private val host: String, private val port: Int, private 
         val theirHeader = readHeader() ?: return false
         if (theirHeader.type != PairingPacketHeader.Type.PEER_INFO.value) return false
 
-        val theirMessage = ByteArray(theirHeader.payload)
-        inputStream.readFully(theirMessage)
+        val theirMsg = ByteArray(theirHeader.payload)
+        inputStream.readFully(theirMsg)
 
-        val decrypted = pairingContext.decrypt(theirMessage) ?: throw AdbInvalidPairingCodeException()
+        val decrypted = pairingContext.decrypt(theirMsg) ?: throw AdbInvalidPairingCodeException()
         if (decrypted.size != kMaxPeerInfoSize) {
             Log.e(TAG, "Got size=${decrypted.size} PeerInfo.size=$kMaxPeerInfoSize")
             return false
         }
-        val theirPeerInfo = PeerInfo.readFrom(ByteBuffer.wrap(decrypted))
-        Log.d(TAG, theirPeerInfo.toString())
+        val theirBuf = ByteBuffer.wrap(decrypted).order(ByteOrder.BIG_ENDIAN)
+        PeerInfo.readFrom(theirBuf)
         return true
     }
 
     override fun close() {
-        try {
-            inputStream.close()
-        } catch (e: Throwable) {
-        }
-        try {
-            outputStream.close()
-        } catch (e: Throwable) {
-        }
-        try {
-            socket.close()
-        } catch (e: Exception) {
-        }
-
-        if (state != State.Ready) {
-            pairingContext.destroy()
-        }
+        state = State.Stopped
+        runCatching { if (this::inputStream.isInitialized) inputStream.close() }
+        runCatching { if (this::outputStream.isInitialized) outputStream.close() }
+        runCatching { if (this::socket.isInitialized) socket.close() }
+        runCatching { if (this::pairingContext.isInitialized) pairingContext.destroy() }
     }
 
     companion object {

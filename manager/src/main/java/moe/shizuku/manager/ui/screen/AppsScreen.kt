@@ -203,9 +203,11 @@ fun AppsScreen(
         if ((!active && !warmUp) || all.isEmpty()) {
             grantedNames = emptySet()
             launcherless = emptySet()
-            // Nothing is known yet, or there is no server to ask, so there is no number to
-            // carry to the tab bar either.
-            onGrantedCount(0)
+            // When inactive or loading, avoid wiping out the known grantedCount on the tab badge
+            // unless the server is confirmed stopped
+            if (!running) {
+                onGrantedCount(0)
+            }
             return@LaunchedEffect
         }
         if (derivedFor == (running to version)) return@LaunchedEffect
