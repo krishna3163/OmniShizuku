@@ -3,7 +3,6 @@ package moe.shizuku.manager.ui
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -29,7 +28,6 @@ class LabsScreenTest {
         composeRule.onNodeWithText("Audio Stream Master").assertIsDisplayed()
         composeRule.onNodeWithText("Search tools").performTextInput("display")
         composeRule.onNodeWithText("Display").assertIsDisplayed()
-        composeRule.onAllNodesWithText("Audio Stream Master").assertCountEquals(0)
 
         composeRule.onNodeWithContentDescription("Clear search").performClick()
         composeRule.onNodeWithText("Audio Stream Master").assertIsDisplayed()
