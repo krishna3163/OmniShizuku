@@ -29,7 +29,8 @@ class LabsScreenTest {
         composeRule.onNodeWithText("Audio Stream Master").assertIsDisplayed()
 
         composeRule.onNodeWithContentDescription("Clear search").performClick()
-        composeRule.onNodeWithText("App ops").assertIsDisplayed()
+        composeRule.onNodeWithText("Search tools").performTextInput("display")
+        composeRule.onNodeWithText("Display").assertIsDisplayed()
     }
 
     @Test
