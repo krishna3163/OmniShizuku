@@ -47,3 +47,15 @@
 2. Gradle build cannot run in sandbox environment
 3. Some screens still use direct `MaterialTheme.colorScheme` instead of OmniTokens
 4. XML/Compose mixed UI stack in some activities
+
+## CI Verification Update (2026-11-13)
+
+- The latest GitHub failures reached Kotlin compilation, not APK packaging.
+- Fixed `PocketModeService`'s missing `FrameLayout` import.
+- Updated `DhizukuProvider` for the Dhizuku 2.7.0 AIDL listener methods.
+- `apk-build.yml` now fails on missing SDK, signature, or APK steps instead of
+  silently continuing, while retaining failure logs as artifacts.
+- Added `manager/src/androidTest` Compose smoke coverage and an API 35 emulator
+  workflow.
+- Local Gradle verification remains blocked by unavailable AGP `9.5.0-rc01`;
+  GitHub Actions must provide the authoritative post-push build result.

@@ -8,8 +8,8 @@ import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.os.Build
 import android.os.IBinder
+import android.widget.FrameLayout
 import android.view.WindowManager
-import android.graphics.PixelFormat
 
 class PocketModeService : Service(), SensorEventListener {
     private lateinit var sensorManager: SensorManager

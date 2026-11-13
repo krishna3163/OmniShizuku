@@ -4,6 +4,11 @@
 - Phase 2 Advanced Labs: Audio Stream Master profiles and the first Advanced
   Display Manager implementation are staged for build/device validation.
   Privacy Dashboard and automation remain staged work.
+- Phase 2 Advanced Labs: Audio Stream Master profiles are implemented and
+  awaiting build validation; Display rollback, Privacy Dashboard, and
+  automation remain staged work.
+- CI verification foundation: post-push validation of the corrected APK and
+  instrumentation workflows is still required.
 
 ## Recently Completed (Labs, 2026-11-06)
 - **Batch 1 (LAB-000)**: Labs modular architecture, search, 4 category headers, tool counters, and unified tokens.

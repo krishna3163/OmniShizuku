@@ -9,6 +9,7 @@ import android.os.Bundle
 import android.os.Parcel
 import android.os.ServiceManager
 import com.rosan.dhizuku.aidl.IDhizuku
+import com.rosan.dhizuku.aidl.IDhizukuLockTaskModeListener
 import com.rosan.dhizuku.aidl.IDhizukuRemoteProcess
 import com.rosan.dhizuku.aidl.IDhizukuUserServiceConnection
 import com.rosan.dhizuku.shared.DhizukuVariables
@@ -64,6 +65,20 @@ class DhizukuProvider : ContentProvider() {
             if (!packageName.isNullOrEmpty() && scopes != null) {
                 DeviceOwnerManager.setDelegatedScopes(ctx, packageName, scopes.toList())
             }
+        }
+
+        override fun addLockTaskModeListener(listener: IDhizukuLockTaskModeListener?) {
+            if (!isCallerAuthorized()) {
+                throw SecurityException("Unauthorized UID ${Binder.getCallingUid()}")
+            }
+            throw UnsupportedOperationException("Lock-task mode listeners are not supported")
+        }
+
+        override fun removeLockTaskModeListener(listener: IDhizukuLockTaskModeListener?) {
+            if (!isCallerAuthorized()) {
+                throw SecurityException("Unauthorized UID ${Binder.getCallingUid()}")
+            }
+            throw UnsupportedOperationException("Lock-task mode listeners are not supported")
         }
 
         override fun onTransact(code: Int, data: Parcel, reply: Parcel?, flags: Int): Boolean {
