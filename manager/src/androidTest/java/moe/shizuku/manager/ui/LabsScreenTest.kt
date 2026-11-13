@@ -1,11 +1,10 @@
 package moe.shizuku.manager.ui
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.test.assertDoesNotExist
-import androidx.compose.ui.test.assertExists
-import androidx.compose.ui.test.hasContentDescription
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onNode
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTextInput
@@ -27,13 +26,13 @@ class LabsScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("Audio Stream Master").assertExists()
+        composeRule.onNodeWithText("Audio Stream Master").assertIsDisplayed()
         composeRule.onNodeWithText("Search tools").performTextInput("display")
-        composeRule.onNodeWithText("Display").assertExists()
-        composeRule.onNodeWithText("Audio Stream Master").assertDoesNotExist()
+        composeRule.onNodeWithText("Display").assertIsDisplayed()
+        composeRule.onAllNodesWithText("Audio Stream Master").assertCountEquals(0)
 
-        composeRule.onNode(hasContentDescription("Clear search")).performClick()
-        composeRule.onNodeWithText("Audio Stream Master").assertExists()
+        composeRule.onNodeWithContentDescription("Clear search").performClick()
+        composeRule.onNodeWithText("Audio Stream Master").assertIsDisplayed()
     }
 
     @Test

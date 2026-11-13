@@ -1,6 +1,6 @@
 package moe.shizuku.manager
 
-import androidx.compose.ui.test.assertExists
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.material3.Text
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -18,7 +18,7 @@ class MainActivityTest {
         composeRule.setContent {
             Text("OmniShizuku")
         }
-        composeRule.onRoot().assertExists()
-        composeRule.onNodeWithText("OmniShizuku").assertExists()
+        composeRule.onRoot().assertIsDisplayed()
+        composeRule.onNodeWithText("OmniShizuku").assertIsDisplayed()
     }
 }

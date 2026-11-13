@@ -1,7 +1,7 @@
 package moe.shizuku.manager.audio
 
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.test.assertExists
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -25,7 +25,7 @@ class AudioMasterScreenTest {
 
         composeRule.onNodeWithText("Custom profile name").performTextInput("Instrumented")
         composeRule.onNodeWithText("Save current state as profile").performClick()
-        composeRule.onNodeWithText("Instrumented saved").assertExists()
+        composeRule.onNodeWithText("Instrumented saved").assertIsDisplayed()
     }
 
     @Test
@@ -36,6 +36,6 @@ class AudioMasterScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("Restore previous state").assertExists()
+        composeRule.onNodeWithText("Restore previous state").assertIsDisplayed()
     }
 }
