@@ -25,7 +25,7 @@ class AudioMasterScreenTest {
 
         composeRule.onNodeWithText("Custom profile name").performTextInput("Instrumented")
         composeRule.onNodeWithText("Save current state as profile").performClick()
-        composeRule.onNodeWithText("Instrumented saved").assertIsDisplayed()
+        composeRule.onNodeWithText("Instrumented saved").performScrollTo().assertIsDisplayed()
     }
 
     @Test
@@ -36,6 +36,6 @@ class AudioMasterScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("Restore previous state").assertIsDisplayed()
+        composeRule.onNodeWithText("Restore previous state").performScrollTo().assertIsDisplayed()
     }
 }

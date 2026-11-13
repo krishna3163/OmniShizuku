@@ -25,12 +25,12 @@ class LabsScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("Audio Stream Master").assertIsDisplayed()
+        composeRule.onNodeWithText("Audio Stream Master").performScrollTo().assertIsDisplayed()
         composeRule.onNodeWithText("Search tools").performTextInput("display")
-        composeRule.onNodeWithText("Display").assertIsDisplayed()
+        composeRule.onNodeWithText("Display").performScrollTo().assertIsDisplayed()
 
         composeRule.onNodeWithContentDescription("Clear search").performClick()
-        composeRule.onNodeWithText("Audio Stream Master").assertIsDisplayed()
+        composeRule.onNodeWithText("Audio Stream Master").performScrollTo().assertIsDisplayed()
     }
 
     @Test
@@ -42,7 +42,7 @@ class LabsScreenTest {
             }
         }
 
-        composeRule.onNodeWithText("Audio Stream Master").performClick()
+        composeRule.onNodeWithText("Audio Stream Master").performScrollTo().performClick()
 
         assert(selected == Detail.AUDIO_MASTER)
     }
