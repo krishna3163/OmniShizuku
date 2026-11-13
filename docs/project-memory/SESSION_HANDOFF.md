@@ -12,6 +12,9 @@
   requested Advanced Labs features.
 - Added reversible Audio Stream Master sound profiles and snapshots using
   `AudioManager` plus local persistence.
+- Added the initial Advanced Display Manager backend and integration:
+  public display capability/mode discovery, typed validation, display profiles,
+  persisted snapshots/history, temporary confirmation, and WorkManager rollback.
 - Gradle validation is blocked in this environment because AGP `9.5.0-rc01`
   cannot be resolved from configured repositories.
 

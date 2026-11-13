@@ -154,7 +154,7 @@
 | LAB-007 | P1 | App Freezer detail redesign | Freeze apps | FreezerScreen | LAB-000 | Redesigned + tested | [ ] |
 | LAB-008 | P1 | Axeron Gaming Optimizer redesign | Perf profiles | OptimizerScreen | LAB-000 | Redesigned + tested | [ ] |
 | LAB-009 | P1 | Power detail redesign | Restart actions | PowerScreen | LAB-000 | Redesigned + tested | [ ] |
-| LAB-010 | P1 | Display detail redesign | Resolution/dpi | DisplayScreen | LAB-000 | Redesigned + tested | [ ] |
+| LAB-010 | P1 | Display detail redesign | Resolution/dpi | DisplayScreen | LAB-000 | Redesigned + tested | [~] |
 | LAB-011 | P1 | Wi-Fi Passwords redesign | Saved networks | WifiPasswordsScreen | LAB-000 | Redesigned + tested | [ ] |
 | LAB-012 | P1 | SystemUI Tuner redesign | Status bar | SystemUiTunerScreen | LAB-000 | Redesigned + tested | [ ] |
 | LAB-013 | P1 | Enforce Doze redesign | Doze controls | EnforceDozeScreen | LAB-000 | Redesigned + tested | [ ] |

@@ -16,15 +16,15 @@
 
 ## Git State
 - **Branch**: `feat/labs-feature-registry-v2`
-- **Commit**: `1abfe5e` (Labs registry implementation)
-- **Uncommitted Changes**: Phase 2 Audio Stream Master profile implementation
+- **Commit**: `2327d08` plus uncommitted Advanced Display Manager work
+- **Uncommitted Changes**: Advanced Display Manager implementation and tests
 
 ## Build Status
 - **Current validation**: Gradle cannot resolve `com.android.library:9.5.0-rc01`
   from the active repositories, so this change requires a connected environment or
   a locally available plugin cache.
-- **Changes verified**: Static consistency review and focused test invocation up to
-  dependency resolution.
+- **Changes verified**: `git diff --check`; Gradle invocation reaches the known
+  AGP resolution blocker before Kotlin compilation.
 - **Next verification**: Run `./gradlew :manager:testDebugUnitTest` and
   `./gradlew :manager:compileDebugKotlin` where the configured AGP is available.
 

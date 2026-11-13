@@ -1,6 +1,9 @@
 # In Progress - OmniShizuku
 
 ## Active Tasks
+- Phase 2 Advanced Labs: Audio Stream Master profiles and the first Advanced
+  Display Manager implementation are staged for build/device validation.
+  Privacy Dashboard and automation remain staged work.
 - Phase 2 Advanced Labs: Audio Stream Master profiles are implemented and
   awaiting build validation; Display rollback, Privacy Dashboard, and
   automation remain staged work.

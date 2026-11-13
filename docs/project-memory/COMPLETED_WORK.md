@@ -35,6 +35,19 @@
 - Integrated profile application and restoration controls into Audio Stream Master.
 - Added focused unit tests for profile model behavior.
 
+## Phase 2 Advanced Display Manager (2026-11-13)
+
+- Added public `DisplayManager` discovery for real display dimensions, modes,
+  refresh rates, HDR types, wide-gamut support, and current state.
+- Added typed validation for logical resolution, density, and reported refresh
+  rates before privileged execution.
+- Added persisted display profiles, before-state snapshots, execution history,
+  temporary confirmation, and WorkManager-backed automatic rollback.
+- Integrated display information, profile saving/applying, restore-last, and
+  confirmation UI into the existing Labs display screen.
+- Added focused validator tests; Gradle/device validation remains blocked by
+  unavailable AGP `9.5.0-rc01` and no attached test device.
+
 ## Bug & Security Fix Session (2026-11-10)
 
 ### Security Fixes
