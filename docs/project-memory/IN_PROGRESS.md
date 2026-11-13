@@ -1,8 +1,9 @@
 # In Progress - OmniShizuku
 
 ## Active Tasks
-- Essentials-inspired Labs expansion: registry foundation complete; native feature
-  enhancements and device/provider integration remain staged work.
+- Phase 2 Advanced Labs: Audio Stream Master profiles are implemented and
+  awaiting build validation; Display rollback, Privacy Dashboard, and
+  automation remain staged work.
 
 ## Recently Completed (Labs, 2026-11-06)
 - **Batch 1 (LAB-000)**: Labs modular architecture, search, 4 category headers, tool counters, and unified tokens.

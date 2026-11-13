@@ -15,6 +15,15 @@
 - Validation is currently blocked before compilation because the configured
   `com.android.library` plugin `9.5.0-rc01` is unavailable from the active repositories.
 
+## Phase 2 Audio Profiles (2026-11-13)
+
+- Added `SoundProfileManager` with real AudioManager-backed Normal, Silent,
+  Vibrate, Night, Meeting, and custom profiles.
+- Added before-state snapshots and restore support using existing local
+  persistence; no new database was introduced.
+- Integrated profile application and restoration controls into Audio Stream Master.
+- Added focused unit tests for profile model behavior.
+
 ## Bug & Security Fix Session (2026-11-10)
 
 ### Security Fixes

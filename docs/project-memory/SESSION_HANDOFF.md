@@ -8,6 +8,10 @@
 - Private DNS writes now verify state and roll back both settings keys on failure.
 - Added `docs/feature-registry.md` with the reference-area mapping and technical
   limitations.
+- Added `docs/phase2-feature-tracker.md` with evidence-based statuses for the
+  requested Advanced Labs features.
+- Added reversible Audio Stream Master sound profiles and snapshots using
+  `AudioManager` plus local persistence.
 - Gradle validation is blocked in this environment because AGP `9.5.0-rc01`
   cannot be resolved from configured repositories.
 
