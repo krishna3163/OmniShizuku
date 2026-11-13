@@ -89,7 +89,6 @@ import moe.shizuku.manager.ui.component.SegmentedCard
 import moe.shizuku.manager.ui.component.SegmentedListItem
 import moe.shizuku.manager.ui.televisionReturnFocus
 import moe.shizuku.manager.manage.ActiveFeaturesRegistry
-import moe.shizuku.manager.feature.registry.FeatureRegistry
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 
@@ -397,14 +396,11 @@ fun LabsScreen(
     }
     val searchItems = remember(displayEntries) {
         displayEntries.map { row ->
-            val registryKeywords = row.entry.detail
-                ?.let { FeatureRegistry.get(it)?.searchKeywords?.joinToString(" ") }
-                .orEmpty()
             LabsSearchItem(
                 value = row,
                 name = row.label,
-                description = "${row.entry.searchTerms} $registryKeywords",
-                aliases = registryKeywords,
+                description = row.entry.searchTerms,
+                aliases = row.entry.searchTerms,
                 category = row.categoryLabel
             )
         }

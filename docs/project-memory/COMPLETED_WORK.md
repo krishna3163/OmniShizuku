@@ -1,20 +1,5 @@
 # Completed Work - OmniShizuku
 
-## Essentials-Inspired Labs Foundation (2026-11-13)
-
-- Added a centralized Labs feature registry covering every `Detail` entry, including
-  stable IDs, categories, search metadata, provider alternatives, API gates, and
-  experimental flags.
-- Added runtime capability resolution for Android API, Shizuku, ADB, and root
-  providers without assuming any provider is permanently available.
-- Reused registry keywords in Labs global search.
-- Made Private DNS changes verify both settings keys and restore the previous
-  configuration when a two-key update fails.
-- Documented the provider policy and the compatible Essentials feature mapping in
-  `docs/feature-registry.md`.
-- Validation is currently blocked before compilation because the configured
-  `com.android.library` plugin `9.5.0-rc01` is unavailable from the active repositories.
-
 ## Bug & Security Fix Session (2026-11-10)
 
 ### Security Fixes

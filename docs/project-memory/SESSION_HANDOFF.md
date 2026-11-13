@@ -1,16 +1,5 @@
 # Session Handoff - OmniShizuku
 
-## Essentials-inspired Labs expansion (2026-11-13)
-
-- Added the centralized feature registry under `manager/.../feature/registry/`.
-- Registry coverage is tested against every `Detail` enum entry.
-- Labs search now includes registry keywords.
-- Private DNS writes now verify state and roll back both settings keys on failure.
-- Added `docs/feature-registry.md` with the reference-area mapping and technical
-  limitations.
-- Gradle validation is blocked in this environment because AGP `9.5.0-rc01`
-  cannot be resolved from configured repositories.
-
 ## Previous Agent Actions (Session 2026-11-06)
 
 ### Phase 1: Design Repository Study
