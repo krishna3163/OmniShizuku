@@ -32,10 +32,14 @@ fun AudioMasterScreen(
     var streams by remember { mutableStateOf<List<AudioStreamInfo>>(emptyList()) }
     var devices by remember { mutableStateOf<List<AudioOutputDevice>>(emptyList()) }
     var grantPackage by remember { mutableStateOf("") }
+    var profiles by remember { mutableStateOf<List<SoundProfile>>(emptyList()) }
+    var profileMessage by remember { mutableStateOf<String?>(null) }
+    var customName by remember { mutableStateOf("") }
 
     fun refresh() {
         streams = AudioMasterManager.getStreamVolumes(context)
         devices = AudioMasterManager.getOutputDevices(context)
+        profiles = SoundProfileManager.builtIns(context) + SoundProfileManager.customProfiles(context)
     }
 
     LaunchedEffect(Unit) {
@@ -74,6 +78,101 @@ fun AudioMasterScreen(
                     fontWeight = FontWeight.Bold,
                     color = OmniTokens.brandPrimary()
                 )
+            }
+
+            item {
+                Text(
+                    "SOUND PROFILES",
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = OmniTokens.brandPrimary(),
+                    modifier = Modifier.padding(top = 8.dp)
+                )
+            }
+
+            item {
+                Card(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Column(modifier = Modifier.padding(14.dp)) {
+                        Text(
+                            "Apply a reversible volume and sound-mode preset.",
+                            fontSize = 13.sp,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(Modifier.height(8.dp))
+                        OutlinedTextField(
+                            value = customName,
+                            onValueChange = { customName = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            singleLine = true,
+                            label = { Text("Custom profile name") }
+                        )
+                        OutlinedButton(
+                            onClick = {
+                                val name = customName.trim()
+                                if (name.isNotEmpty()) {
+                                    val current = SoundProfileManager.capture(context)
+                                    SoundProfileManager.saveCustom(context, current.copy(
+                                        name = name,
+                                        kind = SoundProfileKind.CUSTOM
+                                    ))
+                                    customName = ""
+                                    profileMessage = "$name saved"
+                                    refresh()
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Save current state as profile")
+                        }
+                        profiles.forEach { profile ->
+                            OutlinedButton(
+                                onClick = {
+                                    scope.launch {
+                                        SoundProfileManager.saveSnapshot(context)
+                                        val result = SoundProfileManager.apply(context, profile)
+                                        profileMessage = when {
+                                            result.applied -> "${profile.name} applied"
+                                            !result.ringerModeApplied ->
+                                                "${profile.name} volumes applied; notification-policy access is required for sound mode"
+                                            else -> "Could not apply ${profile.name}"
+                                        }
+                                        refresh()
+                                    }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                            ) {
+                                Text(profile.name)
+                            }
+                        }
+                        OutlinedButton(
+                            onClick = {
+                                scope.launch {
+                                    val result = SoundProfileManager.restoreSnapshot(context)
+                                    profileMessage = if (result.applied) {
+                                        "Previous sound state restored"
+                                    } else {
+                                        "No restorable sound state was found"
+                                    }
+                                    refresh()
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text("Restore previous state")
+                        }
+                        profileMessage?.let {
+                            Text(
+                                it,
+                                modifier = Modifier.padding(top = 6.dp),
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                fontSize = 12.sp
+                            )
+                        }
+                    }
+                }
             }
 
             items(streams) { streamInfo ->

@@ -4,6 +4,10 @@
 
 | Feature | Status | Files | Notes |
 |---------|--------|-------|-------|
+| Labs feature registry | Working | `feature/registry/FeatureRegistry.kt`, `feature/registry/FeatureModels.kt` | Stable IDs, categories, provider alternatives, API gates, experimental classification, and runtime capability checks |
+
+| Feature | Status | Files | Notes |
+|---------|--------|-------|-------|
 | Home Dashboard | Working | `home/HomeActivity.kt`, `ui/screen/HomeScreen.kt` | Compose-based |
 | Apps Management | Working | `ui/screen/AppsScreen.kt` | Installed app list |
 | Modules | Working | `module/ModulesScreen.kt` | Shizuku module management |

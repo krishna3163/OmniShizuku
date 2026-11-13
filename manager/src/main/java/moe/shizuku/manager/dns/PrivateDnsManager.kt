@@ -35,10 +35,40 @@ object PrivateDnsManager {
             null
         }
 
-        val modeApplied = runShellCommand("settings put global private_dns_mode ${mode.modeKey}") != null
-        if (!modeApplied) return@withContext false
-        normalizedHost == null ||
-            runShellCommand("settings put global private_dns_specifier $normalizedHost") != null
+        val previousMode = runShellCommand("settings get global private_dns_mode")?.trim()
+        val previousHostRaw = runShellCommand("settings get global private_dns_specifier")?.trim()
+            ?.takeUnless { it.isNullOrBlank() || it == "null" }
+        val previousHost = previousHostRaw?.let(DnsHostnameValidator::normalize)
+        if (previousMode !in setOf("off", "hostname", "opportunistic") ||
+            (previousHostRaw != null && previousHost == null)
+        ) {
+            return@withContext false
+        }
+
+        fun commandSucceeded(command: String): Boolean =
+            runShellCommand(command) != null
+
+        val hostApplied = normalizedHost == null ||
+            commandSucceeded("settings put global private_dns_specifier $normalizedHost")
+        val modeApplied = hostApplied &&
+            commandSucceeded("settings put global private_dns_mode ${mode.modeKey}")
+        if (!modeApplied) {
+            // Settings are two independent keys. Restore both when either write fails so a
+            // failed provider change cannot leave the device in a half-applied state.
+            commandSucceeded("settings put global private_dns_mode $previousMode")
+            if (previousHost == null) {
+                commandSucceeded("settings delete global private_dns_specifier")
+            } else {
+                commandSucceeded("settings put global private_dns_specifier $previousHost")
+            }
+            return@withContext false
+        }
+
+        val verifiedMode = runShellCommand("settings get global private_dns_mode")?.trim()
+        val verifiedHost = runShellCommand("settings get global private_dns_specifier")?.trim()
+            ?.takeUnless { it.isNullOrBlank() || it == "null" }
+        verifiedMode == mode.modeKey &&
+            (mode != DnsMode.CUSTOM || verifiedHost == normalizedHost)
     }
 
     suspend fun cycleNextDns(): String = withContext(Dispatchers.IO) {
