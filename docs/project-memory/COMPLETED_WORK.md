@@ -26,6 +26,18 @@
 - Added testing strategy, matrix, security, compatibility, device, CI diagnosis,
   coverage, and release-verification documentation.
 
+## CI Reliability and Compose Instrumentation Verification (2026-11-13)
+
+- Added the explicit Compose UI test dependency and migrated assertions to APIs
+  available in the repository's current Compose BOM.
+- Added real Labs search/reset/selection coverage and Audio Stream Master
+  custom-profile and restore-control coverage.
+- Increased the emulator job timeout to accommodate native compilation and
+  emulator startup.
+- Verified commit `4b03953` in GitHub Actions: API 35 instrumentation passed
+  all 5 tests with no failures or skips; Android CI and APK build/publishing
+  also passed.
+
 ## Phase 2 Audio Profiles (2026-11-13)
 
 - Added `SoundProfileManager` with real AudioManager-backed Normal, Silent,

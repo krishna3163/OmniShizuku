@@ -15,9 +15,9 @@
 - **Build Tool**: Gradle 9.8.2
 
 ## Git State
-- **Branch**: `feat/labs-feature-registry-v2`
-- **Commit**: `2327d08` plus uncommitted Advanced Display Manager work
-- **Uncommitted Changes**: Advanced Display Manager implementation and tests
+- **Branch**: `main`
+- **Commit**: `4b03953`
+- **Uncommitted Changes**: none
 
 ## Build Status
 - **Current validation**: Gradle cannot resolve `com.android.library:9.5.0-rc01`
@@ -59,3 +59,13 @@
   workflow.
 - Local Gradle verification remains blocked by unavailable AGP `9.5.0-rc01`;
   GitHub Actions must provide the authoritative post-push build result.
+
+## Latest CI Verification (2026-11-13)
+
+- Android CI: PASS.
+- Build Android APK and release publishing: PASS.
+- API 35 emulator instrumentation: PASS; 5/5 tests passed, with no failures or skips.
+- CodeQL, MobSF, Appknox, Black Duck, OpenSSF, zScan, NowSecure, NeuraLegion,
+  SBOM, and dependency submission: PASS.
+- Codacy Security Scan was still IN_PROGRESS at the last audit.
+- Physical-device and provider-backed verification remain NOT_RUN.

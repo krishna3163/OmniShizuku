@@ -7,8 +7,8 @@
 - Phase 2 Advanced Labs: Audio Stream Master profiles are implemented and
   awaiting build validation; Display rollback, Privacy Dashboard, and
   automation remain staged work.
-- CI verification foundation: post-push validation of the corrected APK and
-  instrumentation workflows is still required.
+- CI verification foundation: latest-main APK, Android CI, and API 35
+  instrumentation validation passed; Codacy's external scan remains in progress.
 
 ## Recently Completed (Labs, 2026-11-06)
 - **Batch 1 (LAB-000)**: Labs modular architecture, search, 4 category headers, tool counters, and unified tokens.
@@ -22,3 +22,10 @@
 - `:manager:compileDebugKotlin` -> PASS (5m 31s)
 - `:manager:testDebugUnitTest` -> PASS (3m 30s)
 - `:manager:assembleDebug` -> PASS (2m 5s) - output: `manager/build/outputs/apk/debug/manager-debug.apk` (62MB)
+
+## Latest GitHub Verification (2026-11-13)
+- Commit `4b03953`: Android CI, APK build/publish, and API 35 instrumentation
+  all passed.
+- Instrumentation executed 5 tests: 5 passed, 0 failed, 0 skipped.
+- Physical Shizuku/root/ADB/Dhizuku and OEM verification remain NOT_RUN.
+- Coverage percentage is not yet measured; no coverage gate is claimed.
