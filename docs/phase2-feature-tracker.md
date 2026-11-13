@@ -4,7 +4,7 @@ Status is based on source inspection, not catalogue presence alone.
 
 | Feature | Status | Evidence / remaining work |
 |---|---|---|
-| Display Manager | PARTIAL | `DisplayScreen` reads and applies `wm` size/density and refresh settings with validation. Temporary confirmation countdown, profiles, and persisted rollback are pending. |
+| Display Manager | PARTIAL | `DisplayRepository` discovers public display modes and real display capabilities; typed resolution/density/refresh validation, persisted profiles, snapshots, confirmation countdown, WorkManager rollback, verification, and history are implemented. Device-level integration and UI tests remain blocked by unavailable AGP/device validation. |
 | Audio Stream Master | PARTIAL | `AudioMasterManager` controls real streams and output devices. Reversible built-in sound profiles and snapshots are now implemented; mute controls and scheduled profiles remain. |
 | Sound Profile Manager | PARTIAL | Normal, silent, vibrate, night, meeting, and custom profile models apply real `AudioManager` state. Notification-policy access is detected; scheduling/history remain. |
 | Battery Dashboard | PARTIAL | `DeviceInfo` and `BatteryInfoUtil` expose real battery telemetry and graceful unavailable values. A dedicated dashboard/provider status surface remains. |
@@ -24,7 +24,8 @@ Status is based on source inspection, not catalogue presence alone.
 
 ## Current milestone
 
-The current implementation milestone adds reversible Audio Stream Master profiles
-without introducing a new provider or database. It uses `SharedPreferences` for
-small local snapshots and `AudioManager` for actual state. This is intentionally
-separate from the larger automation and history work.
+The current implementation milestone adds a provider-aware Advanced Display Manager
+alongside the reversible Audio Stream Master profiles. Display snapshots, profiles,
+pending recovery, and history use the existing local `SharedPreferences` pattern;
+system changes continue through the existing Shizuku shell provider and public
+`DisplayManager` discovery APIs.
