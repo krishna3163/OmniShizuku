@@ -47,4 +47,20 @@ class DisplayConfigurationValidatorTest {
             )
         )
     }
+
+    @Test
+    fun profilesPreserveTheCapturedRefreshRate() {
+        val snapshot = DisplaySnapshot(
+            size = "1080x2400",
+            density = 420,
+            minRefreshRate = "60",
+            peakRefreshRate = "120"
+        )
+
+        val profiles = DisplayProfileManager.builtIns(snapshot)
+
+        assertEquals("120", profiles.first { it.name == "Balanced" }.change.peakRefreshRate)
+        assertEquals("120", profiles.first { it.name == "Smooth" }.change.minRefreshRate)
+        assertEquals(420, profiles.first { it.name == "Reading" }.change.density)
+    }
 }

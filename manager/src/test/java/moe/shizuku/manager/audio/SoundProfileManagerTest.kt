@@ -26,4 +26,30 @@ class SoundProfileManagerTest {
         assertEquals(2, profile.volumes[AudioManager.STREAM_MUSIC])
         assertEquals(0, profile.volumes[AudioManager.STREAM_RING])
     }
+
+    @Test
+    fun customProfileReplacesMatchingNameWithoutChangingKind() {
+        val original = SoundProfile(
+            name = "Reading",
+            kind = SoundProfileKind.CUSTOM,
+            volumes = mapOf(AudioManager.STREAM_MUSIC to 3)
+        )
+        val replacement = original.copy(volumes = mapOf(AudioManager.STREAM_MUSIC to 1))
+
+        assertEquals(original.name, replacement.name)
+        assertEquals(SoundProfileKind.CUSTOM, replacement.kind)
+        assertEquals(1, replacement.volumes[AudioManager.STREAM_MUSIC])
+    }
+
+    @Test
+    fun restoreResultReportsPartialStreamApplication() {
+        val result = SoundProfileResult(
+            applied = false,
+            ringerModeApplied = false,
+            restoredStreams = 2
+        )
+
+        assertEquals(2, result.restoredStreams)
+        assertTrue(!result.applied)
+    }
 }
