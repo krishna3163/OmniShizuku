@@ -1,7 +1,8 @@
 # In Progress - OmniShizuku
 
 ## Active Tasks
-- None. Batches 1 to 6 complete. All 39 Labs tools verified, tested, and built.
+- Essentials-inspired Labs expansion: registry foundation complete; native feature
+  enhancements and device/provider integration remain staged work.
 
 ## Recently Completed (Labs, 2026-11-06)
 - **Batch 1 (LAB-000)**: Labs modular architecture, search, 4 category headers, tool counters, and unified tokens.
