@@ -255,7 +255,12 @@ class WirelessPortHunt(
                     }
                 }
                 unlockReceiver = receiver
-                appContext.registerReceiver(receiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+                androidx.core.content.ContextCompat.registerReceiver(
+                    appContext,
+                    receiver,
+                    IntentFilter(Intent.ACTION_USER_PRESENT),
+                    androidx.core.content.ContextCompat.RECEIVER_EXPORTED
+                )
             } else {
                 awaitingAuth = true
             }

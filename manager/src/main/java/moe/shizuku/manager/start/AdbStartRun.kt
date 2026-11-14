@@ -109,6 +109,8 @@ class AdbStartRun(
     /** The method this start was asked for, so notifications retry the same way. */
     private var requestedMethod = ShizukuSettings.StartMethod.WIRELESS
 
+    val stateMachineCoordinator = AdbStartCoordinator()
+
     private fun notify(state: WorkerState) = host.notify(state)
 
     /**
@@ -121,16 +123,47 @@ class AdbStartRun(
     suspend fun execute(method: Int, reserved: Boolean = false): Outcome {
         requestedMethod = method
 
+        val mappedMethod = when (method) {
+            ShizukuSettings.StartMethod.USB -> AdbStartStateMachine.START_METHOD_USB
+            ShizukuSettings.StartMethod.WIRELESS_NO_NETWORK -> AdbStartStateMachine.START_METHOD_WIRELESS_NO_NETWORK
+            else -> AdbStartStateMachine.START_METHOD_WIRELESS
+        }
+        stateMachineCoordinator.transition(
+            AdbStartEvent.StartRequested(
+                startMethod = mappedMethod,
+                isLockedStart = lockedStart,
+                attemptId = java.util.UUID.randomUUID().toString()
+            )
+        )
+
         // Set before the first thing this attempt does and cleared in the `finally`, so the whole
         // attempt counts as one. See [inFlight] for who reads it and why.
         if (!reserved) beginAttempt()
 
         try {
+            val hidingActive = HidingWatchService.holding() ||
+                moe.shizuku.manager.settings.UsbDebuggingHideManager.snapshot.isHidden ||
+                moe.shizuku.manager.settings.UsbDebuggingHideManager.hasPendingRestore()
+            stateMachineCoordinator.transition(
+                AdbStartEvent.PrerequisitesChecked(
+                    generation = stateMachineCoordinator.generation,
+                    isUsbAutoHidingActive = hidingActive,
+                    hasWriteSecureSettings = applicationContext.hasWriteSecureSettings()
+                )
+            )
+
             // A hiding list is holding a debugging toggle off for an app the user has open. Every
             // path below that needs one writes it back on if it finds it off, so an attempt now is
             // not a start that fails - it is a start that undoes the hide and then fails. Deferred
             // instead: the watch asks for a start itself once nothing is hidden.
-            if (HidingWatchService.holding()) {
+            if (stateMachineCoordinator.state == AdbStartState.DEFERRED) {
+                Diag.info(
+                    AppConstants.TAG,
+                    "Start deferred: USB debugging auto-hide active"
+                )
+                return Outcome.SUCCESS
+            }
+            if (hidingActive && requestedMethod == ShizukuSettings.StartMethod.USB) {
                 Diag.info(
                     AppConstants.TAG,
                     "Start deferred: hiding is holding the debugging toggle off"
@@ -519,10 +552,28 @@ class AdbStartRun(
             // work does not interrupt the blocking calls below, so without this it went on to
             // send its own starter, and two starters ran at once.
             host.checkCancelled()
+            stateMachineCoordinator.transition(
+                AdbStartEvent.ConnectingAdb(
+                    generation = stateMachineCoordinator.generation,
+                    port = port
+                )
+            )
             port = connectAndStart(searchHunt, port, portSource, usbMethod, tcpPort, wanted)
+            stateMachineCoordinator.transition(
+                AdbStartEvent.CommandDispatched(
+                    generation = stateMachineCoordinator.generation,
+                    port = port
+                )
+            )
             // Connected, and the starter sent: nothing is left to find a port for.
             searchHunt.close()
             Starter.waitForBinder()
+            stateMachineCoordinator.transition(
+                AdbStartEvent.BinderReceived(
+                    generation = stateMachineCoordinator.generation,
+                    pid = null
+                )
+            )
             // After the binder, not before: asked for sooner, the server is not there yet and the
             // line always read zero.
             AdbStarter.logStartedPids(ShizukuSettings.getLastAdbPort())
@@ -580,11 +631,29 @@ class AdbStartRun(
 
             return Outcome.SUCCESS
         } catch (e: CancellationException) {
+            stateMachineCoordinator.cancel("CancellationException")
             val state = host.stoppedState()
             notify(state)
 
             throw e
         } catch (e: Exception) {
+            if (e is AdbPairingRequiredException) {
+                stateMachineCoordinator.transition(
+                    AdbStartEvent.PairingRejected(
+                        generation = stateMachineCoordinator.generation,
+                        message = e.message ?: "Pairing required"
+                    )
+                )
+            } else {
+                stateMachineCoordinator.transition(
+                    AdbStartEvent.ConnectionFailed(
+                        generation = stateMachineCoordinator.generation,
+                        port = 0,
+                        failureKind = AdbStartFailureKind.GENERIC_IO,
+                        message = e.message ?: e.javaClass.simpleName
+                    )
+                )
+            }
             if (lockedStart) {
                 // Nothing for the user to act on, and no notification to raise about it: the
                 // reason goes in the log, and the start the unlock makes (or the service's own
@@ -737,10 +806,32 @@ class AdbStartRun(
                     // there is not.
                     connectAttempts = if (wireless && searches < MAX_FRESH_PORT_SEARCHES) 2 else 5
                 )
+                stateMachineCoordinator.transition(
+                    AdbStartEvent.CommandDispatched(
+                        generation = stateMachineCoordinator.generation,
+                        port = port
+                    )
+                )
                 return port
             } catch (e: CancellationException) {
+                if (progress.starterSent) {
+                    stateMachineCoordinator.transition(
+                        AdbStartEvent.CommandDispatched(
+                            generation = stateMachineCoordinator.generation,
+                            port = port
+                        )
+                    )
+                }
                 throw e
             } catch (e: Exception) {
+                if (progress.starterSent) {
+                    stateMachineCoordinator.transition(
+                        AdbStartEvent.CommandDispatched(
+                            generation = stateMachineCoordinator.generation,
+                            port = port
+                        )
+                    )
+                }
                 val kind = classifyConnectFailure(e)
                 if (decideAfterConnectFailure(wireless, progress.starterSent, kind, searches)
                     != PortRetryDecision.SEARCH_AGAIN

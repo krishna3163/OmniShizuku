@@ -119,11 +119,14 @@ import moe.shizuku.manager.utils.EnvironmentUtils
 import moe.shizuku.manager.utils.SettingsHelper
 import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.UpdateHelper
-import androidx.compose.runtime.rememberCoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import rikka.shizuku.manager.ShizukuLocales
+import moe.shizuku.manager.notifications.HelperNotificationManager
+import moe.shizuku.manager.notifications.NotificationPreferences
+import moe.shizuku.manager.notifications.NotificationChannels
+import moe.shizuku.manager.notifications.NotificationLifecycleOwner
+import moe.shizuku.manager.notifications.UsbConnectionMonitor
+import moe.shizuku.manager.notifications.UsbConnectionNotificationManager
+import android.provider.Settings as AndroidSettings
+import androidx.core.app.NotificationManagerCompat
 
 /** The agent a system uid start goes through, checked for when it is not running yet. */
 private const val FOTA_AGENT_PACKAGE = "com.sdet.fotaagent"
@@ -157,6 +160,20 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
     }
 
     var legacyPairing by remember { mutableStateOf(ShizukuSettings.getLegacyPairing()) }
+    var legacyRishEnabled by remember { mutableStateOf(ShizukuSettings.getLegacyRishCompatibility()) }
+    var legacyRishSnapshot by remember { mutableStateOf(LegacyRishCompatibilityManager.getSnapshot()) }
+    var helperNotificationsEnabled by remember { mutableStateOf(ShizukuSettings.getHelperNotificationsEnabled()) }
+    var messagesOverAppsEnabled by remember { mutableStateOf(ShizukuSettings.getMessagesOverOtherAppsEnabled()) }
+    var liveActivityEnabled by remember { mutableStateOf(ShizukuSettings.getLiveActivityNotificationsEnabled()) }
+    var usbConnectionNotificationEnabled by remember { mutableStateOf(ShizukuSettings.getUsbConnectionNotificationEnabled()) }
+    var notificationPermissionGranted by remember { mutableStateOf(NotificationPreferences.notificationsAllowed(context)) }
+    var overlayPermissionGranted by remember { mutableStateOf(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) AndroidSettings.canDrawOverlays(context) else true) }
+    var helperChannelBlocked by remember { mutableStateOf(NotificationPreferences.isChannelBlocked(context, NotificationChannels.HELPER)) }
+    var usbChannelBlocked by remember { mutableStateOf(NotificationPreferences.isChannelBlocked(context, NotificationChannels.USB_CONNECTION)) }
+    var usbConnected by remember { mutableStateOf(UsbConnectionMonitor.current().physicalConnected || UsbConnectionMonitor.current().hostDeviceAttached) }
+    val notificationPermissionLauncher = rememberLauncherForActivityResult(ActivityResultContracts.RequestPermission()) {
+        notificationPermissionGranted = NotificationPreferences.notificationsAllowed(context)
+    }
     var pinMode by remember { mutableStateOf(WirelessAdbPinManager.mode(context)) }
     var accessibilityEnabled by remember { mutableStateOf(WirelessAdbPinManager.isAccessibilityEnabled(context)) }
     var adbWithoutDeveloperOptions by remember {
@@ -249,6 +266,28 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
         AppLocale.reconcile(context)
         language = ShizukuSettings.getLanguageTag()
         writeSecureSettings = context.hasWriteSecureSettings()
+        legacyRishEnabled = ShizukuSettings.getLegacyRishCompatibility()
+        LegacyRishCompatibilityManager.refresh(context)
+        helperNotificationsEnabled = ShizukuSettings.getHelperNotificationsEnabled()
+        messagesOverAppsEnabled = ShizukuSettings.getMessagesOverOtherAppsEnabled()
+        liveActivityEnabled = ShizukuSettings.getLiveActivityNotificationsEnabled()
+        usbConnectionNotificationEnabled = ShizukuSettings.getUsbConnectionNotificationEnabled()
+        notificationPermissionGranted = NotificationPreferences.notificationsAllowed(context)
+        overlayPermissionGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) AndroidSettings.canDrawOverlays(context) else true
+        helperChannelBlocked = NotificationPreferences.isChannelBlocked(context, NotificationChannels.HELPER)
+        usbChannelBlocked = NotificationPreferences.isChannelBlocked(context, NotificationChannels.USB_CONNECTION)
+        usbConnected = UsbConnectionMonitor.current().physicalConnected || UsbConnectionMonitor.current().hostDeviceAttached
+        NotificationLifecycleOwner.reconcile(context)
+    }
+
+    DisposableEffect(Unit) {
+        LegacyRishCompatibilityManager.init(context)
+        val listener: (LegacyRishSnapshot) -> Unit = { snapshot ->
+            legacyRishSnapshot = snapshot
+            legacyRishEnabled = snapshot.enabled
+        }
+        LegacyRishCompatibilityManager.addListener(listener)
+        onDispose { LegacyRishCompatibilityManager.removeListener(listener) }
     }
 
     // Root can be gone since the method was chosen (an OTA, root switched off in the
@@ -679,6 +718,49 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                                 }
                         )
                     }
+                    item {
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Link) },
+                            headlineContent = { Text(stringResource(R.string.settings_legacy_rish_compatibility)) },
+                            supportingContent = { Text(stringResource(R.string.settings_legacy_rish_compatibility_summary)) },
+                            switchState = legacyRishEnabled,
+                            onSwitchChange = { checked ->
+                                legacyRishEnabled = checked
+                                LegacyRishCompatibilityManager.setEnabled(context, checked)
+                            }
+                        )
+                    }
+                    item {
+                        val lifecycleLabel = when (legacyRishSnapshot.state) {
+                            LegacyRishCompatibilityState.ACTIVE -> R.string.settings_legacy_rish_status_active
+                            LegacyRishCompatibilityState.WAITING_FOR_SERVER -> R.string.settings_legacy_rish_status_waiting
+                            LegacyRishCompatibilityState.STARTING -> R.string.settings_legacy_rish_status_starting
+                            LegacyRishCompatibilityState.RECONNECTING -> R.string.settings_legacy_rish_status_reconnecting
+                            LegacyRishCompatibilityState.STOPPING -> R.string.settings_legacy_rish_status_stopping
+                            LegacyRishCompatibilityState.ERROR -> R.string.settings_legacy_rish_status_error
+                            LegacyRishCompatibilityState.DISABLED -> R.string.settings_legacy_rish_status_disabled
+                        }
+                        val serverLabel = if (legacyRishSnapshot.serverRunning) R.string.settings_legacy_rish_status_running else R.string.settings_legacy_rish_status_stopped
+                        val binderLabel = if (legacyRishSnapshot.binderAvailable) R.string.settings_legacy_rish_status_available else R.string.settings_legacy_rish_status_unavailable
+                        val serviceLabel = if (legacyRishSnapshot.serviceRunning) R.string.settings_legacy_rish_status_running else R.string.settings_legacy_rish_status_stopped
+                        val errorLabel = legacyRishSnapshot.lastError ?: stringResource(R.string.settings_legacy_rish_status_none)
+                        val details = buildString {
+                            append(stringResource(R.string.settings_legacy_rish_server_status)); append(": "); append(stringResource(serverLabel)); append('\n')
+                            append(stringResource(R.string.settings_legacy_rish_lifecycle_status)); append(": "); append(stringResource(lifecycleLabel)); append('\n')
+                            append(stringResource(R.string.settings_legacy_rish_binder_status)); append(": "); append(stringResource(binderLabel)); append('\n')
+                            append(stringResource(R.string.settings_legacy_rish_service_status)); append(": "); append(serviceLabel.let { stringResource(it) }); append('\n')
+                            append(stringResource(R.string.settings_legacy_rish_last_event)); append(": "); append(legacyRishSnapshot.lastEvent.ifBlank { "-" }); append('\n')
+                            append(stringResource(R.string.settings_legacy_rish_error)); append(": "); append(errorLabel)
+                        }
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Info) },
+                            headlineContent = { Text(stringResource(R.string.settings_legacy_rish_lifecycle_status)) },
+                            supportingContent = { Text(details) },
+                            onClick = { LegacyRishCompatibilityManager.refresh(context) }
+                        )
+                    }
                     // Auto-enter the wireless ADB pairing PIN through an accessibility service,
                     // only after the user switches it on here.
                     item {
@@ -709,6 +791,130 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                             onClick = {
                                 pinModeDialog = true
                             }
+                        )
+                    }
+                }
+            }
+
+            item {
+                SettingsSectionHeader(R.string.settings_notifications_title)
+            }
+            item {
+                SegmentedColumn(modifier = Modifier.fillMaxWidth()) {
+                    item {
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Notifications) },
+                            headlineContent = { Text(stringResource(R.string.settings_helper_notifications_title)) },
+                            supportingContent = {
+                                val base = stringResource(R.string.settings_helper_notifications_summary)
+                                Text(if (helperChannelBlocked && helperNotificationsEnabled) "$base\n(Channel blocked in system settings)" else base)
+                            },
+                            switchState = helperNotificationsEnabled,
+                            onSwitchChange = { checked ->
+                                if (checked && Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(context, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+                                }
+                                ShizukuSettings.setHelperNotificationsEnabled(checked)
+                                helperNotificationsEnabled = checked
+                                notificationPermissionGranted = NotificationPreferences.notificationsAllowed(context)
+                                helperChannelBlocked = NotificationPreferences.isChannelBlocked(context, NotificationChannels.HELPER)
+                            }
+                        )
+                    }
+                    item {
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Layers) },
+                            headlineContent = { Text(stringResource(R.string.settings_messages_over_apps_title)) },
+                            supportingContent = {
+                                Text(
+                                    if (messagesOverAppsEnabled)
+                                        stringResource(R.string.settings_messages_over_apps_summary)
+                                    else
+                                        stringResource(R.string.settings_messages_over_apps_summary) + "\n" + stringResource(R.string.settings_messages_over_apps_disabled_note)
+                                )
+                            },
+                            switchState = messagesOverAppsEnabled,
+                            onSwitchChange = { checked ->
+                                if (checked && Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !AndroidSettings.canDrawOverlays(context)) {
+                                    context.startActivity(Intent(AndroidSettings.ACTION_MANAGE_OVERLAY_PERMISSION, android.net.Uri.parse("package:" + context.packageName)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                }
+                                ShizukuSettings.setMessagesOverOtherAppsEnabled(checked)
+                                messagesOverAppsEnabled = checked
+                                overlayPermissionGranted = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) AndroidSettings.canDrawOverlays(context) else true
+                                NotificationLifecycleOwner.onOverlayPermissionOrPreferenceChanged()
+                            }
+                        )
+                    }
+                    item {
+                        val notifStatus = stringResource(if (notificationPermissionGranted) R.string.settings_notification_permission_granted else R.string.settings_notification_permission_denied)
+                        val overlayStatus = stringResource(if (overlayPermissionGranted) R.string.settings_notification_permission_granted else R.string.settings_notification_permission_denied)
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Info) },
+                            headlineContent = { Text(stringResource(R.string.settings_notification_permission)) },
+                            supportingContent = { Text(stringResource(R.string.settings_notification_permission) + ": " + notifStatus + "\n" + stringResource(R.string.settings_overlay_permission) + ": " + overlayStatus) },
+                            onClick = {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                    context.startActivity(Intent(AndroidSettings.ACTION_APP_NOTIFICATION_SETTINGS).putExtra(AndroidSettings.EXTRA_APP_PACKAGE, context.packageName).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                } else {
+                                    context.startActivity(Intent(AndroidSettings.ACTION_APPLICATION_DETAILS_SETTINGS, android.net.Uri.parse("package:" + context.packageName)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                                }
+                            }
+                        )
+                    }
+                    item {
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.AutoAwesome) },
+                            headlineContent = { Text(stringResource(R.string.settings_live_activity_title)) },
+                            supportingContent = { Text(stringResource(R.string.settings_live_activity_summary)) },
+                            switchState = liveActivityEnabled,
+                            onSwitchChange = { checked ->
+                                ShizukuSettings.setLiveActivityNotificationsEnabled(checked)
+                                liveActivityEnabled = checked
+                                moe.shizuku.manager.service.WatchdogService.requestNotificationRefresh()
+                            }
+                        )
+                    }
+                    item {
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Usb) },
+                            headlineContent = { Text(stringResource(R.string.settings_usb_connection_notification_title)) },
+                            supportingContent = {
+                                val base = stringResource(R.string.settings_usb_connection_notification_summary)
+                                Text(if (usbChannelBlocked && usbConnectionNotificationEnabled) "$base\n(Channel blocked in system settings)" else base)
+                            },
+                            switchState = usbConnectionNotificationEnabled,
+                            onSwitchChange = { checked ->
+                                ShizukuSettings.setUsbConnectionNotificationEnabled(checked)
+                                usbConnectionNotificationEnabled = checked
+                                NotificationLifecycleOwner.onUsbPreferenceChanged(context, checked)
+                                usbChannelBlocked = NotificationPreferences.isChannelBlocked(context, NotificationChannels.USB_CONNECTION)
+                            }
+                        )
+                    }
+                    item {
+                        val usbStatus = if (usbConnected) stringResource(R.string.settings_usb_status_connected) else stringResource(R.string.settings_usb_status_disconnected)
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Usb) },
+                            headlineContent = { Text(stringResource(R.string.settings_usb_status)) },
+                            supportingContent = { Text(usbStatus) },
+                            onClick = {
+                                usbConnected = UsbConnectionMonitor.current().physicalConnected || UsbConnectionMonitor.current().hostDeviceAttached
+                            }
+                        )
+                    }
+                    item {
+                        SegmentedListItem(
+                            centerSlots = true,
+                            leadingContent = { SettingsIcon(Icons.Outlined.Delete) },
+                            headlineContent = { Text(stringResource(R.string.settings_clear_helper_history)) },
+                            supportingContent = { Text(stringResource(R.string.settings_helper_notifications_summary)) },
+                            onClick = { HelperNotificationManager.clearHistory(context) }
                         )
                     }
                 }

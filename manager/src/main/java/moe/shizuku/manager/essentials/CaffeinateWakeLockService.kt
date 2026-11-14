@@ -19,52 +19,56 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Build
+import android.os.Handler
 import android.os.IBinder
+import android.os.Looper
 import android.os.PowerManager
+import android.os.SystemClock
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import moe.shizuku.manager.MainActivity
 import moe.shizuku.manager.R
-import moe.shizuku.manager.essentials.CaffeinateController
 
 class CaffeinateWakeLockService : Service() {
     private var wakeLock: PowerManager.WakeLock? = null
     private var abortWithScreenOff = true
     private var timeoutMinutes = -1
     private var remainingMillis = 0L
-    private var startTime = 0L
+    private var startElapsedRealtime = 0L
+    private var generation = 0L
 
-    private val handler = android.os.Handler(android.os.Looper.getMainLooper())
-    private val countdownRunnable =
-        object : Runnable {
-            override fun run() {
-                if (timeoutMinutes == -1) return
+    private val handler = Handler(Looper.getMainLooper())
+    private val countdownRunnable = object : Runnable {
+        override fun run() {
+            if (timeoutMinutes == -1) return
 
-                val elapsed = System.currentTimeMillis() - startTime
-                remainingMillis = (timeoutMinutes * 60 * 1000L) - elapsed
+            val elapsed = SystemClock.elapsedRealtime() - startElapsedRealtime
+            remainingMillis = (timeoutMinutes * 60 * 1000L) - elapsed
 
-                if (remainingMillis <= 0) {
-                    CaffeinateController.isActive.value = false
-                    stopSelf()
-                    return
-                }
+            if (remainingMillis <= 0) {
+                CaffeinateController.coordinator.transition(
+                    CaffeinateEvent.ActiveExpired(generation)
+                )
+                stopSelf()
+                return
+            }
 
-                updateNotification()
-                handler.postDelayed(this, 1000)
+            CaffeinateController.coordinator.transition(
+                CaffeinateEvent.ActiveTick(remainingMillis)
+            )
+            updateNotification()
+            handler.postDelayed(this, 1000)
+        }
+    }
+
+    private val screenOffReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            if (intent?.action == Intent.ACTION_SCREEN_OFF && abortWithScreenOff) {
+                CaffeinateController.coordinator.onScreenOff(SystemClock.elapsedRealtime())
+                stopSelf()
             }
         }
-
-    private val screenOffReceiver =
-        object : BroadcastReceiver() {
-            override fun onReceive(
-                context: Context?,
-                intent: Intent?,
-            ) {
-                if (intent?.action == Intent.ACTION_SCREEN_OFF && abortWithScreenOff) {
-                    stopSelf()
-                }
-            }
-        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate() {
@@ -74,31 +78,34 @@ class CaffeinateWakeLockService : Service() {
 
         val pm = getSystemService(POWER_SERVICE) as PowerManager
         @Suppress("DEPRECATION")
-        wakeLock =
-            pm.newWakeLock(
-                PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
-                "Caffeinate::WakeLock",
-            )
-        wakeLock?.acquire()
+        wakeLock = pm.newWakeLock(
+            PowerManager.SCREEN_BRIGHT_WAKE_LOCK or PowerManager.ACQUIRE_CAUSES_WAKEUP,
+            "Caffeinate::WakeLock",
+        )
 
-        registerReceiver(screenOffReceiver, IntentFilter(Intent.ACTION_SCREEN_OFF))
-
-        // Initial state - Always show notification for foreground service
+        androidx.core.content.ContextCompat.registerReceiver(
+            this,
+            screenOffReceiver,
+            IntentFilter(Intent.ACTION_SCREEN_OFF),
+            androidx.core.content.ContextCompat.RECEIVER_EXPORTED
+        )
         startForeground(2, createNotification())
     }
 
     override fun onDestroy() {
-        CaffeinateController.isActive.value = false
-        CaffeinateController.endTime.value = 0L
-        CaffeinateController.durationMillis.value = 0L
         handler.removeCallbacks(countdownRunnable)
         try {
             unregisterReceiver(screenOffReceiver)
-        } catch (_: Exception) {
-        }
-        super.onDestroy()
-        wakeLock?.release()
+        } catch (_: Exception) {}
+
+        try {
+            wakeLock?.let { if (it.isHeld) it.release() }
+        } catch (_: Exception) {}
         wakeLock = null
+
+        CaffeinateController.coordinator.onWakeLockStateChanged(false)
+        CaffeinateController.coordinator.stop("Service stopped")
+        super.onDestroy()
     }
 
     override fun onBind(intent: Intent?): IBinder? = null
@@ -120,21 +127,33 @@ class CaffeinateWakeLockService : Service() {
             }
 
             else -> {
-                // Feature start or update
+                generation = intent?.getLongExtra("generation", CaffeinateController.coordinator.generation)
+                    ?: CaffeinateController.coordinator.generation
                 val newTimeout = intent?.getIntExtra("timeout_minutes", -1) ?: -1
-                if (newTimeout != timeoutMinutes) {
-                    timeoutMinutes = newTimeout
-                    CaffeinateController.durationMillis.value = if (timeoutMinutes != -1) timeoutMinutes * 60 * 1000L else 0L
-                    if (timeoutMinutes != -1) {
-                        startTime = System.currentTimeMillis()
-                        CaffeinateController.endTime.value = startTime + timeoutMinutes * 60 * 1000L
-                        handler.removeCallbacks(countdownRunnable)
-                        handler.post(countdownRunnable)
-                    } else {
-                        CaffeinateController.endTime.value = 0L
-                        handler.removeCallbacks(countdownRunnable)
-                        updateNotification()
+
+                timeoutMinutes = newTimeout
+                val safetyTimeoutMs = if (timeoutMinutes > 0) {
+                    timeoutMinutes * 60 * 1000L + 15_000L
+                } else {
+                    24 * 60 * 60 * 1000L
+                }
+
+                try {
+                    if (wakeLock?.isHeld != true) {
+                        wakeLock?.acquire(safetyTimeoutMs)
                     }
+                } catch (_: Exception) {}
+                CaffeinateController.coordinator.onWakeLockStateChanged(true)
+
+                if (timeoutMinutes != -1) {
+                    startElapsedRealtime = SystemClock.elapsedRealtime()
+                    remainingMillis = timeoutMinutes * 60 * 1000L
+                    handler.removeCallbacks(countdownRunnable)
+                    handler.post(countdownRunnable)
+                } else {
+                    remainingMillis = 0L
+                    handler.removeCallbacks(countdownRunnable)
+                    updateNotification()
                 }
             }
         }
@@ -148,81 +167,72 @@ class CaffeinateWakeLockService : Service() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun createNotificationChannel() {
-        val channel =
-            NotificationChannel(
-                "caffeinate_live",
-                "Caffeinate",
-                NotificationManager.IMPORTANCE_LOW,
-            ).apply {
-                description = "Persistent notification while the screen is kept awake"
-                setShowBadge(false)
-                lockscreenVisibility = Notification.VISIBILITY_PUBLIC
-                setSound(null, null)
-                enableVibration(false)
-            }
+        val channel = NotificationChannel(
+            "caffeinate_live",
+            "Caffeinate",
+            NotificationManager.IMPORTANCE_LOW,
+        ).apply {
+            description = "Persistent notification while the screen is kept awake"
+            setShowBadge(false)
+            lockscreenVisibility = Notification.VISIBILITY_PUBLIC
+            setSound(null, null)
+            enableVibration(false)
+        }
         val manager = getSystemService(NotificationManager::class.java)
         manager.createNotificationChannel(channel)
     }
 
     private fun createNotification(): Notification {
-        val stopIntent =
-            Intent(this, CaffeinateWakeLockService::class.java).apply { action = "STOP" }
-        val stopPendingIntent =
-            PendingIntent.getService(
-                this,
-                0,
-                stopIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
+        val stopIntent = Intent(this, CaffeinateWakeLockService::class.java).apply { action = "STOP" }
+        val stopPendingIntent = PendingIntent.getService(
+            this,
+            0,
+            stopIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
         val mainIntent = Intent(this, MainActivity::class.java)
-        val mainPendingIntent =
-            PendingIntent.getActivity(
-                this,
-                1,
-                mainIntent,
-                PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
-            )
+        val mainPendingIntent = PendingIntent.getActivity(
+            this,
+            1,
+            mainIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE,
+        )
 
-        val activeText =
-            if (timeoutMinutes == -1) {
-                "∞"
-            } else {
-                val totalSeconds = (remainingMillis / 1000).toInt()
-                val minutes = totalSeconds / 60
-                val seconds = totalSeconds % 60
-                if (minutes > 0) "${minutes}m" else "${seconds}s"
-            }
+        val activeText = if (timeoutMinutes == -1) {
+            "∞"
+        } else {
+            val totalSeconds = (remainingMillis / 1000).toInt()
+            val minutes = totalSeconds / 60
+            val seconds = totalSeconds % 60
+            if (minutes > 0) "${minutes}m" else "${seconds}s"
+        }
 
-        val descText =
-            if (timeoutMinutes == -1) {
-                "Screen is being kept awake"
-            } else {
-                val totalSeconds = (remainingMillis / 1000).toInt()
-                val minutes = totalSeconds / 60
-                val seconds = totalSeconds % 60
-                val timeStr = if (minutes > 0) "${minutes}m" else "${seconds}s"
-                "$timeStr remaining"
-            }
+        val descText = if (timeoutMinutes == -1) {
+            "Screen is being kept awake"
+        } else {
+            val totalSeconds = (remainingMillis / 1000).toInt()
+            val minutes = totalSeconds / 60
+            val seconds = totalSeconds % 60
+            val timeStr = if (minutes > 0) "${minutes}m" else "${seconds}s"
+            "$timeStr remaining"
+        }
 
         if (Build.VERSION.SDK_INT >= 35) {
-            val builder =
-                Notification
-                    .Builder(this, "caffeinate_live")
-                    .setSmallIcon(R.drawable.ic_system_icon)
-                    .setContentTitle("Caffeinate Active")
-                    .setContentText(descText)
-                    .setOngoing(true)
-                    .setOnlyAlertOnce(true)
-                    .setCategory(Notification.CATEGORY_SERVICE)
-                    .setContentIntent(mainPendingIntent)
-                    .addAction(
-                        Notification.Action
-                            .Builder(
-                            android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_system_icon),
-                                "Stop",
-                                stopPendingIntent,
-                            ).build(),
-                    )
+            val builder = Notification.Builder(this, "caffeinate_live")
+                .setSmallIcon(R.drawable.ic_system_icon)
+                .setContentTitle("Caffeinate Active")
+                .setContentText(descText)
+                .setOngoing(true)
+                .setOnlyAlertOnce(true)
+                .setCategory(Notification.CATEGORY_SERVICE)
+                .setContentIntent(mainPendingIntent)
+                .addAction(
+                    Notification.Action.Builder(
+                        android.graphics.drawable.Icon.createWithResource(this, R.drawable.ic_system_icon),
+                        "Stop",
+                        stopPendingIntent,
+                    ).build(),
+                )
 
             try {
                 val extras = android.os.Bundle()
@@ -231,38 +241,31 @@ class CaffeinateWakeLockService : Service() {
                 builder.addExtras(extras)
 
                 Notification.Builder::class.java
-                    .getMethod(
-                        "setRequestPromotedOngoing",
-                        Boolean::class.javaPrimitiveType,
-                    ).invoke(builder, true)
+                    .getMethod("setRequestPromotedOngoing", Boolean::class.javaPrimitiveType)
+                    .invoke(builder, true)
                 Notification.Builder::class.java
-                    .getMethod(
-                        "setShortCriticalText",
-                        CharSequence::class.java,
-                    ).invoke(builder, activeText)
-            } catch (_: Throwable) {
-            }
+                    .getMethod("setShortCriticalText", CharSequence::class.java)
+                    .invoke(builder, activeText)
+            } catch (_: Throwable) {}
 
             return builder.build()
         }
 
-        val builder =
-            NotificationCompat
-                .Builder(this, "caffeinate_live")
-                .setSmallIcon(R.drawable.ic_system_icon)
-                .setContentTitle("Caffeinate Active")
-                .setContentText(descText)
-                .setOngoing(true)
-                .setSilent(true)
-                .setOnlyAlertOnce(true)
-                .setPriority(NotificationCompat.PRIORITY_MIN)
-                .setCategory(NotificationCompat.CATEGORY_SERVICE)
-                .setContentIntent(mainPendingIntent)
-                .addAction(
-                    R.drawable.ic_system_icon,
-                    "Stop",
-                    stopPendingIntent,
-                )
+        val builder = NotificationCompat.Builder(this, "caffeinate_live")
+            .setSmallIcon(R.drawable.ic_system_icon)
+            .setContentTitle("Caffeinate Active")
+            .setContentText(descText)
+            .setOngoing(true)
+            .setSilent(true)
+            .setOnlyAlertOnce(true)
+            .setPriority(NotificationCompat.PRIORITY_MIN)
+            .setCategory(NotificationCompat.CATEGORY_SERVICE)
+            .setContentIntent(mainPendingIntent)
+            .addAction(
+                R.drawable.ic_system_icon,
+                "Stop",
+                stopPendingIntent,
+            )
 
         val extras = android.os.Bundle()
         extras.putBoolean("android.requestPromotedOngoing", true)

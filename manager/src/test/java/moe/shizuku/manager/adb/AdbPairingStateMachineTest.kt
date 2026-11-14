@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.adb
+package moe.shizuku.manager.adb
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -59,7 +59,7 @@ class AdbPairingStateMachineTest {
                     assertFalse(AdbPairingStateMachine.canStart(s))
                 }
             }
-            s
+            return s
         }
         assertEquals(run(123), run(123))
         run(5)

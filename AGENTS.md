@@ -106,3 +106,35 @@ When creating new components, follow DESIGN.md token system and add to `ui/compo
 - Do not fake connection status or device metrics
 - Do not break root/ADB/Shizuku functionality
 - Do not mark tasks complete without build + test verification
+
+---
+
+## Elephant-Goldfish Model (EGM) Feature Engineering Workflow
+
+This repository embeds the Google **Elephant-Goldfish Model (EGM)** skills and persona agents under `.agents/skills/`, `skills/`, and `agents/`. Any AI assistant (Antigravity, Claude Code, Cursor, Copilot, Codex, Gemini CLI) working on OmniShizuku should utilize this workflow when adding, editing, or deleting features:
+
+### 1. Adding or Modifying Features
+- **Brainstorming (`skills/egm-brainstorm`)**:
+  Before implementing complex or user-facing changes, engage the user with clarifying questions to formulate a structured hypothesis and proposal (`concepts_brief.md`).
+- **Design & Architecture Drafting (`skills/egm-draft`)**:
+  Draft formal design documents into `docs/designs/<feature-name>.md` covering goals, non-goals, architecture, API changes, security models, and migration paths.
+
+### 2. Multi-Perspective Review Swarm
+- **Review & Verification (`skills/egm-review` / `skills/egm-review-loop`)**:
+  Run independent reviewer personas located in `agents/` (or `.agents/agents/`):
+  - `design_critic.md`: Scrutinizes Android lifecycle edge cases, memory pressure, IPC bottlenecks, and permissions.
+  - `codebase_details.md`: Verifies alignment with OmniShizuku conventions, Shizuku IPC APIs, and Kotlin idioms.
+  - `implementation_readiness.md`: Checks that state machines and reducers are pure and deterministic.
+  - `inventive_catalyst.md`: Eliminates technical trade-offs using TRIZ inventive principles.
+  - `zoom_out.md`: Enforces simplicity, minimalism, and YAGNI (avoids code bloat).
+  - `comprehension.md`, `style.md`, `structural.md`: Verifies documentation and code readability.
+
+### 3. Landing and Resolving Changes
+- **Resolution (`skills/egm-resolve`)**:
+  Address all critical findings raised by the review personas.
+  Ensure zero regressions in root/ADB/Shizuku functionality, preserve all existing working features, write deterministic unit tests, and verify builds before completing.
+
+### 4. Codebase Documentation & Drift Detection
+- **Bootstrap & Drift Auditing (`skills/egm-bootstrap`, `skills/egm-drift-report`)**:
+  Ensure directory documentation remains synchronized with actual code implementation.
+

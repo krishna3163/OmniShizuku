@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.service
+package moe.shizuku.manager.service
 
 import org.junit.Assert.assertEquals
 import org.junit.Test
@@ -59,9 +59,40 @@ class WatchdogRecoveryMachineTest {
             )
             var s = WatchdogRecoveryState.IDLE
             repeat(300) { s = WatchdogRecoveryMachine.reduce(s, list[next() % list.size]) }
-            s
+            return s
         }
         assertEquals(run(99), run(99))
         run(1)
     }
 }
+
+    @Test
+    fun duplicateCrashAndPendingRestartScenarios() {
+        // duplicate crash notifications while awaiting/restarting keep recovery intent (not gave up)
+        var s = WatchdogRecoveryState.IDLE
+        s = WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.CrashDetected)
+        assertEquals(WatchdogRecoveryState.AWAITING_RECOVERY, s)
+        s = WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.CrashDetected)
+        assertEquals(WatchdogRecoveryState.AWAITING_RECOVERY, s)
+        s = WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.RestartStarted)
+        s = WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.CrashDetected)
+        assertEquals(WatchdogRecoveryState.AWAITING_RECOVERY, s)
+        // deferred/pending then restart attempt failure keeps pending
+        s = WatchdogRecoveryMachine.reduce(WatchdogRecoveryState.PENDING_RESTART, WatchdogRecoveryEvent.RestartAttemptFailed)
+        assertEquals(WatchdogRecoveryState.PENDING_RESTART, s)
+    }
+
+    @Test
+    fun timeoutThenNewAttemptAndGenuineRecoveryBehavior() {
+        // modeled as failed attempt -> pending -> new start -> running resets
+        var s = WatchdogRecoveryState.RESTARTING
+        s = WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.RestartAttemptFailed)
+        assertEquals(WatchdogRecoveryState.PENDING_RESTART, s)
+        s = WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.RestartStarted)
+        assertEquals(WatchdogRecoveryState.RESTARTING, s)
+        s = WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.ServerRunning)
+        assertEquals(WatchdogRecoveryState.IDLE, s)
+        // breaker then genuine recovery clears gave-up at reducer level
+        s = WatchdogRecoveryMachine.reduce(WatchdogRecoveryState.RESTARTING, WatchdogRecoveryEvent.BreakerOpened)
+        assertEquals(WatchdogRecoveryState.GAVE_UP, WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.ServerRunning))
+    }

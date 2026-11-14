@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='utf-8'?>
+﻿<?xml version='1.0' encoding='utf-8'?>
 <resources>
     <string name="app_name" translatable="false">OmniShizuku</string>
 
@@ -124,8 +124,8 @@
     <string name="app_management_dialog_adb_is_limited_title">The permission of adb is limited</string>
     <string name="app_management_dialog_adb_is_limited_message">It\'s highly possible that your device manufacturer limits the permission of adb.&lt;p&gt;There may be a solution for your system in &lt;b&gt;&lt;a href="%1$s"&gt;this document&lt;/a&gt;&lt;/b&gt;.</string>
     <string name="app_management_item_summary_requires_root">* requires OmniShizuku runs with root</string>
-    <string name="app_management_loading">Loading apps…</string>
-    <string name="app_management_search_hint">Search applications…</string>
+    <string name="app_management_loading">Loading appsâ€¦</string>
+    <string name="app_management_search_hint">Search applicationsâ€¦</string>
     <string name="app_management_clear_search">Clear search</string>
     <string name="app_management_filter_all">All (%1$d)</string>
     <string name="app_management_filter_allowed">Allowed (%1$d)</string>
@@ -224,7 +224,7 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="modules_install_success">Installed %s</string>
     <string name="modules_install_failed">Install failed: %s</string>
     <string name="modules_install_zip_module">Install Module</string>
-    <string name="modules_installing_zip">Installing ZIP module…</string>
+    <string name="modules_installing_zip">Installing ZIP moduleâ€¦</string>
     <string name="modules_zip_unreadable">Unable to read ZIP file</string>
     <string name="modules_live_log_title">Running %s</string>
     <string name="modules_live_log_hide">Hide</string>
@@ -237,7 +237,7 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="modules_untrust">Untrust</string>
     <string name="modules_run_action">Action</string>
     <string name="modules_run_service">Service</string>
-    <string name="modules_running">Running module script…</string>
+    <string name="modules_running">Running module scriptâ€¦</string>
     <string name="modules_open_webui">WebUI</string>
     <string name="modules_shortcut">Shortcut</string>
     <string name="modules_shortcut_added">Shortcut added to home screen</string>
@@ -272,17 +272,17 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
     <string name="modules_tab_installed">Installed</string>
     <string name="modules_tab_catalog">Catalog</string>
     <string name="modules_check_updates">Check updates</string>
-    <string name="modules_checking_updates">Checking for updates…</string>
+    <string name="modules_checking_updates">Checking for updatesâ€¦</string>
     <string name="modules_no_updates">All modules are up to date</string>
     <string name="modules_update_available">Update available: v%s</string>
     <string name="modules_update_button">Update</string>
-    <string name="modules_updating">Updating module…</string>
+    <string name="modules_updating">Updating moduleâ€¦</string>
     <string name="modules_update_success">Module updated to v%s</string>
     <string name="modules_download_downloads">Download to Downloads</string>
     <string name="modules_download_install">Download &amp; Install</string>
-    <string name="modules_downloading">Downloading…</string>
+    <string name="modules_downloading">Downloadingâ€¦</string>
     <string name="modules_download_enqueued">Download started in background</string>
-    <string name="modules_search_placeholder">Search catalog modules…</string>
+    <string name="modules_search_placeholder">Search catalog modulesâ€¦</string>
 
     
     <string name="action_about">About</string>
@@ -299,10 +299,10 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
 
     
     <string name="notification_channel_service_status">Service start status</string>
-    <string name="notification_service_starting">OmniShizuku service is starting…</string>
+    <string name="notification_service_starting">OmniShizuku service is startingâ€¦</string>
     <string name="notification_service_start_failed">Start OmniShizuku service failed.</string>
     <string name="notification_service_start_no_root">Failed to request root permission.</string>
-    <string name="notification_working">Working…</string>
+    <string name="notification_working">Workingâ€¦</string>
     <string name="notification_channel_adb_pairing">Wireless debugging pairing</string>
     <string name="notification_adb_pairing_input_paring_code">Enter pairing code</string>
     <string name="notification_adb_pairing_searching_for_service_title">Searching for pairing service</string>
@@ -329,7 +329,7 @@ With %1$s, in any terminal app, you can connect to and interact with the shell r
 
     
     <string name="starter">Starter</string>
-    <string name="starting_root_shell" translatable="false">Starting root shell…</string>
+    <string name="starting_root_shell" translatable="false">Starting root shellâ€¦</string>
     <string name="start_with_root_failed">Can\'t start service because root permission is not granted or this device is not rooted.</string>
 
     
@@ -379,7 +379,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="usb_debugging_hide_notification_summary">USB debugging is turned off only while a selected app is in the foreground</string>
     <string name="network_firewall_title">Firewall</string>
     <string name="network_firewall_open_summary">Block selected apps from network access without a VPN</string>
-    <string name="network_firewall_summary">Uses Android’s platform firewall (Android 11 or newer), not a VPN. OmniShizuku shows rules it created; the firewall chain is shared, so enabling it may also activate rules set by other apps.</string>
+    <string name="network_firewall_summary">Uses Androidâ€™s platform firewall (Android 11 or newer), not a VPN. OmniShizuku shows rules it created; the firewall chain is shared, so enabling it may also activate rules set by other apps.</string>
     <string name="network_firewall_unsupported">The platform firewall commands require Android 11 or newer.</string>
     <string name="network_firewall_server_required">Start OmniShizuku with Shizuku before changing firewall rules.</string>
     <string name="network_firewall_apps">Apps</string>
@@ -454,18 +454,18 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="notification_control_channel_name">OmniShizuku Control</string>
     <string name="notification_startup_channel_name">OmniShizuku startup</string>
     <string name="notification_startup_title">Starting OmniShizuku</string>
-    <string name="notification_startup_enabling_wifi">Enabling Wi-Fi debugging…</string>
-    <string name="notification_startup_connecting">Connecting to ADB…</string>
+    <string name="notification_startup_enabling_wifi">Enabling Wi-Fi debuggingâ€¦</string>
+    <string name="notification_startup_connecting">Connecting to ADBâ€¦</string>
     <string name="notification_startup_started">OmniShizuku started.</string>
     <string name="notification_startup_failed">Failed to start OmniShizuku.</string>
     <string name="notification_startup_no_port">Wireless debugging port not found within 15 seconds.</string>
     <string name="notification_startup_no_permission">Cannot start on boot: a required permission is not granted. Open OmniShizuku and grant the permission first.</string>
-    <string name="notification_startup_waiting_unlock">Waiting for device unlock to start…</string>
+    <string name="notification_startup_waiting_unlock">Waiting for device unlock to startâ€¦</string>
     <string name="notification_startup_cancel">Cancel</string>
     <string name="notification_startup_attempt_now">Attempt now</string>
 
     
-    <string name="wadb_notification_title">Starting OmniShizuku…</string>
+    <string name="wadb_notification_title">Starting OmniShizukuâ€¦</string>
     <string name="wadb_notification_wifi_required">Awaiting Wi-Fi connection before proceeding</string>
     <string name="wadb_notification_retry">Waiting to retry</string>
     <string name="wadb_error_title">Error while starting on boot</string>
@@ -512,17 +512,17 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     
     <string name="shevery_update_check_title">Check for OmniShizuku updates</string>
     <string name="shevery_update_check_summary">Check for newer versions of OmniShizuku manager</string>
-    <string name="shevery_update_checking">Checking for OmniShizuku updates…</string>
+    <string name="shevery_update_checking">Checking for OmniShizuku updatesâ€¦</string>
     <string name="shevery_update_up_to_date">OmniShizuku is up to date (%s)</string>
     <string name="shevery_update_available_title">New OmniShizuku update available!</string>
     <string name="shevery_update_available_msg">Version %1$s is available (current: %2$s)</string>
     <string name="shevery_update_download_apk">Download APK</string>
     <string name="shevery_update_view_release">View on GitHub</string>
     <string name="shevery_update_download_install">Download &amp; Install</string>
-    <string name="shevery_update_downloading_title">Downloading update…</string>
+    <string name="shevery_update_downloading_title">Downloading updateâ€¦</string>
     <string name="shevery_update_download_progress">%1$d%% downloaded</string>
-    <string name="shevery_update_preparing">Preparing download…</string>
-    <string name="shevery_update_installing">Installing update…</string>
+    <string name="shevery_update_preparing">Preparing downloadâ€¦</string>
+    <string name="shevery_update_installing">Installing updateâ€¦</string>
     <string name="shevery_update_install_failed_title">Installation failed</string>
     <string name="shevery_update_retry">Retry</string>
     <string name="shevery_update_download_manual">Download manually</string>
@@ -542,7 +542,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     
     <string name="modules_catalog">Catalog</string>
     <string name="modules_catalog_title">Module Catalog</string>
-    <string name="modules_catalog_empty">No modules found — check your token and internet connection, then try again</string>
+    <string name="modules_catalog_empty">No modules found â€” check your token and internet connection, then try again</string>
     <string name="modules_catalog_empty_retry">Try again</string>
     <string name="modules_catalog_empty_token">Edit token</string>
     <string name="modules_catalog_sort_newest">Newest</string>
@@ -558,10 +558,10 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="modules_catalog_token_hint">GitHub Personal Access Token</string>
     <string name="modules_catalog_token_description">A token is needed to search GitHub for modules. You can create one at github.com/settings/tokens</string>
     <string name="modules_catalog_token_format_warning">Token should start with ghp_ or github_pat_ and be at least 30 characters</string>
-    <string name="modules_catalog_loading">Loading catalog…</string>
+    <string name="modules_catalog_loading">Loading catalogâ€¦</string>
     <string name="modules_catalog_error">Failed to load catalog</string>
     <string name="modules_catalog_install">Install</string>
-    <string name="modules_catalog_installing">Installing…</string>
+    <string name="modules_catalog_installing">Installingâ€¦</string>
     <string name="modules_catalog_view_github">View on GitHub</string>
     <string name="modules_catalog_skip_token">Skip</string>
     <string name="modules_catalog_open">Open Catalog</string>
@@ -638,7 +638,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="comput_ai_delete_confirm_title">Delete provider?</string>
     <string name="comput_ai_delete_confirm_text">Remove %1$s? Its saved API key will be deleted too.</string>
     <string name="comput_ai_test_connection">Test connection</string>
-    <string name="comput_ai_test_testing">Testing…</string>
+    <string name="comput_ai_test_testing">Testingâ€¦</string>
     <string name="comput_ai_test_ok">Connected (%1$d models)</string>
     <string name="comput_ai_test_fail">Failed: %1$s</string>
     <string name="comput_ai_test_no_key">Enter an API key before testing.</string>
@@ -681,21 +681,21 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="comput_ai_stage_2">Credentials</string>
     <string name="comput_ai_stage_3">Model</string>
     <string name="comput_ai_discover_models">Discover models</string>
-    <string name="comput_ai_discovering">Discovering models…</string>
+    <string name="comput_ai_discovering">Discovering modelsâ€¦</string>
     <string name="comput_ai_models_found">%1$d models found. Tap \"model\" to pick.</string>
-    <string name="comput_ai_models_none">No model list at this endpoint — enter the model manually.</string>
+    <string name="comput_ai_models_none">No model list at this endpoint â€” enter the model manually.</string>
     <string name="comput_ai_pick_model">Pick model</string>
     <string name="comput_ai_default_model">Default (recommended)</string>
     <string name="comput_ai_search_models">Search models</string>
     <string name="comput_ai_no_models_match">No models match</string>
     <string name="comput_ai_switch_title">Switch AI model</string>
     <string name="comput_ai_chip_active">AI: %1$s</string>
-    <string name="comput_ai_chip_active_model">AI: %1$s · %2$s</string>
-    <string name="comput_ai_no_active_toast">No active AI provider configured. Add one in Settings → Comput Console → AI Provider.</string>
+    <string name="comput_ai_chip_active_model">AI: %1$s Â· %2$s</string>
+    <string name="comput_ai_no_active_toast">No active AI provider configured. Add one in Settings â†’ Comput Console â†’ AI Provider.</string>
     <string name="comput_ai_error_hint">Check the active provider and model in Settings.</string>
     <string name="comput_ai_empty_title">No AI providers yet</string>
     <string name="comput_ai_empty_body">Add a provider with your API key to use AI in Comput Console. Start with a preset or enter a custom endpoint.</string>
-    <string name="comput_ai_switch_fail">Couldn’t load models — check the provider connection.</string>
+    <string name="comput_ai_switch_fail">Couldnâ€™t load models â€” check the provider connection.</string>
     <string name="comput_commandium">Commandium</string>
     <string name="comput_commandium_assistant">Commandium AI Assistant</string>
     <string name="comput_commandium_description">Generate shell commands using natural language. AI will output a raw, copyable command.</string>
@@ -709,7 +709,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="comput_agent_goal_placeholder">e.g. Check battery health and free space</string>
     <string name="comput_agent_run">Run agent</string>
     <string name="comput_agent_stop">Stop</string>
-    <string name="comput_agent_planning">Planning with AI…</string>
+    <string name="comput_agent_planning">Planning with AIâ€¦</string>
     <string name="comput_agent_plan_empty">The agent could not build a plan for this goal.</string>
     <string name="comput_agent_executing">Step %1$d of %2$d</string>
     <string name="comput_agent_final_answer">Result</string>
@@ -725,11 +725,11 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="comput_agent_denied">Denied by user</string>
     <string name="comput_agent_stopped">Stopped by user</string>
     <string name="comput_agent_no_output">No output.</string>
-    <string name="comput_agent_summarizing">Summarizing…</string>
+    <string name="comput_agent_summarizing">Summarizingâ€¦</string>
     <string name="comput_agent_safety_title">Agent safety mode</string>
-    <string name="comput_agent_mode_secure">Secure — ask every time</string>
+    <string name="comput_agent_mode_secure">Secure â€” ask every time</string>
     <string name="comput_agent_mode_secure_summary">The agent asks before every command</string>
-    <string name="comput_agent_mode_turbo">Turbo — run without asking</string>
+    <string name="comput_agent_mode_turbo">Turbo â€” run without asking</string>
     <string name="comput_agent_mode_turbo_summary">The agent runs every planned action immediately</string>
     <string name="comput_agent_mode_custom">Custom</string>
     <string name="comput_agent_mode_custom_summary">Per-action settings below</string>
@@ -867,7 +867,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
 
     
     <string name="tcp_prompt_dialog_title">Enable Persistent TCP Mode?</string>
-    <string name="tcp_prompt_dialog_message">OmniShizuku is running, but Persistent TCP Mode is currently disabled.\n\nEnabling TCP Mode allows OmniShizuku to stay running and auto-reconnect in the background—even without Wi-Fi—until your device is restarted.</string>
+    <string name="tcp_prompt_dialog_message">OmniShizuku is running, but Persistent TCP Mode is currently disabled.\n\nEnabling TCP Mode allows OmniShizuku to stay running and auto-reconnect in the backgroundâ€”even without Wi-Fiâ€”until your device is restarted.</string>
     <string name="tcp_prompt_dialog_enable">Enable</string>
     <string name="tcp_prompt_dialog_later">Not Now</string>
     <string name="tcp_prompt_dialog_do_not_remind">Don\'t remind me again</string>
@@ -894,7 +894,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="home_automation_button_view_intents">View intents</string>
     <string name="home_automation_bottom_sheet_intents">Automation Intents</string>
     <string name="home_automation_bottom_sheet_description">Configure intents in Tasker or MacroDroid, or run the command directly from Termux / ADB. Tap any field to copy.</string>
-    <string name="home_automation_connectors_disabled_warning">Connectors are currently disabled. Enable them in Settings → Automation to allow incoming broadcast intents.</string>
+    <string name="home_automation_connectors_disabled_warning">Connectors are currently disabled. Enable them in Settings â†’ Automation to allow incoming broadcast intents.</string>
     <string name="home_automation_device_restriction">To use the start intent on older Android versions without root, you first need to enable ADB over TCP by running %1$s from a PC.</string>
     <string name="home_automation_label_action">Action</string>
     <string name="home_automation_label_package">Package</string>
@@ -965,13 +965,13 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="device_owner_inactive">Device Owner is not configured</string>
     <string name="device_owner_inactive_desc">To enable Device Owner, remove all accounts from your device, then run this command via ADB:</string>
     <string name="device_owner_transfer_button">Transfer</string>
-    <string name="device_owner_transfer_dialog_hint">Target application must first be enabled under Android Settings тЖТ Security тЖТ Device admin apps.</string>
+    <string name="device_owner_transfer_dialog_hint">Target application must first be enabled under Android Settings Ñ‚Ð–Ð¢ Security Ñ‚Ð–Ð¢ Device admin apps.</string>
     <string name="device_owner_transfer_dialog_message">This will permanently transfer Device Owner rights from OmniShizuku to the selected application. OmniShizuku will no longer be Device Owner.</string>
     <string name="device_owner_transfer_dialog_title">Transfer Device Ownership?</string>
     <string name="device_owner_transfer_failed">Failed to transfer ownership</string>
     <string name="device_owner_transfer_no_admin_apps">No eligible device admin apps found</string>
     <string name="device_owner_transfer_open_settings">Open Settings</string>
-    <string name="device_owner_transfer_search_hint">Search appsтАж</string>
+    <string name="device_owner_transfer_search_hint">Search appsÑ‚ÐÐ¶</string>
     <string name="device_owner_transfer_select_target">Select target admin app</string>
     <string name="device_owner_transfer_status_active">Active as device admin</string>
     <string name="device_owner_transfer_status_inactive">Inactive (must enable in Settings)</string>
@@ -1035,7 +1035,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     
     <string name="notification_channel_automation_alerts">Automation Alerts</string>
     <string name="notification_auth_missing_title">Auth token required</string>
-    <string name="notification_auth_missing_message">Add the “auth” extra to your intent. You can find your token under Automation in Settings.</string>
+    <string name="notification_auth_missing_message">Add the â€œauthâ€ extra to your intent. You can find your token under Automation in Settings.</string>
     <string name="notification_auth_invalid_title">Invalid auth token</string>
     <string name="notification_auth_invalid_message">Make sure the token in your intent matches the one in OmniShizuku Settings.</string>
     <string name="notification_connectors_disabled_title">Automation connectors disabled</string>
@@ -1078,7 +1078,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="dialog_adb_pairing_accessibility_navigate">Please start pairing by performing the following steps:\n- Navigate to \"Developer Options\"\n- Enable \"USB debugging\" and \"Wireless debugging\"\n- Tap the left side of \"Wireless debugging\"\n- Tap \"Pair device with pairing code.\" Shizuku will automatically detect the pairing code.</string>
     <string name="adb_error_stop_tcp">Could not stop ADB over TCP</string>
     <string name="enable">Enable</string>
-    <string name="auto_pair_instructions">Pair without typing a code:\n\n1. Developer options → Wireless debugging\n2. Pair device with pairing code\n\nShizuku reads the code and port straight from that dialog and starts itself. Keep the dialog open until pairing finishes.</string>
+    <string name="auto_pair_instructions">Pair without typing a code:\n\n1. Developer options â†’ Wireless debugging\n2. Pair device with pairing code\n\nShizuku reads the code and port straight from that dialog and starts itself. Keep the dialog open until pairing finishes.</string>
     <string name="auto_pair_manual">Manual</string>
     <string name="home_dialog_reboot_required_title">Reboot required</string>
     <string name="home_dialog_reboot_required_message">A device reboot is required for Shizuku to work properly. To continue, please reboot your device.</string>
@@ -1228,9 +1228,9 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="display_profile">Display profile</string>
     <string name="display_information">Display information</string>
     <string name="display_information_unavailable">Unavailable until Shizuku is running.</string>
-    <string name="display_information_mode">Mode %1$d • %2$d Hz • %3$d dpi</string>
+    <string name="display_information_mode">Mode %1$d â€¢ %2$d Hz â€¢ %3$d dpi</string>
     <string name="display_information_logical">Logical size: %1$dx%2$d</string>
-    <string name="display_information_modes">Supported modes: %1$d • HDR: %2$s</string>
+    <string name="display_information_modes">Supported modes: %1$d â€¢ HDR: %2$s</string>
     <string name="display_information_hdr_missing">not reported</string>
     <string name="display_wide_gamut_supported">Wide colour gamut supported</string>
     <string name="display_wide_gamut_missing">Wide colour gamut not reported</string>
@@ -1383,7 +1383,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="log_capture_device">Entire device</string>
     <string name="log_capture_choose">App to record</string>
     <string name="log_capture_choose_hint">Search apps</string>
-    <string name="log_capture_running">Recording %1$s · %2$d lines · %3$s</string>
+    <string name="log_capture_running">Recording %1$s Â· %2$d lines Â· %3$s</string>
     <string name="log_capture_idle">Nothing is being recorded.</string>
     <string name="log_capture_waiting">Recording. Nothing has been logged yet.</string>
     <string name="log_capture_empty">Nothing has been recorded yet.</string>
@@ -1706,7 +1706,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="permissions_allowed">Allowed</string>
     <string name="permissions_action_allow">Allow</string>
     <string name="permissions_action_settings">Settings</string>
-    <string name="permissions_open_settings_hint">Android will not ask again. Turn it on under App info → Permissions.</string>
+    <string name="permissions_open_settings_hint">Android will not ask again. Turn it on under App info â†’ Permissions.</string>
     <string name="permissions_notifications">Notifications</string>
     <string name="permissions_notifications_summary">Shows the pairing code, start progress and errors.</string>
     <string name="permissions_nearby">Nearby devices</string>
@@ -1724,7 +1724,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="settings_support_coffee">Buy me a coffee</string>
     <string name="settings_support_coffee_note">Support the development of Shizuku-Next</string>
     <string name="settings_contributors">Contributors</string>
-    <string name="settings_contributors_hint">Drag to explore · Pinch to zoom · Tap for details</string>
+    <string name="settings_contributors_hint">Drag to explore Â· Pinch to zoom Â· Tap for details</string>
     
     <plurals name="contributor_commits">
         <item quantity="one">%1$d commit</item>
@@ -1745,7 +1745,37 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="contributor_summary_code_translations">Worked on %1$s, and translated the app into %2$s.</string>
     <string name="contributor_summary_default">Contributor</string>
     <string name="settings_legacy_pairing">Legacy pairing</string>
-    <string name="settings_legacy_pairing_summary">Enter the pairing code in a dialog instead of a notification</string>
+    <string name="settings_legacy_pairing_summary">Enter the pairing code in a dialog instead of a notification</string>    <string name="legacy_rish_channel_description">Keeps legacy Rish shell binder compatibility available while OmniShizuku server is running.</string>
+    <string name="legacy_rish_notification_title">OmniShizuku Compatibility</string>
+    <string name="legacy_rish_state_active">Keeping legacy Rish shell Binder available for compatible apps.</string>
+    <string name="legacy_rish_state_starting">Starting legacy Rish compatibility…</string>
+    <string name="legacy_rish_state_reconnecting">Reconnecting legacy Rish compatibility…</string>
+    <string name="legacy_rish_state_waiting">Waiting for Shizuku server to keep legacy Rish shell Binder available.</string>
+    <string name="legacy_rish_state_stopping">Stopping legacy Rish compatibility…</string>
+    <string name="legacy_rish_state_error">Legacy Rish compatibility error: %1$s</string>
+    <string name="legacy_rish_state_disabled">Legacy Rish compatibility is disabled.</string>
+    <string name="legacy_rish_unknown_error">Unknown error</string>
+    <string name="legacy_rish_action_disable">Disable</string>
+    <string name="settings_legacy_rish_compatibility">Legacy Rish compatibility</string>
+    <string name="settings_legacy_rish_compatibility_summary">Keep legacy Rish shell Binder available for compatible apps while the server runs</string>
+    <string name="settings_legacy_rish_server_status">Shizuku server</string>
+    <string name="settings_legacy_rish_lifecycle_status">Compatibility status</string>
+    <string name="settings_legacy_rish_binder_status">Binder availability</string>
+    <string name="settings_legacy_rish_service_status">Service status</string>
+    <string name="settings_legacy_rish_last_event">Last event</string>
+    <string name="settings_legacy_rish_error">Error / recovery</string>
+    <string name="settings_legacy_rish_status_running">Running</string>
+    <string name="settings_legacy_rish_status_stopped">Stopped</string>
+    <string name="settings_legacy_rish_status_available">Available</string>
+    <string name="settings_legacy_rish_status_unavailable">Unavailable</string>
+    <string name="settings_legacy_rish_status_none">None</string>
+    <string name="settings_legacy_rish_status_active">Active</string>
+    <string name="settings_legacy_rish_status_waiting">Waiting for server</string>
+    <string name="settings_legacy_rish_status_starting">Starting</string>
+    <string name="settings_legacy_rish_status_reconnecting">Reconnecting</string>
+    <string name="settings_legacy_rish_status_stopping">Stopping</string>
+    <string name="settings_legacy_rish_status_error">Error</string>
+    <string name="settings_legacy_rish_status_disabled">Disabled</string>
 
     
     <string name="bug_report_dialog_before_reporting">First, please do the following:</string>
@@ -1886,7 +1916,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     
     <string name="error">Error</string>
     <string name="off">Off</string>
-    <string name="accessibility_service_description">Pairs wireless debugging without typing the code.\n\nShizuku reads the pairing code and port from the system\'s “Pair with device” screen, pairs, and starts itself. On TVs (e.g. Android 14+) it drives the whole flow and switches off once a code is found.</string>
+    <string name="accessibility_service_description">Pairs wireless debugging without typing the code.\n\nShizuku reads the pairing code and port from the system\'s â€œPair with deviceâ€ screen, pairs, and starts itself. On TVs (e.g. Android 14+) it drives the whole flow and switches off once a code is found.</string>
 
     
     <string name="tab_manage">App ops</string>
@@ -2219,16 +2249,16 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="nightdog_summary">Lightweight system monitor with zero energy consumption</string>
     <string name="nightdog_description">NightDog monitors server health using inotify (zero polling). Runs as shell process.</string>
 
-    <string name="wireless_adb_pin_service_description">Enters the wireless ADB pairing PIN into the system’s “Pair with device” dialog through an accessibility service.\n\nOnly the settings apps that host that dialog are read, and only after you switch automatic entry on in settings.</string>
+    <string name="wireless_adb_pin_service_description">Enters the wireless ADB pairing PIN into the systemâ€™s â€œPair with deviceâ€ dialog through an accessibility service.\n\nOnly the settings apps that host that dialog are read, and only after you switch automatic entry on in settings.</string>
 
     <string name="settings_wireless_adb_auto_pin">Auto-enter wireless ADB pairing PIN</string>
-    <string name="settings_wireless_adb_auto_pin_summary">Let an accessibility service enter the pairing PIN into the “Pair with device” dialog. Off: you type it yourself. Manual: the manager tells you when the dialog is up. Automatic: the PIN is entered for you.</string>
+    <string name="settings_wireless_adb_auto_pin_summary">Let an accessibility service enter the pairing PIN into the â€œPair with deviceâ€ dialog. Off: you type it yourself. Manual: the manager tells you when the dialog is up. Automatic: the PIN is entered for you.</string>
     <string name="settings_wireless_adb_auto_pin_off">Off</string>
     <string name="settings_wireless_adb_auto_pin_manual">Manual</string>
     <string name="settings_wireless_adb_auto_pin_automatic">Automatic</string>
     <string name="settings_wireless_adb_pin">Pairing PIN</string>
     <string name="settings_wireless_adb_pin_summary">The 6-digit PIN the accessibility service enters when automatic mode is on.</string>
-    <string name="settings_wireless_adb_auto_pin_enabled">Automatic pairing PIN entry is on. Open the “Pair with device” dialog in settings and the PIN will be filled in for you.</string>
+    <string name="settings_wireless_adb_auto_pin_enabled">Automatic pairing PIN entry is on. Open the â€œPair with deviceâ€ dialog in settings and the PIN will be filled in for you.</string>
     <string name="settings_wireless_adb_auto_pin_summary_accessibility_on">Accessibility service is enabled. PIN will be entered automatically when the pairing dialog appears.</string>
     <string name="settings_wireless_adb_auto_pin_summary_accessibility_off">Accessibility service is not enabled. Automatic mode will not work until you enable it in Accessibility settings.</string>
     <string name="settings_wireless_adb_auto_pin_accessibility_needed">Accessibility permission is required for automatic PIN entry. Please enable it in Accessibility settings.</string>
@@ -2296,7 +2326,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="no_sliders_added">No sliders added</string>
     <string name="new_slider">New Slider</string>
     <string name="removable_apps">Removable apps -</string>
-    <string name="please_wait">Please wait…</string>
+    <string name="please_wait">Please waitâ€¦</string>
     <string name="welcome">Welcome!</string>
     <string name="ensure_no_adb_restrictions">Open the Shizuku app to ensure there are no warnings.</string>
     <string name="directions_lookback">Select an apk file to be installed as a downgrade.</string>
@@ -2314,7 +2344,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="switch_output_device">Switch Output Device:</string>
     <string name="default_">Default</string>
     <string name="run">Run</string>
-    <string name="enter_command">Enter Command…</string>
+    <string name="enter_command">Enter Commandâ€¦</string>
     <string name="accept_adb_intents">Accept adb intents</string>
     <string name="intent_shell_security">Intent shell locks for 5 minutes after usage of a wrong access key, to prevent brute force attempts.</string>
     <string name="access_key">Access key</string>
@@ -2347,7 +2377,7 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="show_soundmaster_notification">Show Control Notification</string>
     <string name="open_controls">Open Controls</string>
     <string name="auto_hide_soundmaster">Hide after Timeout</string>
-    <string name="themepatcher_initial_noti">Take a short trial on Theme Store…</string>
+    <string name="themepatcher_initial_noti">Take a short trial on Theme Storeâ€¦</string>
     <string name="themepatcher_patching">ThemePatcher is applying patches </string>
 
     <!-- Enforce Doze -->
@@ -2441,4 +2471,55 @@ Wi-Fi is required for the first restart because OmniShizuku must connect to the 
     <string name="tile_settings_about_phone">About Phone</string>
     <string name="tile_settings_about_phone_subtitle">Device status and software</string>
 
+
+    <!-- Notifications -->
+    <string name="notification_channel_helper">Helper notifications</string>
+    <string name="notification_channel_usb_connection">USB connection</string>
+    <string name="notification_helper_stopped_title">Shizuku stopped</string>
+    <string name="notification_helper_stopped_text">The Shizuku server is no longer running. Tap to investigate or restart it.</string>
+    <string name="notification_helper_attention_title">Shizuku needs attention</string>
+    <string name="notification_helper_attention_text">The server encountered a problem. Open OmniShizuku to see the recovery status.</string>
+    <string name="notification_helper_recovered_title">Shizuku recovered</string>
+    <string name="notification_helper_recovered_text">The Shizuku server is running again.</string>
+    <string name="notification_helper_permission_title">Permission required</string>
+    <string name="notification_helper_permission_text">An operation requires your attention. Open OmniShizuku to review the permission request.</string>
+    <string name="notification_helper_action_restart">Restart</string>
+
+    <string name="settings_notifications_title">Notifications</string>
+    <string name="settings_helper_notifications_title">Helper notifications</string>
+    <string name="settings_helper_notifications_summary">Get notified when Shizuku+ stops or needs your attention.</string>
+    <string name="settings_messages_over_apps_title">Messages over other apps</string>
+    <string name="settings_messages_over_apps_summary">Show short Shizuku+ messages while you\'re using another app.</string>
+    <string name="settings_messages_over_apps_disabled_note">Messages will only appear while Shizuku+ is open. Pairing results will still arrive as notifications.</string>
+    <string name="settings_live_activity_title">Live Activity Notifications</string>
+    <string name="settings_live_activity_summary">Show real-time service activity in the Watchdog notification.</string>
+    <string name="settings_usb_connection_notification_title">USB connection &amp; switch notification</string>
+    <string name="settings_usb_connection_notification_summary">Keep quick access to Shizuku+ tools available when a phone or USB device is connected.</string>
+    <string name="settings_notification_permission">Notification permission</string>
+    <string name="settings_notification_permission_granted">Allowed</string>
+    <string name="settings_notification_permission_denied">Not allowed</string>
+    <string name="settings_overlay_permission">Overlay permission</string>
+    <string name="settings_clear_helper_history">Clear notification history</string>
+    <string name="settings_usb_status">USB connection status</string>
+    <string name="settings_usb_status_connected">Connected</string>
+    <string name="settings_usb_status_disconnected">Disconnected</string>
+
+    <string name="watchdog_live_running">Shizuku server running · Monitoring health</string>
+    <string name="watchdog_live_monitoring">Monitoring server health</string>
+    <string name="watchdog_live_stopped">Shizuku server stopped</string>
+    <string name="watchdog_live_recovery_started">Server stopped · Watchdog is attempting recovery</string>
+    <string name="watchdog_live_restarting">Restarting Shizuku server</string>
+    <string name="watchdog_live_waiting">Waiting for server initialization</string>
+    <string name="watchdog_live_reconnected">Server successfully recovered</string>
+    <string name="watchdog_live_recovery_failed">Recovery failed — attention required</string>
+    <string name="watchdog_live_circuit_breaker">Automatic recovery temporarily paused</string>
+    <string name="watchdog_live_recovery_attempt">Server stopped · Recovery attempt %1$d</string>
+
+    <string name="notification_usb_connected_title">OmniShizuku — USB connected</string>
+    <string name="notification_usb_connected_text">Your device is connected. Quick access to USB and ADB tools.</string>
+    <string name="notification_usb_action_debugging">USB debugging</string>
+    <string name="notification_usb_action_adb">ADB tools</string>
+    <string name="notification_usb_action_diagnostics">Diagnostics</string>
+    <string name="notification_usb_action_dashboard">Dashboard</string>
 </resources>
+

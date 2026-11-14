@@ -1,4 +1,4 @@
-package moe.shizuku.manager.receiver
+﻿package moe.shizuku.manager.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -96,6 +96,9 @@ object UserUnlockedStarter {
             StartNowDecision.START_LOCKED -> Unit
         }
 
+        runCatching { moe.shizuku.manager.legacy.LegacyRishCompatibilityManager.init(context.applicationContext) }
+        runCatching { moe.shizuku.manager.legacy.LegacyRishCompatibilityManager.refresh(context.applicationContext) }
+
         // A start the foreground service began before the unlock is the better start while it is
         // making progress, and the request above has joined it. When it is not, it is replaced.
         watchLockedRun(context, SystemClock.elapsedRealtime())
@@ -166,3 +169,4 @@ object UserUnlockedStarter {
         }
     }
 }
+

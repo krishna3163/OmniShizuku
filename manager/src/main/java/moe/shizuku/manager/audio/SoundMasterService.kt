@@ -251,7 +251,7 @@ class SoundMasterService : Service() {
         var setBandValueOf: (AudioOutputKey, Int, Float) -> Unit = { _, _, _ -> }
         var getBandValueOf: (AudioOutputKey, Int) -> Float? = { _, _ -> null }
 
-        const val NOTI_ID = 1
+        const val NOTI_ID = moe.shizuku.manager.notifications.NotificationRegistry.Ids.SOUND_MASTER
         const val updateInterval = 30000L
 
         lateinit var uiIntent: Intent

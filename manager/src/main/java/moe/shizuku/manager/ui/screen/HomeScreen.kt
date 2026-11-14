@@ -132,6 +132,8 @@ import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.permissionOwnership
 import moe.shizuku.manager.utils.runShellCommand
 import moe.shizuku.manager.utils.UpdateHelper
+import moe.shizuku.manager.notifications.ServerHealth
+import moe.shizuku.manager.notifications.ServerHealthSnapshot
 import rikka.core.util.ClipboardUtils
 import rikka.shizuku.Shizuku
 
@@ -158,7 +160,12 @@ fun HomeScreen(bottomPadding: Dp) {
     var seccompRes by remember { mutableStateOf<Int?>(null) }
     var diagnostics by remember { mutableStateOf("") }
     val startStatus by StartStatusReporter.status.collectAsState()
+    var serverHealth by remember { mutableStateOf(ServerHealth.snapshot(context, StartStatusReporter.status.value)) }
     val scope = rememberCoroutineScope()
+
+    LaunchedEffect(startStatus, running, uid) {
+        serverHealth = ServerHealth.snapshot(context, startStatus)
+    }
 
     var pendingLocalNetworkAction by remember { mutableStateOf<(() -> Unit)?>(null) }
     val localNetworkLauncher = rememberLauncherForActivityResult(
@@ -213,6 +220,8 @@ fun HomeScreen(bottomPadding: Dp) {
                 StartStatusReporter.clear()
             }
         }
+
+        serverHealth = ServerHealth.snapshot(context, StartStatusReporter.status.value)
 
         withContext(Dispatchers.IO) {
             uid = if (running) runCatching { Shizuku.getUid() }.getOrDefault(-1) else -1
@@ -420,7 +429,8 @@ fun HomeScreen(bottomPadding: Dp) {
                     StatusCard(
                         running = running,
                         uid = uid,
-                        startMethodLabelRes = startMethodLabelRes(startMethod)
+                        startMethodLabelRes = startMethodLabelRes(startMethod),
+                        health = serverHealth
                     )
                 }
 
@@ -714,7 +724,8 @@ fun HomeScreen(bottomPadding: Dp) {
 private fun StatusCard(
     running: Boolean,
     uid: Int,
-    @StringRes startMethodLabelRes: Int
+    @StringRes startMethodLabelRes: Int,
+    health: ServerHealthSnapshot
 ) {
     val context = LocalContext.current
     val containerColor = if (running) {
@@ -764,10 +775,31 @@ private fun StatusCard(
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     stringResource(
-                        if (running) R.string.status_running_short else R.string.status_stopped_short
+                        if (health.running) R.string.status_running_short else R.string.status_stopped_short
                     ),
                     style = moe.shizuku.manager.ui.theme.OmniTokens.displayMedium()
                 )
+                Text(
+                    text = "Binder: " + if (health.binderAvailable) "Available" else "Unavailable",
+                    style = moe.shizuku.manager.ui.theme.OmniTokens.bodySmall(),
+                    color = contentColor.copy(alpha = 0.85f)
+                )
+                if (health.recoveryInProgress) {
+                    Text(
+                        text = "Recovery in progress" + if (health.recoveryAttempt > 0) " (attempt ${health.recoveryAttempt})" else "",
+                        style = moe.shizuku.manager.ui.theme.OmniTokens.bodySmall(),
+                        color = contentColor
+                    )
+                }
+                health.lastFailure?.let {
+                    Text(text = "Last failure: $it", style = moe.shizuku.manager.ui.theme.OmniTokens.bodySmall(), color = contentColor)
+                }
+                health.currentError?.let {
+                    Text(text = "Current error: $it", style = moe.shizuku.manager.ui.theme.OmniTokens.bodySmall(), color = MaterialTheme.colorScheme.error)
+                }
+                health.actionRequired?.let {
+                    Text(text = "Action required: $it", style = moe.shizuku.manager.ui.theme.OmniTokens.bodySmall(), color = contentColor)
+                }
                 StatusFacts(
                     StatusFactEntry(
                         R.string.home_status_started_with,

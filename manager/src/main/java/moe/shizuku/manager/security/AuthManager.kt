@@ -11,26 +11,32 @@ import androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL
 import androidx.biometric.BiometricPrompt
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
+import java.util.concurrent.atomic.AtomicReference
 
 object AuthManager : Application.ActivityLifecycleCallbacks {
 
     private const val AUTH_TYPES = BIOMETRIC_STRONG or DEVICE_CREDENTIAL
 
-    @Volatile
-    private var isAppOpenUnlocked: Boolean = false
+    private val snapshotRef = AtomicReference(AuthSnapshot())
 
-    private val authenticatedActionsInSession = java.util.Collections.synchronizedSet(
-        mutableSetOf<SecuritySettings.ProtectedAction>()
-    )
+    val currentSnapshot: AuthSnapshot
+        get() = snapshotRef.get()
+
+    val currentAuthState: AuthState
+        get() = snapshotRef.get().state
 
     @Volatile
     private var startedActivityCount: Int = 0
 
-    @Volatile
-    private var backgroundTimestamp: Long = 0L
+    private val androidClock = object : MonotonicClock {
+        override fun elapsedRealtime(): Long = SystemClock.elapsedRealtime()
+    }
 
-    @Volatile
-    private var isChangingConfig: Boolean = false
+    fun dispatchEvent(event: AuthEvent) {
+        snapshotRef.updateAndGet { current ->
+            AuthStateMachine.reduce(current, event, androidClock)
+        }
+    }
 
     fun canAuthenticate(context: Context): Boolean {
         val biometricManager = BiometricManager.from(context)
@@ -40,17 +46,20 @@ object AuthManager : Application.ActivityLifecycleCallbacks {
 
     fun isAppOpenSessionValid(): Boolean {
         if (!SecuritySettings.isAuthEnabled || !SecuritySettings.authOnAppOpen) return true
-        if (!isAppOpenUnlocked) return false
+        val snapshot = snapshotRef.get()
+        if (!snapshot.isAppOpenUnlocked) return false
+
+        val session = snapshot.appOpenSession ?: return false
+        if (!session.isValid(SystemClock.elapsedRealtime())) return false
 
         // If the app is currently in background or returned from background, verify timeout
-        if (backgroundTimestamp > 0L) {
-            val elapsedMs = SystemClock.elapsedRealtime() - backgroundTimestamp
-            if (elapsedMs >= 1000L) {
-                val timeoutSec = SecuritySettings.timeoutSeconds
-                if (timeoutSec <= 0) return false
-                val elapsedSec = elapsedMs / 1000
-                if (elapsedSec >= timeoutSec) return false
-            }
+        val bgTime = snapshot.backgroundTimestampElapsedRealtimeMs
+        if (bgTime > 0L) {
+            val elapsedMs = SystemClock.elapsedRealtime() - bgTime
+            val timeoutSec = SecuritySettings.timeoutSeconds
+            if (timeoutSec <= 0) return false
+            val elapsedSec = elapsedMs / 1000
+            if (elapsedSec >= timeoutSec) return false
         }
         return true
     }
@@ -58,8 +67,8 @@ object AuthManager : Application.ActivityLifecycleCallbacks {
     fun isSessionValid(): Boolean = isAppOpenSessionValid()
 
     fun markAppOpenAuthenticated() {
-        isAppOpenUnlocked = true
-        backgroundTimestamp = 0L
+        val gen = snapshotRef.get().generation
+        dispatchEvent(AuthEvent.AuthenticationSucceeded(generation = gen, timeoutSeconds = SecuritySettings.timeoutSeconds))
     }
 
     fun markAuthenticated() {
@@ -67,47 +76,53 @@ object AuthManager : Application.ActivityLifecycleCallbacks {
     }
 
     fun isActionAuthenticatedInSession(action: SecuritySettings.ProtectedAction): Boolean {
-        return authenticatedActionsInSession.contains(action)
+        val now = SystemClock.elapsedRealtime()
+        return snapshotRef.get().isActionAuthorized(action.name, now)
     }
 
     fun markActionAuthenticatedInSession(action: SecuritySettings.ProtectedAction) {
-        authenticatedActionsInSession.add(action)
+        val gen = snapshotRef.get().generation
+        snapshotRef.updateAndGet { current ->
+            val now = SystemClock.elapsedRealtime()
+            val expiresAt = if (SecuritySettings.timeoutSeconds > 0) {
+                now + (SecuritySettings.timeoutSeconds * 1000L)
+            } else {
+                Long.MAX_VALUE
+            }
+            val session = AuthSession(
+                scope = AuthScope.PROTECTED_ACTION,
+                actionName = action.name,
+                authenticatedElapsedRealtimeMs = now,
+                expiresElapsedRealtimeMs = expiresAt
+            )
+            val updated = current.actionSessions.toMutableMap()
+            updated[action.name] = session
+            current.copy(
+                state = AuthState.AUTHENTICATED_ACTION_SESSION,
+                actionSessions = updated
+            )
+        }
     }
 
     fun invalidateSession() {
-        isAppOpenUnlocked = false
-        authenticatedActionsInSession.clear()
-        backgroundTimestamp = 0L
+        dispatchEvent(AuthEvent.InvalidateAll)
     }
 
     override fun onActivityStarted(activity: Activity) {
-        if (startedActivityCount == 0 && !isChangingConfig) {
-            // App returning from background
-            if (backgroundTimestamp > 0L) {
-                val elapsedMs = SystemClock.elapsedRealtime() - backgroundTimestamp
-                if (elapsedMs >= 1000L) {
-                    val timeoutSec = SecuritySettings.timeoutSeconds
-                    val elapsedSec = elapsedMs / 1000
-                    if (timeoutSec <= 0 || elapsedSec >= timeoutSec) {
-                        invalidateSession()
-                    } else {
-                        backgroundTimestamp = 0L
-                    }
-                } else {
-                    backgroundTimestamp = 0L
-                }
-            }
+        if (startedActivityCount == 0) {
+            dispatchEvent(AuthEvent.ActivityForegrounded(timeoutSeconds = SecuritySettings.timeoutSeconds))
         }
         startedActivityCount++
-        isChangingConfig = false
     }
 
     override fun onActivityStopped(activity: Activity) {
-        isChangingConfig = activity.isChangingConfigurations
+        val changing = activity.isChangingConfigurations
         startedActivityCount--
-        if (startedActivityCount <= 0 && !isChangingConfig) {
+        if (startedActivityCount <= 0 && !changing) {
             startedActivityCount = 0
-            backgroundTimestamp = SystemClock.elapsedRealtime()
+            dispatchEvent(AuthEvent.ActivityBackgrounded(isChangingConfig = false))
+        } else if (changing) {
+            dispatchEvent(AuthEvent.ConfigurationChangeStarted(changing = true))
         }
     }
 
@@ -151,10 +166,14 @@ object AuthManager : Application.ActivityLifecycleCallbacks {
             return
         }
 
+        dispatchEvent(AuthEvent.RequestActionAuth(action.name))
+        val currentGen = snapshotRef.get().generation
+
         authenticate(
             activity = activity,
             title = title,
             subtitle = subtitle,
+            expectedGeneration = currentGen,
             onResult = { authenticated ->
                 if (authenticated) {
                     markActionAuthenticatedInSession(action)
@@ -168,6 +187,7 @@ object AuthManager : Application.ActivityLifecycleCallbacks {
         activity: FragmentActivity,
         title: String,
         subtitle: String? = null,
+        expectedGeneration: Long = snapshotRef.get().generation,
         onResult: (Boolean) -> Unit
     ) {
         if (!canAuthenticate(activity)) {
@@ -177,22 +197,46 @@ object AuthManager : Application.ActivityLifecycleCallbacks {
             return
         }
 
+        dispatchEvent(AuthEvent.PromptDisplayed(expectedGeneration))
+
         val executor = ContextCompat.getMainExecutor(activity)
         val prompt = BiometricPrompt(activity, executor, object : BiometricPrompt.AuthenticationCallback() {
             override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
                 super.onAuthenticationSucceeded(result)
-                markAuthenticated()
+                dispatchEvent(
+                    AuthEvent.AuthenticationSucceeded(
+                        generation = expectedGeneration,
+                        timeoutSeconds = SecuritySettings.timeoutSeconds
+                    )
+                )
                 onResult(true)
             }
 
             override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                 super.onAuthenticationError(errorCode, errString)
+                if (errorCode == BiometricPrompt.ERROR_USER_CANCELED ||
+                    errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
+                    errorCode == BiometricPrompt.ERROR_CANCELED
+                ) {
+                    dispatchEvent(AuthEvent.AuthenticationCancelled(generation = expectedGeneration))
+                } else if (errorCode == BiometricPrompt.ERROR_LOCKOUT ||
+                    errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT
+                ) {
+                    dispatchEvent(
+                        AuthEvent.AuthenticationLockout(
+                            generation = expectedGeneration,
+                            permanent = errorCode == BiometricPrompt.ERROR_LOCKOUT_PERMANENT
+                        )
+                    )
+                } else {
+                    dispatchEvent(AuthEvent.AuthenticationFailedSoft(generation = expectedGeneration, reason = errString.toString()))
+                }
                 onResult(false)
             }
 
             override fun onAuthenticationFailed() {
                 super.onAuthenticationFailed()
-                // Called on soft failure (e.g. fingerprint not recognized, user can retry)
+                dispatchEvent(AuthEvent.AuthenticationFailedSoft(generation = expectedGeneration, reason = "Soft failure"))
             }
         })
 
@@ -209,6 +253,7 @@ object AuthManager : Application.ActivityLifecycleCallbacks {
         try {
             prompt.authenticate(promptInfo)
         } catch (_: Exception) {
+            dispatchEvent(AuthEvent.AuthenticationFailedSoft(generation = expectedGeneration, reason = "Prompt error"))
             onResult(false)
         }
     }

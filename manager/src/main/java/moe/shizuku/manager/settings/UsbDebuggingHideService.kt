@@ -33,6 +33,9 @@ class UsbDebuggingHideService : Service() {
     override fun onCreate() {
         super.onCreate()
         startAsForeground()
+        // Check and recover from any prior crash or unhandled journal immediately on startup
+        UsbDebuggingHideManager.recoverFromCrashIfPending(this)
+        UsbDebuggingHideManager.dispatchEvent(UsbDebuggingEvent.StartMonitoring)
         watchJob = serviceScope.launch { watch() }
     }
 
@@ -41,6 +44,7 @@ class UsbDebuggingHideService : Service() {
     override fun onDestroy() {
         watchJob?.cancel()
         UsbDebuggingHideManager.restore(applicationContext)
+        UsbDebuggingHideManager.dispatchEvent(UsbDebuggingEvent.StopMonitoring)
         serviceScope.cancel()
         super.onDestroy()
     }
@@ -65,6 +69,7 @@ class UsbDebuggingHideService : Service() {
                 delay(5_000)
                 continue
             }
+
             val locked = getSystemService(KeyguardManager::class.java)?.isKeyguardLocked == true
             val foreground = if (!locked) {
                 runCatching { foregroundPackage() }.getOrNull()
@@ -74,9 +79,17 @@ class UsbDebuggingHideService : Service() {
 
             runCatching {
                 if (foreground != null && foreground in targets) {
-                    UsbDebuggingHideManager.hide(this)
+                    val currentSnapshot = UsbDebuggingHideManager.snapshot
+                    if (currentSnapshot.activeTargetPackage != foreground) {
+                        UsbDebuggingHideManager.dispatchEvent(UsbDebuggingEvent.TargetAppForeground(foreground))
+                    }
+                    UsbDebuggingHideManager.hide(this, foreground)
                 } else {
-                    UsbDebuggingHideManager.restore(this)
+                    val currentSnapshot = UsbDebuggingHideManager.snapshot
+                    if (currentSnapshot.isHidden || currentSnapshot.activeTargetPackage != null) {
+                        UsbDebuggingHideManager.dispatchEvent(UsbDebuggingEvent.TargetAppBackground)
+                        UsbDebuggingHideManager.restore(this)
+                    }
                 }
             }
             delay(1_000)
@@ -86,7 +99,7 @@ class UsbDebuggingHideService : Service() {
     private fun foregroundPackage(): String? {
         val now = System.currentTimeMillis()
         val stats = getSystemService(UsageStatsManager::class.java)
-            .queryUsageStats(UsageStatsManager.INTERVAL_DAILY, now - 24 * 60 * 60 * 1000L, now)
+            ?.queryUsageStats(UsageStatsManager.INTERVAL_DAILY, now - 24 * 60 * 60 * 1000L, now)
         return stats?.maxByOrNull { it.lastTimeUsed }
             ?.takeIf { now - it.lastTimeUsed < 24 * 60 * 60 * 1000L }
             ?.packageName
@@ -95,7 +108,7 @@ class UsbDebuggingHideService : Service() {
     private fun startAsForeground() {
         val manager = getSystemService(NotificationManager::class.java)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            manager.createNotificationChannel(
+            manager?.createNotificationChannel(
                 NotificationChannel(
                     CHANNEL_ID,
                     getString(R.string.usb_debugging_hide_notification_channel),

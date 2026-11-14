@@ -39,54 +39,72 @@ class RecordingForegroundService : Service() {
     private var outputFile: ParcelFileDescriptor? = null
     private var isBound = false
     private var pendingOutputFile: File? = null
+    @Volatile private var activeRecordingGeneration: Long = -1L
+    @Volatile private var activeCallback: IRecordingCallback.Stub? = null
 
-    private val recordingCallback = object : IRecordingCallback.Stub() {
-        override fun onRecordingStarted() {
-            RecordingStateHolder.setRecording()
-            updateNotification("Recording active...")
-        }
+    private fun isCurrentSession(generation: Long): Boolean =
+        generation != -1L &&
+            generation == activeRecordingGeneration &&
+            generation == RecordingStateHolder.generation
 
-        override fun onRecordingStopped() {
-            RecordingStateHolder.setStopped()
-            cleanupSession(setIdle = false)
-            stopForeground(STOP_FOREGROUND_REMOVE)
-            stopSelf()
-        }
+    private fun createRecordingCallback(sessionGeneration: Long): IRecordingCallback.Stub =
+        object : IRecordingCallback.Stub() {
+            private fun matches(): Boolean = isCurrentSession(sessionGeneration)
 
-        override fun onRecordingPaused() {
-            RecordingStateHolder.setPaused()
-            updateNotification("Recording paused")
-        }
+            override fun onRecordingStarted() {
+                if (!matches()) return
+                RecordingStateHolder.setRecording()
+                if (matches()) updateNotification("Recording active...")
+            }
 
-        override fun onRecordingResumed() {
-            RecordingStateHolder.setResumed()
-            updateNotification("Recording active...")
-        }
+            override fun onRecordingStopped() {
+                if (sessionGeneration != activeRecordingGeneration) return
+                if (sessionGeneration != RecordingStateHolder.generation) return
+                RecordingStateHolder.setStopped()
+                cleanupSession(setIdle = false, forGeneration = sessionGeneration)
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
 
-        override fun onRecordingFailure(errorCode: Int, message: String) {
-            Log.e(TAG, "Recording failure callback received: [$errorCode] $message")
-            RecordingStateHolder.setError(message)
-            cleanupSession(setIdle = false)
-            stopForeground(STOP_FOREGROUND_REMOVE)
-            stopSelf()
-        }
+            override fun onRecordingPaused() {
+                if (!matches()) return
+                RecordingStateHolder.setPaused()
+                if (matches()) updateNotification("Recording paused")
+            }
 
-        override fun onRecordingProgress(durationMs: Long, fileSizeBytes: Long) {
-            if (!RecordingStateHolder.isRecording) return
-            RecordingStateHolder.onProgress(durationMs, fileSizeBytes)
-            val seconds = (durationMs / 1000) % 60
-            val minutes = (durationMs / 1000) / 60
-            val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-            val sizeMb = String.format(Locale.getDefault(), "%.1f MB", fileSizeBytes / (1024f * 1024f))
-            updateNotification("Recording $formattedTime ($sizeMb)")
+            override fun onRecordingResumed() {
+                if (!matches()) return
+                RecordingStateHolder.setResumed()
+                if (matches()) updateNotification("Recording active...")
+            }
+
+            override fun onRecordingFailure(errorCode: Int, message: String) {
+                if (sessionGeneration != activeRecordingGeneration) return
+                if (sessionGeneration != RecordingStateHolder.generation) return
+                Log.e(TAG, "Recording failure callback received: [$errorCode] gen=$sessionGeneration")
+                RecordingStateHolder.setError(message)
+                cleanupSession(setIdle = false, forGeneration = sessionGeneration)
+                stopForeground(STOP_FOREGROUND_REMOVE)
+                stopSelf()
+            }
+
+            override fun onRecordingProgress(durationMs: Long, fileSizeBytes: Long) {
+                if (!matches() || !RecordingStateHolder.isRecording) return
+                RecordingStateHolder.onProgress(durationMs, fileSizeBytes)
+                if (!matches()) return
+                val seconds = (durationMs / 1000) % 60
+                val minutes = (durationMs / 1000) / 60
+                val formattedTime = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
+                val sizeMb = String.format(Locale.getDefault(), "%.1f MB", fileSizeBytes / (1024f * 1024f))
+                updateNotification("Recording $formattedTime ($sizeMb)")
+            }
         }
-    }
 
     private val serviceConnection = object : ServiceConnection {
         override fun onServiceConnected(name: ComponentName, service: IBinder) {
             Log.i(TAG, "ShellService connected via Shizuku")
             shellService = IShellService.Stub.asInterface(service)
-            shellService?.setRecordingCallback(recordingCallback)
+            activeCallback?.let { shellService?.setRecordingCallback(it) }
             startRemoteRecording()
         }
 
@@ -94,10 +112,13 @@ class RecordingForegroundService : Service() {
             Log.w(TAG, "ShellService disconnected")
             shellService = null
             isBound = false
-            if (RecordingStateHolder.isRecording || RecordingStateHolder.sessionState.value == RecordingSessionState.Starting) {
+            val gen = activeRecordingGeneration
+            if (isCurrentSession(gen) &&
+                (RecordingStateHolder.isRecording || RecordingStateHolder.sessionState.value == RecordingSessionState.Starting)
+            ) {
                 RecordingStateHolder.setError("Recording service disconnected")
             }
-            cleanupSession(setIdle = false)
+            cleanupSession(setIdle = false, forGeneration = gen)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }
@@ -121,12 +142,16 @@ class RecordingForegroundService : Service() {
             ACTION_START -> startRecordingSession()
             ACTION_STOP -> stopRecordingSession()
             ACTION_PAUSE -> {
-                if (RecordingStateHolder.sessionState.value == RecordingSessionState.Recording) {
+                if (isCurrentSession(activeRecordingGeneration) &&
+                    RecordingStateHolder.sessionState.value == RecordingSessionState.Recording
+                ) {
                     runCatching { shellService?.pauseRecording() }
                 }
             }
             ACTION_RESUME -> {
-                if (RecordingStateHolder.sessionState.value == RecordingSessionState.Paused) {
+                if (isCurrentSession(activeRecordingGeneration) &&
+                    RecordingStateHolder.sessionState.value == RecordingSessionState.Paused
+                ) {
                     runCatching { shellService?.resumeRecording() }
                 }
             }
@@ -141,10 +166,6 @@ class RecordingForegroundService : Service() {
             return
         }
 
-        RecordingStateHolder.setStarting()
-        createNotificationChannel()
-        startForeground(NOTIFICATION_ID, buildNotification("Initializing recorder..."))
-
         try {
             val recordingsDir = File(getExternalFilesDir(null) ?: filesDir, "Recordings")
             if (!recordingsDir.exists()) recordingsDir.mkdirs()
@@ -153,7 +174,13 @@ class RecordingForegroundService : Service() {
             val codec = RecordingStateHolder.selectedCodec.value
             val targetFile = File(recordingsDir, "Call_$timestamp${codec.extension}")
             pendingOutputFile = targetFile
+            // Single authoritative transition that allocates a unique generation for this session.
             RecordingStateHolder.setStarting(targetFile.name)
+            activeRecordingGeneration = RecordingStateHolder.generation
+            activeCallback = createRecordingCallback(activeRecordingGeneration)
+
+            createNotificationChannel()
+            startForeground(NOTIFICATION_ID, buildNotification("Initializing recorder..."))
 
             val mode = ParcelFileDescriptor.MODE_READ_WRITE or
                     ParcelFileDescriptor.MODE_CREATE or
@@ -162,8 +189,8 @@ class RecordingForegroundService : Service() {
 
             if (!Shizuku.pingBinder()) {
                 Log.e(TAG, "Shizuku binder is not available")
-                RecordingStateHolder.setError("Shizuku is not running")
-                cleanupSession(setIdle = false)
+                if (isCurrentSession(activeRecordingGeneration)) RecordingStateHolder.setError("Shizuku is not running")
+                cleanupSession(setIdle = false, forGeneration = activeRecordingGeneration)
                 stopForeground(STOP_FOREGROUND_REMOVE)
                 stopSelf()
                 return
@@ -177,8 +204,8 @@ class RecordingForegroundService : Service() {
             }
         } catch (e: Exception) {
             Log.e(TAG, "Failed to initialize recording session", e)
-            RecordingStateHolder.setError(e.message ?: "Failed to start")
-            cleanupSession(setIdle = false)
+            if (isCurrentSession(activeRecordingGeneration)) RecordingStateHolder.setError(e.message ?: "Failed to start")
+            cleanupSession(setIdle = false, forGeneration = activeRecordingGeneration)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }
@@ -187,6 +214,8 @@ class RecordingForegroundService : Service() {
     private fun startRemoteRecording() {
         val service = shellService ?: return
         val pfd = outputFile ?: return
+        val gen = activeRecordingGeneration
+        if (!isCurrentSession(gen)) return
 
         val primary = RecordingStateHolder.selectedPrimarySource.value.ordinal
         val secondary = RecordingStateHolder.selectedSecondarySource.value?.ordinal ?: -1
@@ -198,40 +227,41 @@ class RecordingForegroundService : Service() {
             service.startRecording(pfd, primary, secondary, channelSplit, codec, bitrate)
         }.onFailure {
             Log.e(TAG, "Failed to call service.startRecording", it)
-            RecordingStateHolder.setError(it.message)
-            cleanupSession(setIdle = false)
+            if (isCurrentSession(gen)) RecordingStateHolder.setError(it.message)
+            cleanupSession(setIdle = false, forGeneration = gen)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }
     }
 
     private fun stopRecordingSession() {
+        val gen = activeRecordingGeneration
         val state = RecordingStateHolder.sessionState.value
         if (state == RecordingSessionState.Idle) {
-            cleanupSession(setIdle = true)
+            cleanupSession(setIdle = true, forGeneration = gen)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
             return
         }
         if (state == RecordingSessionState.Stopping) return
 
-        if (RecordingStateHolder.isRecording || state == RecordingSessionState.Starting) {
+        if (isCurrentSession(gen) && (RecordingStateHolder.isRecording || state == RecordingSessionState.Starting)) {
             RecordingStateHolder.setStopping()
             updateNotification("Stopping recording...")
         }
 
         val stopResult = runCatching { shellService?.stopRecording() }
-        if (stopResult.isFailure && !RecordingStateHolder.isRecording && state == RecordingSessionState.Starting) {
+        if (stopResult.isFailure && isCurrentSession(gen) && !RecordingStateHolder.isRecording && state == RecordingSessionState.Starting) {
             // No active remote session to stop; finalize locally.
-            RecordingStateHolder.setIdle()
-            cleanupSession(setIdle = true)
+            RecordingStateHolder.setStopped()
+            cleanupSession(setIdle = false, forGeneration = gen)
             stopForeground(STOP_FOREGROUND_REMOVE)
             stopSelf()
         }
         // onRecordingStopped/onRecordingFailure callback finalizes service for active sessions.
     }
 
-    private fun cleanupSession(setIdle: Boolean) {
+    private fun cleanupSession(setIdle: Boolean, forGeneration: Long = activeRecordingGeneration) {
         if (isBound) {
             runCatching { Shizuku.unbindUserService(userServiceArgs, serviceConnection, false) }
             isBound = false
@@ -240,8 +270,12 @@ class RecordingForegroundService : Service() {
         runCatching { outputFile?.close() }
         outputFile = null
         pendingOutputFile = null
-        if (setIdle) {
+        if (setIdle && (forGeneration == -1L || forGeneration == RecordingStateHolder.generation)) {
             RecordingStateHolder.setStopped()
+        }
+        if (forGeneration == activeRecordingGeneration || activeRecordingGeneration == -1L) {
+            activeRecordingGeneration = -1L
+            activeCallback = null
         }
     }
 

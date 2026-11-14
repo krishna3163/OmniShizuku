@@ -290,6 +290,16 @@
         </activity>
 
         <service
+            android:name=".legacy.LegacyRishCompatibilityService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="specialUse"
+            tools:targetApi="34">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="Keeps legacy Rish shell binder availability active while the Shizuku server is running." />
+        </service>
+        <service
             android:name=".adb.AdbPairingService"
             android:enabled="true"
             android:exported="false"
@@ -364,6 +374,7 @@
         <receiver android:name=".receiver.NotifAttemptReceiver" android:exported="false" />
         <receiver android:name=".receiver.NotifCancelReceiver" android:exported="false" />
         <receiver android:name=".receiver.NotifRestoreReceiver" android:exported="false" />
+        <receiver android:name=".notifications.HelperDismissReceiver" android:exported="false" />
 
         <receiver
             android:name=".receiver.IntentReceiver"
@@ -855,3 +866,4 @@
     </application>
 
 </manifest>
+

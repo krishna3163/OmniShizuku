@@ -170,3 +170,49 @@ class RecordingSessionMachineTest {
 }
 
 
+
+    @Test
+    fun staleTerminalAndControlCallbacksFromOldGenerationAreIgnored() {
+        var old = snapshot(RecordingSessionState.Starting, generation = 1)
+        old = RecordingSessionMachine.reduce(old, RecordingSessionEvent.Started(1))
+        old = RecordingSessionMachine.reduce(old, RecordingSessionEvent.StopRequested)
+        old = RecordingSessionMachine.reduce(old, RecordingSessionEvent.Stopped(1))
+        var newer = RecordingSessionMachine.reduce(old, RecordingSessionEvent.StartRequested) // gen 2
+        newer = RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Started(2))
+        newer = RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Paused(2))
+        val before = newer
+        // stale callbacks from generation 1 must not mutate generation 2 session
+        assertEquals(before, RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Started(1)))
+        assertEquals(before, RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Paused(1)))
+        assertEquals(before, RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Resumed(1)))
+        assertEquals(before, RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Stopped(1)))
+        assertEquals(before, RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Failed("late", 1)))
+        // current-generation callbacks still apply
+        val resumed = RecordingSessionMachine.reduce(newer, RecordingSessionEvent.Resumed(2))
+        assertEquals(RecordingSessionState.Recording, resumed.state)
+        val stopped = RecordingSessionMachine.reduce(resumed, RecordingSessionEvent.StopRequested)
+        assertEquals(RecordingSessionState.Stopping, stopped.state)
+    }
+
+    @Test
+    fun sessionReplacementAfterImmediateStopOrFailureIsClean() {
+        // immediate stop from starting
+        var s = snapshot()
+        s = RecordingSessionMachine.reduce(s, RecordingSessionEvent.StartRequested)
+        assertEquals(1L, s.generation)
+        s = RecordingSessionMachine.reduce(s, RecordingSessionEvent.StopRequested)
+        s = RecordingSessionMachine.reduce(s, RecordingSessionEvent.Stopped(1))
+        assertEquals(RecordingSessionState.Idle, s.state)
+        var s2 = RecordingSessionMachine.reduce(s, RecordingSessionEvent.StartRequested)
+        assertEquals(RecordingSessionState.Starting, s2.state)
+        assertEquals(2L, s2.generation)
+        // failure then replacement
+        var f = snapshot(RecordingSessionState.Recording, generation = 5)
+        f = RecordingSessionMachine.reduce(f, RecordingSessionEvent.Failed("init", 5))
+        assertTrue(f.state is RecordingSessionState.Error)
+        val restarted = RecordingSessionMachine.reduce(f, RecordingSessionEvent.StartRequested)
+        assertEquals(RecordingSessionState.Starting, restarted.state)
+        assertEquals(6L, restarted.generation)
+        assertEquals(0L, restarted.durationMs)
+        assertEquals(null, restarted.lastError)
+    }

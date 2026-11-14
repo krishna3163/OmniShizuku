@@ -1,5 +1,7 @@
 package moe.shizuku.manager.themepatcher
 
+import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ApplicationInfo
@@ -8,9 +10,18 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.Looper
+import android.os.SystemClock
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import moe.shizuku.manager.R
 import moe.shizuku.manager.utils.runShellCommand
 
@@ -25,7 +36,6 @@ class ThemePatcherService : Service() {
     private val negativeOneByDefault = listOf(
         "persist.sys.oplus.theme_uuid",
         "persist.sys.oppo.theme.uuid",
-        "persist.sys.oppo.theme.uuid",
         "persist.sys.oppo.theme_uuid"
     )
     private val otherDefaults = mapOf(
@@ -34,6 +44,8 @@ class ThemePatcherService : Service() {
     )
 
     private val handler = Handler(Looper.getMainLooper())
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var patcherJob: Job? = null
 
     override fun onBind(intent: Intent): IBinder? = null
 
@@ -41,11 +53,11 @@ class ThemePatcherService : Service() {
         super.onCreate()
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = android.app.NotificationChannel(
+            val channel = NotificationChannel(
                 "notifications", "ThemePatcher",
-                android.app.NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_LOW
             )
-            val nm = getSystemService(android.app.NotificationManager::class.java)
+            val nm = getSystemService(NotificationManager::class.java)
             nm.createNotificationChannel(channel)
         }
 
@@ -59,6 +71,7 @@ class ThemePatcherService : Service() {
             .setWhen(System.currentTimeMillis() + 1000 * 60 * 5)
             .setUsesChronometer(true)
             .setChronometerCountDown(true)
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
             startForeground(
                 ThemePatcherActivity.NOTI_ID,
@@ -79,54 +92,126 @@ class ThemePatcherService : Service() {
             themeStores
         }
 
-        startPatcher(filteredStores) { items ->
-            postPatchNotification(items)
-        }
+        startPatcherCoroutines(filteredStores)
     }
 
-    private fun startPatcher(
-        storepackages: List<ApplicationInfo>,
-        patched: (Array<String>) -> Unit
-    ) {
-        patchAll {}
-        Thread {
-            var trialStates = trialItems()
-            while (trialStates[3].isEmpty()) {
-                trialStates = trialItems()
-                Thread.sleep(3500)
-            }
-            trialStates = trialItems()
-            val notiMessage = "Applying on " + trialStates.take(3).filter { it.isNotEmpty() }
-                .joinToString(separator = ", ")
-            handler.post {
-                postNotification(
-                    getString(R.string.themepatcher_patching),
-                    notiMessage, success = false, id = ThemePatcherActivity.NOTI_ID * 10
+    override fun onDestroy() {
+        super.onDestroy()
+        patcherJob?.cancel()
+        ThemePatcherManager.coordinator.cancel()
+        serviceScope.cancel()
+    }
+
+    private fun startPatcherCoroutines(storePackages: List<ApplicationInfo>) {
+        patcherJob?.cancel()
+        patcherJob = serviceScope.launch {
+            val gen = ThemePatcherManager.coordinator.nextGeneration()
+            val timeoutDeadlineMs = SystemClock.elapsedRealtime() + (5 * 60 * 1000L) // 5 minutes monotonic timeout
+
+            ThemePatcherManager.coordinator.transition(
+                ThemePatcherEvent.StartRequested(
+                    generation = gen,
+                    storePackages = storePackages.map { it.packageName },
+                    timeoutDeadlineMs = timeoutDeadlineMs,
+                    currentTimeMs = SystemClock.elapsedRealtime()
+                )
+            )
+
+            // Initial cleanup patch
+            patchAllSettings()
+
+            // Polling loop
+            while (isActive && ThemePatcherManager.coordinator.state == ThemePatcherState.WATCHING_FOR_TRIAL) {
+                delay(3500L)
+                val trial = trialItems()
+                val hasTrial = trial[3].isNotEmpty()
+                val detected = trial.take(3).filter { it.isNotEmpty() }
+
+                ThemePatcherManager.coordinator.transition(
+                    ThemePatcherEvent.TrialPolled(
+                        generation = gen,
+                        hasTrial = hasTrial,
+                        items = detected,
+                        currentTimeMs = SystemClock.elapsedRealtime()
+                    )
                 )
             }
-            Thread.sleep(12000)
-            killStores(storepackages)
-            Thread.sleep(3000)
-            killStores(storepackages)
-            patchAll {
-                if (it.isEmpty()) {
-                    handler.post { patched(trialStates) }
-                } else {
+
+            // If trial was detected, proceed through termination, patching, and verification
+            if (isActive && ThemePatcherManager.coordinator.state == ThemePatcherState.TRIAL_DETECTED) {
+                val detectedItems = ThemePatcherManager.coordinator.snapshot.detectedItems
+                val notiMessage = "Applying on " + detectedItems.joinToString(", ")
+                handler.post {
+                    postNotification(
+                        getString(R.string.themepatcher_patching),
+                        notiMessage,
+                        success = false,
+                        id = ThemePatcherActivity.NOTI_ID
+                    )
+                }
+
+                delay(12000L)
+                killStores(storePackages)
+                delay(3000L)
+                killStores(storePackages)
+
+                ThemePatcherManager.coordinator.transition(
+                    ThemePatcherEvent.StoresTerminated(gen)
+                )
+
+                val patchError = patchAllSettings()
+                val success = patchError == null
+                ThemePatcherManager.coordinator.transition(
+                    ThemePatcherEvent.PatchApplied(gen, success, patchError)
+                )
+
+                if (success) {
+                    val verified = verifyTrialFrozen()
+                    ThemePatcherManager.coordinator.transition(
+                        ThemePatcherEvent.VerificationCompleted(gen, verified)
+                    )
+                }
+            }
+
+            // Process terminal outcomes
+            when (ThemePatcherManager.coordinator.state) {
+                ThemePatcherState.COMPLETED -> {
+                    handler.post {
+                        postPatchNotification(ThemePatcherManager.coordinator.snapshot.detectedItems)
+                    }
+                }
+                ThemePatcherState.TIMED_OUT -> {
                     handler.post {
                         postNotification(
                             getString(R.string.themepatcher),
-                            "Error: $it", success = false, id = ThemePatcherActivity.NOTI_ID * 10
+                            "No trial theme detected within 5 minutes.",
+                            success = false,
+                            id = ThemePatcherActivity.NOTI_ID
                         )
                     }
                 }
-                Thread.sleep(10000)
-                try {
-                    stopSelf()
-                } catch (_: Exception) {
-                    stopForeground(Service.STOP_FOREGROUND_DETACH)
+                ThemePatcherState.FAILED -> {
+                    val err = ThemePatcherManager.coordinator.snapshot.lastError ?: "Unknown error"
+                    handler.post {
+                        postNotification(
+                            getString(R.string.themepatcher),
+                            "Error: $err",
+                            success = false,
+                            id = ThemePatcherActivity.NOTI_ID
+                        )
+                    }
                 }
+                else -> {}
             }
-        }.start()
+
+            // Allow user to view status before closing foreground service
+            delay(5000L)
+            try {
+                stopSelf()
+            } catch (_: Exception) {
+                stopForeground(Service.STOP_FOREGROUND_DETACH)
+            }
+        }
     }
 
     private fun killStores(storepackages: List<ApplicationInfo>) {
@@ -135,12 +220,14 @@ class ThemePatcherService : Service() {
                 shell("am force-stop ${sPackage.packageName}")
             }
         }
+        shell("am force-stop com.heytap.themestore")
+        shell("am force-stop com.nearme.themestore")
     }
 
-    private fun patchAll(done: (String) -> Unit) {
-        if (trialItems()[3].isNotEmpty()) {
-            val tables = listOf("system", "secure")
-            tables.forEachIndexed { index, table ->
+    private fun patchAllSettings(): String? {
+        val tables = listOf("system", "secure")
+        return try {
+            tables.forEach { table ->
                 zeroByDefault.forEach {
                     shell("settings put $table $it 0")
                 }
@@ -149,18 +236,32 @@ class ThemePatcherService : Service() {
                 }
                 otherDefaults.forEach { (key, value) ->
                     shell("settings put $table $key $value")
-                    if (index == tables.size - 1) {
-                        handler.post { done("") }
-                    }
                 }
             }
-        } else {
-            handler.post { done("") }
+            null
+        } catch (e: Exception) {
+            e.message ?: "Failed to write settings"
         }
     }
 
-    private fun trialItems(): Array<String> {
-        val items = Array<String>(4) { "" }
+    private fun verifyTrialFrozen(): Boolean {
+        zeroByDefault.forEach {
+            val system = Settings.System.getInt(contentResolver, it, 0)
+            val secure = Settings.Secure.getInt(contentResolver, it, 0)
+            if (system != 0 || secure != 0) return false
+        }
+        return true
+    }
+
+    fun patchAll(done: (String) -> Unit) {
+        serviceScope.launch {
+            val err = patchAllSettings() ?: ""
+            handler.post { done(err) }
+        }
+    }
+
+    fun trialItems(): Array<String> {
+        val items = Array(4) { "" }
         zeroByDefault.forEach {
             val system = Settings.System.getInt(contentResolver, it, 0)
             val secure = Settings.Secure.getInt(contentResolver, it, 0)
@@ -194,7 +295,7 @@ class ThemePatcherService : Service() {
 
     private fun extractNameFor(isFont: Boolean): String {
         return if (isFont) {
-            Settings.System.getString(contentResolver, "current_typeface_name")
+            Settings.System.getString(contentResolver, "current_typeface_name") ?: ""
         } else {
             Settings.System.getString(contentResolver, "current_wallpaper_name")
                 ?.split(";")?.firstOrNull()
@@ -203,13 +304,18 @@ class ThemePatcherService : Service() {
         }.trim()
     }
 
-    private fun postPatchNotification(items: Array<String>) {
+    private fun postPatchNotification(items: List<String>) {
         postNotification(
             getString(R.string.themepatcher),
             getString(R.string.patched) + " " + items.take(3).filter { it.isNotEmpty() }
                 .joinToString(separator = ", "),
-            success = true, id = ThemePatcherActivity.NOTI_ID * 10
+            success = true,
+            id = ThemePatcherActivity.NOTI_ID
         )
+    }
+
+    fun postPatchNotification(items: Array<String>) {
+        postPatchNotification(items.toList())
     }
 
     private fun shell(cmd: String): String? = runShellCommand(cmd)
@@ -217,11 +323,11 @@ class ThemePatcherService : Service() {
     private fun postNotification(title: String, message: String, success: Boolean, id: Int) {
         val channelId = "notifications"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = android.app.NotificationChannel(
+            val channel = NotificationChannel(
                 channelId, "Notifications",
-                android.app.NotificationManager.IMPORTANCE_HIGH
+                NotificationManager.IMPORTANCE_HIGH
             )
-            val nm = getSystemService(android.app.NotificationManager::class.java)
+            val nm = getSystemService(NotificationManager::class.java)
             nm.createNotificationChannel(channel)
         }
         val builder = NotificationCompat.Builder(applicationContext, channelId)

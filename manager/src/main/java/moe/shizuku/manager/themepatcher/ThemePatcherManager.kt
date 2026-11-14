@@ -30,6 +30,9 @@ data class OemThemeTrialState(
 
 object ThemePatcherManager {
 
+    val coordinator: ThemePatcherCoordinator = ThemePatcherCoordinator()
+    val snapshot: ThemePatcherSnapshot get() = coordinator.snapshot
+
     fun isShizukuAvailable(): Boolean = Shizuku.pingBinder()
 
     suspend fun getSystemOverlays(): List<SystemThemeOverlay> = withContext(Dispatchers.IO) {

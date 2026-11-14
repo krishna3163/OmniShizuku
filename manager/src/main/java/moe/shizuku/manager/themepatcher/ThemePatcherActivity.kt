@@ -80,6 +80,6 @@ class ThemePatcherActivity : AppActivity() {
     fun shell(cmd: String): String? = runShellCommand(cmd)
 
     companion object {
-        const val NOTI_ID = 2
+        const val NOTI_ID = moe.shizuku.manager.notifications.NotificationRegistry.Ids.THEME_PATCHER
     }
 }

@@ -89,6 +89,7 @@ class ShizukuApplication : Application() {
 
         moe.shizuku.manager.service.WatchdogManager.init(this)
         moe.shizuku.manager.service.WatchdogManager.reconcileService(this)
+        moe.shizuku.manager.notifications.NotificationLifecycleOwner.init(this)
         moe.shizuku.manager.service.SheveryNotificationManager.setup(this)
         moe.shizuku.manager.service.StartupNotificationManager.setup(this)
         moe.shizuku.manager.worker.AdbNetworkObserver.register(this)
@@ -105,6 +106,9 @@ class ShizukuApplication : Application() {
         moe.shizuku.manager.receiver.UserUnlockedStarter.registerIfLocked(this)
         moe.shizuku.manager.receiver.WatchdogAlarmReceiver.schedule(this)
 
+        runCatching { moe.shizuku.manager.legacy.LegacyRishCompatibilityManager.init(this) }
+            .onFailure { Log.w("ShizukuApplication", "Legacy Rish compatibility init failed", it) }
+
         if (moe.shizuku.manager.manage.Hiding.isActive() || moe.shizuku.manager.manage.ForceDark.hasWorkToDo()) {
             kotlin.concurrent.thread(name = "hiding-watch-restart") {
                 moe.shizuku.manager.service.HidingWatchService.refresh(this)
@@ -118,7 +122,14 @@ class ShizukuApplication : Application() {
             addAction(android.content.Intent.ACTION_SCREEN_OFF)
             addAction(android.content.Intent.ACTION_SCREEN_ON)
         }
-        registerReceiver(moe.shizuku.manager.doze.DozeReceiver(), dozeFilter)
+        androidx.core.content.ContextCompat.registerReceiver(
+            this,
+            moe.shizuku.manager.doze.DozeReceiver(),
+            dozeFilter,
+            androidx.core.content.ContextCompat.RECEIVER_EXPORTED
+        )
     }
 
 }
+
+

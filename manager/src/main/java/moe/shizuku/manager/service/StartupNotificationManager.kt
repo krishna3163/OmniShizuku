@@ -1,4 +1,4 @@
-package moe.shizuku.manager.service
+﻿package moe.shizuku.manager.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -14,7 +14,7 @@ import moe.shizuku.manager.receiver.SheveryControlReceiver
 
 object StartupNotificationManager {
     private const val CHANNEL_ID = "shevery_startup"
-    private const val NOTIFICATION_ID = 1005
+    private const val NOTIFICATION_ID = moe.shizuku.manager.notifications.NotificationRegistry.Ids.STARTUP
     private val channelCreated = java.util.concurrent.atomic.AtomicBoolean(false)
 
     private fun ensureChannel(context: Context) {
@@ -110,3 +110,4 @@ object StartupNotificationManager {
         notificationManager.cancel(NOTIFICATION_ID)
     }
 }
+

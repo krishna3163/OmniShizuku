@@ -8,11 +8,12 @@ import android.content.Intent
 import android.os.Build
 import android.os.IBinder
 import androidx.core.app.NotificationCompat
+import moe.shizuku.manager.notifications.NotificationRegistry
 
 class IslandService : Service() {
     companion object {
-        private const val CHANNEL_ID = "island_service"
-        private const val NOTIF_ID = 1001
+        private const val CHANNEL_ID = NotificationRegistry.Channels.ISLAND
+        private const val NOTIF_ID = NotificationRegistry.Ids.ISLAND
     }
 
     override fun onCreate() {

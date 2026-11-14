@@ -1,4 +1,4 @@
-package moe.shizuku.manager.receiver
+﻿package moe.shizuku.manager.receiver
 
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.app.KeyguardManager
@@ -40,8 +40,13 @@ class BootCompleteReceiver : BroadcastReceiver() {
                 moe.shizuku.manager.service.WatchdogManager.init(context.applicationContext)
                 moe.shizuku.manager.service.WatchdogManager.reconcileService(context.applicationContext)
             } catch (_: Throwable) {}
+            runCatching { moe.shizuku.manager.legacy.LegacyRishCompatibilityManager.init(context.applicationContext) }
+            runCatching { moe.shizuku.manager.legacy.LegacyRishCompatibilityManager.refresh(context.applicationContext) }
             return
         }
+
+        runCatching { moe.shizuku.manager.legacy.LegacyRishCompatibilityManager.init(context.applicationContext) }
+        runCatching { moe.shizuku.manager.legacy.LegacyRishCompatibilityManager.refresh(context.applicationContext) }
 
         // Schedule app auto-update check (cheap, no-op if already scheduled)
         moe.shizuku.manager.module.update.SheveryAutoUpdateWorker.maybeSchedule(context)
@@ -56,7 +61,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
         if (isAdbCandidate) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 // Either WRITE_SECURE_SETTINGS (pm grant / granted back by the server
-                // after the first start) or Device Owner is enough to arm adbd —
+                // after the first start) or Device Owner is enough to arm adbd â€”
                 // see AdbArm. Previously only the permission was accepted, so
                 // Device-Owner-only installs bailed out with "no permission" and
                 // never reached the start path.
@@ -92,9 +97,9 @@ class BootCompleteReceiver : BroadcastReceiver() {
                     return
                 }
             }
-            // Flip the adb switches now — via WRITE_SECURE_SETTINGS or, when that is
+            // Flip the adb switches now â€” via WRITE_SECURE_SETTINGS or, when that is
             // missing, via Device Owner setGlobalSetting (AdbArm picks whichever the
-            // install has) — so the discovery below finds a live wireless session.
+            // install has) â€” so the discovery below finds a live wireless session.
             AdbArm.arm(context)
 
             val tcpPort = EnvironmentUtils.getAdbTcpPort()
@@ -135,7 +140,7 @@ class BootCompleteReceiver : BroadcastReceiver() {
                 appContext,
                 appContext.getString(moe.shizuku.manager.R.string.notification_startup_failed)
             )
-            Log.w(AppConstants.TAG, "Keyguard timeout on pre-S — aborting ADB boot start")
+            Log.w(AppConstants.TAG, "Keyguard timeout on pre-S â€” aborting ADB boot start")
         }
 
         timeoutHandler.postDelayed(timeoutRunnable, KEYGUARD_WAIT_TIMEOUT_MS)
@@ -197,3 +202,4 @@ class BootCompleteReceiver : BroadcastReceiver() {
         }
     }
 }
+

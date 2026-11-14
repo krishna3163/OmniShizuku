@@ -46,14 +46,24 @@ import moe.shizuku.manager.utils.SettingsPage
 import moe.shizuku.manager.utils.ShizukuStateMachine
 import moe.shizuku.manager.utils.createChannelCompat
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 import moe.shizuku.manager.service.HidingWatchService
 import moe.shizuku.manager.utils.Diag
+import moe.shizuku.manager.notifications.HelperEvent
+import moe.shizuku.manager.notifications.HelperEventType
+import moe.shizuku.manager.notifications.HelperNotificationManager
+import moe.shizuku.manager.notifications.NotificationPreferences
+import moe.shizuku.manager.notifications.WatchdogLiveStateMapper
+import moe.shizuku.manager.notifications.WatchdogLiveDecision
 
 class WatchdogService : Service() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main)
     private val recoveryState = AtomicReference(WatchdogRecoveryState.IDLE)
+    private val recoveryAttemptId = AtomicLong(0L)
+    private val recoveryAttemptsCount = AtomicLong(0L)
+    @Volatile private var recoverySucceededFlag: Boolean = false
 
     /** Only one restart at a time, and not one every few seconds for the same outage. */
     private val restartInFlight = AtomicBoolean(false)
@@ -78,37 +88,64 @@ class WatchdogService : Service() {
     private fun markAwaitingRecovery() {
         if (recoveryState.get() == WatchdogRecoveryState.GAVE_UP) return
         transition(WatchdogRecoveryEvent.CrashDetected)
+        updateWatchdogNotification()
     }
 
     private val stateListener: (ShizukuStateMachine.State) -> Unit = { state ->
         when (state) {
             ShizukuStateMachine.State.CRASHED ->
                 when {
-                    WatchdogGuard.consumeExpectedDeath() ->
+                    WatchdogGuard.consumeExpectedDeath() -> {
                         Diag.debug(TAG, "Server went down as expected, nothing to report")
+                        updateWatchdogNotification()
+                    }
 
                     ShizukuSettings.getManuallyStopped() -> {
                         Diag.debug(TAG, "Server was stopped on purpose, nothing to report")
+                        recoveryAttemptId.incrementAndGet()
+                        restartInFlight.set(false)
                         transition(WatchdogRecoveryEvent.ManualStop)
+                        updateWatchdogNotification()
                     }
 
                     else -> {
                         Diag.warn(TAG, "Server died: reporting it and starting it again")
+                        recoveryAttemptsCount.set(0)
+                        recoverySucceededFlag = false
                         showCrashNotification()
                         markAwaitingRecovery()
+                        HelperNotificationManager.post(
+                            HelperEvent(
+                                type = HelperEventType.SERVER_STOPPED,
+                                recoveryAttemptId = recoveryAttemptId.get(),
+                                errorIdentity = "server_crashed",
+                                showRestart = ShizukuSettings.isWatchdogStartAllowed() && !ShizukuSettings.getManuallyStopped()
+                            ),
+                            applicationContext
+                        )
+                        updateWatchdogNotification()
                         attemptRestart()
                     }
                 }
 
             ShizukuStateMachine.State.RUNNING -> {
                 val prev = recoveryState.getAndSet(WatchdogRecoveryState.IDLE)
+                val wasRecovering = prev == WatchdogRecoveryState.AWAITING_RECOVERY || prev == WatchdogRecoveryState.GAVE_UP ||
+                    prev == WatchdogRecoveryState.RESTARTING || prev == WatchdogRecoveryState.PENDING_RESTART
                 resetBreaker()
-                if (prev == WatchdogRecoveryState.AWAITING_RECOVERY || prev == WatchdogRecoveryState.GAVE_UP) {
+                recoveryAttemptsCount.set(0)
+                if (wasRecovering) {
+                    recoverySucceededFlag = true
                     showRecoveryNotification()
+                    HelperNotificationManager.onServerHealthy(applicationContext)
+                } else {
+                    recoverySucceededFlag = false
+                    runCatching { HelperNotificationManager.onServerHealthy(applicationContext) }
                 }
+                updateWatchdogNotification()
             }
 
-            else -> Unit
+            else -> updateWatchdogNotification()
         }
     }
 
@@ -190,18 +227,30 @@ class WatchdogService : Service() {
         if (breaker.open) {
             Diag.debug(TAG, "Restart attempt skipped: the breaker is open")
             transition(WatchdogRecoveryEvent.BreakerOpened)
+            HelperNotificationManager.post(
+                HelperEvent(
+                    type = HelperEventType.NEEDS_ATTENTION,
+                    recoveryAttemptId = recoveryAttemptId.get(),
+                    errorIdentity = "circuit_breaker_open",
+                    showRestart = true
+                ),
+                applicationContext
+            )
+            updateWatchdogNotification()
             return
         }
 
         if (HidingWatchService.holding()) {
             Diag.debug(TAG, "Restart attempt skipped: hiding is holding the debugging toggle off")
             if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
+            updateWatchdogNotification()
             return
         }
 
         if (AdbStartRun.startInProgress()) {
             Diag.debug(TAG, "Restart attempt skipped: a start is already in flight")
             if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
+            updateWatchdogNotification()
             return
         }
 
@@ -209,6 +258,7 @@ class WatchdogService : Service() {
         if (now - lastRestartAt < RESTART_COOLDOWN_MS) {
             Diag.debug(TAG, "Restart attempt skipped: one was made moments ago")
             if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
+            updateWatchdogNotification()
             return
         }
         if (!restartInFlight.compareAndSet(false, true)) {
@@ -216,45 +266,62 @@ class WatchdogService : Service() {
             return
         }
         lastRestartAt = now
+        recoveryAttemptsCount.incrementAndGet()
         recordAttempt(now)
         if (recoveryState.get() == WatchdogRecoveryState.GAVE_UP) {
             restartInFlight.set(false)
+            updateWatchdogNotification()
             return
         }
         recoveryState.set(WatchdogRecoveryState.RESTARTING)
+        updateWatchdogNotification()
+        val attemptId = recoveryAttemptId.incrementAndGet()
 
         WorkManager.getInstance(applicationContext).cancelUniqueWork(AdbStartWorker.UNIQUE_WORK_NAME)
 
         serviceScope.launch {
+            fun isStaleAttempt(): Boolean =
+                attemptId != recoveryAttemptId.get() ||
+                    ShizukuSettings.getManuallyStopped() ||
+                    WatchdogGuard.isExpectingDeath()
+
             try {
                 val tcpPort = EnvironmentUtils.getAdbTcpPort()
                 val usbMethod =
                     ShizukuSettings.getStartMethod() == ShizukuSettings.StartMethod.USB
                 if (usbMethod && tcpPort > 0 && EnvironmentUtils.isUsbDebuggingEnabled()) {
-                    recoveryState.compareAndSet(WatchdogRecoveryState.RESTARTING, WatchdogRecoveryState.AWAITING_RECOVERY)
-                    AdbStarter.startAdb(applicationContext, tcpPort)
-                    Starter.waitForBinder()
-                    AdbStarter.logStartedPids(tcpPort)
+                    if (!isStaleAttempt() && recoveryState.get() == WatchdogRecoveryState.RESTARTING) {
+                        recoveryState.compareAndSet(WatchdogRecoveryState.RESTARTING, WatchdogRecoveryState.AWAITING_RECOVERY)
+                        AdbStarter.startAdb(applicationContext, tcpPort)
+                        Starter.waitForBinder()
+                        AdbStarter.logStartedPids(tcpPort)
+                    }
                 } else {
-                    if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
-                    ShizukuReceiverStarter.start(
-                        applicationContext,
-                        forceStart = true,
-                        reason = "watchdog-restart"
-                    )
+                    if (!isStaleAttempt() && recoveryState.get() != WatchdogRecoveryState.GAVE_UP) {
+                        transition(WatchdogRecoveryEvent.RestartDeferred)
+                        ShizukuReceiverStarter.start(
+                            applicationContext,
+                            forceStart = true,
+                            reason = "watchdog-restart"
+                        )
+                    }
                 }
             } catch (e: Exception) {
                 Diag.warn(TAG, "Direct restart failed, falling back", e)
-                if (recoveryState.get() != WatchdogRecoveryState.GAVE_UP) transition(WatchdogRecoveryEvent.RestartDeferred)
-                if (ShizukuStateMachine.markStartFailed() != ShizukuStateMachine.State.RUNNING) {
-                    ShizukuReceiverStarter.start(
-                        applicationContext,
-                        forceStart = true,
-                        reason = "watchdog-fallback"
-                    )
+                if (!isStaleAttempt() && recoveryState.get() != WatchdogRecoveryState.GAVE_UP) {
+                    transition(WatchdogRecoveryEvent.RestartDeferred)
+                    if (ShizukuStateMachine.markStartFailed() != ShizukuStateMachine.State.RUNNING) {
+                        ShizukuReceiverStarter.start(
+                            applicationContext,
+                            forceStart = true,
+                            reason = "watchdog-fallback"
+                        )
+                    }
                 }
             } finally {
-                restartInFlight.set(false)
+                if (attemptId == recoveryAttemptId.get()) {
+                    restartInFlight.set(false)
+                }
             }
 
             delay(RECOVERY_CHECK_MS)
@@ -262,10 +329,11 @@ class WatchdogService : Service() {
             withTimeoutOrNull(SERVER_BOOT_GRACE_MS) {
                 ShizukuStateMachine.asFlow().first { it == ShizukuStateMachine.State.RUNNING }
             }
+            if (isStaleAttempt()) return@launch
             ShizukuStateMachine.update()
             if (ShizukuStateMachine.isRunning()) {
-                transition(WatchdogRecoveryEvent.Reset)
-            } else if (!ShizukuSettings.getManuallyStopped() && recoveryState.get() != WatchdogRecoveryState.GAVE_UP) {
+                if (!isStaleAttempt()) transition(WatchdogRecoveryEvent.Reset)
+            } else if (!isStaleAttempt() && recoveryState.get() != WatchdogRecoveryState.GAVE_UP) {
                 Diag.warn(TAG, "Restart did not bring the server back, leaving the retry armed")
                 transition(WatchdogRecoveryEvent.RestartDeferred)
                 markAwaitingRecovery()
@@ -292,7 +360,17 @@ class WatchdogService : Service() {
             "Giving up: $BREAKER_MAX_ATTEMPTS starts in under " +
                 "${BREAKER_WINDOW_MS / 1000}s and the server is still down"
         )
+        HelperNotificationManager.post(
+            HelperEvent(
+                type = HelperEventType.NEEDS_ATTENTION,
+                recoveryAttemptId = recoveryAttemptId.get(),
+                errorIdentity = "circuit_breaker_open",
+                showRestart = true
+            ),
+            applicationContext
+        )
         showGaveUpNotification()
+        updateWatchdogNotification()
     }
 
     private fun resetBreaker() {
@@ -302,6 +380,7 @@ class WatchdogService : Service() {
 
     override fun onCreate() {
         super.onCreate()
+        instance = this
         isRunning.set(true)
         sendWatchdogChangedBroadcast(applicationContext, true)
         // The state it starts in is worth a line: a watchdog that came up after the server
@@ -314,8 +393,14 @@ class WatchdogService : Service() {
         (getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager)
             .cancel(NOTIFICATION_ID_NOT_RUNNING)
         ShizukuStateMachine.addListener(stateListener)
-        registerReceiver(screenOnReceiver, IntentFilter(Intent.ACTION_USER_PRESENT))
+        androidx.core.content.ContextCompat.registerReceiver(
+            this,
+            screenOnReceiver,
+            IntentFilter(Intent.ACTION_USER_PRESENT),
+            androidx.core.content.ContextCompat.RECEIVER_EXPORTED
+        )
         startRecoveryLoop()
+        updateWatchdogNotification()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
@@ -326,6 +411,9 @@ class WatchdogService : Service() {
             // the RUNNING transition clears the breaker and posts nothing further.
             Diag.info(TAG, "Start asked for from the notification, resetting the breaker")
             resetBreaker()
+            recoveryAttemptsCount.set(0)
+            recoverySucceededFlag = false
+            updateWatchdogNotification()
             ShizukuReceiverStarter.start(
                 applicationContext,
                 forceStart = true,
@@ -345,6 +433,8 @@ class WatchdogService : Service() {
             // armed would find the watchdog gone and start it again, switching back on the thing
             // the user just switched off.
             WatchdogAlarmReceiver.cancel(applicationContext)
+            recoveryAttemptId.incrementAndGet()
+            restartInFlight.set(false)
             stopSelf()
             return START_NOT_STICKY
         }
@@ -365,6 +455,8 @@ class WatchdogService : Service() {
     }
 
     override fun onDestroy() {
+        if (instance === this) instance = null
+        recoveryAttemptId.incrementAndGet()
         serviceScope.cancel()
         transition(WatchdogRecoveryEvent.Reset)
         ShizukuStateMachine.removeListener(stateListener)
@@ -381,10 +473,6 @@ class WatchdogService : Service() {
     override fun onBind(intent: Intent?): IBinder? = null
 
     private fun buildNotification(): Notification {
-        // The v2 suffix is the point, not an oversight: a channel's settings are frozen
-        // once it exists, so turning the badge off on the old id would do nothing for
-        // anyone who already has it. The service is always running, so a dot over it says
-        // nothing except that something is permanently there.
         val channelId = "shizuku_watchdog_v2"
         val channelName = "Watchdog"
 
@@ -398,7 +486,7 @@ class WatchdogService : Service() {
 
         val launchIntent = Intent(this, MainActivity::class.java).apply {
             addFlags(
-                Intent.FLAG_ACTIVITY_NEW_TASK or 
+                Intent.FLAG_ACTIVITY_NEW_TASK or
                 Intent.FLAG_ACTIVITY_CLEAR_TOP or
                 Intent.FLAG_ACTIVITY_SINGLE_TOP
             )
@@ -414,12 +502,43 @@ class WatchdogService : Service() {
             this, 1, stopIntent, PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )
 
-        // Say how Shizuku is running, like every other status notification does.
         val runningMethod = runningMethodLabel()
+        val suffix = runningMethod?.let { " · $it" } ?: ""
+        val liveEnabled = NotificationPreferences.liveActivityEnabled()
+        val decision = WatchdogLiveStateMapper.map(
+            serverRunning = ShizukuStateMachine.isRunning(),
+            manuallyStopped = ShizukuSettings.getManuallyStopped(),
+            recoveryState = recoveryState.get(),
+            attempt = recoveryAttemptsCount.get().coerceAtLeast(1).toInt(),
+            recoveryJustSucceeded = recoverySucceededFlag
+        )
 
-        return NotificationCompat.Builder(this, channelId)
+        val text = if (!liveEnabled) {
+            runningMethod ?: getString(R.string.watchdog_running)
+        } else {
+            val base = when (decision.state) {
+                WatchdogLiveState.RECONNECTED -> getString(R.string.watchdog_live_reconnected)
+                WatchdogLiveState.WAITING -> getString(R.string.watchdog_live_waiting)
+                WatchdogLiveState.MANUAL_STOP -> getString(R.string.watchdog_live_stopped)
+                WatchdogLiveState.CIRCUIT_BREAKER -> getString(R.string.watchdog_live_circuit_breaker)
+                WatchdogLiveState.RESTARTING -> getString(R.string.watchdog_live_restarting)
+                WatchdogLiveState.RECOVERY_STARTED -> getString(R.string.watchdog_live_recovery_attempt, decision.formatArg ?: 1)
+                WatchdogLiveState.RUNNING -> getString(R.string.watchdog_live_running)
+                WatchdogLiveState.STOPPED -> getString(R.string.watchdog_live_stopped)
+                else -> getString(R.string.watchdog_live_stopped)
+            }
+            base + suffix
+        }
+
+        val showRestart = liveEnabled && decision.showRestartAction
+        val actionsHash = if (showRestart) 1 else 0
+        lastRenderedText = text
+        lastRenderedActionsHash = actionsHash
+
+        val builder = NotificationCompat.Builder(this, channelId)
             .setContentTitle(getString(R.string.watchdog_running))
-            .apply { if (runningMethod != null) setContentText(runningMethod) }
+            .setContentText(text)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(text))
             .setSmallIcon(R.drawable.ic_system_icon)
             .setContentIntent(launchPendingIntent)
             .addAction(
@@ -428,7 +547,63 @@ class WatchdogService : Service() {
                 stopPendingIntent
             )
             .setOngoing(true)
-            .build()
+            .setOnlyAlertOnce(true)
+
+        if (showRestart) {
+            builder.addAction(
+                R.drawable.ic_server_restart,
+                getString(R.string.watchdog_given_up_action_start),
+                PendingIntent.getService(
+                    this,
+                    2,
+                    Intent(this, WatchdogService::class.java).setAction(ACTION_START_NOW),
+                    PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
+                )
+            )
+        }
+        return builder.build()
+    }
+
+    @Volatile private var lastRenderedText: String? = null
+    @Volatile private var lastRenderedActionsHash: Int = 0
+
+    private fun updateWatchdogNotification(force: Boolean = false) {
+        if (!isRunning.get()) return
+        val runningMethod = runningMethodLabel()
+        val suffix = runningMethod?.let { " · $it" } ?: ""
+        val liveEnabled = NotificationPreferences.liveActivityEnabled()
+        val decision = WatchdogLiveStateMapper.map(
+            serverRunning = ShizukuStateMachine.isRunning(),
+            manuallyStopped = ShizukuSettings.getManuallyStopped(),
+            recoveryState = recoveryState.get(),
+            attempt = recoveryAttemptsCount.get().coerceAtLeast(1).toInt(),
+            recoveryJustSucceeded = recoverySucceededFlag
+        )
+        val text = if (!liveEnabled) {
+            runningMethod ?: getString(R.string.watchdog_running)
+        } else {
+            val base = when (decision.state) {
+                WatchdogLiveState.RECONNECTED -> getString(R.string.watchdog_live_reconnected)
+                WatchdogLiveState.WAITING -> getString(R.string.watchdog_live_waiting)
+                WatchdogLiveState.MANUAL_STOP -> getString(R.string.watchdog_live_stopped)
+                WatchdogLiveState.CIRCUIT_BREAKER -> getString(R.string.watchdog_live_circuit_breaker)
+                WatchdogLiveState.RESTARTING -> getString(R.string.watchdog_live_restarting)
+                WatchdogLiveState.RECOVERY_STARTED -> getString(R.string.watchdog_live_recovery_attempt, decision.formatArg ?: 1)
+                WatchdogLiveState.RUNNING -> getString(R.string.watchdog_live_running)
+                WatchdogLiveState.STOPPED -> getString(R.string.watchdog_live_stopped)
+                else -> getString(R.string.watchdog_live_stopped)
+            }
+            base + suffix
+        }
+        val showRestart = liveEnabled && decision.showRestartAction
+        val actionsHash = if (showRestart) 1 else 0
+
+        if (!force && text == lastRenderedText && actionsHash == lastRenderedActionsHash) {
+            return // Throttled: identical content, prevent notification flicker
+        }
+
+        val nm = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        runCatching { nm.notify(NOTIFICATION_ID_WATCHDOG, buildNotification()) }
     }
 
     private fun showCrashNotification() {
@@ -603,6 +778,12 @@ class WatchdogService : Service() {
         /** A start the user asked for from the notification, which the breaker must not block. */
         const val ACTION_START_NOW = "ACTION_START_NOW"
         const val EXTRA_WATCHDOG_STATUS = "status"
+
+        @Volatile private var instance: WatchdogService? = null
+
+        fun currentRecoveryState(): WatchdogRecoveryState = instance?.recoveryState?.get() ?: WatchdogRecoveryState.IDLE
+        fun currentRecoveryAttemptCount(): Int = instance?.recoveryAttemptsCount?.get()?.toInt() ?: 0
+        fun requestNotificationRefresh() { runCatching { instance?.updateWatchdogNotification(force = true) } }
 
         private val isRunning = AtomicBoolean(false)
 

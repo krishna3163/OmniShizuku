@@ -16,6 +16,9 @@ import java.util.*
 
 object EnforceDozeManager {
 
+    val coordinator = DozeCoordinator()
+    val snapshot: DozeSnapshot get() = coordinator.snapshot
+
     private const val PREFS_KEY_PREFIX = "enforcedoze_"
 
     private fun prefs(context: Context): SharedPreferences =

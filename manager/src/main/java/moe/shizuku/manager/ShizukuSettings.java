@@ -1,4 +1,4 @@
-package moe.shizuku.manager;
+﻿package moe.shizuku.manager;
 
 import android.app.ActivityThread;
 import android.content.Context;
@@ -292,12 +292,17 @@ public class ShizukuSettings {
         public static final String KEY_WAIT_FOR_WIFI = "wait_for_wifi";
         public static final String KEY_SYSTEM_START_METHOD = "system_start_method";
         public static final String KEY_LEGACY_PAIRING = "legacy_pairing";
+        public static final String KEY_LEGACY_RISH_COMPATIBILITY = "legacy_rish_compatibility";
         public static final String KEY_TRANSLATION = "translation";
         public static final String KEY_TRANSLATION_CONTRIBUTORS = "translation_contributors";
         public static final String KEY_LIGHT_THEME = "light_theme";
         public static final String KEY_BLACK_NIGHT_THEME = "black_night_theme";
         public static final String KEY_USE_SYSTEM_COLOR = "use_system_color";
         public static final String KEY_UPDATE_MODE = "update_mode";
+        public static final String KEY_HELPER_NOTIFICATIONS = "helper_notifications_enabled";
+        public static final String KEY_MESSAGES_OVER_OTHER_APPS = "messages_over_other_apps_enabled";
+        public static final String KEY_LIVE_ACTIVITY_NOTIFICATIONS = "live_activity_notifications_enabled";
+        public static final String KEY_USB_CONNECTION_NOTIFICATION = "usb_connection_notification_enabled";
     }
 
     public static final String KEY_HELP = "help";
@@ -498,6 +503,46 @@ public class ShizukuSettings {
         return getPreferences().getBoolean(Keys.KEY_LEGACY_PAIRING, false);
     }
 
+
+    public static boolean getHelperNotificationsEnabled() {
+        return getPreferences().getBoolean(Keys.KEY_HELPER_NOTIFICATIONS, false);
+    }
+
+    public static void setHelperNotificationsEnabled(boolean enabled) {
+        getPreferences().edit().putBoolean(Keys.KEY_HELPER_NOTIFICATIONS, enabled).apply();
+    }
+
+    public static boolean getMessagesOverOtherAppsEnabled() {
+        return getPreferences().getBoolean(Keys.KEY_MESSAGES_OVER_OTHER_APPS, false);
+    }
+
+    public static void setMessagesOverOtherAppsEnabled(boolean enabled) {
+        getPreferences().edit().putBoolean(Keys.KEY_MESSAGES_OVER_OTHER_APPS, enabled).apply();
+    }
+
+    public static boolean getLiveActivityNotificationsEnabled() {
+        return getPreferences().getBoolean(Keys.KEY_LIVE_ACTIVITY_NOTIFICATIONS, true);
+    }
+
+    public static void setLiveActivityNotificationsEnabled(boolean enabled) {
+        getPreferences().edit().putBoolean(Keys.KEY_LIVE_ACTIVITY_NOTIFICATIONS, enabled).apply();
+    }
+
+    public static boolean getUsbConnectionNotificationEnabled() {
+        return getPreferences().getBoolean(Keys.KEY_USB_CONNECTION_NOTIFICATION, false);
+    }
+
+    public static void setUsbConnectionNotificationEnabled(boolean enabled) {
+        getPreferences().edit().putBoolean(Keys.KEY_USB_CONNECTION_NOTIFICATION, enabled).apply();
+    }
+    public static boolean getLegacyRishCompatibility() {
+        return getPreferences().getBoolean(Keys.KEY_LEGACY_RISH_COMPATIBILITY, false);
+    }
+
+    public static void setLegacyRishCompatibility(boolean enabled) {
+        getPreferences().edit().putBoolean(Keys.KEY_LEGACY_RISH_COMPATIBILITY, enabled).apply();
+    }
+
     public static String getLanguageTag() {
         String tag = getPreferences().getString(Keys.KEY_LANGUAGE, null);
         return TextUtils.isEmpty(tag) ? moe.shizuku.manager.utils.AppLocale.SYSTEM : tag;
@@ -532,3 +577,5 @@ public class ShizukuSettings {
         } catch (Throwable ignored) {}
     }
 }
+
+

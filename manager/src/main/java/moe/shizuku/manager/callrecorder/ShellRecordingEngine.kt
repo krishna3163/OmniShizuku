@@ -8,12 +8,17 @@ import java.nio.ByteOrder
 import java.util.concurrent.ArrayBlockingQueue
 import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
+import java.util.concurrent.atomic.AtomicLong
 import java.util.concurrent.atomic.AtomicReference
 import kotlin.concurrent.thread
 
 /**
  * Shell recording engine managing the audio capture pipeline, encoder pipeline,
  * and state within the privileged Shizuku shell process.
+ *
+ * Backward-compatible callback safety: AIDL [IRecordingCallback] cannot carry a session token,
+ * so this engine associates every emitted callback with its originating in-process session and
+ * suppresses callbacks once the session is superseded/stopped/failed.
  */
 class ShellRecordingEngine {
     companion object {
@@ -24,10 +29,18 @@ class ShellRecordingEngine {
 
     private val state = AtomicReference(EngineState.IDLE)
     private val recordingPaused = AtomicBoolean(false)
+    private val sessionGeneration = AtomicLong(0L)
+    @Volatile private var activeSessionGeneration: Long = 0L
 
     private var outputFile: ParcelFileDescriptor? = null
     private var currentPlan: RecordingPlan? = null
     private var recordingCallback: IRecordingCallback? = null
+
+    private fun isCurrentSession(gen: Long): Boolean =
+        gen != 0L && gen == activeSessionGeneration
+
+    private fun callbackFor(gen: Long): IRecordingCallback? =
+        if (isCurrentSession(gen)) recordingCallback else null
 
     private var primaryCapture: AudioRecordCapture? = null
     private var secondaryCapture: AudioRecordCapture? = null
@@ -73,6 +86,8 @@ class ShellRecordingEngine {
                 return
             }
             state.set(EngineState.STARTING)
+            val gen = sessionGeneration.incrementAndGet()
+            activeSessionGeneration = gen
 
             try {
                 this.outputFile = outputFile
@@ -80,7 +95,7 @@ class ShellRecordingEngine {
                 this.recordingCallback = callback
                 this.recordingPaused.set(false)
 
-                Log.i(TAG, "Starting recording session: codec=${plan.codec.name}, bitrate=${plan.bitrate}, primary=${plan.primary.source.name}, secondary=${plan.secondary?.source?.name}")
+                Log.i(TAG, "Starting recording session gen=$gen: codec=${plan.codec.name}, bitrate=${plan.bitrate}, primary=${plan.primary.source.name}, secondary=${plan.secondary?.source?.name}")
 
                 emptyQueue.clear()
                 readyQueue.clear()
@@ -102,37 +117,41 @@ class ShellRecordingEngine {
                 primaryCapture?.start()
                 secondaryCapture?.start()
 
-                encoderThread = thread(name = "SCR-Encoder", isDaemon = true) {
+                encoderThread = thread(name = "SCR-Encoder-$gen", isDaemon = true) {
                     Process.setThreadPriority(Process.THREAD_PRIORITY_FOREGROUND)
-                    encoderLoop()
+                    encoderLoop(gen)
                 }
 
-                captureThread = thread(name = "SCR-Capture", isDaemon = true) {
+                captureThread = thread(name = "SCR-Capture-$gen", isDaemon = true) {
                     Process.setThreadPriority(Process.THREAD_PRIORITY_AUDIO)
-                    captureLoop()
+                    captureLoop(gen)
                 }
 
                 runCatching { Runtime.getRuntime().addShutdownHook(shutdownHook) }
+                if (!isCurrentSession(gen)) {
+                    stopInternal(notifyStopped = false)
+                    return
+                }
                 state.set(EngineState.RECORDING)
-                callback.onRecordingStarted()
-                Log.i(TAG, "Native audio capture and encoding pipelines started successfully")
+                callbackFor(gen)?.let { runCatching { it.onRecordingStarted() } }
+                Log.i(TAG, "Native audio capture and encoding pipelines started successfully (gen=$gen)")
             } catch (t: Throwable) {
-                Log.e(TAG, "Failed to start recording session", t)
+                Log.e(TAG, "Failed to start recording session gen=$gen", t)
                 state.set(EngineState.ERROR)
-                runCatching { callback.onRecordingFailure(1, t.message ?: "Failed to start capture") }
+                callbackFor(gen)?.let { runCatching { it.onRecordingFailure(1, t.message ?: "Failed to start capture") } }
                 stopInternal(notifyStopped = false)
             }
         }
     }
 
-    private fun captureLoop() {
+    private fun captureLoop(gen: Long) {
         val primary = primaryCapture ?: return
         val secondary = secondaryCapture
         val trashPrimary = ByteBuffer.allocateDirect(AudioConfig.BLOCK_SIZE_BYTES).order(ByteOrder.nativeOrder())
         val trashSecondary = secondary?.let { ByteBuffer.allocateDirect(AudioConfig.BLOCK_SIZE_BYTES).order(ByteOrder.nativeOrder()) }
 
         try {
-            while (true) {
+            while (isCurrentSession(gen)) {
                 val s = state.get()
                 if (s == EngineState.IDLE || s == EngineState.ERROR) break
                 if (s == EngineState.STOPPING) break
@@ -176,16 +195,16 @@ class ShellRecordingEngine {
                 }
             }
         } catch (t: Throwable) {
-            if (isActiveState()) {
-                Log.e(TAG, "Capture loop exception", t)
+            if (isCurrentSession(gen) && isActiveState()) {
+                Log.e(TAG, "Capture loop exception gen=$gen", t)
                 state.set(EngineState.ERROR)
-                runCatching { recordingCallback?.onRecordingFailure(2, "Capture read failure") }
+                callbackFor(gen)?.let { runCatching { it.onRecordingFailure(2, "Capture read failure") } }
                 stopInternal(notifyStopped = false)
             }
         }
     }
 
-    private fun encoderLoop() {
+    private fun encoderLoop(gen: Long) {
         val plan = currentPlan ?: return
         val processor = PcmProcessor(plan)
         val clock = RecordingClock()
@@ -197,7 +216,7 @@ class ShellRecordingEngine {
         var blocksProcessed = 0L
 
         try {
-            while (true) {
+            while (isCurrentSession(gen)) {
                 val s = state.get()
                 val active = s == EngineState.STARTING || s == EngineState.RECORDING || s == EngineState.PAUSED || s == EngineState.STOPPING
                 if (!active && readyQueue.isEmpty()) break
@@ -232,18 +251,16 @@ class ShellRecordingEngine {
                 if (blocksProcessed % AudioConfig.LOG_INTERVAL_BLOCKS == 0L) {
                     val durationMs = presentationTimeUs / 1000L
                     val fileSizeBytes = blocksProcessed * processedBytes
-                    runCatching {
-                        recordingCallback?.onRecordingProgress(durationMs, fileSizeBytes)
-                    }
+                    callbackFor(gen)?.let { runCatching { it.onRecordingProgress(durationMs, fileSizeBytes) } }
                 }
 
                 emptyQueue.offer(frame)
             }
         } catch (t: Throwable) {
-            Log.e(TAG, "Encoder loop exception", t)
-            if (isActiveState()) {
+            Log.e(TAG, "Encoder loop exception gen=$gen", t)
+            if (isCurrentSession(gen) && isActiveState()) {
                 state.set(EngineState.ERROR)
-                runCatching { recordingCallback?.onRecordingFailure(3, "Encoder failure") }
+                callbackFor(gen)?.let { runCatching { it.onRecordingFailure(3, "Encoder failure") } }
                 stopInternal(notifyStopped = false)
             }
         }
@@ -253,8 +270,9 @@ class ShellRecordingEngine {
         synchronized(this) {
             if (state.compareAndSet(EngineState.RECORDING, EngineState.PAUSED)) {
                 recordingPaused.set(true)
-                Log.i(TAG, "Recording paused")
-                runCatching { recordingCallback?.onRecordingPaused() }
+                val gen = activeSessionGeneration
+                Log.i(TAG, "Recording paused gen=$gen")
+                callbackFor(gen)?.let { runCatching { it.onRecordingPaused() } }
             }
         }
     }
@@ -263,8 +281,9 @@ class ShellRecordingEngine {
         synchronized(this) {
             if (state.compareAndSet(EngineState.PAUSED, EngineState.RECORDING)) {
                 recordingPaused.set(false)
-                Log.i(TAG, "Recording resumed")
-                runCatching { recordingCallback?.onRecordingResumed() }
+                val gen = activeSessionGeneration
+                Log.i(TAG, "Recording resumed gen=$gen")
+                callbackFor(gen)?.let { runCatching { it.onRecordingResumed() } }
             }
         }
     }
@@ -276,12 +295,16 @@ class ShellRecordingEngine {
     private fun stopInternal(notifyStopped: Boolean) {
         synchronized(this) {
             val prev = state.getAndSet(EngineState.STOPPING)
+            val finishingGen = activeSessionGeneration
             if (prev == EngineState.IDLE && primaryCapture == null && encoder == null && outputFile == null) {
+                activeSessionGeneration = 0L
                 state.set(EngineState.IDLE)
                 return
             }
 
-            Log.i(TAG, "Stopping recording session...")
+            // Invalidate session early so in-flight loop callbacks are suppressed.
+            activeSessionGeneration = 0L
+            Log.i(TAG, "Stopping recording session gen=$finishingGen...")
             recordingPaused.set(false)
 
             runCatching { primaryCapture?.stop() }
@@ -315,16 +338,13 @@ class ShellRecordingEngine {
             runCatching { Runtime.getRuntime().removeShutdownHook(shutdownHook) }
 
             val wasError = prev == EngineState.ERROR
-            if (notifyStopped && !wasError) {
-                runCatching { recordingCallback?.onRecordingStopped() }
+            val cb = recordingCallback
+            recordingCallback = null
+            if (notifyStopped && !wasError && finishingGen != 0L && cb != null) {
+                runCatching { cb.onRecordingStopped() }
             }
-            if (!wasError) {
-                state.set(EngineState.IDLE)
-                recordingCallback = null
-            } else {
-                state.set(EngineState.ERROR)
-            }
-            Log.i(TAG, "Recording stopped and resources released (prev=$prev)")
+            state.set(if (!wasError) EngineState.IDLE else EngineState.ERROR)
+            Log.i(TAG, "Recording stopped and resources released (prev=$prev, gen=$finishingGen)")
         }
     }
 }

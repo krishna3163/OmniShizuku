@@ -14,16 +14,23 @@ import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
+import android.os.SystemClock
 import android.provider.Settings
 import androidx.core.app.NotificationCompat
-import moe.shizuku.manager.R
-import moe.shizuku.manager.ShizukuSettings
-import moe.shizuku.manager.MainActivity
-import moe.shizuku.manager.utils.runShellCommand
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.util.*
+import kotlinx.coroutines.withContext
+import moe.shizuku.manager.MainActivity
+import moe.shizuku.manager.R
+import moe.shizuku.manager.ShizukuSettings
+import moe.shizuku.manager.utils.runShellCommand
+import java.util.Date
+import java.util.Locale
 
 class EnforceDozeService : Service() {
 
@@ -31,23 +38,25 @@ class EnforceDozeService : Service() {
     private val CHANNEL_SILENT = "enforcedoze_channel_silent"
     private val PERSISTENT_NOTIF_ID = 1234
 
+    private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+    private var enterDozeJob: Job? = null
+    private var enableSensorsJob: Job? = null
+    private var disableSensorsJob: Job? = null
+
     private var pm: PowerManager? = null
     private var tempWakeLock: PowerManager.WakeLock? = null
-    private var enterDozeTimer: java.util.Timer? = null
-    private var enableSensorsTimer: java.util.Timer? = null
-    private var disableSensorsTimer: java.util.Timer? = null
 
     private var dozeAppBlocklist: Set<String> = emptySet()
     private var dozeNotificationBlocklist: Set<String> = emptySet()
     private var dozeUsageData: Set<String> = emptySet()
 
-    private var wasBatterySaverOn = false
-    private var wasWiFiTurnedOn = false
-    private var wasMobileDataTurnedOn = false
-    private var wasAirplaneOn = false
-    private var wasBluetoothOn = false
-    private var wasGPSOn = false
-    private var wasHotSpotTurnedOn = false
+    var wasBatterySaverOn = false
+    var wasWiFiTurnedOn = false
+    var wasMobileDataTurnedOn = false
+    var wasAirplaneOn = false
+    var wasBluetoothOn = false
+    var wasGPSOn = false
+    var wasHotSpotTurnedOn = false
 
     private var state = ""
     private var timeEnterDoze: Long = 0
@@ -55,36 +64,62 @@ class EnforceDozeService : Service() {
     private var lastScreenOff = "Unknown"
     private var maintenance = false
 
-    private val localDozeReceiver: BroadcastReceiver = DozeReceiver()
+    private val localDozeReceiver: BroadcastReceiver = ServiceBroadcastReceiver()
 
     override fun onCreate() {
         super.onCreate()
         pm = getSystemService(Context.POWER_SERVICE) as PowerManager
 
-        val filter = IntentFilter()
-        filter.addAction(Intent.ACTION_SCREEN_ON)
-        filter.addAction(Intent.ACTION_SCREEN_OFF)
-        filter.addAction(Intent.ACTION_USER_PRESENT)
-        filter.addAction(Intent.ACTION_POWER_CONNECTED)
-        filter.addAction(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            filter.addAction("android.os.action.LIGHT_DEVICE_IDLE_MODE_CHANGED")
+        val filter = IntentFilter().apply {
+            addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_SCREEN_OFF)
+            addAction(Intent.ACTION_USER_PRESENT)
+            addAction(Intent.ACTION_POWER_CONNECTED)
+            addAction(Intent.ACTION_POWER_DISCONNECTED)
+            addAction(PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                addAction("android.os.action.LIGHT_DEVICE_IDLE_MODE_CHANGED")
+            }
         }
-        registerReceiver(localDozeReceiver, filter)
+        androidx.core.content.ContextCompat.registerReceiver(
+            this,
+            localDozeReceiver,
+            filter,
+            androidx.core.content.ContextCompat.RECEIVER_EXPORTED
+        )
 
         reloadSettings()
+
+        val isScreenOn = EnforceDozeManager.isScreenOn(this)
+        val isCharging = EnforceDozeManager.isCharging(this)
+        EnforceDozeManager.coordinator.transition(
+            DozeEvent.ServiceStarted(isScreenOn = isScreenOn, isCharging = isCharging)
+        )
     }
 
     override fun onDestroy() {
         super.onDestroy()
         try { unregisterReceiver(localDozeReceiver) } catch (_: Exception) {}
-        enterDozeTimer?.cancel()
-        enableSensorsTimer?.cancel()
-        disableSensorsTimer?.cancel()
-        tempWakeLock?.release()
 
-        runShellCommand("dumpsys sensorservice enable")
-        exitDoze(getDeviceIdleState())
+        enterDozeJob?.cancel()
+        enableSensorsJob?.cancel()
+        disableSensorsJob?.cancel()
+
+        try {
+            tempWakeLock?.let { if (it.isHeld) it.release() }
+        } catch (_: Exception) {}
+        tempWakeLock = null
+
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                runShellCommand("dumpsys sensorservice enable")
+                exitDoze(getDeviceIdleState())
+            } catch (_: Exception) {
+            } finally {
+                EnforceDozeManager.coordinator.stopService()
+            }
+        }
+        serviceScope.cancel()
 
         if (!ShizukuSettings.getPreferences().getBoolean("enforcedoze_serviceEnabled", false)) {
             showDisabledNotification(applicationContext)
@@ -105,8 +140,14 @@ class EnforceDozeService : Service() {
                 hidePersistentNotification()
             }
         }
-        addSelfToDozeWhitelist()
-        enterDoze(this)
+
+        serviceScope.launch(Dispatchers.IO) {
+            addSelfToDozeWhitelist()
+            if (!EnforceDozeManager.isScreenOn(this@EnforceDozeService)) {
+                scheduleEnterDoze(0L)
+            }
+        }
+
         state = getDeviceIdleState()
         hideDisabledNotification(applicationContext)
         return START_STICKY
@@ -143,61 +184,153 @@ class EnforceDozeService : Service() {
         }
     }
 
+    fun scheduleEnterDoze(delayMs: Long) {
+        enterDozeJob?.cancel()
+        val gen = EnforceDozeManager.coordinator.generation
+        enterDozeJob = serviceScope.launch(Dispatchers.IO) {
+            if (delayMs > 0) {
+                delay(delayMs)
+            }
+            EnforceDozeManager.coordinator.transition(DozeEvent.PendingDelayElapsed(gen))
+            enterDoze(this@EnforceDozeService)
+        }
+    }
+
     fun enterDoze(context: Context) {
         if (!EnforceDozeManager.isInsideCustomDozePeriod(context)) return
 
         val currentState = getDeviceIdleState()
         if (!currentState.equals("IDLE", ignoreCase = true)) {
             if (!EnforceDozeManager.isScreenOn(context)) {
-                tempWakeLock?.let { if (it.isHeld) it.release() }
-                tempWakeLock = null
+                try {
+                    val wl = pm?.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "OmniShizuku:EnforceDoze")
+                    wl?.acquire(5000L)
+                    tempWakeLock = wl
+                } catch (_: Exception) {}
 
-                if (dozeAppBlocklist.isNotEmpty()) {
-                    for (pkg in dozeAppBlocklist) {
-                        var targetPkg = pkg
-                        if (EnforceDozeManager.isWhitelistCurrentApp(context)) {
-                            val focused = EnforceDozeManager.getNonRootFocusedPackageName(context)
-                            if (focused != null && focused == pkg) continue
+                try {
+                    val modified = computeModifiedSettings(context)
+                    val snapshot = DeviceRadioSnapshot(
+                        wifiEnabled = isWiFiEnabled(context),
+                        mobileDataEnabled = isMobileDataEnabled(context),
+                        airplaneModeEnabled = isAirplaneEnabled(),
+                        bluetoothEnabled = isBluetoothEnabled(),
+                        locationModeEnabled = isLocationEnabled(),
+                        batterySaverEnabled = isBatterySaverEnabled(),
+                        hotspotEnabled = isHotspotEnabled(context),
+                        sensorsRestricted = false,
+                        biometricsDisabled = false,
+                        blockedAppPackages = dozeAppBlocklist,
+                        blockedNotificationPackages = dozeNotificationBlocklist,
+                        modifiedSettings = modified,
+                        timestampMonotonicMs = SystemClock.elapsedRealtime()
+                    )
+                    EnforceDozeManager.coordinator.transition(
+                        DozeEvent.RadioStateCaptured(EnforceDozeManager.coordinator.generation, snapshot)
+                    )
+
+                    if (dozeAppBlocklist.isNotEmpty()) {
+                        for (pkg in dozeAppBlocklist) {
+                            if (EnforceDozeManager.isWhitelistCurrentApp(context)) {
+                                val focused = EnforceDozeManager.getNonRootFocusedPackageName(context)
+                                if (focused != null && focused == pkg) continue
+                            }
+                            setPackageState(context, pkg, enabled = false)
                         }
-                        setPackageState(context, pkg, enabled = false)
                     }
-                }
 
-                if (dozeNotificationBlocklist.isNotEmpty()) {
-                    for (pkg in dozeNotificationBlocklist) {
-                        if (pkg !in dozeAppBlocklist) {
-                            setNotificationEnabledForPackage(pkg, enabled = false)
+                    if (dozeNotificationBlocklist.isNotEmpty()) {
+                        for (pkg in dozeNotificationBlocklist) {
+                            if (pkg !in dozeAppBlocklist) {
+                                setNotificationEnabledForPackage(pkg, enabled = false)
+                            }
                         }
                     }
-                }
 
-                timeEnterDoze = System.currentTimeMillis()
-                lastScreenOff = java.text.SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
-                    .format(Date(System.currentTimeMillis()))
+                    timeEnterDoze = System.currentTimeMillis()
+                    lastScreenOff = java.text.SimpleDateFormat("dd MMM yyyy HH:mm:ss", Locale.getDefault())
+                        .format(Date(System.currentTimeMillis()))
 
-                if (!EnforceDozeManager.isDisableStats(context)) {
-                    val charging = if (EnforceDozeManager.isCharging(context)) 0.0f else EnforceDozeManager.getBatteryLevel(context).toFloat()
-                    dozeUsageData += "${System.currentTimeMillis()},$charging,ENTER"
-                    saveDozeDataStats()
-                }
+                    if (!EnforceDozeManager.isDisableStats(context)) {
+                        val charging = if (EnforceDozeManager.isCharging(context)) 0.0f else EnforceDozeManager.getBatteryLevel(context).toFloat()
+                        dozeUsageData += "${System.currentTimeMillis()},$charging,ENTER"
+                        saveDozeDataStats()
+                    }
 
-                applyDoze()
+                    applyDoze()
 
-                if (EnforceDozeManager.isDisableMotionSensors(context)) {
-                    disableSensorsTimer = java.util.Timer()
-                    disableSensorsTimer!!.schedule(object : java.util.TimerTask() {
-                        override fun run() {
+                    if (EnforceDozeManager.isDisableMotionSensors(context)) {
+                        disableSensorsJob?.cancel()
+                        disableSensorsJob = serviceScope.launch(Dispatchers.IO) {
+                            delay(2000L)
                             val whitelist = EnforceDozeManager.getSensorWhitelistPackage(context)
                             val target = if (whitelist.isNotEmpty()) whitelist else ""
                             runShellCommand("dumpsys sensorservice restrict $target")
                         }
-                    }, 2000)
-                }
+                    }
 
-                enterDozeHandleNetwork(context)
+                    enterDozeHandleNetwork(context)
+
+                    val newIdleState = getDeviceIdleState()
+                    EnforceDozeManager.coordinator.transition(
+                        DozeEvent.DozeApplied(EnforceDozeManager.coordinator.generation, newIdleState)
+                    )
+                } finally {
+                    try {
+                        tempWakeLock?.let { if (it.isHeld) it.release() }
+                    } catch (_: Exception) {}
+                    tempWakeLock = null
+                }
             }
         }
     }
+
+    private fun computeModifiedSettings(context: Context): Set<String> {
+        val modified = mutableSetOf<String>()
+        val wasHotspot = isHotspotEnabled(context)
+        val wasWifi = isWiFiEnabled(context)
+        val wasData = isMobileDataEnabled(context)
+        val wasAirplane = isAirplaneEnabled()
+        val wasBt = isBluetoothEnabled()
+        val wasGps = isLocationEnabled()
+
+        if (EnforceDozeManager.isTurnOffAllSensorsInDoze(context)) modified.add(DeviceRadioSnapshot.SETTING_SENSORS)
+        if (EnforceDozeManager.isTurnOffBiometricsInDoze(context)) modified.add(DeviceRadioSnapshot.SETTING_BIOMETRICS)
+        if (EnforceDozeManager.isTurnOnBatterySaverInDoze(context)) modified.add(DeviceRadioSnapshot.SETTING_BATTERY_SAVER)
+        if (EnforceDozeManager.isTurnOnAirplaneInDoze(context) &&
+            (EnforceDozeManager.isIgnoreIfHotspot(context) || !wasHotspot) && !wasAirplane) {
+            modified.add(DeviceRadioSnapshot.SETTING_AIRPLANE)
+        }
+        if (EnforceDozeManager.isTurnOffBluetoothInDoze(context) && wasBt) modified.add(DeviceRadioSnapshot.SETTING_BLUETOOTH)
+        if (EnforceDozeManager.isTurnOffGPSInDoze(context) && wasGps) modified.add(DeviceRadioSnapshot.SETTING_LOCATION)
+        if (EnforceDozeManager.isTurnOffWiFiInDoze(context) &&
+            (EnforceDozeManager.isIgnoreIfHotspot(context) || !wasHotspot) && wasWifi) {
+            modified.add(DeviceRadioSnapshot.SETTING_WIFI)
+        }
+        if (EnforceDozeManager.isTurnOffDataInDoze(context) && wasData &&
+            (EnforceDozeManager.isIgnoreIfHotspot(context) || !wasHotspot)) {
+            modified.add(DeviceRadioSnapshot.SETTING_DATA)
+        }
+        if (dozeAppBlocklist.isNotEmpty()) modified.add(DeviceRadioSnapshot.SETTING_BLOCKED_APPS)
+        if (dozeNotificationBlocklist.isNotEmpty()) modified.add(DeviceRadioSnapshot.SETTING_BLOCKED_NOTIFS)
+        return modified
+    }
+
+    fun captureCurrentRadioSnapshot(context: Context): DeviceRadioSnapshot = DeviceRadioSnapshot(
+        wifiEnabled = isWiFiEnabled(context),
+        mobileDataEnabled = isMobileDataEnabled(context),
+        airplaneModeEnabled = isAirplaneEnabled(),
+        bluetoothEnabled = isBluetoothEnabled(),
+        locationModeEnabled = isLocationEnabled(),
+        batterySaverEnabled = isBatterySaverEnabled(),
+        hotspotEnabled = isHotspotEnabled(context),
+        sensorsRestricted = false,
+        biometricsDisabled = false,
+        blockedAppPackages = emptySet(),
+        blockedNotificationPackages = emptySet(),
+        modifiedSettings = emptySet(),
+        timestampMonotonicMs = SystemClock.elapsedRealtime()
+    )
 
     private fun reEnableBlockedAppsAndNotifications(context: Context) {
         if (dozeAppBlocklist.isNotEmpty()) {
@@ -215,6 +348,7 @@ class EnforceDozeService : Service() {
     }
 
     fun exitDoze(newDeviceIdleState: String) {
+        enterDozeJob?.cancel()
         timeExitDoze = System.currentTimeMillis()
         leaveDoze()
         state = "ACTIVE"
@@ -225,17 +359,34 @@ class EnforceDozeService : Service() {
             saveDozeDataStats()
         }
 
+        val snapshot = EnforceDozeManager.coordinator.snapshot.initialSnapshot
+        val currentLive = captureCurrentRadioSnapshot(this)
+        val toRestore = snapshot?.computeRequiredRestorations(currentLive) ?: setOf(
+            DeviceRadioSnapshot.SETTING_AIRPLANE,
+            DeviceRadioSnapshot.SETTING_BLUETOOTH,
+            DeviceRadioSnapshot.SETTING_LOCATION,
+            DeviceRadioSnapshot.SETTING_WIFI,
+            DeviceRadioSnapshot.SETTING_DATA,
+            DeviceRadioSnapshot.SETTING_BATTERY_SAVER,
+            DeviceRadioSnapshot.SETTING_SENSORS,
+            DeviceRadioSnapshot.SETTING_BIOMETRICS
+        )
+
+        leaveDozeHandleNetworkSelective(this, toRestore)
         reEnableBlockedAppsAndNotifications(this)
 
         if (EnforceDozeManager.isDisableMotionSensors(this)) {
-            enableSensorsTimer = java.util.Timer()
-            enableSensorsTimer!!.schedule(object : java.util.TimerTask() {
-                override fun run() {
-                    runShellCommand("dumpsys sensorservice enable")
-                    autoRotateBrightnessFix()
-                }
-            }, 2000)
+            enableSensorsJob?.cancel()
+            enableSensorsJob = serviceScope.launch(Dispatchers.IO) {
+                delay(2000L)
+                runShellCommand("dumpsys sensorservice enable")
+                autoRotateBrightnessFix()
+            }
         }
+
+        EnforceDozeManager.coordinator.transition(
+            DozeEvent.RestorationCompleted(EnforceDozeManager.coordinator.generation, toRestore)
+        )
     }
 
     fun enterDozeHandleNetwork(context: Context) {
@@ -285,35 +436,56 @@ class EnforceDozeService : Service() {
     }
 
     fun leaveDozeHandleNetwork(context: Context) {
-        if (EnforceDozeManager.isTurnOnAirplaneInDoze(context)) {
-            if (!wasAirplaneOn) {
-                runShellCommand("settings put global airplane_mode_on 0")
-                runShellCommand("am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false")
-            }
+        val snapshot = EnforceDozeManager.coordinator.snapshot.initialSnapshot
+        val currentLive = captureCurrentRadioSnapshot(context)
+        val toRestore = snapshot?.computeRequiredRestorations(currentLive) ?: setOf(
+            DeviceRadioSnapshot.SETTING_AIRPLANE,
+            DeviceRadioSnapshot.SETTING_BLUETOOTH,
+            DeviceRadioSnapshot.SETTING_LOCATION,
+            DeviceRadioSnapshot.SETTING_WIFI,
+            DeviceRadioSnapshot.SETTING_DATA,
+            DeviceRadioSnapshot.SETTING_BATTERY_SAVER,
+            DeviceRadioSnapshot.SETTING_SENSORS,
+            DeviceRadioSnapshot.SETTING_BIOMETRICS
+        )
+        leaveDozeHandleNetworkSelective(context, toRestore)
+    }
+
+    fun leaveDozeHandleNetworkSelective(context: Context, toRestore: Set<String>) {
+        if (DeviceRadioSnapshot.SETTING_AIRPLANE in toRestore) {
+            runShellCommand("settings put global airplane_mode_on 0")
+            runShellCommand("am broadcast -a android.intent.action.AIRPLANE_MODE --ez state false")
         }
-        if (EnforceDozeManager.isTurnOffBluetoothInDoze(context) && wasBluetoothOn) {
+        if (DeviceRadioSnapshot.SETTING_BLUETOOTH in toRestore) {
             runShellCommand("svc bluetooth enable")
         }
-        if (EnforceDozeManager.isTurnOffGPSInDoze(context) && wasGPSOn) {
+        if (DeviceRadioSnapshot.SETTING_LOCATION in toRestore) {
             runShellCommand("settings put secure location_mode 1")
         }
-        if (EnforceDozeManager.isTurnOffWiFiInDoze(context) && wasWiFiTurnedOn) {
+        if (DeviceRadioSnapshot.SETTING_WIFI in toRestore) {
             runShellCommand("svc wifi enable")
         }
-        if (EnforceDozeManager.isTurnOffAllSensorsInDoze(context)) {
+        if (DeviceRadioSnapshot.SETTING_SENSORS in toRestore) {
             runShellCommand("dumpsys sensorservice enable")
         }
-        if (EnforceDozeManager.isTurnOnBatterySaverInDoze(context)) {
+        if (DeviceRadioSnapshot.SETTING_BATTERY_SAVER in toRestore) {
             runShellCommand("settings put global low_power 0")
         }
-        if (EnforceDozeManager.isTurnOffDataInDoze(context) && wasMobileDataTurnedOn) {
+        if (DeviceRadioSnapshot.SETTING_DATA in toRestore) {
             runShellCommand("svc data enable")
+        }
+        if (DeviceRadioSnapshot.SETTING_BIOMETRICS in toRestore) {
+            runShellCommand("settings put secure biometric_keyguard_enabled 1")
         }
     }
 
     fun handleScreenOn(context: Context) {
-        tempWakeLock?.release()
+        enterDozeJob?.cancel()
+        try {
+            tempWakeLock?.let { if (it.isHeld) it.release() }
+        } catch (_: Exception) {}
         tempWakeLock = null
+
         leaveDozeHandleNetwork(context)
         wasWiFiTurnedOn = false
         wasBatterySaverOn = false
@@ -326,11 +498,12 @@ class EnforceDozeService : Service() {
         if (!newState.equals("ACTIVE", ignoreCase = true) || !state.equals("ACTIVE", ignoreCase = true)) {
             exitDoze(newState)
         } else {
-            enterDozeTimer?.cancel()
             reEnableBlockedAppsAndNotifications(context)
         }
         if (EnforceDozeManager.isTurnOffBiometricsInDoze(context)) {
-            runShellCommand("settings put secure biometric_keyguard_enabled 1")
+            serviceScope.launch(Dispatchers.IO) {
+                runShellCommand("settings put secure biometric_keyguard_enabled 1")
+            }
         }
     }
 
@@ -540,53 +713,91 @@ class EnforceDozeService : Service() {
         nm.cancel(9876)
     }
 
-    class DozeReceiver : BroadcastReceiver() {
+    inner class ServiceBroadcastReceiver : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action ?: return
-            val time = Settings.Secure.getInt(context.contentResolver, "lock_screen_lock_after_timeout", 5000)
-            val delay = EnforceDozeManager.getDozeEnterDelay(context) * 1000
-            val totalTime = time + delay
 
-            CoroutineScope(Dispatchers.IO).launch {
+            serviceScope.launch(Dispatchers.IO) {
                 when (action) {
                     Intent.ACTION_USER_PRESENT -> {
-                        if (EnforceDozeManager.isWaitForUnlock(context)) {
-                            // handle screen on - need service reference
+                        EnforceDozeManager.coordinator.transition(
+                            DozeEvent.ScreenTurnedOn(SystemClock.elapsedRealtime())
+                        )
+                        withContext(Dispatchers.Main) {
+                            handleScreenOn(context)
                         }
                     }
                     Intent.ACTION_SCREEN_ON -> {
-                        val km = context.getSystemService(Context.KEYGUARD_SERVICE) as android.app.KeyguardManager
-                        if (!km.isKeyguardLocked || !EnforceDozeManager.isWaitForUnlock(context)) {
-                            // handle screen on
+                        val km = context.getSystemService(Context.KEYGUARD_SERVICE) as? android.app.KeyguardManager
+                        val isLocked = km?.isKeyguardLocked == true
+                        if (!isLocked || !EnforceDozeManager.isWaitForUnlock(context)) {
+                            EnforceDozeManager.coordinator.transition(
+                                DozeEvent.ScreenTurnedOn(SystemClock.elapsedRealtime())
+                            )
+                            withContext(Dispatchers.Main) {
+                                handleScreenOn(context)
+                            }
                         }
                         if (EnforceDozeManager.isTurnOffBiometricsInDoze(context)) {
                             runShellCommand("settings put secure biometric_keyguard_enabled 1")
                         }
                     }
                     Intent.ACTION_SCREEN_OFF -> {
-                        if (EnforceDozeManager.isDisableWhenCharging(context) && EnforceDozeManager.isCharging(context)) {
-                            // skip
-                        } else if (isUserInCommunicationCall(context)) {
-                            // skip
-                        } else if (isUserInCall(context)) {
-                            // skip
+                        val isCharging = EnforceDozeManager.isCharging(context)
+                        val inComm = isUserInCommunicationCall(context)
+                        val inCall = isUserInCall(context)
+                        val callActive = inComm || inCall
+
+                        if (EnforceDozeManager.isDisableWhenCharging(context) && isCharging) {
+                            return@launch
+                        }
+                        if (callActive) {
+                            return@launch
+                        }
+
+                        val delayMs = if (EnforceDozeManager.isIgnoreLockscreenTimeout(context)) {
+                            EnforceDozeManager.getDozeEnterDelay(context) * 1000L
                         } else {
-                            if (EnforceDozeManager.isIgnoreLockscreenTimeout(context)) {
-                                if (EnforceDozeManager.getDozeEnterDelay(context) == 0) {
-                                    // enter doze immediately
-                                } else {
-                                    // schedule doze
-                                }
-                            } else {
-                                // schedule doze with totalTime
+                            val time = Settings.Secure.getInt(context.contentResolver, "lock_screen_lock_after_timeout", 5000)
+                            val delay = EnforceDozeManager.getDozeEnterDelay(context) * 1000L
+                            time + delay
+                        }
+
+                        EnforceDozeManager.coordinator.transition(
+                            DozeEvent.ScreenTurnedOff(
+                                isCharging = isCharging,
+                                isCallActive = callActive,
+                                delayMs = delayMs,
+                                currentTimeMs = SystemClock.elapsedRealtime()
+                            )
+                        )
+                        scheduleEnterDoze(delayMs)
+                    }
+                    Intent.ACTION_POWER_CONNECTED -> {
+                        EnforceDozeManager.coordinator.transition(
+                            DozeEvent.PowerConnected(SystemClock.elapsedRealtime())
+                        )
+                        if (EnforceDozeManager.isDisableWhenCharging(context)) {
+                            enterDozeJob?.cancel()
+                            withContext(Dispatchers.Main) {
+                                exitDoze(getDeviceIdleState())
                             }
                         }
                     }
-                    Intent.ACTION_POWER_CONNECTED -> {
-                        // handle power connected
+                    Intent.ACTION_POWER_DISCONNECTED -> {
+                        EnforceDozeManager.coordinator.transition(
+                            DozeEvent.PowerDisconnected(SystemClock.elapsedRealtime())
+                        )
+                        if (!EnforceDozeManager.isScreenOn(context)) {
+                            scheduleEnterDoze(0L)
+                        }
                     }
-                    PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED -> {
-                        // handle idle mode changed
+                    PowerManager.ACTION_DEVICE_IDLE_MODE_CHANGED,
+                    "android.os.action.LIGHT_DEVICE_IDLE_MODE_CHANGED" -> {
+                        val idleMode = getDeviceIdleState()
+                        EnforceDozeManager.coordinator.transition(
+                            DozeEvent.DeviceIdleStateChanged(idleMode)
+                        )
                     }
                 }
             }

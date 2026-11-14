@@ -19,7 +19,6 @@ signing.properties
 
 **/build/
 *.jks
-.agents/
 node_modules/
 .next/
 next-env.d.ts
@@ -51,3 +50,22 @@ scratch/
 
 
 code-scanning-alerts.json
+
+# Local AI Agent Harnesses and Plugins (kept local, excluded from Git repo)
+.agents/
+.claude-plugin/
+.codex-plugin/
+.cursor-plugin/
+agents/
+skills/
+resources/
+assets/icon.svg
+plugin.json
+GEMINI.md
+docs/claude.md
+docs/codex.md
+docs/copilot.md
+docs/cursor.md
+docs/harnesses.md
+docs/egm-integration-audit.md
+

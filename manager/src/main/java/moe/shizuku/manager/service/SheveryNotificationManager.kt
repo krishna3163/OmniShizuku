@@ -1,5 +1,7 @@
 package moe.shizuku.manager.service
 
+import moe.shizuku.manager.notifications.NotificationRegistry
+
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -14,15 +16,30 @@ import rikka.shizuku.Shizuku
 
 object SheveryNotificationManager {
     private const val CHANNEL_ID = "shevery_control"
-    private const val NOTIFICATION_ID = 1002
+    private const val NOTIFICATION_ID = moe.shizuku.manager.notifications.NotificationRegistry.Ids.SHEVERY_CONTROL
     private var initialized = false
 
     private val binderReceivedListener = Shizuku.OnBinderReceivedListener {
         updateNotification(moe.shizuku.manager.application)
+        runCatching {
+            moe.shizuku.manager.notifications.HelperNotificationManager.onServerHealthy(moe.shizuku.manager.application)
+        }
     }
 
     private val binderDeadListener = Shizuku.OnBinderDeadListener {
         updateNotification(moe.shizuku.manager.application)
+        runCatching {
+            if (!moe.shizuku.manager.ShizukuSettings.getManuallyStopped()) {
+                moe.shizuku.manager.notifications.HelperNotificationManager.post(
+                    moe.shizuku.manager.notifications.HelperEvent(
+                        type = moe.shizuku.manager.notifications.HelperEventType.SERVER_STOPPED,
+                        errorIdentity = "binder_dead",
+                        showRestart = true
+                    ),
+                    moe.shizuku.manager.application
+                )
+            }
+        }
     }
 
     fun setup(context: Context) {
@@ -110,3 +127,4 @@ object SheveryNotificationManager {
         notificationManager.notify(NOTIFICATION_ID, builder.build())
     }
 }
+

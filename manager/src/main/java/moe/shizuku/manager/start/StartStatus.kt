@@ -114,10 +114,30 @@ object StartStatusReporter {
 
     fun succeeded() {
         _status.value = StartStatus.Succeeded
+        runCatching {
+            moe.shizuku.manager.notifications.HelperNotificationManager.onServerHealthy(moe.shizuku.manager.application)
+        }
     }
 
     fun failed(message: String, kind: StartFailureKind = StartFailureKind.GENERIC) {
         _status.value = StartStatus.Failed(message, kind)
+        runCatching {
+            val app = moe.shizuku.manager.application
+            val eventType = if (kind == StartFailureKind.SETTINGS || kind == StartFailureKind.PAIRING) {
+                moe.shizuku.manager.notifications.HelperEventType.PERMISSION_REQUIRED
+            } else {
+                moe.shizuku.manager.notifications.HelperEventType.NEEDS_ATTENTION
+            }
+            moe.shizuku.manager.notifications.HelperNotificationManager.post(
+                moe.shizuku.manager.notifications.HelperEvent(
+                    type = eventType,
+                    errorIdentity = kind.name,
+                    message = message,
+                    showRestart = true
+                ),
+                app
+            )
+        }
     }
 
     fun clear() {

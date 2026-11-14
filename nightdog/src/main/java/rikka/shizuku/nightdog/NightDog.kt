@@ -11,19 +11,16 @@ import android.util.Log
 import java.util.concurrent.ConcurrentHashMap
 import java.util.concurrent.atomic.AtomicBoolean
 import java.util.concurrent.atomic.AtomicInteger
-import java.util.concurrent.atomic.AtomicLong
 
 object NightDog {
 
     private const val TAG = "NightDog"
 
-    const val DEFAULT_TIMEOUT_MS = 60_000L
-    const val DEFAULT_POLL_INTERVAL_MS = 60_000L
+    const val DEFAULT_TIMEOUT_MS = NightDogStateMachine.DEFAULT_TIMEOUT_MS
+    const val DEFAULT_POLL_INTERVAL_MS = NightDogStateMachine.DEFAULT_POLL_INTERVAL_MS
     private const val MIN_CHECK_DELAY_MS = 1_000L
-    private const val INITIAL_REBIND_DELAY_MS = 2_000L
-    private const val BACKOFF_BASE_MS = 5_000L
-    private const val MAX_BACKOFF_MS = 60_000L
-    private const val MAX_REBIND_ATTEMPTS = 10
+    private const val INITIAL_REBIND_DELAY_MS = NightDogStateMachine.INITIAL_REBIND_DELAY_MS
+    private const val MAX_REBIND_ATTEMPTS = NightDogStateMachine.MAX_REBIND_ATTEMPTS
 
     private val CRITICAL_SERVICES = arrayOf("package", "activity", "user", "appops")
     private val OPTIONAL_SERVICES = arrayOf("permissionmgr")
@@ -40,18 +37,22 @@ object NightDog {
     private var handler: Handler? = null
     private var healthCheckRunnable: Runnable? = null
 
-    private val lastBeatTime = AtomicLong(0L)
-    private val beatCount = AtomicLong(0L)
     private val totalRebinds = AtomicInteger(0)
-    private var startTimeMs = 0L
     private var timeoutMs = DEFAULT_TIMEOUT_MS
     private var pollIntervalMs = DEFAULT_POLL_INTERVAL_MS
     @Volatile
     private var listener: Listener? = null
 
+    val coordinator = NightDogCoordinator()
+    val snapshot: NightDogSnapshot get() = coordinator.snapshot
+
+    // Pluggable for testing recovery termination without killing test JVM
+    var processTerminator: (reason: String) -> Unit = {
+        Process.killProcess(Process.myPid())
+    }
+
     private val bindings = ConcurrentHashMap<String, IBinder>()
     private val deathRecipients = ConcurrentHashMap<String, IBinder.DeathRecipient>()
-    private val rebindAttempts = ConcurrentHashMap<String, Int>()
     private val pendingRebinds = ConcurrentHashMap.newKeySet<String>()
 
     @JvmStatic
@@ -69,9 +70,30 @@ object NightDog {
             this.listener = listener
 
             val now = SystemClock.uptimeMillis()
-            this.startTimeMs = now
-            this.lastBeatTime.set(now)
-            this.beatCount.set(0L)
+            val gen = coordinator.nextGeneration()
+
+            coordinator.onFatalFaultAction = { reason ->
+                terminateForRecovery(reason)
+            }
+            coordinator.onServiceRecoveredAction = { name ->
+                totalRebinds.incrementAndGet()
+                try {
+                    this.listener?.onServiceRecovered(name)
+                } catch (t: Throwable) {
+                    Log.w(TAG, "Listener onServiceRecovered($name) threw", t)
+                }
+            }
+
+            coordinator.transition(
+                NightDogEvent.StartRequested(
+                    generation = gen,
+                    timeoutMs = this.timeoutMs,
+                    pollIntervalMs = this.pollIntervalMs,
+                    criticalServices = CRITICAL_SERVICES.toList(),
+                    optionalServices = OPTIONAL_SERVICES.toList(),
+                    currentTimeMs = now
+                )
+            )
 
             val thread = HandlerThread("nightdog").apply {
                 isDaemon = true
@@ -81,13 +103,14 @@ object NightDog {
             watchdogThread = thread
             handler = threadHandler
 
-            val checkRunnable = Runnable { checkHealth() }
+            val checkRunnable = Runnable { checkHealth(gen) }
             healthCheckRunnable = checkRunnable
 
             threadHandler.post {
-                if (!started.get()) return@post
-                linkToServices(critical = true, *CRITICAL_SERVICES)
-                linkToServices(critical = false, *OPTIONAL_SERVICES)
+                if (!started.get() || coordinator.generation != gen) return@post
+                coordinator.transition(NightDogEvent.Started(gen))
+                linkToServices(gen, critical = true, *CRITICAL_SERVICES)
+                linkToServices(gen, critical = false, *OPTIONAL_SERVICES)
                 val initialDelay = minOf(this.pollIntervalMs, this.timeoutMs)
                 threadHandler.postDelayed(checkRunnable, initialDelay)
             }
@@ -99,15 +122,15 @@ object NightDog {
         synchronized(lock) {
             if (!started.compareAndSet(true, false)) return
 
+            coordinator.stop()
+
             val currentHandler = handler
             healthCheckRunnable?.let { currentHandler?.removeCallbacks(it) }
             healthCheckRunnable = null
             currentHandler?.removeCallbacksAndMessages(null)
 
             unlinkAllServices()
-            rebindAttempts.clear()
             pendingRebinds.clear()
-            lastBeatTime.set(0L)
             listener = null
 
             watchdogThread?.quitSafely()
@@ -118,12 +141,12 @@ object NightDog {
 
     @JvmStatic
     fun beat() {
-        lastBeatTime.set(SystemClock.uptimeMillis())
-        beatCount.incrementAndGet()
+        if (!started.get()) return
+        coordinator.transition(NightDogEvent.HeartbeatReceived(SystemClock.uptimeMillis()))
     }
 
     @JvmStatic
-    fun isStarted(): Boolean = started.get()
+    fun isStarted(): Boolean = started.get() && coordinator.isRunning
 
     @JvmStatic
     fun getBoundServiceCount(): Int = bindings.size
@@ -136,8 +159,7 @@ object NightDog {
             bindings[name]?.let { binder ->
                 try {
                     binder.unlinkToDeath(recipient, 0)
-                } catch (_: Exception) {
-                }
+                } catch (_: Exception) {}
             }
         }
         bindings.clear()
@@ -150,42 +172,49 @@ object NightDog {
         if (binder != null && recipient != null) {
             try {
                 binder.unlinkToDeath(recipient, 0)
-            } catch (_: Exception) {
-            }
+            } catch (_: Exception) {}
         }
     }
 
-    private fun linkToServices(critical: Boolean, vararg names: String) {
+    private fun linkToServices(generation: Long, critical: Boolean, vararg names: String) {
         for (name in names) {
-            if (!started.get()) return
+            if (!started.get() || coordinator.generation != generation) return
             val binder = ServiceManager.getService(name)
-            if (binder == null || !binder.pingBinder() || !linkTo(name, binder)) {
+            if (binder == null || !binder.pingBinder() || !linkTo(generation, name, binder)) {
+                coordinator.transition(
+                    NightDogEvent.ServiceLinkFailed(generation, name, SystemClock.uptimeMillis())
+                )
                 if (critical) {
                     Log.w(TAG, "Initial bind to '$name' unavailable, scheduling rebind")
-                    scheduleRebind(name, INITIAL_REBIND_DELAY_MS)
+                    scheduleRebind(name, INITIAL_REBIND_DELAY_MS, generation)
                 }
+            } else {
+                coordinator.transition(
+                    NightDogEvent.ServiceLinked(generation, name, SystemClock.uptimeMillis())
+                )
             }
         }
     }
 
-    private fun linkTo(name: String, binder: IBinder): Boolean {
+    private fun linkTo(generation: Long, name: String, binder: IBinder): Boolean {
         unlinkService(name)
 
         val recipient = IBinder.DeathRecipient {
-            if (!started.get()) return@DeathRecipient
+            if (!started.get() || coordinator.generation != generation) return@DeathRecipient
             Log.e(TAG, "System service died: $name")
             handler?.post {
-                if (!started.get()) return@post
+                if (!started.get() || coordinator.generation != generation) return@post
                 unlinkService(name)
-                rebindAttempts.remove(name)
-                scheduleRebind(name, INITIAL_REBIND_DELAY_MS)
+                coordinator.transition(
+                    NightDogEvent.ServiceDeathDetected(generation, name, SystemClock.uptimeMillis())
+                )
+                scheduleRebind(name, INITIAL_REBIND_DELAY_MS, generation)
             }
         }
         return try {
             binder.linkToDeath(recipient, 0)
             bindings[name] = binder
             deathRecipients[name] = recipient
-            rebindAttempts.remove(name)
             true
         } catch (e: Exception) {
             Log.e(TAG, "linkToDeath($name) failed", e)
@@ -193,13 +222,18 @@ object NightDog {
         }
     }
 
-    private fun scheduleRebind(name: String, delayMs: Long) {
-        if (!started.get()) return
+    private fun scheduleRebind(name: String, delayMs: Long, generation: Long) {
+        if (!started.get() || coordinator.generation != generation) return
         if (!pendingRebinds.add(name)) return
+
+        coordinator.transition(
+            NightDogEvent.RebindScheduled(generation, name, delayMs, SystemClock.uptimeMillis())
+        )
 
         val posted = handler?.postDelayed({
             pendingRebinds.remove(name)
-            rebind(name)
+            if (!started.get() || coordinator.generation != generation) return@postDelayed
+            rebind(name, generation)
         }, delayMs) ?: false
 
         if (!posted) {
@@ -207,49 +241,55 @@ object NightDog {
         }
     }
 
-    private fun rebind(name: String) {
-        if (!started.get()) return
+    private fun rebind(name: String, generation: Long) {
+        if (!started.get() || coordinator.generation != generation) return
 
-        val attempts = rebindAttempts.getOrDefault(name, 0)
+        coordinator.transition(
+            NightDogEvent.RebindStarted(generation, name, SystemClock.uptimeMillis())
+        )
+
         val binder = ServiceManager.getService(name)
-        if (binder != null && binder.pingBinder() && linkTo(name, binder)) {
-            totalRebinds.incrementAndGet()
-            Log.i(TAG, "System service recovered: $name (after ${attempts + 1} attempt(s))")
-            try {
-                listener?.onServiceRecovered(name)
-            } catch (t: Throwable) {
-                Log.w(TAG, "Listener onServiceRecovered($name) threw", t)
-            }
+        if (binder != null && binder.pingBinder() && linkTo(generation, name, binder)) {
+            Log.i(TAG, "System service recovered: $name")
+            coordinator.transition(
+                NightDogEvent.ServiceRecovered(generation, name, SystemClock.uptimeMillis())
+            )
             return
         }
 
-        val nextAttempt = attempts + 1
-        if (nextAttempt >= MAX_REBIND_ATTEMPTS) {
-            rebindAttempts.remove(name)
-            if (name in CRITICAL_SERVICES) {
+        val svcSnapshot = coordinator.snapshot.services[name]
+        val attempts = svcSnapshot?.rebindAttempts ?: 0
+
+        if (attempts + 1 >= MAX_REBIND_ATTEMPTS) {
+            if (svcSnapshot?.isCritical == true) {
                 Log.e(
                     TAG,
                     "Critical service '$name' failed to recover after $MAX_REBIND_ATTEMPTS attempts; terminating server for starter recovery"
                 )
-                terminateForRecovery("service_unrecoverable:$name")
             } else {
                 Log.w(TAG, "Optional service '$name' did not recover after $MAX_REBIND_ATTEMPTS attempts")
             }
+            coordinator.transition(
+                NightDogEvent.ServiceUnrecoverable(generation, name, SystemClock.uptimeMillis())
+            )
             return
         }
 
-        rebindAttempts[name] = nextAttempt
-        val shift = attempts.coerceAtMost(4)
-        val delay = minOf(BACKOFF_BASE_MS * (1L shl shift), MAX_BACKOFF_MS)
-        Log.w(TAG, "Rebind attempt $nextAttempt/$MAX_REBIND_ATTEMPTS for '$name' failed; retrying in ${delay}ms")
-        scheduleRebind(name, delay)
+        val delay = NightDogStateMachine.calculateBackoffDelay(attempts + 1)
+        Log.w(TAG, "Rebind attempt ${attempts + 1}/$MAX_REBIND_ATTEMPTS for '$name' failed; retrying in ${delay}ms")
+
+        coordinator.transition(
+            NightDogEvent.RebindFailed(generation, name, delay, SystemClock.uptimeMillis())
+        )
+        scheduleRebind(name, delay, generation)
     }
 
-    private fun checkHealth() {
-        if (!started.get()) return
+    private fun checkHealth(generation: Long) {
+        if (!started.get() || coordinator.generation != generation) return
 
         val now = SystemClock.uptimeMillis()
-        val beat = lastBeatTime.get()
+        val snapshot = coordinator.snapshot
+        val beat = snapshot.lastBeatMonotonicMs
         var nextCheckDelay = pollIntervalMs
 
         if (beat > 0L) {
@@ -257,7 +297,9 @@ object NightDog {
             if (elapsed >= timeoutMs) {
                 Log.e(TAG, "Main thread heartbeat overdue by ${elapsed}ms (timeout=${timeoutMs}ms)")
                 dumpMainThreadStackTrace()
-                terminateForRecovery("heartbeat_timeout:${elapsed}ms")
+                coordinator.transition(
+                    NightDogEvent.FatalFaultDetected(generation, "heartbeat_timeout:${elapsed}ms", now)
+                )
                 return
             }
             val remainingUntilTimeout = (timeoutMs - elapsed).coerceAtLeast(MIN_CHECK_DELAY_MS)
@@ -265,11 +307,11 @@ object NightDog {
         }
 
         for (name in CRITICAL_SERVICES) {
-            if (!started.get()) return
+            if (!started.get() || coordinator.generation != generation) return
             val binder = bindings[name]
             if (binder == null) {
                 if (!pendingRebinds.contains(name)) {
-                    scheduleRebind(name, INITIAL_REBIND_DELAY_MS)
+                    scheduleRebind(name, INITIAL_REBIND_DELAY_MS, generation)
                 }
                 continue
             }
@@ -277,17 +319,23 @@ object NightDog {
                 if (!binder.pingBinder()) {
                     Log.w(TAG, "System service '$name' unresponsive during fallback check")
                     unlinkService(name)
-                    scheduleRebind(name, INITIAL_REBIND_DELAY_MS)
+                    coordinator.transition(
+                        NightDogEvent.ServiceDeathDetected(generation, name, now)
+                    )
+                    scheduleRebind(name, INITIAL_REBIND_DELAY_MS, generation)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Fallback check failed for '$name'", e)
                 unlinkService(name)
-                scheduleRebind(name, INITIAL_REBIND_DELAY_MS)
+                coordinator.transition(
+                    NightDogEvent.ServiceDeathDetected(generation, name, now)
+                )
+                scheduleRebind(name, INITIAL_REBIND_DELAY_MS, generation)
             }
         }
 
         val runnable = healthCheckRunnable ?: return
-        if (started.get()) {
+        if (started.get() && coordinator.generation == generation) {
             handler?.postDelayed(runnable, nextCheckDelay)
         }
     }
@@ -311,9 +359,10 @@ object NightDog {
     private fun terminateForRecovery(reason: String) {
         try {
             listener?.onFatalFault(reason)
-        } catch (_: Throwable) {
-        }
+        } catch (_: Throwable) {}
         stop()
-        Process.killProcess(Process.myPid())
+        try {
+            processTerminator(reason)
+        } catch (_: Throwable) {}
     }
 }
