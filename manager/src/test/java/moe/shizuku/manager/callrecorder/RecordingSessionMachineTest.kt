@@ -167,10 +167,6 @@ class RecordingSessionMachineTest {
         // different seed may differ but still must not crash (covered by run)
         run(7)
     }
-}
-
-
-
     @Test
     fun staleTerminalAndControlCallbacksFromOldGenerationAreIgnored() {
         var old = snapshot(RecordingSessionState.Starting, generation = 1)
@@ -216,3 +212,4 @@ class RecordingSessionMachineTest {
         assertEquals(0L, restarted.durationMs)
         assertEquals(null, restarted.lastError)
     }
+}
