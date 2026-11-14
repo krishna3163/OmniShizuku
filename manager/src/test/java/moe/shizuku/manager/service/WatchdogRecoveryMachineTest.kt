@@ -64,8 +64,6 @@ class WatchdogRecoveryMachineTest {
         assertEquals(run(99), run(99))
         run(1)
     }
-}
-
     @Test
     fun duplicateCrashAndPendingRestartScenarios() {
         // duplicate crash notifications while awaiting/restarting keep recovery intent (not gave up)
@@ -94,5 +92,6 @@ class WatchdogRecoveryMachineTest {
         assertEquals(WatchdogRecoveryState.IDLE, s)
         // breaker then genuine recovery clears gave-up at reducer level
         s = WatchdogRecoveryMachine.reduce(WatchdogRecoveryState.RESTARTING, WatchdogRecoveryEvent.BreakerOpened)
-        assertEquals(WatchdogRecoveryState.GAVE_UP, WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.ServerRunning))
+        assertEquals(WatchdogRecoveryState.IDLE, WatchdogRecoveryMachine.reduce(s, WatchdogRecoveryEvent.ServerRunning))
     }
+}

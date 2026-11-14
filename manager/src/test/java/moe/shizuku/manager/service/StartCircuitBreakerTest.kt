@@ -28,8 +28,8 @@ class StartCircuitBreakerTest {
         // third is outside 1000ms window relative to first -> first dropped
         assertFalse(b.record(1200))
         assertFalse(b.open)
-        assertFalse(b.record(1500))
-        assertTrue(b.record(1800))
+        // 900, 1200, 1500 are 3 attempts within 1000ms -> opens on third in-window attempt
+        assertTrue(b.record(1500))
         assertTrue(b.open)
     }
 
