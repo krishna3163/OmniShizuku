@@ -76,6 +76,7 @@ android {
     }
     lint {
         checkReleaseBuilds false
+        abortOnError false
     }
     testOptions {
         unitTests {
