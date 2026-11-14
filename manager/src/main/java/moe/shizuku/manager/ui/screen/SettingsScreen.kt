@@ -82,9 +82,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import android.widget.Toast
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import moe.shizuku.manager.legacy.LegacyRishCompatibilityManager
 import moe.shizuku.manager.legacy.LegacyRishCompatibilityState
 import moe.shizuku.manager.legacy.LegacyRishSnapshot
