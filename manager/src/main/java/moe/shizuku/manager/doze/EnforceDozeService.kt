@@ -385,7 +385,7 @@ class EnforceDozeService : Service() {
         }
 
         EnforceDozeManager.coordinator.transition(
-            DozeEvent.RestorationCompleted(EnforceDozeManager.coordinator.generation, toRestore)
+            DozeEvent.RestoringCompleted(EnforceDozeManager.coordinator.generation, toRestore)
         )
     }
 
@@ -796,7 +796,7 @@ class EnforceDozeService : Service() {
                     "android.os.action.LIGHT_DEVICE_IDLE_MODE_CHANGED" -> {
                         val idleMode = getDeviceIdleState()
                         EnforceDozeManager.coordinator.transition(
-                            DozeEvent.DeviceIdleStateChanged(idleMode)
+                            DozeEvent.IdleModeChanged(idleMode)
                         )
                     }
                 }

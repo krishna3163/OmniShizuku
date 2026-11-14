@@ -45,7 +45,6 @@ object UsbConnectionMonitor {
         }
         receiver = r
         val filter = IntentFilter().apply {
-            addAction(UsbManager.ACTION_USB_STATE)
             addAction(ACTION_USB_STATE)
             addAction(UsbManager.ACTION_USB_DEVICE_ATTACHED)
             addAction(UsbManager.ACTION_USB_DEVICE_DETACHED)
@@ -58,7 +57,7 @@ object UsbConnectionMonitor {
         }
 
         val sticky = runCatching {
-            context.registerReceiver(null, IntentFilter(UsbManager.ACTION_USB_STATE))
+            context.registerReceiver(null, IntentFilter(ACTION_USB_STATE))
         }.getOrNull()
         if (sticky != null) {
             handleIntent(sticky, force = true)

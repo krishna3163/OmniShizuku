@@ -47,13 +47,6 @@ object RecordingSessionMachine {
                     fileSizeBytes = 0L,
                     lastError = null
                 )
-                RecordingSessionState.Stopped -> snapshot.copy(
-                    state = RecordingSessionState.Starting,
-                    generation = snapshot.generation + 1,
-                    durationMs = 0L,
-                    fileSizeBytes = 0L,
-                    lastError = null
-                )
                 else -> snapshot // reject duplicate/concurrent starts while active/transitioning
             }
 

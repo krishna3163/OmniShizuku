@@ -1,10 +1,15 @@
 package moe.shizuku.manager.ui.screen
 
+import android.Manifest
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.StringRes
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -25,6 +30,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.AutoMode
+import androidx.compose.material.icons.outlined.AutoAwesome
 import androidx.compose.material.icons.outlined.AdminPanelSettings
 import androidx.compose.material.icons.outlined.Bolt
 import androidx.compose.material.icons.outlined.BugReport
@@ -32,15 +38,18 @@ import androidx.compose.material.icons.outlined.Code
 import androidx.compose.material.icons.outlined.Coffee
 import androidx.compose.material.icons.outlined.Contrast
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material.icons.outlined.DeveloperMode
 import androidx.compose.material.icons.outlined.Devices
 import androidx.compose.material.icons.outlined.Info
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.KeyboardArrowUp
+import androidx.compose.material.icons.outlined.Layers
 import androidx.compose.material.icons.outlined.Link
 import androidx.compose.material.icons.outlined.MenuBook
 import androidx.compose.material.icons.outlined.MonitorHeart
 import androidx.compose.material.icons.outlined.NetworkCheck
+import androidx.compose.material.icons.outlined.Notifications
 import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Palette
 import androidx.compose.material.icons.outlined.PowerSettingsNew
@@ -74,6 +83,12 @@ import androidx.compose.material3.TopAppBar
 import android.widget.Toast
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
+import moe.shizuku.manager.legacy.LegacyRishCompatibilityManager
+import moe.shizuku.manager.legacy.LegacyRishCompatibilityState
+import moe.shizuku.manager.legacy.LegacyRishSnapshot
+import rikka.shizuku.manager.ShizukuLocales
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.compose.runtime.getValue
@@ -749,8 +764,8 @@ fun SettingsScreen(bottomPadding: Dp, onOpenDetail: (Detail) -> Unit) {
                             append(stringResource(R.string.settings_legacy_rish_server_status)); append(": "); append(stringResource(serverLabel)); append('\n')
                             append(stringResource(R.string.settings_legacy_rish_lifecycle_status)); append(": "); append(stringResource(lifecycleLabel)); append('\n')
                             append(stringResource(R.string.settings_legacy_rish_binder_status)); append(": "); append(stringResource(binderLabel)); append('\n')
-                            append(stringResource(R.string.settings_legacy_rish_service_status)); append(": "); append(serviceLabel.let { stringResource(it) }); append('\n')
-                            append(stringResource(R.string.settings_legacy_rish_last_event)); append(": "); append(legacyRishSnapshot.lastEvent.ifBlank { "-" }); append('\n')
+                            append(stringResource(R.string.settings_legacy_rish_service_status)); append(": "); append(stringResource(serviceLabel)); append('\n')
+                            append(stringResource(R.string.settings_legacy_rish_last_event)); append(": "); append(if (legacyRishSnapshot.lastEvent.isBlank()) "-" else legacyRishSnapshot.lastEvent); append('\n')
                             append(stringResource(R.string.settings_legacy_rish_error)); append(": "); append(errorLabel)
                         }
                         SegmentedListItem(

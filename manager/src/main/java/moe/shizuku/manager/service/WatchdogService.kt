@@ -54,6 +54,7 @@ import moe.shizuku.manager.notifications.HelperEvent
 import moe.shizuku.manager.notifications.HelperEventType
 import moe.shizuku.manager.notifications.HelperNotificationManager
 import moe.shizuku.manager.notifications.NotificationPreferences
+import moe.shizuku.manager.notifications.WatchdogLiveState
 import moe.shizuku.manager.notifications.WatchdogLiveStateMapper
 import moe.shizuku.manager.notifications.WatchdogLiveDecision
 
