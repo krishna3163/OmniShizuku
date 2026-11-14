@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.service
+package moe.shizuku.manager.service
 
 /**
  * Pure watchdog recovery state machine for deterministic testing.

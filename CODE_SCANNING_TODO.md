@@ -1,4 +1,4 @@
-﻿# Code Scanning Security Alerts TODO Checklist
+# Code Scanning Security Alerts TODO Checklist
 
 > **Total Alerts**: 430 open alerts from GitHub Code Scanning (mobsfscan & OpenSSF Scorecard)
 > **Repository**: [krishna3163/OmniShizuku](https://github.com/krishna3163/OmniShizuku/security/code-scanning)

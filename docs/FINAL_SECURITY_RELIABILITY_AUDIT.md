@@ -1,4 +1,4 @@
-﻿# Final Security & Reliability Audit (Preliminary)
+# Final Security & Reliability Audit (Preliminary)
 
 Generated: 2026-11-14
 Status: **PARTIAL / NOT_VERIFIED** (static audit only; build/runtime/device verification blocked)

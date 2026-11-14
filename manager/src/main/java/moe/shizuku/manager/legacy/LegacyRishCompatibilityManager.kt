@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.legacy
+package moe.shizuku.manager.legacy
 
 import android.content.Context
 import android.os.Handler

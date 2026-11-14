@@ -1,4 +1,4 @@
-﻿# Final Production Readiness Report (Preliminary)
+# Final Production Readiness Report (Preliminary)
 
 Generated: 2026-11-14
 Overall status: **NOT READY (BLOCKED/PARTIAL)**

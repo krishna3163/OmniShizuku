@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.service
+package moe.shizuku.manager.service
 
 import android.app.NotificationChannel
 import android.app.NotificationManager

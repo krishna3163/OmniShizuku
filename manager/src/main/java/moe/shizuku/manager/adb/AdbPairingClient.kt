@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.adb
+package moe.shizuku.manager.adb
 
 import android.os.Build
 import android.util.Log

@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.callrecorder
+package moe.shizuku.manager.callrecorder
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

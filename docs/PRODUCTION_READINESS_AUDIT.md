@@ -1,4 +1,4 @@
-﻿# OmniShizuku Production Readiness Audit
+# OmniShizuku Production Readiness Audit
 
 Generated: 2026-11-14 (local audit, no codebase reset)
 Repository: `main` @ `35885d2` (working tree dirty; all existing modified/untracked files preserved)

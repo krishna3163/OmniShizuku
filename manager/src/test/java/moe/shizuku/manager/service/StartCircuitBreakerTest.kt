@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.service
+package moe.shizuku.manager.service
 
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse

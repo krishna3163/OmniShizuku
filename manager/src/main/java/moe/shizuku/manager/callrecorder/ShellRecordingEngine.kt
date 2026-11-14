@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.callrecorder
+package moe.shizuku.manager.callrecorder
 
 import android.os.ParcelFileDescriptor
 import android.os.Process

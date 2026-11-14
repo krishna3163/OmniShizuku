@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.receiver
+package moe.shizuku.manager.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

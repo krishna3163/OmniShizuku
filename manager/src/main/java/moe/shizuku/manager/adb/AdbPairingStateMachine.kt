@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.adb
+package moe.shizuku.manager.adb
 
 /** Pure ADB pairing protocol state for deterministic validation. */
 enum class AdbPairingState { READY, EXCHANGING_MSGS, EXCHANGING_PEER_INFO, STOPPED }

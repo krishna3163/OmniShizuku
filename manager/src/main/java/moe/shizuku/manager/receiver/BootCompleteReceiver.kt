@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.receiver
+package moe.shizuku.manager.receiver
 
 import android.Manifest.permission.NEARBY_WIFI_DEVICES
 import android.app.KeyguardManager

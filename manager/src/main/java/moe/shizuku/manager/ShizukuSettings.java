@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager;
+package moe.shizuku.manager;
 
 import android.app.ActivityThread;
 import android.content.Context;

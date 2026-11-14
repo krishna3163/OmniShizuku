@@ -1,4 +1,4 @@
-﻿# Watchdog Live Activity Notifications
+# Watchdog Live Activity Notifications
 
 Status: **IMPLEMENTED / INTEGRATED / UNIT_TESTED: VERIFIED (8/8 PASSING) / RUNTIME DEVICE VERIFICATION: BLOCKED (NO ANDROID SDK/DEVICE)**
 

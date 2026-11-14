@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.notifications
+package moe.shizuku.manager.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent

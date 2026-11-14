@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.callrecorder
+package moe.shizuku.manager.callrecorder
 
 /**
  * Pure recording session state machine (no Android dependencies) for deterministic testing.

@@ -1,4 +1,4 @@
-﻿# OmniShizuku — Legacy Rish Compatibility
+# OmniShizuku — Legacy Rish Compatibility
 
 ## Purpose
 Legacy Rish Compatibility keeps manager-side availability for the existing legacy Rish Binder request flow while the Shizuku server is running. It does not replace or change the Binder relay contract (`rikka.shizuku.intent.action.REQUEST_BINDER`, `${applicationId}.intent.action.REQUEST_BINDER`, `moe.shizuku.privileged.api.intent.action.REQUEST_BINDER`) implemented by `ShellBinderRequestHandler`, `ShellRequestHandlerActivity`, and `ShizukuReceiver`.

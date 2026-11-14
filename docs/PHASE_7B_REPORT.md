@@ -1,4 +1,4 @@
-﻿# Phase 7B Report — Notification Production Integration Status
+# Phase 7B Report — Notification Production Integration Status
 
 Generated: 2026-11-14
 Status: **PARTIAL / BLOCKED (verification)**

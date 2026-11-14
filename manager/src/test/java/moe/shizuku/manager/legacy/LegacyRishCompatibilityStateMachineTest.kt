@@ -1,4 +1,4 @@
-﻿package moe.shizuku.manager.legacy
+package moe.shizuku.manager.legacy
 
 import org.junit.Assert.*
 import org.junit.Test

@@ -1,4 +1,4 @@
-﻿# Messages Over Other Apps (Overlay & In-App Messaging)
+# Messages Over Other Apps (Overlay & In-App Messaging)
 
 Status: **IMPLEMENTED / INTEGRATED / UNIT_TESTED: VERIFIED (6/6 PASSING) / RUNTIME DEVICE VERIFICATION: BLOCKED (NO ANDROID SDK/DEVICE)**
 

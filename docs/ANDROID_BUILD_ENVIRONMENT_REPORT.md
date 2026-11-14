@@ -1,4 +1,4 @@
-﻿# Android Build Environment Report
+# Android Build Environment Report
 
 Generated: 2026-11-14T12:05:00.3624313+05:30
 Repository: OmniShizuku-main (main @ 35885d2)
