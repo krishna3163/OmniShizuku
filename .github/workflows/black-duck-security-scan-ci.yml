@@ -35,7 +35,7 @@ jobs:
         run: echo "::notice::Skipping Black Duck scan because no scan service URL variables are configured."
       - name: Black Duck SCA scan
         if: ${{ vars.BLACKDUCKSCA_URL != '' || vars.COVERITY_URL != '' || vars.POLARIS_SERVER_URL != '' || vars.SRM_URL != '' }}
-        uses: blackduck-inc/black-duck-security-scan@805cbd09e806b01907bbea0f990723c2bb85abe9
+        uses: blackduck-inc/black-duck-security-scan@d8375979d21af3848d894171815d0285f9a4d983
         with:
           ### ---------- BLACKDUCK SCA SCANNING: REQUIRED FIELDS ----------
           blackducksca_url: ${{ vars.BLACKDUCKSCA_URL }}
